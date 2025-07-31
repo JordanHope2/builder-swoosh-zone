@@ -41,21 +41,22 @@ export function HeroSection() {
         </div>
 
         {/* Split Hero Section */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-stretch">
           {/* Left: CV Upload */}
-          <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-lg border border-border">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 lg:p-14 shadow-2xl border border-jobequal-neutral-dark hover:shadow-3xl transition-all duration-300 group">
             <div className="text-center">
-              <div className="w-16 h-16 bg-jobequal-green rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Upload className="w-8 h-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <Upload className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-jobequal-text mb-6 leading-tight">
                 Upload Your CV
               </h2>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-lg text-jobequal-text-muted mb-10 leading-relaxed">
                 Let our AI analyze your skills and experience to find the perfect job matches for you.
+                Experience Swiss precision in career matching.
               </p>
-              
-              <div className="relative">
+
+              <div className="relative mb-6">
                 <input
                   type="file"
                   accept=".pdf,.doc,.docx"
@@ -65,38 +66,39 @@ export function HeroSection() {
                 />
                 <label
                   htmlFor="cv-upload"
-                  className="block w-full bg-jobequal-green text-white py-4 px-8 rounded-xl font-semibold hover:bg-jobequal-green-dark transition-colors duration-200 cursor-pointer"
+                  className="block w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:scale-105"
                 >
                   Choose File or Drop Here
                 </label>
               </div>
-              
-              <p className="text-sm text-muted-foreground mt-4">
+
+              <p className="text-sm text-jobequal-text-muted font-medium">
                 Supported formats: PDF, DOC, DOCX (Max 5MB)
               </p>
             </div>
           </div>
 
           {/* Right: Job Filter */}
-          <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-lg border border-border">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 lg:p-14 shadow-2xl border border-jobequal-neutral-dark hover:shadow-3xl transition-all duration-300 group">
             <div className="text-center">
-              <div className="w-16 h-16 bg-jobequal-blue-dark rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Search className="w-8 h-8 text-white" />
+              <div className="w-20 h-20 bg-gradient-to-br from-jobequal-blue-dark to-jobequal-teal rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                <Search className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-bold text-jobequal-text mb-4 leading-tight">
                 Browse Jobs
               </h2>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-lg text-jobequal-text-muted mb-10 leading-relaxed">
                 Explore opportunities by location, role, and company type.
+                Discover Switzerland's finest career opportunities.
               </p>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-6">
                 <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <MapPin className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
                   <select
                     value={selectedLocation}
                     onChange={(e) => setSelectedLocation(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl border border-input bg-background text-foreground focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
+                    className="w-full pl-14 pr-5 py-5 rounded-2xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200 font-medium"
                   >
                     <option value="">Select Location</option>
                     <option value="zurich">Zurich</option>
@@ -107,13 +109,13 @@ export function HeroSection() {
                     <option value="remote">Remote</option>
                   </select>
                 </div>
-                
+
                 <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Calendar className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
                   <select
                     value={selectedJobType}
                     onChange={(e) => setSelectedJobType(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 rounded-xl border border-input bg-background text-foreground focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
+                    className="w-full pl-14 pr-5 py-5 rounded-2xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent shadow-sm hover:shadow-md transition-all duration-200 font-medium"
                   >
                     <option value="">Job Type</option>
                     <option value="full-time">Full-time</option>
@@ -122,8 +124,8 @@ export function HeroSection() {
                     <option value="internship">Internship</option>
                   </select>
                 </div>
-                
-                <button className="w-full bg-jobequal-blue-dark text-white py-4 px-8 rounded-xl font-semibold hover:opacity-90 transition-opacity duration-200">
+
+                <button className="w-full bg-gradient-to-r from-jobequal-blue-dark to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-blue-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
                   Search Jobs
                 </button>
               </div>
