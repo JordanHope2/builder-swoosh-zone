@@ -23,6 +23,7 @@ const featuredJobs: Job[] = [
     type: 'Full-time',
     logo: '🚀',
     featured: true,
+    matchScore: 95,
   },
   {
     id: '2',
@@ -32,6 +33,7 @@ const featuredJobs: Job[] = [
     salary: 'CHF 110,000 - 130,000',
     type: 'Full-time',
     logo: '💡',
+    matchScore: 73,
   },
   {
     id: '3',
@@ -41,6 +43,7 @@ const featuredJobs: Job[] = [
     salary: 'CHF 85,000 - 105,000',
     type: 'Full-time',
     logo: '🎨',
+    matchScore: 67,
   },
   {
     id: '4',
@@ -51,6 +54,7 @@ const featuredJobs: Job[] = [
     type: 'Full-time',
     logo: '📊',
     featured: true,
+    matchScore: 91,
   },
   {
     id: '5',
@@ -60,6 +64,7 @@ const featuredJobs: Job[] = [
     salary: 'CHF 95,000 - 115,000',
     type: 'Full-time',
     logo: '☁️',
+    matchScore: 88,
   },
   {
     id: '6',
@@ -69,6 +74,7 @@ const featuredJobs: Job[] = [
     salary: 'CHF 130,000 - 150,000',
     type: 'Full-time',
     logo: '📈',
+    matchScore: 54,
   },
 ];
 
