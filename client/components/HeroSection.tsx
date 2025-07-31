@@ -18,17 +18,25 @@ export function HeroSection() {
       {/* Enhanced Redwood Tree Background */}
       <RedwoodTreeBackground />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-32">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-40">
         {/* Main Tagline */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 leading-tight">
-            We match aspirations,
+        <div className="text-center mb-20 lg:mb-24">
+          <div className="flex items-center justify-center mb-6">
+            <Sparkles className="w-6 h-6 text-jobequal-green mr-3" />
+            <span className="text-jobequal-text-muted font-medium text-lg tracking-wide uppercase">
+              Swiss Quality Job Matching
+            </span>
+            <Sparkles className="w-6 h-6 text-jobequal-green ml-3" />
+          </div>
+          <h1 className="text-5xl lg:text-7xl font-bold text-jobequal-text mb-8 leading-tight tracking-tight">
+            We match
+            <span className="text-jobequal-green block lg:inline lg:ml-4">aspirations,</span>
             <br />
-            <span className="text-jobequal-green">not just profiles</span>
+            <span className="text-jobequal-text-muted">not just profiles</span>
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Discover opportunities that align with your career goals and values. 
-            Upload your CV for smart matching or browse our curated job listings.
+          <p className="text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed font-light">
+            Discover opportunities that align with your career goals and values.
+            Experience Swiss-quality job matching that goes beyond traditional recruiting.
           </p>
         </div>
 
