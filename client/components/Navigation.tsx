@@ -50,7 +50,7 @@ export function Navigation() {
           <div className="flex items-center space-x-4">
             <LanguageSwitcher />
             <Link
-              to="/login"
+              to="/signin"
               className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
             >
               Sign In
