@@ -22,6 +22,7 @@ import Companies from "./pages/Companies";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import SwipeDiscovery from "./pages/SwipeDiscovery";
+import EnhancedDashboard from "./pages/EnhancedDashboard";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -44,8 +45,9 @@ const App = () => (
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/dashboard" element={<CandidateDashboard />} />
+          <Route path="/dashboard" element={<EnhancedDashboard />} />
           <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
+          <Route path="/enhanced-dashboard" element={<EnhancedDashboard />} />
           <Route path="/profile" element={<CandidateProfile />} />
           <Route path="/candidate-profile" element={<CandidateProfile />} />
           <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
