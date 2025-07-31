@@ -190,6 +190,19 @@ export default function JobDetails() {
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
           <div className="lg:col-span-2">
+            {/* AI Match Score - Prominent Banner */}
+            <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal rounded-3xl p-6 mb-8 text-center">
+              <div className="flex items-center justify-center space-x-3 mb-2">
+                <Zap className="w-8 h-8 text-white" />
+                <span className="text-4xl font-bold text-white">{job.matchScore}%</span>
+                <Target className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-1">Excellent AI Match!</h2>
+              <p className="text-white/90">
+                This job aligns perfectly with your skills and experience
+              </p>
+            </div>
+
             {/* Job Header */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 border border-jobequal-neutral-dark mb-8">
               <div className="flex items-start justify-between mb-8">
