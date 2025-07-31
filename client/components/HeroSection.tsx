@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Upload, Search, MapPin, Calendar, Sparkles } from 'lucide-react';
 import { RedwoodTreeBackground } from './RedwoodTreeBackground';
 
