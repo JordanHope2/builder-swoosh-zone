@@ -16,6 +16,7 @@ interface Job {
   featured?: boolean;
   remote?: boolean;
   posted: string;
+  matchScore: number;
 }
 
 const mockJobs: Job[] = [
