@@ -1,61 +1,63 @@
 import { Link } from 'react-router-dom';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function Navigation() {
   return (
-    <nav className="w-full bg-white border-b border-border">
+    <nav className="w-full bg-white/95 backdrop-blur-sm border-b border-jobequal-neutral-dark sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-18">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-jobequal-green rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">J</span>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200">
+                <span className="text-white font-bold text-xl">J</span>
               </div>
-              <span className="text-xl font-bold text-foreground">JobEqual</span>
+              <span className="text-2xl font-bold text-jobequal-text tracking-tight">JobEqual</span>
             </Link>
           </div>
 
           {/* Navigation Menu */}
           <div className="hidden md:block">
-            <div className="flex items-center space-x-8">
-              <Link 
-                to="/jobs" 
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+            <div className="flex items-center space-x-10">
+              <Link
+                to="/jobs"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 Browse Jobs
               </Link>
-              <Link 
-                to="/companies" 
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+              <Link
+                to="/companies"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 Companies
               </Link>
-              <Link 
-                to="/about" 
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+              <Link
+                to="/about"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 About
               </Link>
-              <Link 
-                to="/contact" 
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+              <Link
+                to="/contact"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 Contact
               </Link>
             </div>
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons & Language Switcher */}
           <div className="flex items-center space-x-4">
-            <Link 
-              to="/login" 
-              className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+            <LanguageSwitcher />
+            <Link
+              to="/login"
+              className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
             >
               Sign In
             </Link>
-            <Link 
-              to="/signup" 
-              className="bg-jobequal-green text-white px-6 py-2 rounded-xl hover:bg-jobequal-green-dark transition-colors duration-200"
+            <Link
+              to="/signup"
+              className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-8 py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
             >
               Get Started
             </Link>
