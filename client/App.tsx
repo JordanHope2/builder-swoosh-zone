@@ -18,6 +18,7 @@ import CandidateProfile from "./pages/CandidateProfile";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import Companies from "./pages/Companies";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
