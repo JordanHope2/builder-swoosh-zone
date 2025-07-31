@@ -43,6 +43,12 @@ export function Navigation() {
               >
                 About
               </Link>
+              <Link
+                to="/contact"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
+              >
+                Contact
+              </Link>
             </div>
           </div>
 
