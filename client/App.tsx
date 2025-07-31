@@ -36,13 +36,16 @@ const App = () => (
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/dashboard" element={<CandidateDashboard />} />
+          <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
+          <Route path="/profile" element={<CandidateProfile />} />
+          <Route path="/candidate-profile" element={<CandidateProfile />} />
+          <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
           <Route path="/companies" element={<PlaceholderPage title="Companies" description="Explore top companies hiring through JobEqual. This section will showcase company profiles, culture insights, and open positions." />} />
           <Route path="/about" element={<PlaceholderPage title="About JobEqual" description="Learn about our mission to match aspirations with opportunities. This page will detail our story, values, and team." />} />
           <Route path="/contact" element={<PlaceholderPage title="Contact Us" description="Get in touch with our team. This page will include contact forms, office locations, and support information." />} />
-          <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" description="Your personalized dashboard with job recommendations, applications, and profile management." />} />
-          <Route path="/profile" element={<PlaceholderPage title="My Profile" description="Manage your profile, update your CV, and track your job applications." />} />
-          <Route path="/recruiter-dashboard" element={<PlaceholderPage title="Recruiter Dashboard" description="Manage your job postings, review candidates, and track hiring progress." />} />
           <Route path="/post-job" element={<PlaceholderPage title="Post a Job" description="Create and publish job listings to find the best candidates for your company." />} />
+          <Route path="/applicants" element={<PlaceholderPage title="Applicant Management" description="Review and manage job applicants, schedule interviews, and track hiring progress." />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
