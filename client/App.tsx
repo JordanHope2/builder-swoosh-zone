@@ -33,6 +33,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/jobs" element={<JobSearch />} />
           <Route path="/job-search" element={<JobSearch />} />
+          <Route path="/careers" element={<Navigate to="/job-search" replace />} />
           <Route path="/job/:id" element={<JobDetails />} />
           <Route path="/cv-upload" element={<CVUpload />} />
           <Route path="/upload-cv" element={<CVUpload />} />
