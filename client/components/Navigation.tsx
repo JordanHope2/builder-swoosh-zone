@@ -20,10 +20,16 @@ export function Navigation() {
           <div className="hidden md:block">
             <div className="flex items-center space-x-10">
               <Link
-                to="/jobs"
+                to="/job-search"
                 className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 Browse Jobs
+              </Link>
+              <Link
+                to="/cv-upload"
+                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
+              >
+                Upload CV
               </Link>
               <Link
                 to="/companies"
@@ -36,12 +42,6 @@ export function Navigation() {
                 className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
               >
                 About
-              </Link>
-              <Link
-                to="/contact"
-                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105"
-              >
-                Contact
               </Link>
             </div>
           </div>
