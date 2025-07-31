@@ -1,4 +1,4 @@
-import { MapPin, Clock, Building, Heart } from 'lucide-react';
+import { MapPin, Clock, Building, Heart, Star, TrendingUp } from 'lucide-react';
 
 interface Job {
   id: string;
