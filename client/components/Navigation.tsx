@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeProvider';
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,6 +37,7 @@ export function Navigation() {
 
   const navLinks = [
     { to: '/job-search', label: 'Browse Jobs' },
+    { to: '/swipe', label: 'Swipe Discovery' },
     { to: '/cv-upload', label: 'Upload CV' },
     { to: '/companies', label: 'Companies' },
     { to: '/about', label: 'About' },
@@ -82,8 +84,9 @@ export function Navigation() {
               </div>
             </div>
 
-            {/* Desktop CTA Buttons & Language Switcher */}
+            {/* Desktop CTA Buttons & Controls */}
             <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
+              <ThemeToggle />
               <LanguageSwitcher />
               <Link
                 to="/signin"
@@ -101,6 +104,7 @@ export function Navigation() {
 
             {/* Mobile menu button */}
             <div className="lg:hidden flex items-center space-x-3">
+              <ThemeToggle />
               <LanguageSwitcher />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
