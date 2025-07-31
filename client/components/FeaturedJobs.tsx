@@ -123,25 +123,33 @@ function JobCard({ job }: { job: Job }) {
 
 export function FeaturedJobs() {
   return (
-    <section className="py-16 lg:py-24 bg-muted/30">
+    <section className="py-20 lg:py-32 bg-gradient-to-b from-jobequal-neutral to-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-16 lg:mb-20">
+          <div className="flex items-center justify-center mb-6">
+            <Star className="w-6 h-6 text-jobequal-green mr-3" />
+            <span className="text-jobequal-text-muted font-medium text-lg tracking-wide uppercase">
+              Curated Excellence
+            </span>
+            <Star className="w-6 h-6 text-jobequal-green ml-3" />
+          </div>
+          <h2 className="text-4xl lg:text-6xl font-bold text-jobequal-text mb-8 leading-tight tracking-tight">
             Featured Opportunities
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover hand-picked job opportunities from top Swiss companies
+          <p className="text-xl lg:text-2xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed font-light">
+            Discover hand-picked job opportunities from Switzerland's most prestigious companies.
+            Quality positions for exceptional professionals.
           </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 mb-16">
           {featuredJobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
         </div>
-        
+
         <div className="text-center">
-          <button className="bg-jobequal-green text-white px-8 py-4 rounded-xl font-semibold hover:bg-jobequal-green-dark transition-colors duration-200">
+          <button className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-12 py-5 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-lg">
             View All Jobs
           </button>
         </div>
