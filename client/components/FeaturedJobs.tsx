@@ -10,6 +10,7 @@ interface Job {
   type: string;
   logo: string;
   featured?: boolean;
+  matchScore: number;
 }
 
 const featuredJobs: Job[] = [
