@@ -1,10 +1,10 @@
 import { Navigation } from '../components/Navigation';
-import { 
-  Target, 
-  Heart, 
-  Award, 
-  Users, 
-  TrendingUp, 
+import {
+  Target,
+  Heart,
+  Award,
+  Users,
+  TrendingUp,
   Shield,
   Mountain,
   Clock,
@@ -20,7 +20,8 @@ import {
   MapPin,
   Phone,
   Linkedin,
-  Twitter
+  Twitter,
+  Building
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
