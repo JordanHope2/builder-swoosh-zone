@@ -79,8 +79,23 @@ const featuredJobs: Job[] = [
 ];
 
 function JobCard({ job }: { job: Job }) {
+  const getMatchColor = (score: number) => {
+    if (score >= 85) return 'text-jobequal-green bg-jobequal-green-light border-jobequal-green';
+    if (score >= 70) return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+    if (score >= 55) return 'text-orange-600 bg-orange-100 border-orange-200';
+    return 'text-red-600 bg-red-100 border-red-200';
+  };
+
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group cursor-pointer transform hover:scale-105 hover:bg-white">
+      {/* AI Match Score - Prominent at top */}
+      <div className="text-center mb-6">
+        <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-2xl text-lg font-bold border-2 ${getMatchColor(job.matchScore)}`}>
+          <Zap className="w-5 h-5" />
+          <span>{job.matchScore}% AI Match</span>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         {job.featured && (
           <div className="flex items-center space-x-2">
