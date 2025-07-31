@@ -260,8 +260,21 @@ function ProcessingStage() {
 }
 
 function JobMatchCard({ job }: { job: MatchedJob }) {
+  const getMatchColor = (score: number) => {
+    if (score >= 85) return 'from-jobequal-green to-jobequal-teal text-white';
+    if (score >= 70) return 'from-yellow-400 to-yellow-600 text-white';
+    if (score >= 55) return 'from-orange-400 to-orange-600 text-white';
+    return 'from-red-400 to-red-600 text-white';
+  };
+
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group">
+      {/* Prominent Match Score Header */}
+      <div className={`bg-gradient-to-r ${getMatchColor(job.matchScore)} rounded-2xl p-4 mb-6 text-center`}>
+        <div className="text-3xl font-bold mb-1">{job.matchScore}%</div>
+        <div className="text-sm opacity-90">AI Match Score</div>
+      </div>
+
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center space-x-4">
           <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-3xl">
@@ -279,11 +292,6 @@ function JobMatchCard({ job }: { job: MatchedJob }) {
             </h3>
             <p className="text-jobequal-text-muted font-medium">{job.company}</p>
           </div>
-        </div>
-        
-        <div className="text-center">
-          <div className="text-3xl font-bold text-jobequal-green mb-1">{job.matchScore}%</div>
-          <div className="text-sm text-jobequal-text-muted">Match</div>
         </div>
       </div>
       
