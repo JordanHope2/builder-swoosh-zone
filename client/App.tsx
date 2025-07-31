@@ -25,12 +25,21 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/jobs" element={<PlaceholderPage title="Browse Jobs" description="The jobs listing page will include advanced filters, search functionality, and detailed job descriptions. Ask me to implement specific features for this page!" />} />
+          <Route path="/jobs" element={<JobSearch />} />
+          <Route path="/job-search" element={<JobSearch />} />
+          <Route path="/job/:id" element={<JobDetails />} />
+          <Route path="/cv-upload" element={<CVUpload />} />
+          <Route path="/upload-cv" element={<CVUpload />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="/companies" element={<PlaceholderPage title="Companies" description="Explore top companies hiring through JobEqual. This section will showcase company profiles, culture insights, and open positions." />} />
           <Route path="/about" element={<PlaceholderPage title="About JobEqual" description="Learn about our mission to match aspirations with opportunities. This page will detail our story, values, and team." />} />
           <Route path="/contact" element={<PlaceholderPage title="Contact Us" description="Get in touch with our team. This page will include contact forms, office locations, and support information." />} />
-          <Route path="/login" element={<PlaceholderPage title="Sign In" description="User authentication page with login form, social login options, and password recovery." />} />
-          <Route path="/signup" element={<PlaceholderPage title="Get Started" description="User registration page with signup form and onboarding flow for new users." />} />
+          <Route path="/dashboard" element={<PlaceholderPage title="Dashboard" description="Your personalized dashboard with job recommendations, applications, and profile management." />} />
+          <Route path="/profile" element={<PlaceholderPage title="My Profile" description="Manage your profile, update your CV, and track your job applications." />} />
+          <Route path="/recruiter-dashboard" element={<PlaceholderPage title="Recruiter Dashboard" description="Manage your job postings, review candidates, and track hiring progress." />} />
+          <Route path="/post-job" element={<PlaceholderPage title="Post a Job" description="Create and publish job listings to find the best candidates for your company." />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
