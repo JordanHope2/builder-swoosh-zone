@@ -72,46 +72,49 @@ const featuredJobs: Job[] = [
 
 function JobCard({ job }: { job: Job }) {
   return (
-    <div className="bg-white rounded-2xl p-6 border border-border hover:shadow-lg transition-all duration-300 group cursor-pointer">
-      {job.featured && (
-        <div className="flex items-center justify-between mb-4">
-          <span className="bg-jobequal-green text-white text-xs font-semibold px-3 py-1 rounded-full">
-            Featured
-          </span>
-          <button className="text-muted-foreground hover:text-jobequal-green transition-colors">
-            <Heart className="w-5 h-5" />
-          </button>
-        </div>
-      )}
-      
-      <div className="flex items-start space-x-4 mb-4">
-        <div className="w-12 h-12 bg-jobequal-green-light rounded-xl flex items-center justify-center text-2xl">
+    <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group cursor-pointer transform hover:scale-105 hover:bg-white">
+      <div className="flex items-center justify-between mb-6">
+        {job.featured && (
+          <div className="flex items-center space-x-2">
+            <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white text-xs font-semibold px-4 py-2 rounded-full flex items-center space-x-1">
+              <Star className="w-3 h-3" />
+              <span>Featured</span>
+            </div>
+          </div>
+        )}
+        <button className="text-jobequal-text-muted hover:text-red-500 transition-all duration-200 hover:scale-110 ml-auto">
+          <Heart className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="flex items-start space-x-5 mb-6">
+        <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-3xl shadow-md group-hover:shadow-lg transition-all duration-300">
           {job.logo}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-lg text-foreground group-hover:text-jobequal-green transition-colors">
+          <h3 className="font-bold text-xl text-jobequal-text group-hover:text-jobequal-green transition-all duration-200 mb-2 leading-tight">
             {job.title}
           </h3>
-          <p className="text-muted-foreground">{job.company}</p>
+          <p className="text-jobequal-text-muted font-medium text-lg">{job.company}</p>
         </div>
       </div>
-      
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-sm text-muted-foreground">
-          <MapPin className="w-4 h-4 mr-2" />
-          {job.location}
+
+      <div className="space-y-3 mb-8">
+        <div className="flex items-center text-jobequal-text-muted">
+          <MapPin className="w-5 h-5 mr-3 text-jobequal-green" />
+          <span className="font-medium">{job.location}</span>
         </div>
-        <div className="flex items-center text-sm text-muted-foreground">
-          <Clock className="w-4 h-4 mr-2" />
-          {job.type}
+        <div className="flex items-center text-jobequal-text-muted">
+          <Clock className="w-5 h-5 mr-3 text-jobequal-blue-dark" />
+          <span className="font-medium">{job.type}</span>
         </div>
-        <div className="flex items-center text-sm text-jobequal-green font-semibold">
-          <Building className="w-4 h-4 mr-2" />
-          {job.salary}
+        <div className="flex items-center text-jobequal-green font-bold text-lg">
+          <TrendingUp className="w-5 h-5 mr-3" />
+          <span>{job.salary}</span>
         </div>
       </div>
-      
-      <button className="w-full bg-jobequal-green-light text-jobequal-green-dark py-3 rounded-xl font-medium hover:bg-jobequal-green hover:text-white transition-all duration-200">
+
+      <button className="w-full bg-gradient-to-r from-jobequal-green-light to-jobequal-blue-light text-jobequal-green-dark py-4 rounded-2xl font-semibold hover:from-jobequal-green hover:to-jobequal-teal hover:text-white transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
         View Details
       </button>
     </div>
