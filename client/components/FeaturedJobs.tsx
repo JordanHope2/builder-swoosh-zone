@@ -1,4 +1,5 @@
 import { MapPin, Clock, Building, Heart, Star, TrendingUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Job {
   id: string;
