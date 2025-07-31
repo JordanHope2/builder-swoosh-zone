@@ -39,12 +39,20 @@
 
     --radius: 0.75rem;
 
-    /* JobEqual specific colors */
-    --jobequal-green: 156 73% 44%;
-    --jobequal-green-light: 156 50% 92%;
-    --jobequal-green-dark: 156 73% 30%;
-    --jobequal-blue: 207 100% 88%;
-    --jobequal-blue-dark: 207 73% 44%;
+    /* JobEqual specific colors - Swiss luxury palette */
+    --jobequal-green: 156 68% 35%;
+    --jobequal-green-light: 156 45% 95%;
+    --jobequal-green-dark: 156 75% 25%;
+    --jobequal-green-hover: 156 68% 30%;
+    --jobequal-blue: 207 85% 82%;
+    --jobequal-blue-dark: 207 75% 38%;
+    --jobequal-blue-hover: 207 75% 33%;
+    --jobequal-teal: 180 68% 35%;
+    --jobequal-teal-light: 180 45% 95%;
+    --jobequal-neutral: 210 8% 97%;
+    --jobequal-neutral-dark: 210 12% 88%;
+    --jobequal-text: 215 25% 15%;
+    --jobequal-text-muted: 215 12% 45%;
 
     --sidebar-background: 0 0% 98%;
 
@@ -93,11 +101,19 @@
     --ring: 156 60% 60%;
 
     /* JobEqual specific colors - dark mode */
-    --jobequal-green: 156 60% 60%;
-    --jobequal-green-light: 156 30% 20%;
-    --jobequal-green-dark: 156 80% 80%;
-    --jobequal-blue: 207 50% 30%;
-    --jobequal-blue-dark: 207 80% 70%;
+    --jobequal-green: 156 55% 65%;
+    --jobequal-green-light: 156 25% 15%;
+    --jobequal-green-dark: 156 70% 75%;
+    --jobequal-green-hover: 156 55% 70%;
+    --jobequal-blue: 207 45% 25%;
+    --jobequal-blue-dark: 207 70% 75%;
+    --jobequal-blue-hover: 207 70% 80%;
+    --jobequal-teal: 180 55% 65%;
+    --jobequal-teal-light: 180 25% 15%;
+    --jobequal-neutral: 215 20% 8%;
+    --jobequal-neutral-dark: 215 15% 12%;
+    --jobequal-text: 210 15% 85%;
+    --jobequal-text-muted: 210 10% 65%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
