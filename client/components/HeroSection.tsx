@@ -118,9 +118,12 @@ export function HeroSection() {
                   </select>
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-jobequal-blue-dark to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-blue-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                <Link
+                  to="/job-search"
+                  className="block w-full bg-gradient-to-r from-jobequal-blue-dark to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-blue-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-center"
+                >
                   Search Jobs
-                </button>
+                </Link>
               </div>
             </div>
           </div>
