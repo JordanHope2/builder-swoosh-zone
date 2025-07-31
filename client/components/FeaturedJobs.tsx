@@ -153,9 +153,12 @@ export function FeaturedJobs() {
         </div>
 
         <div className="text-center">
-          <button className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-12 py-5 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-lg">
+          <Link
+            to="/job-search"
+            className="inline-block bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-12 py-5 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-lg"
+          >
             View All Jobs
-          </button>
+          </Link>
         </div>
       </div>
     </section>
