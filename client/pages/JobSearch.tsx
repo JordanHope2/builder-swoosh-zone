@@ -31,7 +31,8 @@ const mockJobs: Job[] = [
     requirements: ['React', 'TypeScript', 'Node.js', '5+ years experience'],
     logo: '🚀',
     featured: true,
-    posted: '2 days ago'
+    posted: '2 days ago',
+    matchScore: 95
   },
   {
     id: '2',
@@ -43,7 +44,8 @@ const mockJobs: Job[] = [
     description: 'Lead product strategy for our growing fintech platform.',
     requirements: ['Product Management', 'Agile', 'Data Analysis', '3+ years experience'],
     logo: '💡',
-    posted: '1 week ago'
+    posted: '1 week ago',
+    matchScore: 73
   },
   {
     id: '3',
@@ -56,7 +58,8 @@ const mockJobs: Job[] = [
     requirements: ['Figma', 'User Research', 'Prototyping', 'Design Systems'],
     logo: '🎨',
     remote: true,
-    posted: '3 days ago'
+    posted: '3 days ago',
+    matchScore: 67
   },
   {
     id: '4',
@@ -69,7 +72,8 @@ const mockJobs: Job[] = [
     requirements: ['AWS', 'Kubernetes', 'Docker', 'CI/CD'],
     logo: '☁️',
     remote: true,
-    posted: '5 days ago'
+    posted: '5 days ago',
+    matchScore: 88
   },
   {
     id: '5',
@@ -82,7 +86,8 @@ const mockJobs: Job[] = [
     requirements: ['Python', 'Machine Learning', 'SQL', 'Statistics'],
     logo: '📊',
     featured: true,
-    posted: '1 day ago'
+    posted: '1 day ago',
+    matchScore: 91
   },
   {
     id: '6',
@@ -94,7 +99,8 @@ const mockJobs: Job[] = [
     description: 'Lead marketing strategy and team for B2B SaaS company.',
     requirements: ['Marketing Strategy', 'Team Leadership', 'B2B Experience', '7+ years'],
     logo: '📈',
-    posted: '4 days ago'
+    posted: '4 days ago',
+    matchScore: 54
   }
 ];
 
