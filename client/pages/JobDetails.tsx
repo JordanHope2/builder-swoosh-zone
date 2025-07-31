@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Navigation } from '../components/Navigation';
-import { 
-  MapPin, 
-  Clock, 
-  Building, 
-  ArrowLeft, 
-  Bookmark, 
-  Share2, 
-  Users, 
+import {
+  MapPin,
+  Clock,
+  Building,
+  ArrowLeft,
+  Bookmark,
+  Share2,
+  Users,
   Calendar,
   CheckCircle,
   AlertCircle,
@@ -16,7 +16,9 @@ import {
   Heart,
   TrendingUp,
   Globe,
-  Award
+  Award,
+  Zap,
+  Target
 } from 'lucide-react';
 
 // Mock job data - in real app this would come from API
