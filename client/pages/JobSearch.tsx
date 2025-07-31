@@ -107,6 +107,13 @@ const mockJobs: Job[] = [
 function JobCard({ job }: { job: Job }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  const getMatchColor = (score: number) => {
+    if (score >= 85) return 'text-jobequal-green bg-jobequal-green-light border-jobequal-green';
+    if (score >= 70) return 'text-yellow-600 bg-yellow-100 border-yellow-200';
+    if (score >= 55) return 'text-orange-600 bg-orange-100 border-orange-200';
+    return 'text-red-600 bg-red-100 border-red-200';
+  };
+
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group">
       <div className="flex items-start justify-between mb-6">
@@ -116,6 +123,11 @@ function JobCard({ job }: { job: Job }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-3 mb-2">
+              {/* AI Match Score - Always first */}
+              <div className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-bold border ${getMatchColor(job.matchScore)}`}>
+                <Zap className="w-3 h-3" />
+                <span>{job.matchScore}% AI Match</span>
+              </div>
               {job.featured && (
                 <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center space-x-1">
                   <Star className="w-3 h-3" />
