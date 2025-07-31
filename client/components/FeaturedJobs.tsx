@@ -115,9 +115,12 @@ function JobCard({ job }: { job: Job }) {
         </div>
       </div>
 
-      <button className="w-full bg-gradient-to-r from-jobequal-green-light to-jobequal-blue-light text-jobequal-green-dark py-4 rounded-2xl font-semibold hover:from-jobequal-green hover:to-jobequal-teal hover:text-white transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+      <Link
+        to={`/job/${job.id}`}
+        className="block w-full bg-gradient-to-r from-jobequal-green-light to-jobequal-blue-light text-jobequal-green-dark py-4 rounded-2xl font-semibold hover:from-jobequal-green hover:to-jobequal-teal hover:text-white transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg text-center"
+      >
         View Details
-      </button>
+      </Link>
     </div>
   );
 }
