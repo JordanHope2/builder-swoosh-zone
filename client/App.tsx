@@ -13,6 +13,9 @@ import JobDetails from "./pages/JobDetails";
 import CVUpload from "./pages/CVUpload";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import CandidateDashboard from "./pages/CandidateDashboard";
+import CandidateProfile from "./pages/CandidateProfile";
+import RecruiterDashboard from "./pages/RecruiterDashboard";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
