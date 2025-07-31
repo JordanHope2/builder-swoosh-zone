@@ -43,8 +43,8 @@ const App = () => (
           <Route path="/profile" element={<CandidateProfile />} />
           <Route path="/candidate-profile" element={<CandidateProfile />} />
           <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
-          <Route path="/companies" element={<PlaceholderPage title="Companies" description="Explore top companies hiring through JobEqual. This section will showcase company profiles, culture insights, and open positions." />} />
-          <Route path="/about" element={<PlaceholderPage title="About JobEqual" description="Learn about our mission to match aspirations with opportunities. This page will detail our story, values, and team." />} />
+          <Route path="/companies" element={<Companies />} />
+          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<PlaceholderPage title="Contact Us" description="Get in touch with our team. This page will include contact forms, office locations, and support information." />} />
           <Route path="/post-job" element={<PlaceholderPage title="Post a Job" description="Create and publish job listings to find the best candidates for your company." />} />
           <Route path="/applicants" element={<PlaceholderPage title="Applicant Management" description="Review and manage job applicants, schedule interviews, and track hiring progress." />} />
