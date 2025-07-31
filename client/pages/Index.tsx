@@ -47,54 +47,57 @@ export default function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-muted py-12">
+      <footer className="bg-gradient-to-b from-jobequal-neutral to-jobequal-neutral-dark py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-jobequal-green rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">J</span>
+          <div className="grid md:grid-cols-4 gap-12 lg:gap-16">
+            <div className="md:col-span-1">
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-2xl">J</span>
                 </div>
-                <span className="text-xl font-bold text-foreground">JobEqual</span>
+                <span className="text-2xl font-bold text-jobequal-text">JobEqual</span>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-jobequal-text-muted leading-relaxed text-lg">
                 Matching aspirations with opportunities across Switzerland.
+                Swiss-quality job matching for exceptional professionals.
               </p>
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">For Job Seekers</h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>Browse Jobs</li>
-                <li>Upload CV</li>
-                <li>Career Tips</li>
-                <li>Salary Guide</li>
+              <h4 className="font-bold text-jobequal-text mb-6 text-lg">For Job Seekers</h4>
+              <ul className="space-y-3 text-jobequal-text-muted">
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Browse Jobs</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Upload CV</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Career Tips</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Salary Guide</li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">For Employers</h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>Post Jobs</li>
-                <li>Find Candidates</li>
-                <li>Pricing</li>
-                <li>Resources</li>
+              <h4 className="font-bold text-jobequal-text mb-6 text-lg">For Employers</h4>
+              <ul className="space-y-3 text-jobequal-text-muted">
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Post Jobs</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Find Candidates</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Pricing</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Resources</li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Company</h4>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>About Us</li>
-                <li>Contact</li>
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
+              <h4 className="font-bold text-jobequal-text mb-6 text-lg">Company</h4>
+              <ul className="space-y-3 text-jobequal-text-muted">
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">About Us</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Contact</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Privacy Policy</li>
+                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Terms of Service</li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 JobEqual. All rights reserved.</p>
+          <div className="border-t border-jobequal-neutral-dark mt-12 pt-8 text-center">
+            <p className="text-jobequal-text-muted text-lg">
+              &copy; 2024 JobEqual. All rights reserved. Designed with Swiss precision.
+            </p>
           </div>
         </div>
       </footer>
