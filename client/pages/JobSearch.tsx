@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigation } from '../components/Navigation';
-import { MapPin, Clock, Building, Search, Filter, ChevronDown, Bookmark, Star, TrendingUp } from 'lucide-react';
+import { MapPin, Clock, Building, Search, Filter, ChevronDown, Bookmark, Star, TrendingUp, Target, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Job {
