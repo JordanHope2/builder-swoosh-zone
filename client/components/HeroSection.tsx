@@ -57,19 +57,12 @@ export function HeroSection() {
               </p>
 
               <div className="relative mb-6">
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleFileUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  id="cv-upload"
-                />
-                <label
-                  htmlFor="cv-upload"
-                  className="block w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:scale-105"
+                <Link
+                  to="/cv-upload"
+                  className="block w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-5 px-10 rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:scale-105 text-center"
                 >
-                  Choose File or Drop Here
-                </label>
+                  Upload Your CV
+                </Link>
               </div>
 
               <p className="text-sm text-jobequal-text-muted font-medium">
