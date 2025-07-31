@@ -34,6 +34,7 @@ const mockJob = {
   deadline: '2024-02-15',
   applicants: 24,
   views: 156,
+  matchScore: 95,
   description: `Join our innovative team building next-generation financial technology solutions that serve millions of users worldwide. We're looking for a passionate Senior Software Engineer to help us scale our platform and deliver exceptional user experiences.
 
 As a Senior Software Engineer, you'll work on challenging problems in a collaborative environment where your contributions directly impact the product. You'll have the opportunity to mentor junior developers, architect solutions, and work with cutting-edge technologies.`,
