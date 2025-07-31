@@ -1,238 +1,299 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Navigation } from '../components/Navigation';
 import { 
-  Mail, 
-  Lock, 
   Eye, 
   EyeOff, 
-  User, 
-  Building,
-  ArrowRight,
+  Mail, 
+  Lock, 
+  ArrowRight, 
+  Sparkles,
   Shield,
-  Zap
+  Mountain,
+  CheckCircle
 } from 'lucide-react';
+import { ThemeToggle } from '../components/ThemeProvider';
 
-type UserType = 'candidate' | 'recruiter';
+const benefits = [
+  {
+    icon: Shield,
+    title: 'Swiss Privacy',
+    description: 'Your data protected with Swiss banking-level security'
+  },
+  {
+    icon: Mountain,
+    title: 'Premium Quality',
+    description: 'Curated opportunities from Switzerland\'s finest companies'
+  },
+  {
+    icon: CheckCircle,
+    title: 'AI Matching',
+    description: 'Advanced algorithms find your perfect career match'
+  }
+];
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    userType: 'candidate' as UserType,
     rememberMe: false
   });
-  
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Sign in submitted:', formData);
-    // In real app, handle sign in logic here
+    setIsLoading(true);
+    
+    // Simulate login process
+    setTimeout(() => {
+      setIsLoading(false);
+      // Redirect to dashboard
+      window.location.href = '/dashboard';
+    }, 2000);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-jobequal-blue to-white">
-      <Navigation />
-      
-      <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Side - Welcome Content */}
-          <div className="order-2 lg:order-1">
-            <div className="text-center lg:text-left">
-              <h1 className="text-4xl lg:text-6xl font-bold text-jobequal-text mb-6 leading-tight">
-                Welcome Back to
-                <span className="text-jobequal-green block lg:inline lg:ml-4">JobEqual</span>
-              </h1>
-              <p className="text-xl lg:text-2xl text-jobequal-text-muted mb-12 leading-relaxed">
-                Continue your journey to find the perfect job match or discover exceptional talent.
+    <div className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex">
+      {/* Left Side - Form */}
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="max-w-md w-full space-y-8"
+        >
+          {/* Header */}
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center justify-center mb-6"
+            >
+              <Link to="/" className="flex items-center space-x-3 group">
+                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
+                  <span className="text-white font-bold text-xl">J</span>
+                </div>
+                <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">JobEqual</span>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <h2 className="text-3xl font-bold text-jobequal-text dark:text-white mb-2">
+                Welcome back
+              </h2>
+              <p className="text-jobequal-text-muted dark:text-gray-300">
+                Sign in to continue your career journey
               </p>
-              
-              <div className="space-y-8">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-jobequal-text mb-2">Secure & Private</h3>
-                    <p className="text-jobequal-text-muted">
-                      Your data is protected with Swiss-grade security standards
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Zap className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-jobequal-text mb-2">Instant Matching</h3>
-                    <p className="text-jobequal-text-muted">
-                      AI-powered job matching that understands your aspirations
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Right Side - Sign In Form */}
-          <div className="order-1 lg:order-2">
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 border border-jobequal-neutral-dark">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-jobequal-text mb-2">
-                  Sign In
-                </h2>
-                <p className="text-jobequal-text-muted">
-                  Access your JobEqual account
-                </p>
+          {/* Form */}
+          <motion.form
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            onSubmit={handleSubmit}
+            className="space-y-6"
+          >
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                Email address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:border-transparent transition-all duration-200"
+                  placeholder="Enter your email"
+                />
               </div>
+            </div>
 
-              {/* User Type Toggle */}
-              <div className="flex bg-jobequal-neutral rounded-2xl p-2 mb-8">
+            {/* Password Field */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:border-transparent transition-all duration-200"
+                  placeholder="Enter your password"
+                />
                 <button
                   type="button"
-                  onClick={() => setFormData({...formData, userType: 'candidate'})}
-                  className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-semibold transition-all duration-200 ${
-                    formData.userType === 'candidate'
-                      ? 'bg-white text-jobequal-green shadow-md'
-                      : 'text-jobequal-text-muted hover:text-jobequal-text'
-                  }`}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
-                  <User className="w-4 h-4" />
-                  <span>Job Seeker</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({...formData, userType: 'recruiter'})}
-                  className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-xl font-semibold transition-all duration-200 ${
-                    formData.userType === 'recruiter'
-                      ? 'bg-white text-jobequal-green shadow-md'
-                      : 'text-jobequal-text-muted hover:text-jobequal-text'
-                  }`}
-                >
-                  <Building className="w-4 h-4" />
-                  <span>Recruiter</span>
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
+                  )}
                 </button>
               </div>
+            </div>
 
-              {/* Social Login Buttons */}
-              <div className="space-y-4 mb-8">
-                <button className="w-full flex items-center justify-center space-x-3 py-4 px-6 border border-jobequal-neutral-dark rounded-xl hover:bg-jobequal-neutral transition-all duration-200">
-                  <div className="w-5 h-5 bg-blue-600 rounded text-white text-xs flex items-center justify-center font-bold">f</div>
-                  <span className="font-semibold text-jobequal-text">Continue with LinkedIn</span>
-                </button>
-                
-                <button className="w-full flex items-center justify-center space-x-3 py-4 px-6 border border-jobequal-neutral-dark rounded-xl hover:bg-jobequal-neutral transition-all duration-200">
-                  <div className="w-5 h-5 bg-red-500 rounded text-white text-xs flex items-center justify-center font-bold">G</div>
-                  <span className="font-semibold text-jobequal-text">Continue with Google</span>
-                </button>
+            {/* Remember Me & Forgot Password */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="rememberMe"
+                  name="rememberMe"
+                  type="checkbox"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-jobequal-green focus:ring-jobequal-green border-gray-300 dark:border-gray-600 rounded"
+                />
+                <label htmlFor="rememberMe" className="ml-2 block text-sm text-jobequal-text-muted dark:text-gray-300">
+                  Remember me
+                </label>
               </div>
 
-              {/* Divider */}
-              <div className="relative mb-8">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-jobequal-neutral-dark"></div>
+              <div className="text-sm">
+                <Link to="/forgot-password" className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors">
+                  Forgot your password?
+                </Link>
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-white bg-gradient-to-r from-jobequal-green to-jobequal-teal rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jobequal-green disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              {isLoading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2" />
+                  Signing in...
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-jobequal-text-muted">Or continue with email</span>
+              ) : (
+                <div className="flex items-center">
+                  <span>Sign in</span>
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </div>
-              </div>
+              )}
+            </button>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-gray-900 text-jobequal-text-muted dark:text-gray-400">
+                  Don't have an account?
+                </span>
+              </div>
+            </div>
+
+            {/* Sign Up Link */}
+            <div className="text-center">
+              <Link
+                to="/signup"
+                className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors"
+              >
+                Create your account →
+              </Link>
+            </div>
+          </motion.form>
+        </motion.div>
+      </div>
+
+      {/* Right Side - Benefits & Branding */}
+      <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-jobequal-green/10 via-jobequal-teal/10 to-jobequal-blue/10 dark:from-jobequal-green/5 dark:via-jobequal-teal/5 dark:to-jobequal-blue/5 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10 dark:opacity-5">
+          <div className="absolute top-20 left-20 w-32 h-32 bg-jobequal-green rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-center px-12 py-20">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-12"
+          >
+            <div className="flex items-center mb-6">
+              <Sparkles className="w-6 h-6 text-jobequal-green mr-3 animate-pulse" />
+              <span className="text-jobequal-text-muted dark:text-gray-400 font-medium tracking-wide uppercase">
+                Swiss Excellence
+              </span>
+            </div>
+            <h3 className="text-4xl font-bold text-jobequal-text dark:text-white mb-4 leading-tight">
+              Your Career Journey
+              <br />
+              <span className="bg-gradient-to-r from-jobequal-green to-jobequal-teal bg-clip-text text-transparent">
+                Starts Here
+              </span>
+            </h3>
+            <p className="text-lg text-jobequal-text-muted dark:text-gray-300 leading-relaxed">
+              Join thousands of professionals who found their dream careers through our Swiss-quality platform.
+            </p>
+          </motion.div>
+
+          <div className="space-y-8">
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
+                className="flex items-start space-x-4"
+              >
+                <div className="w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                  <benefit.icon className="w-6 h-6 text-jobequal-green" />
+                </div>
                 <div>
-                  <label className="block text-jobequal-text font-semibold mb-3">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="w-full pl-12 pr-4 py-4 rounded-xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-                      placeholder="your.email@example.com"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-jobequal-text font-semibold mb-3">Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      value={formData.password}
-                      onChange={(e) => setFormData({...formData, password: e.target.value})}
-                      className="w-full pl-12 pr-12 py-4 rounded-xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-                      placeholder="Enter your password"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-jobequal-text-muted hover:text-jobequal-green"
-                    >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center space-x-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.rememberMe}
-                      onChange={(e) => setFormData({...formData, rememberMe: e.target.checked})}
-                      className="w-5 h-5 text-jobequal-green border-jobequal-neutral-dark rounded focus:ring-jobequal-green"
-                    />
-                    <span className="text-jobequal-text-muted">Remember me</span>
-                  </label>
-                  
-                  <Link 
-                    to="/forgot-password"
-                    className="text-jobequal-green hover:text-jobequal-green-dark transition-colors font-semibold"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
-                >
-                  <span>Sign In</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-
-                <div className="text-center pt-6 border-t border-jobequal-neutral-dark">
-                  <p className="text-jobequal-text-muted">
-                    Don't have an account?{' '}
-                    <Link 
-                      to="/signup"
-                      className="text-jobequal-green hover:text-jobequal-green-dark transition-colors font-semibold"
-                    >
-                      Sign up for free
-                    </Link>
+                  <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                    {benefit.title}
+                  </h4>
+                  <p className="text-jobequal-text-muted dark:text-gray-300">
+                    {benefit.description}
                   </p>
                 </div>
-              </form>
-            </div>
+              </motion.div>
+            ))}
           </div>
         </div>
 
-        {/* Trust Indicators */}
-        <div className="text-center mt-16 max-w-4xl mx-auto">
-          <p className="text-jobequal-text-muted text-lg mb-8">
-            Trusted by professionals at top Swiss companies
-          </p>
-          <div className="flex items-center justify-center space-x-12 opacity-60">
-            <div className="text-2xl font-bold text-jobequal-text-muted">UBS</div>
-            <div className="text-2xl font-bold text-jobequal-text-muted">Nestlé</div>
-            <div className="text-2xl font-bold text-jobequal-text-muted">Roche</div>
-            <div className="text-2xl font-bold text-jobequal-text-muted">ABB</div>
-          </div>
+        {/* Theme Toggle */}
+        <div className="absolute top-6 right-6">
+          <ThemeToggle />
         </div>
       </div>
-    </main>
+    </div>
   );
 }
