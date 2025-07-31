@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Upload, Search, MapPin, Calendar } from 'lucide-react';
+import { Upload, Search, MapPin, Calendar, Sparkles } from 'lucide-react';
+import { RedwoodTreeBackground } from './RedwoodTreeBackground';
 
 export function HeroSection() {
   const [selectedLocation, setSelectedLocation] = useState('');
@@ -13,20 +14,9 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-white via-jobequal-green-light to-jobequal-blue overflow-hidden">
-      {/* Redwood Tree Background - Subtle SVG */}
-      <div className="absolute inset-0 opacity-5">
-        <svg
-          viewBox="0 0 400 400"
-          className="absolute right-0 top-0 h-full w-auto"
-          fill="currentColor"
-        >
-          <path d="M200 350 Q190 340 185 325 Q180 310 185 295 Q190 280 200 275 Q210 280 215 295 Q220 310 215 325 Q210 340 200 350 Z" />
-          <path d="M200 275 Q185 265 175 245 Q165 225 175 205 Q185 185 200 180 Q215 185 225 205 Q235 225 225 245 Q215 265 200 275 Z" />
-          <path d="M200 180 Q180 170 165 145 Q150 120 165 95 Q180 70 200 65 Q220 70 235 95 Q250 120 235 145 Q220 170 200 180 Z" />
-          <path d="M195 350 L205 350 L205 380 L195 380 Z" />
-        </svg>
-      </div>
+    <section className="relative bg-gradient-to-br from-white via-jobequal-neutral to-jobequal-blue overflow-hidden min-h-[90vh] flex items-center">
+      {/* Enhanced Redwood Tree Background */}
+      <RedwoodTreeBackground />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-32">
         {/* Main Tagline */}
