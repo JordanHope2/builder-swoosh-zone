@@ -132,5 +132,66 @@
 
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+  }
+
+  /* Smooth scrolling and scroll behavior */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--jobequal-neutral));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--jobequal-green));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--jobequal-green-hover));
+  }
+
+  /* Focus management for accessibility */
+  *:focus {
+    outline: 2px solid hsl(var(--jobequal-green));
+    outline-offset: 2px;
+  }
+
+  /* Remove outline for mouse users but keep for keyboard users */
+  .js-focus-visible *:focus:not(.focus-visible) {
+    outline: none;
+  }
+
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Custom selection colors */
+  ::selection {
+    background: hsl(var(--jobequal-green) / 0.2);
+    color: hsl(var(--jobequal-text));
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    * {
+      border-color: ButtonText !important;
+    }
   }
 }
