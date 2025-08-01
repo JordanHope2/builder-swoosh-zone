@@ -27,18 +27,18 @@ import { Link } from 'react-router-dom';
 
 const teamMembers = [
   {
-    name: 'Dr. Sarah Müller',
+    name: 'Christian Mah',
     role: 'Founder & CEO',
-    avatar: '👩‍💼',
-    bio: 'Former McKinsey partner with 15 years in talent acquisition. ETH Zurich alumna passionate about revolutionizing career matching.',
-    linkedin: 'https://linkedin.com/in/sarahmuller'
+    avatar: '👨‍💼',
+    bio: 'Visionary leader with deep expertise in talent acquisition and AI-driven career matching. Passionate about transforming the Swiss job market.',
+    linkedin: 'https://linkedin.com/in/christianmah'
   },
   {
-    name: 'Thomas Weber',
-    role: 'CTO & Co-Founder',
-    avatar: '👨‍💻',
-    bio: 'AI researcher from EPFL with expertise in machine learning and natural language processing. Previously at Google Research.',
-    linkedin: 'https://linkedin.com/in/thomasweber'
+    name: 'Jeanne Ba',
+    role: 'President & Founder',
+    avatar: '👩‍💼',
+    bio: 'Strategic executive with extensive experience in business development and international markets. Co-founder driving JobEqual\'s global expansion.',
+    linkedin: 'https://linkedin.com/in/jeanneba'
   },
   {
     name: 'Marie Dubois',
@@ -354,7 +354,7 @@ export default function About() {
                   </div>
                   <div>
                     <div className="font-semibold text-jobequal-text">Headquarters</div>
-                    <div className="text-jobequal-text-muted">Bahnhofstrasse 45, 8001 Zurich, Switzerland</div>
+                    <div className="text-jobequal-text-muted">Avenue de la Gare 12, 1003 Lausanne, Switzerland</div>
                   </div>
                 </div>
 
