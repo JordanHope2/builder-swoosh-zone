@@ -117,7 +117,7 @@ export function Navigation() {
 
             {/* Mobile menu button */}
             <div className="lg:hidden flex items-center space-x-3">
-              <NotificationsOverlay />
+              <NotificationSystem />
               <ThemeToggle />
               <LanguageSwitcher />
               <button
