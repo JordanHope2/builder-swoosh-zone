@@ -35,6 +35,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import FAQ from "./pages/FAQ";
 import Pricing from "./pages/Pricing";
+import CompanyDetail from "./pages/CompanyDetail";
 
 const queryClient = new QueryClient();
 
