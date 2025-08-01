@@ -44,6 +44,17 @@ import {
   Linkedin,
   Twitter
 } from 'lucide-react';
+import {
+  DashboardContainer,
+  StatsCard,
+  SectionHeader,
+  ActionButton,
+  DashboardCard,
+  LoadingSpinner,
+  fadeInUp,
+  slideInLeft
+} from '../components/ui/unified-dashboard';
+import SecurityUtils from '../lib/security';
 
 interface DashboardStats {
   totalJobPosts: number;
