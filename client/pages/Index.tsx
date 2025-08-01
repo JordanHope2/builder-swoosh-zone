@@ -1,7 +1,6 @@
 import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
 import { FeaturedJobs } from '../components/FeaturedJobs';
-import { LanguageTest } from '../components/LanguageTest';
 
 export default function Index() {
   return (
