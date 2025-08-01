@@ -41,6 +41,7 @@ import Favorites from "./pages/Favorites";
 import CompanyDashboard from "./pages/CompanyDashboard";
 import EnhancedRecruiterDashboard from "./pages/EnhancedRecruiterDashboard";
 import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
+import RoleSwitcher from "./pages/RoleSwitcher";
 
 const queryClient = new QueryClient();
 
