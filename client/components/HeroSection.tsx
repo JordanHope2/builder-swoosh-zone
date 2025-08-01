@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Upload, Search, MapPin, Calendar, Sparkles, FileText, ChevronDown } from 'lucide-react';
 import { RedwoodTreeBackground } from './RedwoodTreeBackground';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function HeroSection() {
   const [selectedLocation, setSelectedLocation] = useState('');
@@ -9,6 +10,7 @@ export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setIsVisible(true);
@@ -83,11 +85,10 @@ export function HeroSection() {
                 )}
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-jobequal-text mb-4 sm:mb-6 leading-tight">
-                Upload Your CV
+                {t('hero.cta_secondary')}
               </h2>
               <p className="text-base sm:text-lg text-jobequal-text-muted mb-8 sm:mb-10 leading-relaxed">
-                Let our AI analyze your skills and experience to find the perfect job matches for you.
-                Experience Swiss precision in career matching.
+                {t('hero.subtitle')}
               </p>
 
               <div className="relative mb-6">
