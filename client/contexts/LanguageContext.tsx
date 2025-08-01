@@ -124,6 +124,15 @@ const translations = {
     'hero.advanced_upload_page': 'Or use our advanced upload page',
     'hero.uploading': 'Uploading... {percent}%',
 
+    // Featured Jobs
+    'featured.title': 'Featured Swiss Opportunities',
+    'featured.subtitle': 'Discover hand-picked job opportunities from Switzerland\'s most prestigious companies. Quality positions for exceptional professionals.',
+    'featured.match': 'Match',
+    'featured.view_all': 'View All Featured Jobs',
+    'featured.posted_time_ago': 'Posted {time} ago',
+    'featured.save_job': 'Save this job',
+    'featured.apply_now': 'Apply Now',
+
     // AI Chatbot
     'ai.welcome': "Hi! I'm your AI career assistant. I can help you find jobs, get salary insights, and optimize your profile. What can I help you with today?",
     'ai.find_jobs': 'Find jobs for me',
@@ -242,6 +251,15 @@ const translations = {
     // Hero Section
     'hero.advanced_upload_page': 'Oder nutzen Sie unsere erweiterte Upload-Seite',
     'hero.uploading': 'Hochladen... {percent}%',
+
+    // Featured Jobs
+    'featured.title': 'Empfohlene Schweizer Stellenangebote',
+    'featured.subtitle': 'Entdecken Sie handverlesene Stellenangebote von den renommiertesten Unternehmen der Schweiz. Qualitätspositionen für außergewöhnliche Fachkräfte.',
+    'featured.match': 'Übereinstimmung',
+    'featured.view_all': 'Alle Empfohlenen Jobs Anzeigen',
+    'featured.posted_time_ago': 'Vor {time} veröffentlicht',
+    'featured.save_job': 'Diesen Job speichern',
+    'featured.apply_now': 'Jetzt Bewerben',
 
     // AI Chatbot
     'ai.ask_anything': 'Fragen Sie mich alles über Jobs!',
@@ -363,6 +381,15 @@ const translations = {
     'hero.advanced_upload_page': 'Ou utilisez notre page de téléchargement avancée',
     'hero.uploading': 'Téléchargement... {percent}%',
 
+    // Featured Jobs
+    'featured.title': 'Opportunités Suisses en Vedette',
+    'featured.subtitle': 'Découvrez des opportunités d\'emploi sélectionnées avec soin des entreprises les plus prestigieuses de Suisse. Des postes de qualité pour des professionnels exceptionnels.',
+    'featured.match': 'Correspondance',
+    'featured.view_all': 'Voir Tous les Emplois en Vedette',
+    'featured.posted_time_ago': 'Publié il y a {time}',
+    'featured.save_job': 'Sauvegarder cet emploi',
+    'featured.apply_now': 'Postuler Maintenant',
+
     // AI Chatbot
     'ai.ask_anything': 'Demandez-moi tout sur les emplois!',
     'ai.ask_placeholder': 'Demandez-moi tout sur les emplois...',
@@ -483,6 +510,15 @@ const translations = {
     'hero.advanced_upload_page': 'O usa la nostra pagina di caricamento avanzata',
     'hero.uploading': 'Caricamento... {percent}%',
 
+    // Featured Jobs
+    'featured.title': 'Opportunità Svizzere in Evidenza',
+    'featured.subtitle': 'Scopri opportunità di lavoro selezionate dalle aziende più prestigiose della Svizzera. Posizioni di qualità per professionisti eccezionali.',
+    'featured.match': 'Corrispondenza',
+    'featured.view_all': 'Visualizza Tutti i Lavori in Evidenza',
+    'featured.posted_time_ago': 'Pubblicato {time} fa',
+    'featured.save_job': 'Salva questo lavoro',
+    'featured.apply_now': 'Candidati Ora',
+
     // AI Chatbot
     'ai.ask_anything': 'Chiedimi qualsiasi cosa sui lavori!',
     'ai.ask_placeholder': 'Chiedimi qualsiasi cosa sui lavori...',
@@ -602,6 +638,15 @@ const translations = {
     // Hero Section
     'hero.advanced_upload_page': 'U duvrai nossa pagina da chargiada avanzada',
     'hero.uploading': 'Chargiar... {percent}%',
+
+    // Featured Jobs
+    'featured.title': 'Pussaivladads Svizras en Emprima Lingia',
+    'featured.subtitle': 'Scuvrir pussaivladads da plazzas selecziunadas da las interprendas pli prestigiusas da la Svizra. Posiziuns da qualità per professiunists excepziunals.',
+    'featured.match': 'Correspundenza',
+    'featured.view_all': 'Vesair Tut las Plazzas en Emprima Lingia',
+    'featured.posted_time_ago': 'Publitgà {time} enavant',
+    'featured.save_job': 'Memorisar questa plazza',
+    'featured.apply_now': 'Sa Candidar Ussa',
 
     // AI Chatbot
     'ai.ask_anything': 'Dumai mai tut davart plazzas!',
