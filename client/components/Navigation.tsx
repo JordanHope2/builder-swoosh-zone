@@ -3,11 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeProvider';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
 
   // Handle scroll effect
   useEffect(() => {
@@ -36,12 +38,12 @@ export function Navigation() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { to: '/job-search', label: 'Browse Jobs' },
-    { to: '/swipe', label: 'Swipe Discovery' },
-    { to: '/cv-upload', label: 'Upload CV' },
-    { to: '/companies', label: 'Companies' },
-    { to: '/about', label: 'About' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/job-search', label: t('nav.browse_jobs') },
+    { to: '/swipe', label: t('nav.swipe_discovery') },
+    { to: '/cv-upload', label: t('nav.upload_cv') },
+    { to: '/companies', label: t('nav.companies') },
+    { to: '/about', label: t('nav.about') },
+    { to: '/contact', label: t('nav.contact') },
   ];
 
   const isActiveLink = (path: string) => location.pathname === path;
