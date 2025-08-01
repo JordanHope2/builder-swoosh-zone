@@ -87,6 +87,17 @@ const translations = {
     'ai_score.skill_match': 'Skill Match',
     'ai_score.market_fit': 'Market Fit',
     'ai_score.salary_potential': 'Salary Potential',
+
+    // AI Chatbot
+    'ai.welcome': "Hi! I'm your AI career assistant. I can help you find jobs, get salary insights, and optimize your profile. What can I help you with today?",
+    'ai.find_jobs': 'Find jobs for me',
+    'ai.location_jobs': 'Jobs in my area',
+    'ai.remote_jobs': 'Remote positions',
+    'ai.salary_insights': 'Salary insights',
+    'ai.type_message': 'Type your message...',
+    'ai.search_jobs': 'search jobs',
+    'ai.cv_review': 'cv review',
+    'ai.company_match': 'company match',
   },
   
   de: {
