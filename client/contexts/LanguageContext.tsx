@@ -127,6 +127,7 @@ const translations = {
     // Featured Jobs
     'featured.title': 'Featured Swiss Opportunities',
     'featured.subtitle': 'Discover hand-picked job opportunities from Switzerland\'s most prestigious companies. Quality positions for exceptional professionals.',
+    'featured.featured': 'Featured',
     'featured.match': 'Match',
     'featured.view_all': 'View All Featured Jobs',
     'featured.posted_time_ago': 'Posted {time} ago',
@@ -255,6 +256,7 @@ const translations = {
     // Featured Jobs
     'featured.title': 'Empfohlene Schweizer Stellenangebote',
     'featured.subtitle': 'Entdecken Sie handverlesene Stellenangebote von den renommiertesten Unternehmen der Schweiz. Qualitätspositionen für außergewöhnliche Fachkräfte.',
+    'featured.featured': 'Empfohlen',
     'featured.match': 'Übereinstimmung',
     'featured.view_all': 'Alle Empfohlenen Jobs Anzeigen',
     'featured.posted_time_ago': 'Vor {time} veröffentlicht',
@@ -384,6 +386,7 @@ const translations = {
     // Featured Jobs
     'featured.title': 'Opportunités Suisses en Vedette',
     'featured.subtitle': 'Découvrez des opportunités d\'emploi sélectionnées avec soin des entreprises les plus prestigieuses de Suisse. Des postes de qualité pour des professionnels exceptionnels.',
+    'featured.featured': 'En Vedette',
     'featured.match': 'Correspondance',
     'featured.view_all': 'Voir Tous les Emplois en Vedette',
     'featured.posted_time_ago': 'Publié il y a {time}',
@@ -513,6 +516,7 @@ const translations = {
     // Featured Jobs
     'featured.title': 'Opportunità Svizzere in Evidenza',
     'featured.subtitle': 'Scopri opportunità di lavoro selezionate dalle aziende più prestigiose della Svizzera. Posizioni di qualità per professionisti eccezionali.',
+    'featured.featured': 'In Evidenza',
     'featured.match': 'Corrispondenza',
     'featured.view_all': 'Visualizza Tutti i Lavori in Evidenza',
     'featured.posted_time_ago': 'Pubblicato {time} fa',
@@ -642,6 +646,7 @@ const translations = {
     // Featured Jobs
     'featured.title': 'Pussaivladads Svizras en Emprima Lingia',
     'featured.subtitle': 'Scuvrir pussaivladads da plazzas selecziunadas da las interprendas pli prestigiusas da la Svizra. Posiziuns da qualità per professiunists excepziunals.',
+    'featured.featured': 'En Emprima Lingia',
     'featured.match': 'Correspundenza',
     'featured.view_all': 'Vesair Tut las Plazzas en Emprima Lingia',
     'featured.posted_time_ago': 'Publitgà {time} enavant',
