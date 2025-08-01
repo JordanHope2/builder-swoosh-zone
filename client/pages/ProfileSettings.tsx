@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '../components/Navigation';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   User, 
   Mail, 
@@ -136,6 +137,7 @@ export default function ProfileSettings() {
   const [isLoading, setSaving] = useState(false);
   const [newSkill, setNewSkill] = useState('');
   const [newLanguage, setNewLanguage] = useState('');
+  const { t } = useLanguage();
 
   const updateProfile = (path: string, value: any) => {
     setProfile(prev => {
@@ -204,10 +206,10 @@ export default function ProfileSettings() {
         >
           <div>
             <h1 className="text-3xl font-bold text-jobequal-text dark:text-white mb-2">
-              Profile Settings
+              {t('profile.title')}
             </h1>
             <p className="text-jobequal-text-muted dark:text-gray-300">
-              Manage your account settings and preferences
+              {t('profile.subtitle')}
             </p>
           </div>
           
@@ -224,12 +226,12 @@ export default function ProfileSettings() {
                 {isLoading ? (
                   <>
                     <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-                    <span>Saving...</span>
+                    <span>{t('profile.saving')}</span>
                   </>
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
-                    <span>Save Changes</span>
+                    <span>{t('profile.save_changes')}</span>
                   </>
                 )}
               </motion.button>
