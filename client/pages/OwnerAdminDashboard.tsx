@@ -69,6 +69,17 @@ import {
   AdminPanelSettings
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+  DashboardContainer,
+  StatsCard,
+  SectionHeader,
+  ActionButton,
+  DashboardCard,
+  LoadingSpinner,
+  fadeInUp,
+  slideInLeft
+} from '../components/ui/unified-dashboard';
+import SecurityUtils from '../lib/security';
 
 interface PlatformMetrics {
   totalUsers: number;
