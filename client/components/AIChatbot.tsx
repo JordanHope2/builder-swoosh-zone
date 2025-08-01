@@ -13,6 +13,7 @@ import {
   TrendingUp,
   Zap
 } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Message {
   id: string;
@@ -38,19 +39,25 @@ const mockResponses = {
 };
 
 export function AIChatbot() {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Hi! I'm your AI career assistant. I can help you find jobs, get salary insights, and optimize your profile. What can I help you with today?",
-      isBot: true,
-      timestamp: new Date(),
-      suggestions: ["Find jobs for me", "Jobs in Zurich", "Remote positions", "Salary insights"]
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize with welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([{
+        id: '1',
+        text: t('ai.welcome'),
+        isBot: true,
+        timestamp: new Date(),
+        suggestions: [t('ai.find_jobs_for_me'), t('ai.jobs_in_zurich'), t('ai.remote_positions'), t('ai.salary_insights')]
+      }]);
+    }
+  }, [t, messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -81,7 +88,24 @@ export function AIChatbot() {
     // Simulate AI thinking time
     setTimeout(() => {
       const responseKey = action || 'default';
-      const response = mockResponses[responseKey as keyof typeof mockResponses] || mockResponses.default;
+      let response;
+
+      switch(responseKey) {
+        case 'search_jobs':
+          response = t('ai.find_jobs_response');
+          break;
+        case 'jobs_zurich':
+          response = t('ai.zurich_jobs_response');
+          break;
+        case 'remote_jobs':
+          response = t('ai.remote_jobs_response');
+          break;
+        case 'salary_info':
+          response = "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?";
+          break;
+        default:
+          response = t('ai.help_find_job');
+      }
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -118,7 +142,7 @@ export function AIChatbot() {
         
         {/* Tooltip */}
         <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          Ask me anything about jobs!
+          {t('ai.ask_anything')}
         </div>
       </motion.button>
 
@@ -224,16 +248,25 @@ export function AIChatbot() {
             {/* Quick Actions */}
             <div className="p-3 border-t border-gray-200 dark:border-gray-600">
               <div className="grid grid-cols-2 gap-2 mb-3">
-                {quickActions.map((action, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleQuickAction(action.action, action.text)}
-                    className="flex items-center space-x-2 p-2 bg-jobequal-green-light dark:bg-gray-700 text-jobequal-green-dark dark:text-gray-300 rounded-lg hover:bg-jobequal-green hover:text-white dark:hover:bg-jobequal-green transition-colors text-xs"
-                  >
-                    <action.icon className="w-3 h-3" />
-                    <span>{action.text}</span>
-                  </button>
-                ))}
+                {quickActions.map((action, index) => {
+                  let translatedText = action.text;
+                  switch(action.action) {
+                    case 'search_jobs': translatedText = t('ai.find_jobs_for_me'); break;
+                    case 'jobs_zurich': translatedText = t('ai.jobs_in_zurich'); break;
+                    case 'remote_jobs': translatedText = t('ai.remote_positions'); break;
+                    case 'salary_info': translatedText = t('ai.salary_insights'); break;
+                  }
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleQuickAction(action.action, translatedText)}
+                      className="flex items-center space-x-2 p-2 bg-jobequal-green-light dark:bg-gray-700 text-jobequal-green-dark dark:text-gray-300 rounded-lg hover:bg-jobequal-green hover:text-white dark:hover:bg-jobequal-green transition-colors text-xs"
+                    >
+                      <action.icon className="w-3 h-3" />
+                      <span className="truncate">{translatedText}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -244,7 +277,7 @@ export function AIChatbot() {
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder="Ask me anything about jobs..."
+                  placeholder={t('ai.ask_placeholder')}
                   className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-jobequal-green focus:border-transparent text-sm"
                 />
                 <button
