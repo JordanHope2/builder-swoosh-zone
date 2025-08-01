@@ -96,7 +96,7 @@ export function HeroSection() {
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-sm text-jobequal-text-muted mt-2">Uploading... {uploadProgress}%</p>
+                    <p className="text-sm text-jobequal-text-muted mt-2">{t('hero.uploading').replace('{percent}', String(uploadProgress))}</p>
                   </div>
                 )}
                 <div className="relative">
@@ -118,7 +118,7 @@ export function HeroSection() {
                   to="/cv-upload"
                   className="block w-full mt-3 text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors duration-200 text-sm"
                 >
-                  Or use our advanced upload page
+                  {t('hero.advanced_upload_page')}
                 </Link>
               </div>
 
