@@ -96,6 +96,12 @@ export function Navigation() {
               <ThemeToggle />
               <LanguageSwitcher />
               <Link
+                to="/role-switcher"
+                className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-3 xl:px-4 py-2 xl:py-2.5 rounded-lg font-medium hover:from-purple-600 hover:to-indigo-600 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-xs xl:text-sm"
+              >
+                🔄 Role Switch
+              </Link>
+              <Link
                 to="/signin"
                 className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
               >
