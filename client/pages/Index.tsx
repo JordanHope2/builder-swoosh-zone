@@ -8,7 +8,6 @@ export default function Index() {
       <Navigation />
       <HeroSection />
       <FeaturedJobs />
-      <LanguageTest />
 
       {/* Trust & Stats Section */}
       <section className="py-20 lg:py-32 bg-white dark:bg-gray-800">
