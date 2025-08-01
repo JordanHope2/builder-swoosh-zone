@@ -81,7 +81,7 @@ const App = () => (
             <Route path="/swipe" element={<SwipeDiscovery />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <AIChatbot />
+          <EnhancedAIChatbot />
         </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
