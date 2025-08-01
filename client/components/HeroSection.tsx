@@ -57,14 +57,10 @@ export function HeroSection() {
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-jobequal-green ml-2 sm:ml-3 animate-pulse-soft" />
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-jobequal-text mb-6 sm:mb-8 leading-tight tracking-tight">
-            We match
-            <span className="text-jobequal-green block sm:inline lg:ml-4 animate-gradient-x bg-gradient-to-r from-jobequal-green to-jobequal-teal bg-clip-text text-transparent">aspirations,</span>
-            <br className="hidden sm:block" />
-            <span className="text-jobequal-text-muted text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">not just profiles</span>
+            {t('hero.title')}
           </h1>
           <p className="text-lg sm:text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed font-light px-4">
-            Discover opportunities that align with your career goals and values.
-            Experience Swiss-quality job matching that goes beyond traditional recruiting.
+            {t('hero.subtitle')}
           </p>
         </div>
 
@@ -115,7 +111,7 @@ export function HeroSection() {
                     isUploading ? 'opacity-50 cursor-not-allowed' : ''
                   }`}>
                     <FileText className="w-5 h-5" />
-                    <span>{isUploading ? 'Uploading...' : 'Upload Your CV'}</span>
+                    <span>{isUploading ? t('common.loading') : t('hero.cta_secondary')}</span>
                   </div>
                 </div>
                 <Link
@@ -139,7 +135,7 @@ export function HeroSection() {
                 <Search className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-jobequal-text mb-4 sm:mb-6 leading-tight">
-                Browse Jobs
+                {t('nav.browse_jobs')}
               </h2>
               <p className="text-base sm:text-lg text-jobequal-text-muted mb-8 sm:mb-10 leading-relaxed">
                 Explore opportunities by location, role, and company type.
@@ -185,7 +181,7 @@ export function HeroSection() {
                   to="/job-search"
                   className="block w-full bg-gradient-to-r from-jobequal-blue-dark to-jobequal-teal text-white py-4 sm:py-5 px-6 sm:px-10 rounded-xl sm:rounded-2xl font-semibold hover:from-jobequal-blue-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-center"
                 >
-                  Search Jobs
+                  {t('hero.cta_primary')}
                 </Link>
               </div>
             </div>
