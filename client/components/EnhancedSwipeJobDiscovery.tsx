@@ -5,26 +5,16 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { 
   Heart, 
   X, 
-  Bookmark, 
-  MapPin, 
-  Clock, 
-  TrendingUp, 
-  Zap,
   RotateCcw,
+  CheckCircle,
+  Target,
+  MapPin,
+  DollarSign,
   Star,
-  Building,
-  Users,
   ChevronUp,
   ChevronDown,
   Send,
-  FileText,
-  ExternalLink,
-  Sparkles,
-  Award,
-  DollarSign,
-  CheckCircle,
-  AlertCircle,
-  Target
+  Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -81,194 +71,16 @@ const mockSwipeJobs: SwipeJob[] = [
     benefits: ['Flexible Hours', 'Health Insurance', 'Training Budget', 'Team Events'],
     whyMatch: ['Leadership experience match', 'Industry expertise', 'Growth potential', 'Team collaboration skills'],
     postedDate: '2024-01-12'
-  },
-  {
-    id: '3',
-    title: 'UX Designer',
-    company: 'DesignStudio Basel',
-    logo: '🎨',
-    location: 'Basel (Remote)',
-    salary: 'CHF 85,000 - 105,000',
-    type: 'Full-time',
-    description: 'Create beautiful and intuitive user experiences for B2B applications, working with a talented design team.',
-    requirements: ['Figma', 'User Research', 'Prototyping', 'Design Systems'],
-    matchScore: 73,
-    companySize: '20-50 employees',
-    benefits: ['Remote Work', 'Creative Freedom', 'Latest Tools', 'Design Conferences'],
-    whyMatch: ['Design tool expertise', 'Remote work preference', 'Creative projects', 'Portfolio alignment'],
-    applicationDeadline: '2024-02-20',
-    postedDate: '2024-01-15'
-  },
-  {
-    id: '4',
-    title: 'Data Scientist',
-    company: 'Analytics Pro',
-    logo: '📊',
-    location: 'Zurich',
-    salary: 'CHF 95,000 - 125,000',
-    type: 'Full-time',
-    description: 'Analyze complex datasets to drive business insights and build predictive models for our e-commerce platform.',
-    requirements: ['Python', 'Machine Learning', 'SQL', 'Statistics'],
-    matchScore: 82,
-    companySize: '100-200 employees',
-    benefits: ['Learning Budget', 'Conference Attendance', 'Health Insurance', 'Flexible Schedule'],
-    whyMatch: ['Strong Python skills', 'ML experience', 'Statistical background', 'Problem-solving approach'],
-    postedDate: '2024-01-18'
   }
 ];
-
-interface ApplicationModalProps {
-  job: SwipeJob;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: () => void;
-}
-
-function ApplicationModal({ job, isOpen, onClose, onSubmit }: ApplicationModalProps) {
-  const [coverLetter, setCoverLetter] = useState('');
-  const [includeCV, setIncludeCV] = useState(true);
-  const [includePortfolio, setIncludePortfolio] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { t } = useLanguage();
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsSubmitting(false);
-    onSubmit();
-    onClose();
-  };
-
-  if (!isOpen) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-jobequal-text dark:text-white">
-            Apply for {job.title}
-          </h3>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
-            <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">{job.company}</h4>
-            <p className="text-jobequal-text-muted dark:text-gray-400 text-sm">{job.location} • {job.type}</p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
-              Cover Letter (Optional)
-            </label>
-            <textarea
-              value={coverLetter}
-              onChange={(e) => setCoverLetter(e.target.value)}
-              rows={4}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
-              placeholder="Tell the employer why you're interested in this position..."
-            />
-          </div>
-
-          <div className="space-y-3">
-            <h4 className="font-semibold text-jobequal-text dark:text-white">Documents to Include:</h4>
-            
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                checked={includeCV}
-                onChange={(e) => setIncludeCV(e.target.checked)}
-                className="w-4 h-4 text-jobequal-green border-gray-300 dark:border-gray-600 rounded focus:ring-jobequal-green"
-              />
-              <span className="text-jobequal-text dark:text-white">Include my CV</span>
-              <CheckCircle className="w-4 h-4 text-green-500" />
-            </label>
-
-            <label className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                checked={includePortfolio}
-                onChange={(e) => setIncludePortfolio(e.target.checked)}
-                className="w-4 h-4 text-jobequal-green border-gray-300 dark:border-gray-600 rounded focus:ring-jobequal-green"
-              />
-              <span className="text-jobequal-text dark:text-white">Include portfolio link</span>
-            </label>
-          </div>
-
-          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
-            <div className="flex items-start space-x-3">
-              <Sparkles className="w-5 h-5 text-blue-600 mt-0.5" />
-              <div className="text-sm">
-                <p className="font-medium text-blue-800 dark:text-blue-200 mb-1">
-                  AI Application Boost
-                </p>
-                <p className="text-blue-700 dark:text-blue-300">
-                  Your application will be highlighted to the employer as a top match based on your {job.matchScore}% compatibility score.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex space-x-3">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 text-jobequal-text dark:text-white rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={isSubmitting || !includeCV}
-              className="flex-1 bg-jobequal-green hover:bg-jobequal-green-hover text-white px-4 py-3 rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
-                  <span>Submitting...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4" />
-                  <span>Submit Application</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export function EnhancedSwipeJobDiscovery() {
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
   const [swipedJobs, setSwipedJobs] = useState<{ job: SwipeJob; action: 'like' | 'pass' }[]>([]);
   const [showDetails, setShowDetails] = useState(false);
-  const [showApplicationModal, setShowApplicationModal] = useState(false);
-  const [appliedJobs, setAppliedJobs] = useState<Set<string>>(new Set());
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
-  const constraintsRef = useRef<HTMLDivElement>(null);
   const controls = useAnimation();
-  const { addToFavorites, isFavorite } = useFavorites();
-  const { t } = useLanguage();
+  const { addToFavorites } = useFavorites();
 
   const currentJob = mockSwipeJobs[currentJobIndex];
   const hasMoreJobs = currentJobIndex < mockSwipeJobs.length - 1;
@@ -290,7 +102,7 @@ export function EnhancedSwipeJobDiscovery() {
     setSwipedJobs(prev => [...prev, { job: currentJob, action }]);
 
     if (direction === 'right') {
-      // Add to favorites when swiped right
+      // Add to favorites and submit application automatically
       addToFavorites({
         id: currentJob.id,
         title: currentJob.title,
@@ -299,9 +111,6 @@ export function EnhancedSwipeJobDiscovery() {
         salary: currentJob.salary,
         type: 'job'
       });
-      
-      // Show application modal
-      setShowApplicationModal(true);
     }
 
     // Move to next job
@@ -335,17 +144,10 @@ export function EnhancedSwipeJobDiscovery() {
   const handleUndo = useCallback(() => {
     if (swipedJobs.length === 0) return;
     
-    const lastSwiped = swipedJobs[swipedJobs.length - 1];
     setSwipedJobs(prev => prev.slice(0, -1));
     setCurrentJobIndex(prev => Math.max(0, prev - 1));
     controls.set({ x: 0, rotate: 0, opacity: 1 });
   }, [swipedJobs, controls]);
-
-  const handleApplicationSubmit = () => {
-    if (currentJob) {
-      setAppliedJobs(prev => new Set(prev.add(currentJob.id)));
-    }
-  };
 
   const getMatchScoreColor = (score: number) => {
     if (score >= 90) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
@@ -367,7 +169,7 @@ export function EnhancedSwipeJobDiscovery() {
             Great Job Exploring!
           </h3>
           <p className="text-jobequal-text-muted dark:text-gray-400 mb-6">
-            You've reviewed all available positions. Check your applications and saved jobs, or discover more opportunities.
+            You've reviewed all available positions. Check your applications and saved jobs.
           </p>
           <div className="space-y-3">
             <Link
@@ -383,7 +185,7 @@ export function EnhancedSwipeJobDiscovery() {
               Advanced Search
             </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -411,8 +213,8 @@ export function EnhancedSwipeJobDiscovery() {
       </div>
 
       {/* Swipe Container */}
-      <div className="relative h-[600px] overflow-hidden" ref={constraintsRef}>
-        {/* Background Card (Next Job Preview) */}
+      <div className="relative h-[600px] overflow-hidden">
+        {/* Background Card */}
         {hasMoreJobs && (
           <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg opacity-50 scale-95" />
         )}
@@ -424,17 +226,7 @@ export function EnhancedSwipeJobDiscovery() {
           dragConstraints={{ left: 0, right: 0 }}
           onDragEnd={handleDragEnd}
           animate={controls}
-          whileDrag={{ 
-            scale: 1.02,
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-          }}
-          style={{
-            backgroundImage: swipeDirection === 'right' 
-              ? 'linear-gradient(45deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.2))'
-              : swipeDirection === 'left'
-              ? 'linear-gradient(45deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2))'
-              : 'none'
-          }}
+          whileDrag={{ scale: 1.02 }}
         >
           {/* Swipe Indicators */}
           <AnimatePresence>
@@ -446,7 +238,7 @@ export function EnhancedSwipeJobDiscovery() {
                 className="absolute top-8 left-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10"
               >
                 <Heart className="w-6 h-6 inline mr-2" />
-                LIKE
+                APPLY
               </motion.div>
             )}
             {swipeDirection === 'left' && (
@@ -466,8 +258,11 @@ export function EnhancedSwipeJobDiscovery() {
             {/* Header with JobEqual Logo */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
-                <div className="w-6 h-6 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center">
+                <div className="w-6 h-6 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center relative">
                   <span className="text-white font-bold text-xs">J</span>
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full">
+                    <span className="text-white text-xs">+</span>
+                  </div>
                 </div>
                 <span className="text-sm font-medium text-jobequal-green">JobEqual</span>
               </div>
@@ -561,19 +356,6 @@ export function EnhancedSwipeJobDiscovery() {
                       ))}
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="font-medium text-jobequal-text dark:text-white">Company Size:</span>
-                      <p className="text-jobequal-text-muted dark:text-gray-400">{currentJob.companySize}</p>
-                    </div>
-                    <div>
-                      <span className="font-medium text-jobequal-text dark:text-white">Posted:</span>
-                      <p className="text-jobequal-text-muted dark:text-gray-400">
-                        {new Date(currentJob.postedDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
                 </motion.div>
               )}
             </div>
@@ -624,13 +406,19 @@ export function EnhancedSwipeJobDiscovery() {
         </motion.button>
       </div>
 
-      {/* Application Modal */}
-      <ApplicationModal
-        job={currentJob}
-        isOpen={showApplicationModal}
-        onClose={() => setShowApplicationModal(false)}
-        onSubmit={handleApplicationSubmit}
-      />
+      {/* Enhanced Action Info */}
+      <div className="mt-6 grid grid-cols-2 gap-4 text-center">
+        <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
+          <X className="w-6 h-6 text-red-500 mx-auto mb-2" />
+          <p className="text-sm font-medium text-red-700 dark:text-red-300">Swipe Left</p>
+          <p className="text-xs text-red-600 dark:text-red-400">Not interested, skip this position</p>
+        </div>
+        <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+          <Heart className="w-6 h-6 text-green-500 mx-auto mb-2" />
+          <p className="text-sm font-medium text-green-700 dark:text-green-300">Swipe Right</p>
+          <p className="text-xs text-green-600 dark:text-green-400">Apply instantly with your profile</p>
+        </div>
+      </div>
     </div>
   );
 }
