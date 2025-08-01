@@ -88,6 +88,20 @@ const translations = {
     'ai_score.market_fit': 'Market Fit',
     'ai_score.salary_potential': 'Salary Potential',
 
+    // Swipe Discovery
+    'swipe.smart_discovery': 'Smart Discovery',
+    'swipe.title_main': 'Swipe Your Way',
+    'swipe.title_sub': 'to Your Dream Job',
+    'swipe.subtitle': 'Discover personalized job matches with our intuitive swipe interface.',
+    'swipe.swipe_left': 'Swipe Left',
+    'swipe.swipe_right': 'Swipe Right',
+    'swipe.undo': 'Undo',
+    'swipe.not_interested': 'Not interested',
+    'swipe.interested': 'Apply instantly!',
+    'swipe.changed_mind': 'Changed your mind?',
+    'swipe.advanced_search_text': 'Want to see more detailed search options?',
+    'swipe.advanced_search_cta': 'Advanced Job Search →',
+
     // AI Chatbot
     'ai.welcome': "Hi! I'm your AI career assistant. I can help you find jobs, get salary insights, and optimize your profile. What can I help you with today?",
     'ai.find_jobs': 'Find jobs for me',
@@ -162,6 +176,20 @@ const translations = {
     'notifications.no_notifications': 'Keine Benachrichtigungen',
     'notifications.caught_up': 'Sie sind auf dem neuesten Stand! Schauen Sie später wieder vorbei.',
     
+    // Swipe Discovery
+    'swipe.smart_discovery': 'Intelligente Entdeckung',
+    'swipe.title_main': 'Swipen Sie sich',
+    'swipe.title_sub': 'zu Ihrem Traumjob',
+    'swipe.subtitle': 'Entdecken Sie personalisierte Job-Matches mit unserem intuitiven Swipe-Interface.',
+    'swipe.swipe_left': 'Nach Links Swipen',
+    'swipe.swipe_right': 'Nach Rechts Swipen',
+    'swipe.undo': 'Rückgängig',
+    'swipe.not_interested': 'Nicht interessiert',
+    'swipe.interested': 'Sofort bewerben!',
+    'swipe.changed_mind': 'Haben Sie sich umentschieden?',
+    'swipe.advanced_search_text': 'Möchten Sie detailliertere Suchoptionen sehen?',
+    'swipe.advanced_search_cta': 'Erweiterte Jobsuche →',
+
     // AI Score
     'ai_score.title': 'KI-Übereinstimmungsanalyse',
     'ai_score.subtitle': 'Tiefer Einblick in Ihre Profilkompatibilität mit detaillierter Fähigkeitsanalyse und Markteinblicken',
@@ -235,6 +263,20 @@ const translations = {
     'notifications.no_notifications': 'Aucune notification',
     'notifications.caught_up': 'Vous êtes à jour ! Revenez plus tard pour les mises à jour.',
     
+    // Swipe Discovery
+    'swipe.smart_discovery': 'Découverte Intelligente',
+    'swipe.title_main': 'Swipez vers',
+    'swipe.title_sub': 'votre Emploi de Rêve',
+    'swipe.subtitle': 'Découvrez des correspondances d\'emploi personnalisées avec notre interface de swipe intuitive.',
+    'swipe.swipe_left': 'Swiper à Gauche',
+    'swipe.swipe_right': 'Swiper à Droite',
+    'swipe.undo': 'Annuler',
+    'swipe.not_interested': 'Pas intéressé',
+    'swipe.interested': 'Postuler instantanément!',
+    'swipe.changed_mind': 'Vous avez changé d\'avis?',
+    'swipe.advanced_search_text': 'Voulez-vous voir des options de recherche plus détaillées?',
+    'swipe.advanced_search_cta': 'Recherche Avancée d\'Emploi →',
+
     // AI Score
     'ai_score.title': "Analyse de Correspondance IA",
     'ai_score.subtitle': 'Plongée profonde dans votre compatibilité de profil avec une analyse détaillée des compétences et des insights du marché',
@@ -308,6 +350,20 @@ const translations = {
     'notifications.no_notifications': 'Nessuna notifica',
     'notifications.caught_up': 'Sei aggiornato! Controlla più tardi per gli aggiornamenti.',
     
+    // Swipe Discovery
+    'swipe.smart_discovery': 'Scoperta Intelligente',
+    'swipe.title_main': 'Swipa verso',
+    'swipe.title_sub': 'il tuo Lavoro dei Sogni',
+    'swipe.subtitle': 'Scopri corrispondenze di lavoro personalizzate con la nostra interfaccia swipe intuitiva.',
+    'swipe.swipe_left': 'Swipa a Sinistra',
+    'swipe.swipe_right': 'Swipa a Destra',
+    'swipe.undo': 'Annulla',
+    'swipe.not_interested': 'Non interessato',
+    'swipe.interested': 'Candidati subito!',
+    'swipe.changed_mind': 'Hai cambiato idea?',
+    'swipe.advanced_search_text': 'Vuoi vedere opzioni di ricerca più dettagliate?',
+    'swipe.advanced_search_cta': 'Ricerca Lavoro Avanzata →',
+
     // AI Score
     'ai_score.title': 'Analisi Corrispondenza IA',
     'ai_score.subtitle': 'Immersione profonda nella compatibilità del tuo profilo con analisi dettagliata delle competenze e approfondimenti di mercato',
@@ -381,6 +437,20 @@ const translations = {
     'notifications.no_notifications': 'Nagins avis',
     'notifications.caught_up': 'Vus essas actual! Controlai pli tard per actualisaziuns.',
     
+    // Swipe Discovery
+    'swipe.smart_discovery': 'Scuverta Intelligenta',
+    'swipe.title_main': 'Swipe vers',
+    'swipe.title_sub': 'vossa Plazza da Siemi',
+    'swipe.subtitle': 'Scuvrir correspundenzas da plazzas personalisadas cun nossa interfatscha swipe intuitiva.',
+    'swipe.swipe_left': 'Swipe a Schnestra',
+    'swipe.swipe_right': 'Swipe a Dretga',
+    'swipe.undo': 'Interrumper',
+    'swipe.not_interested': 'Betg interessà',
+    'swipe.interested': 'Sa candidar directamain!',
+    'swipe.changed_mind': 'Avais midà idea?',
+    'swipe.advanced_search_text': 'Vulais vesair opziuns da tschertga pli detagliadas?',
+    'swipe.advanced_search_cta': 'Tschertga Avanzada da Plazzas →',
+
     // AI Score
     'ai_score.title': 'Analisa da Correspundenza IA',
     'ai_score.subtitle': 'Immersion profunda en vossa cumpatibladad dal profil cun analisa detagliada da cumpetenzas e perspectivas da martgà',
