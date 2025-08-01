@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeProvider';
+import { NotificationsOverlay } from './NotificationsOverlay';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export function Navigation() {
@@ -88,6 +89,7 @@ export function Navigation() {
 
             {/* Desktop CTA Buttons & Controls */}
             <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
+              <NotificationsOverlay />
               <ThemeToggle />
               <LanguageSwitcher />
               <Link
@@ -106,6 +108,7 @@ export function Navigation() {
 
             {/* Mobile menu button */}
             <div className="lg:hidden flex items-center space-x-3">
+              <NotificationsOverlay />
               <ThemeToggle />
               <LanguageSwitcher />
               <button
