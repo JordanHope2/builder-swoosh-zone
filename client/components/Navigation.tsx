@@ -163,13 +163,13 @@ export function Navigation() {
                 to="/signin"
                 className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral transition-all duration-200"
               >
-                Sign In
+                {t('nav.sign_in')}
               </Link>
               <Link
                 to="/signup"
                 className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
               >
-                Get Started
+                {t('nav.sign_up')}
               </Link>
             </div>
           </div>
