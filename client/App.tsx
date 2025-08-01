@@ -26,6 +26,10 @@ import SwipeDiscovery from "./pages/SwipeDiscovery";
 import EnhancedDashboard from "./pages/EnhancedDashboard";
 import Onboarding from "./pages/Onboarding";
 import { PlaceholderPage } from "./components/PlaceholderPage";
+import CVReviewBooking from "./pages/CVReviewBooking";
+import AIScore from "./pages/AIScore";
+import AdminPanel from "./pages/AdminPanel";
+import ProfileSettings from "./pages/ProfileSettings";
 
 const queryClient = new QueryClient();
 
@@ -58,7 +62,11 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/ai-score" element={<PlaceholderPage title="AI Match Analysis" description="Detailed breakdown of your skill-job compatibility with personalized recommendations." />} />
+          <Route path="/ai-score" element={<AIScore />} />
+          <Route path="/cv-review" element={<CVReviewBooking />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/settings" element={<ProfileSettings />} />
+          <Route path="/profile-settings" element={<ProfileSettings />} />
           <Route path="/post-job" element={<PlaceholderPage title="Post a Job" description="Create and publish job listings to find the best candidates for your company." />} />
           <Route path="/applicants" element={<PlaceholderPage title="Applicant Management" description="Review and manage job applicants, schedule interviews, and track hiring progress." />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
