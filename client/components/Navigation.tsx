@@ -172,6 +172,12 @@ export function Navigation() {
             {/* Mobile CTA Buttons */}
             <div className="pt-6 border-t border-jobequal-neutral-dark space-y-3">
               <Link
+                to="/role-switcher"
+                className="block w-full text-center bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-medium hover:from-purple-600 hover:to-indigo-600 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+              >
+                🔄 Role Switcher
+              </Link>
+              <Link
                 to="/signin"
                 className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral transition-all duration-200"
               >
