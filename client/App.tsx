@@ -39,6 +39,7 @@ import Pricing from "./pages/Pricing";
 import CompanyDetail from "./pages/CompanyDetail";
 import Favorites from "./pages/Favorites";
 import CompanyDashboard from "./pages/CompanyDashboard";
+import EnhancedRecruiterDashboard from "./pages/EnhancedRecruiterDashboard";
 
 const queryClient = new QueryClient();
 
