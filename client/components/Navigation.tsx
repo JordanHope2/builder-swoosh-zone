@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeProvider';
-import { NotificationsOverlay } from './NotificationsOverlay';
+import { NotificationSystem } from './NotificationSystem';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export function Navigation() {
