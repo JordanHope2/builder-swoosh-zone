@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Clock, Building, Heart, Star, TrendingUp, Zap, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Job {
   id: string;
@@ -80,6 +81,7 @@ const featuredJobs: Job[] = [
 ];
 
 function JobCard({ job, index }: { job: Job; index: number }) {
+  const { t } = useLanguage();
   const [isLiked, setIsLiked] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -107,7 +109,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
         <div className="text-center mb-4 sm:mb-6">
           <div className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base lg:text-lg font-bold border-2 animate-pulse-soft ${getMatchColor(job.matchScore)}`}>
             <Zap className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce-subtle" />
-            <span>{job.matchScore}% AI Match</span>
+            <span>{job.matchScore}% {t('featured.match')}</span>
           </div>
         </div>
 
@@ -116,7 +118,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
             <div className="flex items-center space-x-2 animate-slide-in-left">
               <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white text-xs font-semibold px-3 sm:px-4 py-1 sm:py-2 rounded-full flex items-center space-x-1 animate-gradient-x">
                 <Star className="w-3 h-3" />
-                <span>Featured</span>
+                <span>{t('featured.featured')}</span>
               </div>
             </div>
           )}
@@ -128,7 +130,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
             className={`transition-all duration-300 hover:scale-110 ml-auto group/heart ${
               isLiked ? 'text-red-500' : 'text-jobequal-text-muted hover:text-red-500'
             }`}
-            aria-label={isLiked ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label={t('featured.save_job')}
           >
             <Heart className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 group-hover/heart:animate-pulse ${
               isLiked ? 'fill-current scale-110' : ''
@@ -167,7 +169,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
           to={`/job/${job.id}`}
           className="block w-full bg-gradient-to-r from-jobequal-green-light to-jobequal-blue-light text-jobequal-green-dark py-3 sm:py-4 rounded-xl sm:rounded-2xl font-semibold hover:from-jobequal-green hover:to-jobequal-teal hover:text-white transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-center relative overflow-hidden group/button text-sm sm:text-base"
         >
-          <span className="relative z-10">View Details</span>
+          <span className="relative z-10">{t('featured.apply_now')}</span>
           <div className="absolute inset-0 bg-gradient-to-r from-jobequal-green to-jobequal-teal transform scale-x-0 group-hover/button:scale-x-100 transition-transform duration-300 origin-left" />
         </Link>
       </div>
@@ -176,6 +178,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 }
 
 export function FeaturedJobs() {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -213,14 +216,13 @@ export function FeaturedJobs() {
             </span>
             <Star className="w-5 h-5 sm:w-6 sm:h-6 text-jobequal-green ml-2 sm:ml-3 animate-bounce-subtle" style={{ animationDelay: '0.5s' }} />
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-jobequal-text mb-6 sm:mb-8 leading-tight tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-jobequal-text mb-6 sm:mb-8 leading-tight tracking-tight text-center">
             <span className="bg-gradient-to-r from-jobequal-text to-jobequal-green bg-clip-text text-transparent animate-gradient-x">
-              Featured Opportunities
+              {t('featured.title')}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl lg:text-2xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed font-light">
-            Discover hand-picked job opportunities from Switzerland's most prestigious companies.
-            Quality positions for exceptional professionals.
+          <p className="text-lg sm:text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed font-light text-center px-4">
+            {t('featured.subtitle')}
           </p>
         </div>
 
@@ -240,7 +242,7 @@ export function FeaturedJobs() {
             className="inline-block bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-8 sm:px-12 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg relative overflow-hidden group"
           >
             <span className="relative z-10 flex items-center justify-center space-x-2">
-              <span>View All Jobs</span>
+              <span>{t('featured.view_all')}</span>
               <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 rotate-[-90deg] group-hover:translate-x-1 transition-transform duration-300" />
             </span>
             <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
