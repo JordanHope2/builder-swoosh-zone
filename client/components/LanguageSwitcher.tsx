@@ -1,29 +1,14 @@
 import { useState } from 'react';
 import { Globe, ChevronDown } from 'lucide-react';
-
-interface Language {
-  code: string;
-  label: string;
-  nativeLabel: string;
-}
-
-const languages: Language[] = [
-  { code: 'de', label: 'German', nativeLabel: 'Deutsch' },
-  { code: 'fr', label: 'French', nativeLabel: 'Français' },
-  { code: 'it', label: 'Italian', nativeLabel: 'Italiano' },
-  { code: 'rm', label: 'Romansh', nativeLabel: 'Rumantsch' },
-  { code: 'en', label: 'English', nativeLabel: 'English' },
-];
+import { useLanguage, languages } from '../contexts/LanguageContext';
 
 export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState(languages[0]);
+  const { currentLanguage, setLanguage } = useLanguage();
 
-  const handleLanguageChange = (language: Language) => {
-    setCurrentLanguage(language);
+  const handleLanguageChange = (language: typeof languages[0]) => {
+    setLanguage(language);
     setIsOpen(false);
-    // In a real app, this would trigger language change logic
-    console.log('Language changed to:', language.code);
   };
 
   return (
