@@ -81,6 +81,7 @@ export function EnhancedSwipeJobDiscovery() {
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const controls = useAnimation();
   const { addToFavorites } = useFavorites();
+  const { t } = useLanguage();
 
   const currentJob = mockSwipeJobs[currentJobIndex];
   const hasMoreJobs = currentJobIndex < mockSwipeJobs.length - 1;
@@ -166,23 +167,23 @@ export function EnhancedSwipeJobDiscovery() {
         >
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4">
-            Great Job Exploring!
+            {t('swipe_job.great_job_exploring')}
           </h3>
           <p className="text-jobequal-text-muted dark:text-gray-400 mb-6">
-            You've reviewed all available positions. Check your applications and saved jobs.
+            {t('swipe_job.reviewed_all_positions')}
           </p>
           <div className="space-y-3">
             <Link
               to="/favorites"
               className="block w-full bg-jobequal-green hover:bg-jobequal-green-hover text-white py-3 px-6 rounded-xl font-semibold transition-colors"
             >
-              View Saved Jobs ({swipedJobs.filter(s => s.action === 'like').length})
+              {t('swipe_job.view_saved_jobs')} ({swipedJobs.filter(s => s.action === 'like').length})
             </Link>
             <Link
               to="/job-search"
               className="block w-full border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white py-3 px-6 rounded-xl font-semibold transition-colors"
             >
-              Advanced Search
+              {t('swipe_job.advanced_search')}
             </Link>
           </div>
         </motion.div>
@@ -198,10 +199,10 @@ export function EnhancedSwipeJobDiscovery() {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            Job {currentJobIndex + 1} of {mockSwipeJobs.length}
+            {t('swipe_job.job_of').replace('{current}', String(currentJobIndex + 1)).replace('{total}', String(mockSwipeJobs.length))}
           </span>
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            {Math.round(((currentJobIndex + 1) / mockSwipeJobs.length) * 100)}% Complete
+            {t('swipe_job.complete').replace('{percent}', String(Math.round(((currentJobIndex + 1) / mockSwipeJobs.length) * 100)))}
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -238,7 +239,7 @@ export function EnhancedSwipeJobDiscovery() {
                 className="absolute top-8 left-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10"
               >
                 <Heart className="w-6 h-6 inline mr-2" />
-                APPLY
+                {t('swipe_job.apply')}
               </motion.div>
             )}
             {swipeDirection === 'left' && (
@@ -249,7 +250,7 @@ export function EnhancedSwipeJobDiscovery() {
                 className="absolute top-8 right-8 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10"
               >
                 <X className="w-6 h-6 inline mr-2" />
-                PASS
+                {t('swipe_job.pass')}
               </motion.div>
             )}
           </AnimatePresence>
@@ -267,7 +268,7 @@ export function EnhancedSwipeJobDiscovery() {
                 <span className="text-sm font-medium text-jobequal-green">JobEqual</span>
               </div>
               <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getMatchScoreColor(currentJob.matchScore)}`}>
-                {currentJob.matchScore}% Match
+                {currentJob.matchScore}% {t('swipe_job.match')}
                 <Target className="w-4 h-4 inline ml-1" />
               </div>
             </div>
@@ -296,7 +297,7 @@ export function EnhancedSwipeJobDiscovery() {
               {currentJob.featured && (
                 <div className="flex items-center space-x-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full text-xs font-medium">
                   <Star className="w-3 h-3" />
-                  <span>Featured</span>
+                  <span>{t('swipe_job.featured')}</span>
                 </div>
               )}
             </div>
@@ -304,7 +305,7 @@ export function EnhancedSwipeJobDiscovery() {
             {/* Job Details */}
             <div className="flex-1 space-y-4 overflow-y-auto">
               <div>
-                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Why You're a Great Match</h3>
+                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.why_great_match')}</h3>
                 <div className="space-y-2">
                   {currentJob.whyMatch.map((reason, index) => (
                     <div key={index} className="flex items-start space-x-2">
@@ -316,7 +317,7 @@ export function EnhancedSwipeJobDiscovery() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Job Description</h3>
+                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.job_description')}</h3>
                 <p className="text-sm text-jobequal-text-muted dark:text-gray-400 leading-relaxed">
                   {currentJob.description}
                 </p>
@@ -330,7 +331,7 @@ export function EnhancedSwipeJobDiscovery() {
                   className="space-y-4"
                 >
                   <div>
-                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Requirements</h3>
+                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.requirements')}</h3>
                     <div className="flex flex-wrap gap-2">
                       {currentJob.requirements.map((req, index) => (
                         <span
@@ -344,7 +345,7 @@ export function EnhancedSwipeJobDiscovery() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Benefits</h3>
+                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.benefits')}</h3>
                     <div className="flex flex-wrap gap-2">
                       {currentJob.benefits.map((benefit, index) => (
                         <span
@@ -366,7 +367,7 @@ export function EnhancedSwipeJobDiscovery() {
               className="flex items-center justify-center space-x-2 py-2 text-jobequal-green hover:text-jobequal-green-hover transition-colors"
             >
               <span className="text-sm font-medium">
-                {showDetails ? 'Show Less' : 'Show More Details'}
+                {showDetails ? t('swipe_job.show_less') : t('swipe_job.show_more_details')}
               </span>
               {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
