@@ -406,19 +406,7 @@ export function EnhancedSwipeJobDiscovery() {
         </motion.button>
       </div>
 
-      {/* Enhanced Action Info */}
-      <div className="mt-6 grid grid-cols-2 gap-4 text-center">
-        <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-          <X className="w-6 h-6 text-red-500 mx-auto mb-2" />
-          <p className="text-sm font-medium text-red-700 dark:text-red-300">Swipe Left</p>
-          <p className="text-xs text-red-600 dark:text-red-400">Not interested, skip this position</p>
-        </div>
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-          <Heart className="w-6 h-6 text-green-500 mx-auto mb-2" />
-          <p className="text-sm font-medium text-green-700 dark:text-green-300">Swipe Right</p>
-          <p className="text-xs text-green-600 dark:text-green-400">Apply instantly with your profile</p>
-        </div>
-      </div>
+
     </div>
   );
 }
