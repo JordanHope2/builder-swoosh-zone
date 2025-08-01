@@ -144,8 +144,8 @@ export default function SwipeDiscovery() {
           </div>
 
           {/* Enhanced Title */}
-          <motion.h1 
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-jobequal-text dark:text-white mb-6 leading-tight"
+          <motion.h1
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-jobequal-text dark:text-white mb-6 leading-tight center-force lang-transition responsive-spacing"
             animate={titleControls}
           >
             <motion.span 
@@ -178,7 +178,7 @@ export default function SwipeDiscovery() {
             transition={{ delay: 0.6, duration: 1 }}
             className="relative"
           >
-            <p className="text-lg sm:text-xl text-jobequal-text-muted dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-jobequal-text-muted dark:text-gray-300 max-w-2xl mx-auto leading-relaxed center-force lang-transition responsive-spacing">
               {t('swipe.subtitle')}
             </p>
             <motion.div
