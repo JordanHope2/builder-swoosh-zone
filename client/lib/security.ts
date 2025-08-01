@@ -29,7 +29,7 @@ export class SecurityUtils {
     return str
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/javascript:/gi, '')
-      .replace/onclick=/gi, '')
+      .replace(/onclick=/gi, '')
       .replace(/onerror=/gi, '')
       .trim();
   }
