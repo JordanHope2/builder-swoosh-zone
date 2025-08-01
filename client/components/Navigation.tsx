@@ -61,8 +61,11 @@ export function Navigation() {
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2 lg:space-x-3 group">
-                <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105">
+                <div className="relative w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105">
                   <span className="text-white font-bold text-lg lg:text-xl">J</span>
+                  <div className="absolute -top-1 -right-1 w-3 h-3 lg:w-4 lg:h-4 bg-red-600 rounded-full flex items-center justify-center border border-white shadow-sm">
+                    <span className="text-white text-xs font-bold">+</span>
+                  </div>
                 </div>
                 <span className="text-xl lg:text-2xl font-bold text-jobequal-text tracking-tight">JobEqual</span>
               </Link>
