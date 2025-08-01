@@ -1,5 +1,5 @@
 import { Navigation } from '../components/Navigation';
-import { SwipeJobDiscovery } from '../components/SwipeJobDiscovery';
+import { EnhancedSwipeJobDiscovery } from '../components/EnhancedSwipeJobDiscovery';
 import { motion } from 'framer-motion';
 import { Sparkles, Heart, X, RotateCcw } from 'lucide-react';
 
