@@ -38,6 +38,7 @@ import FAQ from "./pages/FAQ";
 import Pricing from "./pages/Pricing";
 import CompanyDetail from "./pages/CompanyDetail";
 import Favorites from "./pages/Favorites";
+import CompanyDashboard from "./pages/CompanyDashboard";
 
 const queryClient = new QueryClient();
 
