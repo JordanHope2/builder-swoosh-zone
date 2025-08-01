@@ -80,7 +80,7 @@ export default function SwipeDiscovery() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <SwipeJobDiscovery />
+          <EnhancedSwipeJobDiscovery />
         </motion.div>
 
         {/* Bottom CTA */}
