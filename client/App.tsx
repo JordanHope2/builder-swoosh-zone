@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -36,6 +37,7 @@ import TermsOfService from "./pages/TermsOfService";
 import FAQ from "./pages/FAQ";
 import Pricing from "./pages/Pricing";
 import CompanyDetail from "./pages/CompanyDetail";
+import Favorites from "./pages/Favorites";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <LanguageProvider>
+        <FavoritesProvider>
         <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -79,6 +82,7 @@ const App = () => (
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="/post-job" element={<PlaceholderPage title="Post a Job" description="Create and publish job listings to find the best candidates for your company." />} />
           <Route path="/applicants" element={<PlaceholderPage title="Applicant Management" description="Review and manage job applicants, schedule interviews, and track hiring progress." />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -88,6 +92,7 @@ const App = () => (
           <EnhancedAIChatbot />
         </BrowserRouter>
         </TooltipProvider>
+        </FavoritesProvider>
       </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>
