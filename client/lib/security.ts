@@ -1,4 +1,5 @@
 // Security utilities for input validation and data sanitization
+import React from 'react';
 
 export class SecurityUtils {
   // Input validation patterns
