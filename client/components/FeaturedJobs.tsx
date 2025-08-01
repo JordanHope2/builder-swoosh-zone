@@ -216,12 +216,12 @@ export function FeaturedJobs() {
             </span>
             <Star className="w-5 h-5 sm:w-6 sm:h-6 text-jobequal-green ml-2 sm:ml-3 animate-bounce-subtle" style={{ animationDelay: '0.5s' }} />
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-jobequal-text mb-6 sm:mb-8 leading-tight tracking-tight text-center">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-jobequal-text mb-6 sm:mb-8 leading-tight tracking-tight center-force lang-transition responsive-spacing">
             <span className="bg-gradient-to-r from-jobequal-text to-jobequal-green bg-clip-text text-transparent animate-gradient-x">
               {t('featured.title')}
             </span>
           </h2>
-          <p className="text-lg sm:text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed font-light text-center px-4">
+          <p className="text-lg sm:text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed font-light center-force lang-transition responsive-spacing px-4">
             {t('featured.subtitle')}
           </p>
         </div>
