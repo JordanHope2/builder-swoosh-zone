@@ -42,6 +42,8 @@ import CompanyDashboard from "./pages/CompanyDashboard";
 import EnhancedRecruiterDashboard from "./pages/EnhancedRecruiterDashboard";
 import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import RoleSwitcher from "./pages/RoleSwitcher";
+import SubscriptionBilling from "./pages/SubscriptionBilling";
+import Messages from "./pages/Messages";
 
 const queryClient = new QueryClient();
 
