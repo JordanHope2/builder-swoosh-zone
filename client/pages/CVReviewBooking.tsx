@@ -592,7 +592,10 @@ export default function CVReviewBooking() {
                   <div className="bg-gradient-to-br from-jobequal-green-light to-jobequal-blue-light dark:from-jobequal-green/20 dark:to-jobequal-blue/20 rounded-xl p-6">
                     <div className="flex items-center mb-4">
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${reviewTypes[booking.type].color} flex items-center justify-center text-white mr-4`}>
-                        <reviewTypes[booking.type].icon className="w-6 h-6" />
+                        {(() => {
+                          const IconComponent = reviewTypes[booking.type].icon;
+                          return <IconComponent className="w-6 h-6" />;
+                        })()}
                       </div>
                       <div>
                         <h3 className="font-bold text-jobequal-text dark:text-white text-lg">
