@@ -102,6 +102,28 @@ const translations = {
     'swipe.advanced_search_text': 'Want to see more detailed search options?',
     'swipe.advanced_search_cta': 'Advanced Job Search →',
 
+    // Swipe Job Discovery
+    'swipe_job.great_job_exploring': 'Great Job Exploring!',
+    'swipe_job.reviewed_all_positions': "You've reviewed all available positions. Check your applications and saved jobs.",
+    'swipe_job.view_saved_jobs': 'View Saved Jobs',
+    'swipe_job.advanced_search': 'Advanced Search',
+    'swipe_job.match': 'Match',
+    'swipe_job.featured': 'Featured',
+    'swipe_job.why_great_match': "Why You're a Great Match",
+    'swipe_job.job_description': 'Job Description',
+    'swipe_job.requirements': 'Requirements',
+    'swipe_job.benefits': 'Benefits',
+    'swipe_job.show_more_details': 'Show More Details',
+    'swipe_job.show_less': 'Show Less',
+    'swipe_job.apply': 'APPLY',
+    'swipe_job.pass': 'PASS',
+    'swipe_job.job_of': 'Job {current} of {total}',
+    'swipe_job.complete': '{percent}% Complete',
+
+    // Hero Section
+    'hero.advanced_upload_page': 'Or use our advanced upload page',
+    'hero.uploading': 'Uploading... {percent}%',
+
     // AI Chatbot
     'ai.welcome': "Hi! I'm your AI career assistant. I can help you find jobs, get salary insights, and optimize your profile. What can I help you with today?",
     'ai.find_jobs': 'Find jobs for me',
@@ -112,6 +134,15 @@ const translations = {
     'ai.search_jobs': 'search jobs',
     'ai.cv_review': 'cv review',
     'ai.company_match': 'company match',
+    'ai.ask_anything': 'Ask me anything about jobs!',
+    'ai.ask_placeholder': 'Ask me anything about jobs...',
+    'ai.find_jobs_for_me': 'Find jobs for me',
+    'ai.jobs_in_zurich': 'Jobs in Zurich',
+    'ai.remote_positions': 'Remote positions',
+    'ai.help_find_job': "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?",
+    'ai.find_jobs_response': "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
+    'ai.zurich_jobs_response': "Here are some great opportunities in Zurich:\n\n🚀 Software Engineer at Google Zurich - CHF 120k-140k\n🏦 UBS Investment Banking - CHF 110k-150k\n📊 Credit Suisse Risk Analyst - CHF 95k-120k\n\nWould you like me to help you apply to any of these?",
+    'ai.remote_jobs_response': "Here are excellent remote opportunities from Swiss companies:\n\n🏠 Remote Frontend Developer - Migros Digital - CHF 100k-120k\n📱 Flutter Developer - SBB - CHF 95k-115k\n📈 Product Manager - Swisscom - CHF 110k-130k\n\nSwiss companies are embracing remote work more than ever. Should I help you apply to any of these?",
   },
   
   de: {
@@ -189,6 +220,39 @@ const translations = {
     'swipe.changed_mind': 'Haben Sie sich umentschieden?',
     'swipe.advanced_search_text': 'Möchten Sie detailliertere Suchoptionen sehen?',
     'swipe.advanced_search_cta': 'Erweiterte Jobsuche →',
+
+    // Swipe Job Discovery
+    'swipe_job.great_job_exploring': 'Tolle Arbeit beim Erkunden!',
+    'swipe_job.reviewed_all_positions': 'Sie haben alle verfügbaren Positionen überprüft. Überprüfen Sie Ihre Bewerbungen und gespeicherten Jobs.',
+    'swipe_job.view_saved_jobs': 'Gespeicherte Jobs Anzeigen',
+    'swipe_job.advanced_search': 'Erweiterte Suche',
+    'swipe_job.match': 'Übereinstimmung',
+    'swipe_job.featured': 'Hervorgehoben',
+    'swipe_job.why_great_match': 'Warum Sie Eine Tolle Übereinstimmung Sind',
+    'swipe_job.job_description': 'Stellenbeschreibung',
+    'swipe_job.requirements': 'Anforderungen',
+    'swipe_job.benefits': 'Vorteile',
+    'swipe_job.show_more_details': 'Mehr Details Anzeigen',
+    'swipe_job.show_less': 'Weniger Anzeigen',
+    'swipe_job.apply': 'BEWERBEN',
+    'swipe_job.pass': 'ABLEHNEN',
+    'swipe_job.job_of': 'Job {current} von {total}',
+    'swipe_job.complete': '{percent}% Abgeschlossen',
+
+    // Hero Section
+    'hero.advanced_upload_page': 'Oder nutzen Sie unsere erweiterte Upload-Seite',
+    'hero.uploading': 'Hochladen... {percent}%',
+
+    // AI Chatbot
+    'ai.ask_anything': 'Fragen Sie mich alles über Jobs!',
+    'ai.ask_placeholder': 'Fragen Sie mich alles über Jobs...',
+    'ai.find_jobs_for_me': 'Finde Jobs für mich',
+    'ai.jobs_in_zurich': 'Jobs in Zürich',
+    'ai.remote_positions': 'Remote-Positionen',
+    'ai.help_find_job': 'Ich bin hier, um Ihnen dabei zu helfen, den perfekten Job zu finden! Ich kann Ihnen helfen:\n\n• Nach bestimmten Rollen suchen\n• Jobs nach Standort finden\n• Gehaltseinblicke erhalten\n• Sie mit Unternehmen zusammenbringen\n• Ihr Profil optimieren\n\nWas möchten Sie tun?',
+    'ai.find_jobs_response': 'Ich helfe Ihnen gerne beim Finden von Jobs! Nach welcher Art von Stelle suchen Sie? Sie können etwas wie "Software Engineer" oder "Marketing Manager" sagen.',
+    'ai.zurich_jobs_response': 'Hier sind einige großartige Möglichkeiten in Zürich:\n\n🚀 Software Engineer bei Google Zürich - CHF 120k-140k\n🏦 UBS Investment Banking - CHF 110k-150k\n📊 Credit Suisse Risikoanalyst - CHF 95k-120k\n\nSoll ich Ihnen bei der Bewerbung für eine davon helfen?',
+    'ai.remote_jobs_response': 'Hier sind ausgezeichnete Remote-Möglichkeiten von Schweizer Unternehmen:\n\n🏠 Remote Frontend Developer - Migros Digital - CHF 100k-120k\n📱 Flutter Developer - SBB - CHF 95k-115k\n📈 Product Manager - Swisscom - CHF 110k-130k\n\nSchweizer Unternehmen akzeptieren Remote-Arbeit mehr denn je. Soll ich Ihnen bei der Bewerbung helfen?',
 
     // AI Score
     'ai_score.title': 'KI-Übereinstimmungsanalyse',
@@ -277,6 +341,39 @@ const translations = {
     'swipe.advanced_search_text': 'Voulez-vous voir des options de recherche plus détaillées?',
     'swipe.advanced_search_cta': 'Recherche Avancée d\'Emploi →',
 
+    // Swipe Job Discovery
+    'swipe_job.great_job_exploring': 'Excellent Travail d\'Exploration!',
+    'swipe_job.reviewed_all_positions': 'Vous avez examiné toutes les positions disponibles. Vérifiez vos candidatures et emplois sauvegardés.',
+    'swipe_job.view_saved_jobs': 'Voir les Emplois Sauvegardés',
+    'swipe_job.advanced_search': 'Recherche Avancée',
+    'swipe_job.match': 'Correspondance',
+    'swipe_job.featured': 'En Vedette',
+    'swipe_job.why_great_match': 'Pourquoi Vous Êtes Une Excellente Correspondance',
+    'swipe_job.job_description': 'Description du Poste',
+    'swipe_job.requirements': 'Exigences',
+    'swipe_job.benefits': 'Avantages',
+    'swipe_job.show_more_details': 'Afficher Plus de Détails',
+    'swipe_job.show_less': 'Afficher Moins',
+    'swipe_job.apply': 'POSTULER',
+    'swipe_job.pass': 'PASSER',
+    'swipe_job.job_of': 'Emploi {current} sur {total}',
+    'swipe_job.complete': '{percent}% Terminé',
+
+    // Hero Section
+    'hero.advanced_upload_page': 'Ou utilisez notre page de téléchargement avancée',
+    'hero.uploading': 'Téléchargement... {percent}%',
+
+    // AI Chatbot
+    'ai.ask_anything': 'Demandez-moi tout sur les emplois!',
+    'ai.ask_placeholder': 'Demandez-moi tout sur les emplois...',
+    'ai.find_jobs_for_me': 'Trouvez des emplois pour moi',
+    'ai.jobs_in_zurich': 'Emplois à Zurich',
+    'ai.remote_positions': 'Postes à distance',
+    'ai.help_find_job': 'Je suis là pour vous aider à trouver l\'emploi parfait! Je peux vous aider:\n\n• Rechercher des rôles spécifiques\n• Trouver des emplois par lieu\n• Obtenir des informations sur les salaires\n• Vous mettre en relation avec des entreprises\n• Optimiser votre profil\n\nQue souhaitez-vous faire?',
+    'ai.find_jobs_response': 'Je serais ravi de vous aider à trouver des emplois! Quel type de rôle recherchez-vous? Vous pouvez dire quelque chose comme "Ingénieur Logiciel" ou "Responsable Marketing".',
+    'ai.zurich_jobs_response': 'Voici quelques excellentes opportunités à Zurich:\n\n🚀 Ingénieur Logiciel chez Google Zurich - CHF 120k-140k\n🏦 UBS Banque d\'Investissement - CHF 110k-150k\n📊 Analyste des Risques Credit Suisse - CHF 95k-120k\n\nVoulez-vous que je vous aide à postuler pour l\'une d\'entre elles?',
+    'ai.remote_jobs_response': 'Voici d\'excellentes opportunités à distance dans des entreprises suisses:\n\n🏠 Développeur Frontend à Distance - Migros Digital - CHF 100k-120k\n📱 Développeur Flutter - CFF - CHF 95k-115k\n📈 Chef de Produit - Swisscom - CHF 110k-130k\n\nLes entreprises suisses adoptent le travail à distance plus que jamais. Dois-je vous aider à postuler?',
+
     // AI Score
     'ai_score.title': "Analyse de Correspondance IA",
     'ai_score.subtitle': 'Plongée profonde dans votre compatibilité de profil avec une analyse détaillée des compétences et des insights du marché',
@@ -364,6 +461,39 @@ const translations = {
     'swipe.advanced_search_text': 'Vuoi vedere opzioni di ricerca più dettagliate?',
     'swipe.advanced_search_cta': 'Ricerca Lavoro Avanzata →',
 
+    // Swipe Job Discovery
+    'swipe_job.great_job_exploring': 'Ottimo Lavoro di Esplorazione!',
+    'swipe_job.reviewed_all_positions': 'Hai esaminato tutte le posizioni disponibili. Controlla le tue candidature e i lavori salvati.',
+    'swipe_job.view_saved_jobs': 'Visualizza Lavori Salvati',
+    'swipe_job.advanced_search': 'Ricerca Avanzata',
+    'swipe_job.match': 'Corrispondenza',
+    'swipe_job.featured': 'In Evidenza',
+    'swipe_job.why_great_match': 'Perché Sei Una Grande Corrispondenza',
+    'swipe_job.job_description': 'Descrizione del Lavoro',
+    'swipe_job.requirements': 'Requisiti',
+    'swipe_job.benefits': 'Benefici',
+    'swipe_job.show_more_details': 'Mostra Più Dettagli',
+    'swipe_job.show_less': 'Mostra Meno',
+    'swipe_job.apply': 'CANDIDATI',
+    'swipe_job.pass': 'SALTA',
+    'swipe_job.job_of': 'Lavoro {current} di {total}',
+    'swipe_job.complete': '{percent}% Completato',
+
+    // Hero Section
+    'hero.advanced_upload_page': 'O usa la nostra pagina di caricamento avanzata',
+    'hero.uploading': 'Caricamento... {percent}%',
+
+    // AI Chatbot
+    'ai.ask_anything': 'Chiedimi qualsiasi cosa sui lavori!',
+    'ai.ask_placeholder': 'Chiedimi qualsiasi cosa sui lavori...',
+    'ai.find_jobs_for_me': 'Trova lavori per me',
+    'ai.jobs_in_zurich': 'Lavori a Zurigo',
+    'ai.remote_positions': 'Posizioni remote',
+    'ai.help_find_job': 'Sono qui per aiutarti a trovare il lavoro perfetto! Posso aiutarti:\n\n• Cercare ruoli specifici\n• Trovare lavori per località\n• Ottenere informazioni sui salari\n• Abbinarti con aziende\n• Ottimizzare il tuo profilo\n\nCosa vorresti fare?',
+    'ai.find_jobs_response': 'Sarei felice di aiutarti a trovare lavori! Che tipo di ruolo stai cercando? Puoi dire qualcosa come "Ingegnere del Software" o "Manager Marketing".',
+    'ai.zurich_jobs_response': 'Ecco alcune ottime opportunità a Zurigo:\n\n🚀 Ingegnere del Software presso Google Zurich - CHF 120k-140k\n🏦 UBS Investment Banking - CHF 110k-150k\n📊 Analista del Rischio Credit Suisse - CHF 95k-120k\n\nVuoi che ti aiuti a candidarti per qualcuna di queste?',
+    'ai.remote_jobs_response': 'Ecco eccellenti opportunità remote da aziende svizzere:\n\n🏠 Sviluppatore Frontend Remoto - Migros Digital - CHF 100k-120k\n📱 Sviluppatore Flutter - FFS - CHF 95k-115k\n📈 Product Manager - Swisscom - CHF 110k-130k\n\nLe aziende svizzere stanno abbracciando il lavoro remoto più che mai. Dovrei aiutarti a candidarti?',
+
     // AI Score
     'ai_score.title': 'Analisi Corrispondenza IA',
     'ai_score.subtitle': 'Immersione profonda nella compatibilità del tuo profilo con analisi dettagliata delle competenze e approfondimenti di mercato',
@@ -450,6 +580,39 @@ const translations = {
     'swipe.changed_mind': 'Avais midà idea?',
     'swipe.advanced_search_text': 'Vulais vesair opziuns da tschertga pli detagliadas?',
     'swipe.advanced_search_cta': 'Tschertga Avanzada da Plazzas →',
+
+    // Swipe Job Discovery
+    'swipe_job.great_job_exploring': 'Grond Lavur da Exploraziun!',
+    'swipe_job.reviewed_all_positions': 'Vus avais controllà tut las posiziuns disponiblas. Controllai vossas candidaturas e plazzas memorisadas.',
+    'swipe_job.view_saved_jobs': 'Vesair Plazzas Memorisadas',
+    'swipe_job.advanced_search': 'Tschertga Avanzada',
+    'swipe_job.match': 'Correspundenza',
+    'swipe_job.featured': 'En Emprima Lingia',
+    'swipe_job.why_great_match': 'Pertge Essas Vus Ina Gronda Correspundenza',
+    'swipe_job.job_description': 'Descripziun da la Plazza',
+    'swipe_job.requirements': 'Pretensiuns',
+    'swipe_job.benefits': 'Avantatgs',
+    'swipe_job.show_more_details': 'Mussar Dapli Detagls',
+    'swipe_job.show_less': 'Mussar Pli Pauc',
+    'swipe_job.apply': 'SA CANDIDAR',
+    'swipe_job.pass': 'SURSIGLIR',
+    'swipe_job.job_of': 'Plazza {current} da {total}',
+    'swipe_job.complete': '{percent}% Cumplettà',
+
+    // Hero Section
+    'hero.advanced_upload_page': 'U duvrai nossa pagina da chargiada avanzada',
+    'hero.uploading': 'Chargiar... {percent}%',
+
+    // AI Chatbot
+    'ai.ask_anything': 'Dumai mai tut davart plazzas!',
+    'ai.ask_placeholder': 'Dumai mai tut davart plazzas...',
+    'ai.find_jobs_for_me': 'Chattar plazzas per mai',
+    'ai.jobs_in_zurich': 'Plazzas a Turitg',
+    'ai.remote_positions': 'Posiziuns a distanza',
+    'ai.help_find_job': 'Jau sun qua per gidar a vus da chattar la plazza perfecta! Jau pos gidar a vus:\n\n• Tschertgar rols specifics\n• Chattar plazzas tenor lieu\n• Survegnir infurmaziuns davart salaris\n• Connectar cun interprendas\n• Optimisar voss profil\n\nTge vulais vus far?',
+    'ai.find_jobs_response': 'Jau fiss cuntents da gidar a vus da chattar plazzas! Che tips da rol tschertgais vus? Vus pudais dir insatge sco "Ingenieur da Software" u "Manager da Marketing".',
+    'ai.zurich_jobs_response': 'Qua èn tschertas grondas pussaivladads a Turitg:\n\n🚀 Ingenieur da Software tar Google Zurich - CHF 120k-140k\n🏦 UBS Investment Banking - CHF 110k-150k\n📊 Analist da Ristg Credit Suisse - CHF 95k-120k\n\nVulais che jau gid a vus da sa candidar per ina da quellas?',
+    'ai.remote_jobs_response': 'Qua èn excellentas pussaivladads a distanza dad interprendas svizras:\n\n🏠 Sviluppader Frontend a Distanza - Migros Digital - CHF 100k-120k\n📱 Sviluppader Flutter - VFF - CHF 95k-115k\n📈 Manager da Product - Swisscom - CHF 110k-130k\n\nInterprendas svizras acceptan lavur a distanza dapli che mai avant. Duai jau gidar a vus da sa candidar?',
 
     // AI Score
     'ai_score.title': 'Analisa da Correspundenza IA',
