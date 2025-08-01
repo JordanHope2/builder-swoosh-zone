@@ -94,13 +94,13 @@ export function Navigation() {
                 to="/signin"
                 className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
               >
-                Sign In
+                {t('nav.sign_in')}
               </Link>
               <Link
                 to="/signup"
                 className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-sm xl:text-base"
               >
-                Get Started
+                {t('nav.sign_up')}
               </Link>
             </div>
 
