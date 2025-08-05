@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from '../../shared/types/supabase';
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "../../shared/types/supabase";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+  throw new Error("Missing Supabase environment variables");
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
@@ -27,7 +27,10 @@ export const auth = supabase.auth;
 
 // Helper functions for common operations
 export const getCurrentUser = async () => {
-  const { data: { user }, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
   if (error) throw error;
   return user;
 };
@@ -46,7 +49,11 @@ export const signInWithEmail = async (email: string, password: string) => {
   return data;
 };
 
-export const signUpWithEmail = async (email: string, password: string, userData?: any) => {
+export const signUpWithEmail = async (
+  email: string,
+  password: string,
+  userData?: any,
+) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -61,20 +68,22 @@ export const signUpWithEmail = async (email: string, password: string, userData?
 // Database helpers
 export const getJobs = async (filters?: any) => {
   let query = supabase
-    .from('jobs')
-    .select(`
+    .from("jobs")
+    .select(
+      `
       *,
       companies(name, logo_url, location),
       applications(id, status, candidate_id)
-    `)
-    .eq('status', 'published');
+    `,
+    )
+    .eq("status", "published");
 
   if (filters?.location) {
-    query = query.ilike('location', `%${filters.location}%`);
+    query = query.ilike("location", `%${filters.location}%`);
   }
 
   if (filters?.title) {
-    query = query.ilike('title', `%${filters.title}%`);
+    query = query.ilike("title", `%${filters.title}%`);
   }
 
   const { data, error } = await query;
@@ -84,22 +93,28 @@ export const getJobs = async (filters?: any) => {
 
 export const getJobById = async (id: string) => {
   const { data, error } = await supabase
-    .from('jobs')
-    .select(`
+    .from("jobs")
+    .select(
+      `
       *,
       companies(*),
       applications(*)
-    `)
-    .eq('id', id)
+    `,
+    )
+    .eq("id", id)
     .single();
 
   if (error) throw error;
   return data;
 };
 
-export const submitApplication = async (jobId: string, candidateId: string, data: any) => {
+export const submitApplication = async (
+  jobId: string,
+  candidateId: string,
+  data: any,
+) => {
   const { data: application, error } = await supabase
-    .from('applications')
+    .from("applications")
     .insert({
       job_id: jobId,
       candidate_id: candidateId,
@@ -113,34 +128,40 @@ export const submitApplication = async (jobId: string, candidateId: string, data
 };
 
 // Real-time subscriptions
-export const subscribeToMessages = (conversationId: string, callback: (payload: any) => void) => {
+export const subscribeToMessages = (
+  conversationId: string,
+  callback: (payload: any) => void,
+) => {
   return supabase
     .channel(`messages:${conversationId}`)
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'messages',
+        event: "INSERT",
+        schema: "public",
+        table: "messages",
         filter: `conversation_id=eq.${conversationId}`,
       },
-      callback
+      callback,
     )
     .subscribe();
 };
 
-export const subscribeToNotifications = (userId: string, callback: (payload: any) => void) => {
+export const subscribeToNotifications = (
+  userId: string,
+  callback: (payload: any) => void,
+) => {
   return supabase
     .channel(`notifications:${userId}`)
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: '*',
-        schema: 'public',
-        table: 'notifications',
+        event: "*",
+        schema: "public",
+        table: "notifications",
         filter: `user_id=eq.${userId}`,
       },
-      callback
+      callback,
     )
     .subscribe();
 };

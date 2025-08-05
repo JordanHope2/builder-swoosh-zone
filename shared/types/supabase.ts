@@ -9,7 +9,7 @@ export interface Database {
           id: string;
           email: string;
           full_name: string | null;
-          role: 'candidate' | 'recruiter' | 'company' | 'admin';
+          role: "candidate" | "recruiter" | "company" | "admin";
           avatar_url: string | null;
           created_at: string;
           updated_at: string;
@@ -18,7 +18,7 @@ export interface Database {
           id?: string;
           email: string;
           full_name?: string | null;
-          role?: 'candidate' | 'recruiter' | 'company' | 'admin';
+          role?: "candidate" | "recruiter" | "company" | "admin";
           avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -27,7 +27,7 @@ export interface Database {
           id?: string;
           email?: string;
           full_name?: string | null;
-          role?: 'candidate' | 'recruiter' | 'company' | 'admin';
+          role?: "candidate" | "recruiter" | "company" | "admin";
           avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -81,10 +81,10 @@ export interface Database {
           salary_max: number | null;
           currency: string | null;
           location: string | null;
-          type: 'full-time' | 'part-time' | 'contract' | 'internship';
+          type: "full-time" | "part-time" | "contract" | "internship";
           company_id: string;
           recruiter_id: string | null;
-          status: 'draft' | 'published' | 'closed';
+          status: "draft" | "published" | "closed";
           featured: boolean;
           created_at: string;
           updated_at: string;
@@ -98,10 +98,10 @@ export interface Database {
           salary_max?: number | null;
           currency?: string | null;
           location?: string | null;
-          type?: 'full-time' | 'part-time' | 'contract' | 'internship';
+          type?: "full-time" | "part-time" | "contract" | "internship";
           company_id: string;
           recruiter_id?: string | null;
-          status?: 'draft' | 'published' | 'closed';
+          status?: "draft" | "published" | "closed";
           featured?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -115,10 +115,10 @@ export interface Database {
           salary_max?: number | null;
           currency?: string | null;
           location?: string | null;
-          type?: 'full-time' | 'part-time' | 'contract' | 'internship';
+          type?: "full-time" | "part-time" | "contract" | "internship";
           company_id?: string;
           recruiter_id?: string | null;
-          status?: 'draft' | 'published' | 'closed';
+          status?: "draft" | "published" | "closed";
           featured?: boolean;
           created_at?: string;
           updated_at?: string;
@@ -129,7 +129,12 @@ export interface Database {
           id: string;
           job_id: string;
           candidate_id: string;
-          status: 'pending' | 'reviewing' | 'interview' | 'accepted' | 'rejected';
+          status:
+            | "pending"
+            | "reviewing"
+            | "interview"
+            | "accepted"
+            | "rejected";
           cover_letter: string | null;
           resume_url: string | null;
           created_at: string;
@@ -139,7 +144,12 @@ export interface Database {
           id?: string;
           job_id: string;
           candidate_id: string;
-          status?: 'pending' | 'reviewing' | 'interview' | 'accepted' | 'rejected';
+          status?:
+            | "pending"
+            | "reviewing"
+            | "interview"
+            | "accepted"
+            | "rejected";
           cover_letter?: string | null;
           resume_url?: string | null;
           created_at?: string;
@@ -149,7 +159,12 @@ export interface Database {
           id?: string;
           job_id?: string;
           candidate_id?: string;
-          status?: 'pending' | 'reviewing' | 'interview' | 'accepted' | 'rejected';
+          status?:
+            | "pending"
+            | "reviewing"
+            | "interview"
+            | "accepted"
+            | "rejected";
           cover_letter?: string | null;
           resume_url?: string | null;
           created_at?: string;
@@ -161,7 +176,7 @@ export interface Database {
           id: string;
           user_id: string;
           plan_id: string;
-          status: 'active' | 'cancelled' | 'past_due' | 'trialing';
+          status: "active" | "cancelled" | "past_due" | "trialing";
           current_period_start: string;
           current_period_end: string;
           cancel_at_period_end: boolean;
@@ -173,7 +188,7 @@ export interface Database {
           id?: string;
           user_id: string;
           plan_id: string;
-          status?: 'active' | 'cancelled' | 'past_due' | 'trialing';
+          status?: "active" | "cancelled" | "past_due" | "trialing";
           current_period_start: string;
           current_period_end: string;
           cancel_at_period_end?: boolean;
@@ -185,7 +200,7 @@ export interface Database {
           id?: string;
           user_id?: string;
           plan_id?: string;
-          status?: 'active' | 'cancelled' | 'past_due' | 'trialing';
+          status?: "active" | "cancelled" | "past_due" | "trialing";
           current_period_start?: string;
           current_period_end?: string;
           cancel_at_period_end?: boolean;
@@ -200,7 +215,7 @@ export interface Database {
           conversation_id: string;
           sender_id: string;
           content: string;
-          type: 'text' | 'image' | 'file' | 'audio' | 'video';
+          type: "text" | "image" | "file" | "audio" | "video";
           file_url: string | null;
           read_by: string[];
           created_at: string;
@@ -211,7 +226,7 @@ export interface Database {
           conversation_id: string;
           sender_id: string;
           content: string;
-          type?: 'text' | 'image' | 'file' | 'audio' | 'video';
+          type?: "text" | "image" | "file" | "audio" | "video";
           file_url?: string | null;
           read_by?: string[];
           created_at?: string;
@@ -222,7 +237,7 @@ export interface Database {
           conversation_id?: string;
           sender_id?: string;
           content?: string;
-          type?: 'text' | 'image' | 'file' | 'audio' | 'video';
+          type?: "text" | "image" | "file" | "audio" | "video";
           file_url?: string | null;
           read_by?: string[];
           created_at?: string;
@@ -237,10 +252,15 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      user_role: 'candidate' | 'recruiter' | 'company' | 'admin';
-      job_type: 'full-time' | 'part-time' | 'contract' | 'internship';
-      application_status: 'pending' | 'reviewing' | 'interview' | 'accepted' | 'rejected';
-      subscription_status: 'active' | 'cancelled' | 'past_due' | 'trialing';
+      user_role: "candidate" | "recruiter" | "company" | "admin";
+      job_type: "full-time" | "part-time" | "contract" | "internship";
+      application_status:
+        | "pending"
+        | "reviewing"
+        | "interview"
+        | "accepted"
+        | "rejected";
+      subscription_status: "active" | "cancelled" | "past_due" | "trialing";
     };
   };
 }

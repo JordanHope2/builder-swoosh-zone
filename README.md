@@ -5,6 +5,7 @@ A comprehensive job platform built with React, TypeScript, and Vite, featuring a
 ## 🚀 Features
 
 ### Core Platform
+
 - **Multi-Role System**: Candidate, Recruiter, Company, and Admin dashboards
 - **Real-time Messaging**: Advanced chat system with file sharing
 - **Subscription & Billing**: Comprehensive pricing plans with Stripe integration
@@ -12,6 +13,7 @@ A comprehensive job platform built with React, TypeScript, and Vite, featuring a
 - **Advanced Analytics**: Revenue analysis, user metrics, and security monitoring
 
 ### Technical Features
+
 - **Modern Stack**: React 18, TypeScript, Vite, Tailwind CSS
 - **Animations**: Framer Motion for smooth interactions
 - **Security**: Input validation, XSS protection, CSRF tokens
@@ -21,11 +23,13 @@ A comprehensive job platform built with React, TypeScript, and Vite, featuring a
 ## 🛠️ Setup Instructions
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 - Git
 
 ### 1. Clone and Install
+
 ```bash
 git clone <your-repo-url>
 cd jobequal-platform
@@ -33,25 +37,30 @@ npm install
 ```
 
 ### 2. Environment Setup
+
 Copy the example environment file and configure:
+
 ```bash
 cp .env.example .env
 ```
 
 Fill in your environment variables:
+
 - Supabase credentials
-- Stripe keys for payments  
+- Stripe keys for payments
 - SMTP settings for emails
 - OpenAI API key for AI features
 
 ### 3. Database Setup (Supabase)
 
 #### Install Supabase CLI
+
 ```bash
 npm install -g supabase
 ```
 
 #### Initialize Supabase
+
 ```bash
 supabase login
 supabase init
@@ -59,16 +68,19 @@ supabase start
 ```
 
 #### Run Migrations
+
 ```bash
 supabase db reset
 ```
 
 #### Generate Types
+
 ```bash
 supabase gen types typescript --local > shared/types/supabase.ts
 ```
 
 ### 4. Development
+
 ```bash
 npm run dev
 ```
@@ -76,6 +88,7 @@ npm run dev
 The app will be available at `http://localhost:8080`
 
 ### 5. Build for Production
+
 ```bash
 npm run build
 ```
@@ -83,30 +96,37 @@ npm run build
 ## 🔧 VS Code Setup
 
 ### Recommended Extensions
+
 The project includes VS Code configuration with recommended extensions:
+
 - Prettier (code formatting)
 - Tailwind CSS IntelliSense
 - TypeScript support
 - Supabase integration
 
 ### Auto Setup
+
 Open the project in VS Code and install recommended extensions when prompted.
 
 ## 🚀 Deployment
 
 ### Vercel Deployment
+
 1. Connect your GitHub repository to Vercel
 2. Set environment variables in Vercel dashboard
 3. Deploy automatically on push to main
 
 ### Manual Vercel Deploy
+
 ```bash
 npm install -g vercel
 vercel --prod
 ```
 
 ### Netlify Deployment
+
 The project includes `netlify.toml` configuration:
+
 1. Connect repository to Netlify
 2. Set environment variables
 3. Deploy automatically
@@ -114,6 +134,7 @@ The project includes `netlify.toml` configuration:
 ## 📊 Database Schema
 
 ### Core Tables
+
 - `users` - User accounts and profiles
 - `companies` - Company information
 - `jobs` - Job postings
@@ -123,6 +144,7 @@ The project includes `netlify.toml` configuration:
 - `notifications` - User notifications
 
 ### Key Relationships
+
 - Users can be candidates, recruiters, or company admins
 - Companies have multiple job postings
 - Jobs receive multiple applications
@@ -132,18 +154,21 @@ The project includes `netlify.toml` configuration:
 ## 🔐 Security Features
 
 ### Input Validation
+
 - All user inputs are sanitized
 - XSS protection on all text fields
 - File upload validation
 - SQL injection prevention
 
 ### Authentication
+
 - JWT-based authentication via Supabase
 - Role-based access control
 - Session management
 - Password strength requirements
 
 ### Data Protection
+
 - GDPR compliance features
 - Data encryption
 - Secure API endpoints
@@ -152,6 +177,7 @@ The project includes `netlify.toml` configuration:
 ## 🎨 Architecture
 
 ### Frontend Structure
+
 ```
 client/
 ├── components/          # Reusable UI components
@@ -164,6 +190,7 @@ client/
 ```
 
 ### Backend Structure
+
 ```
 server/
 ├── routes/            # API routes
@@ -171,6 +198,7 @@ server/
 ```
 
 ### Shared
+
 ```
 shared/
 ├── api.ts            # API types
@@ -180,11 +208,13 @@ shared/
 ## 🧪 Testing
 
 ### Run Tests
+
 ```bash
 npm test
 ```
 
 ### Type Checking
+
 ```bash
 npm run typecheck
 ```
@@ -199,6 +229,7 @@ npm run typecheck
 ## 📚 Documentation
 
 ### Key Components
+
 - **Navigation**: Main navigation with notifications
 - **Dashboard Systems**: Role-specific dashboards
 - **Messaging**: Real-time chat functionality
@@ -206,12 +237,14 @@ npm run typecheck
 - **Security**: Input validation and protection
 
 ### Styling
+
 - Tailwind CSS for styling
 - Custom JobEqual design system
 - Dark/light theme support
 - Responsive design
 
 ### State Management
+
 - React Context for global state
 - Local state for component-specific data
 - Supabase for server state
@@ -219,17 +252,20 @@ npm run typecheck
 ## 🔗 Integrations
 
 ### Supabase
+
 - Authentication
 - Database
 - Real-time subscriptions
 - File storage
 
 ### Stripe
+
 - Payment processing
 - Subscription management
 - Webhook handling
 
 ### External APIs
+
 - OpenAI for AI features
 - Email services for notifications
 - File storage services
@@ -237,12 +273,14 @@ npm run typecheck
 ## 📈 Analytics & Monitoring
 
 ### Built-in Analytics
+
 - User activity tracking
 - Revenue metrics
 - Security monitoring
 - System health checks
 
 ### External Monitoring
+
 - Sentry for error tracking
 - Performance monitoring
 - User analytics
@@ -250,12 +288,14 @@ npm run typecheck
 ## 🚀 Performance
 
 ### Optimizations
+
 - Code splitting
 - Lazy loading
 - Image optimization
 - Bundle analysis
 
 ### Caching
+
 - Browser caching
 - API response caching
 - Static asset caching
@@ -263,11 +303,13 @@ npm run typecheck
 ## 📱 Mobile Support
 
 ### Responsive Design
+
 - Mobile-first approach
 - Touch-friendly interactions
 - Progressive Web App features
 
 ### Accessibility
+
 - Screen reader support
 - Keyboard navigation
 - High contrast mode
@@ -285,6 +327,7 @@ npm run typecheck
 4. **Build errors**: Run `npm run typecheck` first
 
 ### Getting Help
+
 - Check the GitHub issues
 - Review the documentation
 - Contact support team
