@@ -7,7 +7,7 @@ export interface FavoriteJob {
   location: string;
   salary: string;
   dateAdded: Date;
-  type: 'job' | 'profile';
+  type: 'job' | 'profile' | 'company';
 }
 
 interface FavoritesContextType {
