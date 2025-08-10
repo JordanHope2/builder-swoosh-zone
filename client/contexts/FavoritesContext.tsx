@@ -72,7 +72,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     setFavorites([]);
   };
 
-  const getFavoritesByType = (type: 'job' | 'profile') => {
+  const getFavoritesByType = (type: 'job' | 'profile' | 'company') => {
     return favorites.filter(fav => fav.type === type);
   };
 
