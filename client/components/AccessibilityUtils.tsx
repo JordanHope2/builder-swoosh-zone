@@ -171,8 +171,8 @@ export function useKeyboardNavigation(
 ) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onEscape?.();
-      if (event.key === 'Enter') onEnter?.();
+      if (event.key === 'Escape') onEscape?.(event);
+      if (event.key === 'Enter') onEnter?.(event);
     };
 
     document.addEventListener('keydown', handleKeyDown);
