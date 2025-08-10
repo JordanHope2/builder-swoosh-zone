@@ -16,7 +16,7 @@ interface FavoritesContextType {
   removeFromFavorites: (id: string) => void;
   isFavorite: (id: string) => boolean;
   clearFavorites: () => void;
-  getFavoritesByType: (type: 'job' | 'profile') => FavoriteJob[];
+  getFavoritesByType: (type: 'job' | 'profile' | 'company') => FavoriteJob[];
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
