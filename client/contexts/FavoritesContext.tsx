@@ -60,8 +60,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromFavorites = (id: string) => {
-    setFavorites(prev => prev.filter(fav => fav.id !== id));
+  const removeFromFavorites = (id: string, type?: 'job' | 'profile' | 'company') => {
+    setFavorites(prev => prev.filter(fav =>
+      fav.id !== id || (type && fav.type !== type)
+    ));
   };
 
   const isFavorite = (id: string) => {
