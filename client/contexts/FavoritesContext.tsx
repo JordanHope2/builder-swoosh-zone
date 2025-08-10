@@ -13,8 +13,8 @@ export interface FavoriteJob {
 interface FavoritesContextType {
   favorites: FavoriteJob[];
   addToFavorites: (item: Omit<FavoriteJob, 'dateAdded'>) => void;
-  removeFromFavorites: (id: string) => void;
-  isFavorite: (id: string) => boolean;
+  removeFromFavorites: (id: string, type?: 'job' | 'profile' | 'company') => void;
+  isFavorite: (id: string, type?: 'job' | 'profile' | 'company') => boolean;
   clearFavorites: () => void;
   getFavoritesByType: (type: 'job' | 'profile' | 'company') => FavoriteJob[];
 }
