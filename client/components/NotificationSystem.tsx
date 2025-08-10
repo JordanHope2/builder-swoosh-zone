@@ -361,8 +361,7 @@ export const NotificationSystem: React.FC = () => {
                     size="sm"
                     icon={Settings}
                     onClick={() => setIsOpen(false)}
-                  >
-                  </ActionButton>
+                  />
                 </div>
               </div>
 
