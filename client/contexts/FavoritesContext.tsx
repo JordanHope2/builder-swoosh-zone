@@ -66,8 +66,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     ));
   };
 
-  const isFavorite = (id: string) => {
-    return favorites.some(fav => fav.id === id);
+  const isFavorite = (id: string, type?: 'job' | 'profile' | 'company') => {
+    return favorites.some(fav =>
+      fav.id === id && (!type || fav.type === type)
+    );
   };
 
   const clearFavorites = () => {
