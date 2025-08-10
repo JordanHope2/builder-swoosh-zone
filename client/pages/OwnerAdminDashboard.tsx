@@ -50,13 +50,13 @@ import {
   Smartphone,
   Tablet,
   Chrome,
-  Firefox,
-  Safari,
+  Globe,
+  Monitor,
   ArrowUp,
   ArrowDown,
   Minus,
   Plus,
-  Link,
+  LinkIcon,
   ExternalLink,
   Share2,
   Copy,
@@ -66,7 +66,7 @@ import {
   Key,
   UserPlus,
   Crown,
-  AdminPanelSettings
+  Settings
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
