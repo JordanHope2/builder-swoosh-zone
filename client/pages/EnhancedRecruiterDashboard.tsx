@@ -51,7 +51,8 @@ import {
   Pause,
   StopCircle,
   Archive,
-  Copy
+  Copy,
+  X
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

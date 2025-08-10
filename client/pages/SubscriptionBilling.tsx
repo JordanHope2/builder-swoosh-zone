@@ -26,7 +26,7 @@ import {
   Edit,
   Trash2,
   CreditCard as CardIcon,
-  PaymentMethod,
+  
   Banknote,
   Wallet,
   Calculator,

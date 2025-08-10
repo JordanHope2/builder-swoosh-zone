@@ -50,13 +50,12 @@ import {
   Smartphone,
   Tablet,
   Chrome,
-  Firefox,
-  Safari,
+  
   ArrowUp,
   ArrowDown,
   Minus,
   Plus,
-  Link,
+  
   ExternalLink,
   Share2,
   Copy,

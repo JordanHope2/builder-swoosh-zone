@@ -304,7 +304,7 @@ export default function CompanyDetail() {
 
   useEffect(() => {
     if (company) {
-      setIsFollowing(isFavorite(company.id, 'company'));
+      setIsFollowing(isFavorite(company.id));
     }
   }, [company, isFavorite]);
 
@@ -327,7 +327,7 @@ export default function CompanyDetail() {
 
   const handleFollow = () => {
     if (isFollowing) {
-      removeFromFavorites(company.id, 'company');
+      removeFromFavorites(company.id);
     } else {
       addToFavorites({
         id: company.id,
@@ -335,7 +335,7 @@ export default function CompanyDetail() {
         company: company.industry,
         location: company.headquarters,
         salary: `${company.stats.totalEmployees} employees`,
-        type: 'company'
+        type: 'profile'
       });
     }
     setIsFollowing(!isFollowing);

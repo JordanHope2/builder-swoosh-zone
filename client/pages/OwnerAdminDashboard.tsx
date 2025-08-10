@@ -50,13 +50,12 @@ import {
   Smartphone,
   Tablet,
   Chrome,
-  Firefox,
-  Safari,
+  
   ArrowUp,
   ArrowDown,
   Minus,
   Plus,
-  Link,
+  Link as LinkIcon,
   ExternalLink,
   Share2,
   Copy,
@@ -65,8 +64,9 @@ import {
   Unlock,
   Key,
   UserPlus,
-  Crown,
-  AdminPanelSettings
+ 
+  Crown
+  
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
