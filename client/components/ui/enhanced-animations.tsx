@@ -212,7 +212,7 @@ export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
   onClick
 }) => {
   const animConfig = enhancedAnimations[animation];
-  
+
   return (
     <motion.div
       initial={animConfig.initial}
@@ -221,8 +221,8 @@ export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
       whileHover={animConfig.whileHover}
       whileTap={animConfig.whileTap}
       transition={{
-        ...animConfig.transition,
-        delay: typeof animConfig.transition === 'object' ? animConfig.transition.delay || 0 + delay : delay
+        ...(animConfig.transition || {}),
+        delay: typeof animConfig.transition === 'object' && animConfig.transition?.delay ? animConfig.transition.delay + delay : delay
       }}
       className={className}
       onClick={onClick}
