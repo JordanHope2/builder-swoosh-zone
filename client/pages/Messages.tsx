@@ -328,10 +328,8 @@ export default function Messages() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">Messages</h2>
               <div className="flex items-center space-x-2">
-                <ActionButton variant="secondary" size="sm" icon={Settings}>
-                </ActionButton>
-                <ActionButton variant="primary" size="sm" icon={Plus}>
-                </ActionButton>
+                <ActionButton variant="secondary" size="sm" icon={Settings} />
+                <ActionButton variant="primary" size="sm" icon={Plus} />
               </div>
             </div>
             
@@ -451,14 +449,10 @@ export default function Messages() {
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <ActionButton variant="secondary" size="sm" icon={Phone}>
-                    </ActionButton>
-                    <ActionButton variant="secondary" size="sm" icon={Video}>
-                    </ActionButton>
-                    <ActionButton variant="secondary" size="sm" icon={Eye} onClick={() => setShowUserInfo(!showUserInfo)}>
-                    </ActionButton>
-                    <ActionButton variant="secondary" size="sm" icon={MoreVertical}>
-                    </ActionButton>
+                    <ActionButton variant="secondary" size="sm" icon={Phone} />
+                    <ActionButton variant="secondary" size="sm" icon={Video} />
+                    <ActionButton variant="secondary" size="sm" icon={Eye} onClick={() => setShowUserInfo(!showUserInfo)} />
+                    <ActionButton variant="secondary" size="sm" icon={MoreVertical} />
                   </div>
                 </div>
               </div>
@@ -582,10 +576,8 @@ export default function Messages() {
                       size="sm"
                       icon={Paperclip}
                       onClick={() => fileInputRef.current?.click()}
-                    >
-                    </ActionButton>
-                    <ActionButton variant="secondary" size="sm" icon={Smile}>
-                    </ActionButton>
+                    />
+                    <ActionButton variant="secondary" size="sm" icon={Smile} />
                   </div>
                   
                   <div className="flex-1">

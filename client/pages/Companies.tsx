@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '../components/Navigation';
+import { EnhancedMotionDiv, StaggeredList } from '../components/ui/enhanced-animations';
 import { 
   Building, 
   Users, 

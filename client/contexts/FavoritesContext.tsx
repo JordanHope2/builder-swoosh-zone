@@ -7,16 +7,16 @@ export interface FavoriteJob {
   location: string;
   salary: string;
   dateAdded: Date;
-  type: 'job' | 'profile';
+  type: 'job' | 'profile' | 'company';
 }
 
 interface FavoritesContextType {
   favorites: FavoriteJob[];
   addToFavorites: (item: Omit<FavoriteJob, 'dateAdded'>) => void;
-  removeFromFavorites: (id: string) => void;
-  isFavorite: (id: string) => boolean;
+  removeFromFavorites: (id: string, type?: 'job' | 'profile' | 'company') => void;
+  isFavorite: (id: string, type?: 'job' | 'profile' | 'company') => boolean;
   clearFavorites: () => void;
-  getFavoritesByType: (type: 'job' | 'profile') => FavoriteJob[];
+  getFavoritesByType: (type: 'job' | 'profile' | 'company') => FavoriteJob[];
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -60,19 +60,23 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromFavorites = (id: string) => {
-    setFavorites(prev => prev.filter(fav => fav.id !== id));
+  const removeFromFavorites = (id: string, type?: 'job' | 'profile' | 'company') => {
+    setFavorites(prev => prev.filter(fav =>
+      fav.id !== id || (type && fav.type !== type)
+    ));
   };
 
-  const isFavorite = (id: string) => {
-    return favorites.some(fav => fav.id === id);
+  const isFavorite = (id: string, type?: 'job' | 'profile' | 'company') => {
+    return favorites.some(fav =>
+      fav.id === id && (!type || fav.type === type)
+    );
   };
 
   const clearFavorites = () => {
     setFavorites([]);
   };
 
-  const getFavoritesByType = (type: 'job' | 'profile') => {
+  const getFavoritesByType = (type: 'job' | 'profile' | 'company') => {
     return favorites.filter(fav => fav.type === type);
   };
 

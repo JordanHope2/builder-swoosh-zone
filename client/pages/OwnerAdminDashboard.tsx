@@ -55,7 +55,7 @@ import {
   ArrowDown,
   Minus,
   Plus,
-  Link as LinkIcon,
+  Link,
   ExternalLink,
   Share2,
   Copy,
@@ -64,9 +64,8 @@ import {
   Unlock,
   Key,
   UserPlus,
- 
-  Crown
-  
+  Crown,
+  AdminPanelSettings
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {

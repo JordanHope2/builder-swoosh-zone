@@ -212,25 +212,18 @@ export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
   onClick
 }) => {
   const animConfig = enhancedAnimations[animation];
-  
+
   return (
     <motion.div
-      initial={"initial" in animConfig ? (animConfig as any).initial : undefined}
-animate={"animate" in animConfig ? (animConfig as any).animate : undefined}
-exit={"exit" in animConfig ? (animConfig as any).exit : undefined}
-whileHover={"whileHover" in animConfig ? (animConfig as any).whileHover : undefined}
-whileTap={"whileTap" in animConfig ? (animConfig as any).whileTap : undefined}
-transition={{
-  ...(typeof (animConfig as any).transition === "object"
-    ? (animConfig as any).transition
-    : {}),
-  delay:
-    typeof (animConfig as any).transition === "object" &&
-    typeof (animConfig as any).transition?.delay === "number"
-      ? (animConfig as any).transition.delay + (delay ?? 0)
-      : (delay ?? 0),
-}}
-
+      initial={animConfig.initial}
+      animate={animConfig.animate}
+      exit={animConfig.exit}
+      whileHover={animConfig.whileHover}
+      whileTap={animConfig.whileTap}
+      transition={{
+        ...(animConfig.transition || {}),
+        delay: typeof animConfig.transition === 'object' && animConfig.transition?.delay ? animConfig.transition.delay + delay : delay
+      }}
       className={className}
       onClick={onClick}
     >

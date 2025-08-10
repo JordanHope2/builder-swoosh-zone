@@ -238,10 +238,10 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+          className={`w-4 h-4 border-2 border-white border-t-transparent rounded-full ${children ? 'mr-2' : ''}`}
         />
       ) : Icon ? (
-        <Icon className="w-4 h-4 mr-2" />
+        <Icon className={`w-4 h-4 ${children ? 'mr-2' : ''}`} />
       ) : null}
       {children}
     </motion.button>

@@ -166,8 +166,8 @@ export function useHighContrastMode(): boolean {
 
 // ---------- Keyboard Navigation Hook ----------
 export function useKeyboardNavigation(
-  onEscape?: () => void,
-  onEnter?: () => void
+  onEscape?: (event: KeyboardEvent) => void,
+  onEnter?: (event: KeyboardEvent) => void
 ) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

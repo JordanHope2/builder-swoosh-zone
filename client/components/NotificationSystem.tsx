@@ -357,13 +357,11 @@ export const NotificationSystem: React.FC = () => {
                     </ActionButton>
                   )}
                   <ActionButton
-  variant="secondary"
-  size="sm"
-  icon={Settings}
-  onClick={() => {/* ... */}}
->
-  <span className="sr-only">Open notifications</span>
-</ActionButton>
+                    variant="secondary"
+                    size="sm"
+                    icon={Settings}
+                    onClick={() => setIsOpen(false)}
+                  />
                 </div>
               </div>
 
