@@ -187,7 +187,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
 // Unified Action Button
 interface ActionButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'danger' | 'success';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
