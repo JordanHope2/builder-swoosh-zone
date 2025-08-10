@@ -65,8 +65,7 @@ import {
   Unlock,
   Key,
   UserPlus,
-  Crown,
-  Settings
+  Crown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
