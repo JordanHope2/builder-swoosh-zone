@@ -5,6 +5,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import jobsRouter from "./routes/jobs";
 import scrapeRouter from "./routes/scrape";
+import uploadRouter from "./routes/upload";
 
 export function createServer() {
   const app = express();
@@ -25,6 +26,7 @@ export function createServer() {
   // App routes
   app.use("/api/jobs", jobsRouter);
   app.use("/api/scrape", scrapeRouter);
+  app.use("/api/upload", uploadRouter);
 
   return app;
 }
