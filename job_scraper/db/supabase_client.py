@@ -183,3 +183,49 @@ class SupabaseClient:
             print(f"Successfully linked job {job_id} to company {company_id}.")
         except Exception as e:
             print(f"An error occurred while updating job {job_id}: {e}")
+
+    def get_all_jobs_with_company(self) -> List[Dict[str, Any]]:
+        """
+        Fetches all jobs that have a valid, linked company_id.
+        """
+        try:
+            response = self.client.table('jobs').select('company_id, description').not_.is_('company_id', None).execute()
+            print(f"Found {len(response.data)} jobs with a linked company to analyze.")
+            return response.data
+        except Exception as e:
+            print(f"An error occurred while fetching jobs with company links: {e}")
+            return []
+
+    def update_company_sponsorship(self, company_id: str, status: bool):
+        """
+        Updates the sponsorship status for a company.
+        """
+        try:
+            self.client.table('companies').update({'offers_visa_sponsorship': status}).eq('id', company_id).execute()
+            print(f"Successfully updated sponsorship status for company {company_id}.")
+        except Exception as e:
+            print(f"An error occurred while updating sponsorship for company {company_id}: {e}")
+
+    def get_companies_for_tagging(self) -> List[Dict[str, Any]]:
+        """
+        Fetches companies that have a description but have not yet been tagged.
+        """
+        try:
+            response = self.client.table('companies').select('id, description').not_.is_('description', None).is_('tags', None).execute()
+            print(f"Found {len(response.data)} companies to tag.")
+            return response.data
+        except Exception as e:
+            print(f"An error occurred while fetching companies for tagging: {e}")
+            return []
+
+    def update_company_tags(self, company_id: str, tags: List[str]):
+        """
+        Updates the tags for a specific company.
+        """
+        if not tags:
+            return
+        try:
+            self.client.table('companies').update({'tags': tags}).eq('id', company_id).execute()
+            print(f"Successfully updated tags for company {company_id}.")
+        except Exception as e:
+            print(f"An error occurred while updating tags for company {company_id}: {e}")
