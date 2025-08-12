@@ -57,7 +57,8 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       const data = await getJobs(currentFilters);
       setJobs(data || []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load jobs');
+      const errorMessage = getErrorMessage(err);
+      setError(errorMessage);
       console.error('Error loading jobs:', err);
     } finally {
       setLoading(false);
