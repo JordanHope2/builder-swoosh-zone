@@ -9,6 +9,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { JobsProvider } from "./contexts/JobsContext";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
