@@ -65,6 +65,7 @@ interface PricingPlan {
     storage?: string;
     support?: string;
   };
+  priceId: string; // Add this line
   popular?: boolean;
   enterprise?: boolean;
 }
@@ -113,6 +114,7 @@ const pricingPlans: PricingPlan[] = [
     price: 0,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_free',
     features: [
       '5 job applications per month',
       'Basic profile',
@@ -133,6 +135,7 @@ const pricingPlans: PricingPlan[] = [
     price: 19,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_candidate_premium',
     features: [
       'Unlimited job applications',
       'Premium profile with video intro',
@@ -158,6 +161,7 @@ const pricingPlans: PricingPlan[] = [
     price: 89,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_recruiter_starter',
     features: [
       '10 active job posts',
       '100 candidate contacts/month',
@@ -181,6 +185,7 @@ const pricingPlans: PricingPlan[] = [
     price: 189,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_recruiter_professional',
     features: [
       '50 active job posts',
       '500 candidate contacts/month',
@@ -208,6 +213,7 @@ const pricingPlans: PricingPlan[] = [
     price: 399,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_recruiter_enterprise',
     features: [
       'Unlimited job posts',
       'Unlimited candidate contacts',
@@ -237,6 +243,7 @@ const pricingPlans: PricingPlan[] = [
     price: 149,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_company_startup',
     features: [
       '20 active job posts',
       '200 candidate views/month',
@@ -261,6 +268,7 @@ const pricingPlans: PricingPlan[] = [
     price: 299,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_company_growth',
     features: [
       '100 active job posts',
       '1000 candidate views/month',
@@ -288,6 +296,7 @@ const pricingPlans: PricingPlan[] = [
     price: 599,
     currency: 'CHF',
     billing: 'monthly',
+    priceId: 'price_company_enterprise',
     features: [
       'Unlimited job posts',
       'Unlimited candidate views',
@@ -418,13 +427,29 @@ export default function SubscriptionBilling() {
     }).format(new Date(dateString));
   };
 
-  const handlePlanUpgrade = async (planId: string) => {
+  const handlePlanUpgrade = async (priceId: string) => {
     setLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setSelectedPlan(planId);
-    setShowUpgradeModal(false);
-    setLoading(false);
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priceId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      // You might want to show an error message to the user here
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderOverview = () => (
@@ -672,7 +697,7 @@ export default function SubscriptionBilling() {
                   <ActionButton
                     variant={plan.id === currentPlan?.id ? 'secondary' : plan.popular ? 'primary' : 'secondary'}
                     className="w-full"
-                    onClick={() => plan.id !== currentPlan?.id && handlePlanUpgrade(plan.id)}
+                    onClick={() => plan.id !== currentPlan?.id && handlePlanUpgrade(plan.priceId)}
                     disabled={plan.id === currentPlan?.id}
                     loading={loading && selectedPlan === plan.id}
                   >

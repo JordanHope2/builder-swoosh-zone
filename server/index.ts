@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { handleDemo } from "./routes/demo";
 import { handleAiChat } from "./routes/ai";
+import { createCheckoutSession, handleStripeWebhook } from "./routes/stripe";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -26,6 +27,14 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
   app.post("/api/ai/chat", handleAiChat);
+
+  // Stripe routes
+  app.post("/api/stripe/create-checkout-session", createCheckoutSession);
+  app.post(
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json" }),
+    handleStripeWebhook
+  );
 
   // ⬇️ AJOUTE CETTE LIGNE
   app.use("/api/jobs", jobsRouter);
