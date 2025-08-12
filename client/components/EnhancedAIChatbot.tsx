@@ -111,139 +111,6 @@ export function EnhancedAIChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Enhanced AI Response Generator (Placeholder for ChatGPT Integration)
-  const generateAIResponse = async (userMessage: string, context: ChatContext): Promise<string> => {
-    // This is where we would integrate with ChatGPT API
-    // For now, using enhanced mock responses
-    
-    const responses = {
-      'search_jobs': `I'll help you find the perfect job! Based on your profile, I found several opportunities:
-
-🚀 **Senior Software Engineer** at TechCorp Zurich
-   • CHF 120,000 - 140,000 • 95% match • Remote-friendly
-   
-💡 **Product Manager** at InnovateCH Geneva  
-   • CHF 110,000 - 130,000 • 89% match • Hybrid work
-   
-📊 **Data Scientist** at Analytics Pro Basel
-   • CHF 105,000 - 125,000 • 87% match • Full remote
-
-Would you like me to apply to any of these, or should I find more specific matches?`,
-
-      'location_jobs': `Great! I found ${Math.floor(Math.random() * 50 + 20)} jobs in ${context.preferences.location}:
-
-**Top Matches:**
-🏢 Finance roles: 15 positions (CHF 85k-160k)
-💻 Tech positions: 22 positions (CHF 95k-180k)  
-📈 Consulting: 8 positions (CHF 100k-150k)
-
-The job market in ${context.preferences.location} is very strong right now, especially in tech and finance. Would you like to see specific roles in any industry?`,
-
-      'remote_jobs': `Excellent choice! Remote work is growing rapidly in Switzerland. I found **${Math.floor(Math.random() * 30 + 15)} remote positions** matching your profile:
-
-🌍 **100% Remote Jobs:**
-• Senior Developer at CloudFirst (CHF 115k-135k)
-• UX Designer at DesignHub (CHF 85k-105k)
-• Marketing Lead at GrowthCo (CHF 95k-115k)
-
-🏠 **Hybrid Options:**
-• Project Manager at FlexiWork (CHF 100k-120k)
-• Business Analyst at DataDriven (CHF 90k-110k)
-
-Swiss companies are embracing remote work more than ever. Should I help you apply to any of these?`,
-
-      'salary_insights': `Based on current Swiss market data and your profile:
-
-💰 **Your Salary Range:**
-   Current market: CHF ${Math.floor(Math.random() * 40000 + 95000).toLocaleString()}-${Math.floor(Math.random() * 50000 + 125000).toLocaleString()}
-   
-📊 **Market Position:**
-   You're in the top ${Math.floor(Math.random() * 20 + 10)}% of candidates in your field
-   
-🎯 **Negotiation Range:**
-   Recommended ask: CHF ${Math.floor(Math.random() * 30000 + 110000).toLocaleString()}-${Math.floor(Math.random() * 40000 + 135000).toLocaleString()}
-
-**Salary Factors:**
-• Location: Zurich (+15%), Geneva (+10%), Basel (+8%)
-• Remote work: Usually 5-10% adjustment
-• Company size: Startups vs. corporates vary significantly
-
-Need help with salary negotiation strategies?`,
-
-      'cv_review': `I'd love to help optimize your CV for the Swiss market! Here's what I can do:
-
-📋 **Free CV Analysis:**
-• Swiss formatting standards check
-• ATS compatibility review  
-• Keyword optimization
-• Skills gap analysis
-
-⭐ **Premium CV Review** (CHF 149):
-• 45-minute expert consultation
-• Personalized feedback report
-• Industry-specific recommendations
-• Interview preparation tips
-
-🎥 **Video CV Consultation** (CHF 249):
-• 90-minute video session
-• Live CV editing
-• Mock interview practice
-• Career coaching
-
-Would you like to upload your CV for a free quick analysis, or book a detailed review session?`,
-
-      'company_match': `Let me find companies that match your values and career goals:
-
-🎯 **Perfect Culture Matches:**
-• **Google Zurich** - Innovation-focused, excellent benefits
-• **Roche Basel** - Healthcare impact, stable growth
-• **UBS Zurich** - Financial services leader, global reach
-
-🌟 **Based on Your Profile:**
-• Work-life balance: 9/10 companies prioritize this
-• Remote flexibility: 7/10 offer hybrid options
-• Career growth: All provide clear advancement paths
-
-**Company Insights:**
-• Average employee satisfaction: 4.2/5
-• Typical hiring time: 3-5 weeks
-• Salary negotiation success rate: 78%
-
-Want detailed insights on any specific company, or should I find more matches?`,
-
-      'default': `I'm here to help with your career journey! Here's what I can assist with:
-
-🔍 **Job Search:** Find roles matching your skills and preferences
-📊 **Market Insights:** Salary data, industry trends, company info  
-📝 **CV Optimization:** Review and improve your resume
-🎯 **Application Strategy:** Personalized job search approach
-🗣️ **Interview Prep:** Practice sessions and tips
-💼 **Career Coaching:** Long-term career planning
-
-I understand context about Swiss employment law, work permits, and cultural expectations. What would be most helpful for you right now?`
-    };
-
-    // Simulate API thinking time
-    await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1500));
-
-    // Simple keyword matching for demo (would be replaced with ChatGPT)
-    const lowerMessage = userMessage.toLowerCase();
-    
-    for (const [key, response] of Object.entries(responses)) {
-      if (lowerMessage.includes(key.replace('_', ' ')) || 
-          lowerMessage.includes(key.replace('_', '')) ||
-          (key === 'search_jobs' && (lowerMessage.includes('job') || lowerMessage.includes('work'))) ||
-          (key === 'location_jobs' && (lowerMessage.includes('zurich') || lowerMessage.includes('geneva') || lowerMessage.includes('basel'))) ||
-          (key === 'salary_insights' && (lowerMessage.includes('salary') || lowerMessage.includes('pay') || lowerMessage.includes('money'))) ||
-          (key === 'cv_review' && (lowerMessage.includes('cv') || lowerMessage.includes('resume') || lowerMessage.includes('review'))) ||
-          (key === 'company_match' && (lowerMessage.includes('company') || lowerMessage.includes('employer')))) {
-        return response;
-      }
-    }
-
-    return responses.default;
-  };
-
   const sendMessage = async (text: string, isQuickAction = false) => {
     if (!text.trim()) return;
 
@@ -259,7 +126,6 @@ I understand context about Swiss employment law, work permits, and cultural expe
     setInputText('');
     setIsTyping(true);
 
-    // Add thinking indicator
     const thinkingMessage: Message = {
       id: 'thinking-' + Date.now(),
       text: '...',
@@ -272,14 +138,25 @@ I understand context about Swiss employment law, work permits, and cultural expe
     setMessages(prev => [...prev, thinkingMessage]);
 
     try {
-      const response = await generateAIResponse(text, context);
+      const response = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from AI');
+      }
+
+      const { reply } = await response.json();
       
-      // Remove thinking indicator and add real response
       setMessages(prev => {
         const withoutThinking = prev.filter(m => !m.isThinking);
         const botResponse: Message = {
           id: Date.now().toString(),
-          text: response,
+          text: reply,
           isBot: true,
           timestamp: new Date(),
           type: 'text',

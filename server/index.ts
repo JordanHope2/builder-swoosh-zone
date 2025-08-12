@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { handleDemo } from "./routes/demo";
+import { handleAiChat } from "./routes/ai";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -24,6 +25,7 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+  app.post("/api/ai/chat", handleAiChat);
 
   // ⬇️ AJOUTE CETTE LIGNE
   app.use("/api/jobs", jobsRouter);
