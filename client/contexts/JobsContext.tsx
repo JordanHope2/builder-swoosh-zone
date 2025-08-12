@@ -1,0 +1,123 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getJobs, getJobById, submitApplication, supabase } from '../lib/supabase';
+import { useAuth } from './AuthContext';
+
+interface Job {
+  id: string;
+  title: string;
+  description: string;
+  company_id: string;
+  location: string;
+  salary_min?: number;
+  salary_max?: number;
+  type: 'full-time' | 'part-time' | 'contract' | 'internship';
+  status: 'draft' | 'published' | 'closed';
+  created_at: string;
+  updated_at: string;
+  companies?: {
+    name: string;
+    logo_url?: string;
+    location: string;
+  };
+}
+
+interface JobsContextType {
+  jobs: Job[];
+  loading: boolean;
+  error: string | null;
+  filters: JobFilters;
+  setFilters: (filters: JobFilters) => void;
+  searchJobs: (query: string) => void;
+  getJobDetails: (id: string) => Promise<Job>;
+  applyToJob: (jobId: string, applicationData: any) => Promise<void>;
+  refreshJobs: () => Promise<void>;
+}
+
+interface JobFilters {
+  location?: string;
+  title?: string;
+  type?: string;
+  salaryMin?: number;
+  salaryMax?: number;
+}
+
+const JobsContext = createContext<JobsContextType | undefined>(undefined);
+
+export function JobsProvider({ children }: { children: React.ReactNode }) {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<JobFilters>({});
+  const { user } = useAuth();
+
+  const loadJobs = async (currentFilters: JobFilters = {}) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getJobs(currentFilters);
+      setJobs(data || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load jobs');
+      console.error('Error loading jobs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadJobs(filters);
+  }, [filters]);
+
+  const searchJobs = (query: string) => {
+    setFilters({ ...filters, title: query });
+  };
+
+  const getJobDetails = async (id: string): Promise<Job> => {
+    try {
+      const job = await getJobById(id);
+      return job;
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to load job details');
+    }
+  };
+
+  const applyToJob = async (jobId: string, applicationData: any) => {
+    if (!user) {
+      throw new Error('You must be logged in to apply for jobs');
+    }
+
+    try {
+      await submitApplication(jobId, user.id, applicationData);
+      // Refresh jobs to update application status
+      await loadJobs(filters);
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to submit application');
+    }
+  };
+
+  const refreshJobs = async () => {
+    await loadJobs(filters);
+  };
+
+  const value = {
+    jobs,
+    loading,
+    error,
+    filters,
+    setFilters,
+    searchJobs,
+    getJobDetails,
+    applyToJob,
+    refreshJobs,
+  };
+
+  return <JobsContext.Provider value={value}>{children}</JobsContext.Provider>;
+}
+
+export function useJobs() {
+  const context = useContext(JobsContext);
+  if (context === undefined) {
+    throw new Error('useJobs must be used within a JobsProvider');
+  }
+  return context;
+}
