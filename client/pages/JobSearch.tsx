@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigation } from '../components/Navigation';
 import { MapPin, Clock, Building, Search, Filter, ChevronDown, Bookmark, Star, TrendingUp, Target, Zap, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useJobSearch, useAppData } from '../hooks/useAppData';
+import { useFavorites } from '../contexts/FavoritesContext';
 
 interface Job {
   id: string;
