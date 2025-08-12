@@ -107,7 +107,23 @@ const mockJobs: Job[] = [
 ];
 
 function JobCard({ job }: { job: Job }) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const isBookmarked = isFavorite(job.id);
+
+  const handleBookmark = () => {
+    if (isBookmarked) {
+      removeFromFavorites(job.id);
+    } else {
+      addToFavorites({
+        id: job.id,
+        title: job.title,
+        company: job.company || '',
+        location: job.location || '',
+        salary: job.salary || '',
+        type: 'job'
+      });
+    }
+  };
 
   const getMatchColor = (score: number) => {
     if (score >= 85) return 'text-jobequal-green bg-jobequal-green-light border-jobequal-green';
