@@ -159,7 +159,7 @@ function JobCard({ job }: { job: Job }) {
           </div>
 
           <button
-            onClick={() => setIsBookmarked(!isBookmarked)}
+            onClick={handleBookmark}
             className={`transition-all duration-200 hover:scale-110 p-1 ${isBookmarked ? 'text-red-500' : 'text-jobequal-text-muted hover:text-red-500'}`}
             aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           >
