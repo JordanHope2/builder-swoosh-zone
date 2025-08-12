@@ -9,13 +9,19 @@ const router = Router();
  * GET /api/jobs — list all jobs (public)
  * Uses anon client -> respects RLS
  */
-router.get("/", async (_req, res) => {
+router.get("/", async (req, res) => {
   try {
     const supabase = getSupabase();
-    const { data, error } = await supabase
+    let query = supabase
       .from("jobs")
       .select("*")
       .order("created_at", { ascending: false });
+
+    if (req.query.featured === 'true') {
+      query = query.eq('featured', true);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     res.json({ jobs: data ?? [] });

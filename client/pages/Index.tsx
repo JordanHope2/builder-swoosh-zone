@@ -1,8 +1,42 @@
+import { useState, useEffect } from 'react';
 import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
 import { FeaturedJobs } from '../components/FeaturedJobs';
 
+interface Stats {
+  activeJobs: string;
+  registeredUsers: string;
+  successRate: string;
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
+
 export default function Index() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [featuredCompanies, setFeaturedCompanies] = useState<Company[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsResponse, companiesResponse] = await Promise.all([
+          fetch('/api/stats'),
+          fetch('/api/companies/featured')
+        ]);
+        const statsData: Stats = await statsResponse.json();
+        const companiesData: Company[] = await companiesResponse.json();
+        setStats(statsData);
+        setFeaturedCompanies(companiesData);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <main className="min-h-screen bg-background dark:bg-gray-900">
       <Navigation />
@@ -23,23 +57,34 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center justify-items-center mb-20">
-            <div className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">UBS</div>
-            <div className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Nestlé</div>
-            <div className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Roche</div>
-            <div className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">ABB</div>
+            {featuredCompanies.length > 0 ? (
+              featuredCompanies.map((company) => (
+                <div key={company.id} className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">
+                  {company.name}
+                </div>
+              ))
+            ) : (
+              <p>Loading companies...</p>
+            )}
           </div>
 
           <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
             <div className="text-center group">
-              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">10,000+</div>
+              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
+                {stats ? stats.activeJobs : '...'}
+              </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Active Jobs</div>
             </div>
             <div className="text-center group">
-              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">50,000+</div>
+              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
+                {stats ? stats.registeredUsers : '...'}
+              </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Registered Users</div>
             </div>
             <div className="text-center group">
-              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">95%</div>
+              <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
+                {stats ? stats.successRate : '...'}
+              </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Success Rate</div>
             </div>
           </div>

@@ -8,77 +8,13 @@ interface Job {
   title: string;
   company: string;
   location: string;
-  salary: string;
+  salary_min: number;
+  salary_max: number;
   type: string;
-  logo: string;
+  logo?: string;
   featured?: boolean;
-  matchScore: number;
+  matchScore: number; // This will be hardcoded for now
 }
-
-const featuredJobs: Job[] = [
-  {
-    id: '1',
-    title: 'Senior Software Engineer',
-    company: 'TechCorp Zurich',
-    location: 'Zurich',
-    salary: 'CHF 120,000 - 140,000',
-    type: 'Full-time',
-    logo: '🚀',
-    featured: true,
-    matchScore: 95,
-  },
-  {
-    id: '2',
-    title: 'Product Manager',
-    company: 'InnovateCH',
-    location: 'Geneva',
-    salary: 'CHF 110,000 - 130,000',
-    type: 'Full-time',
-    logo: '💡',
-    matchScore: 73,
-  },
-  {
-    id: '3',
-    title: 'UX Designer',
-    company: 'DesignStudio',
-    location: 'Basel',
-    salary: 'CHF 85,000 - 105,000',
-    type: 'Full-time',
-    logo: '🎨',
-    matchScore: 67,
-  },
-  {
-    id: '4',
-    title: 'Data Scientist',
-    company: 'DataDriven AG',
-    location: 'Bern',
-    salary: 'CHF 100,000 - 120,000',
-    type: 'Full-time',
-    logo: '📊',
-    featured: true,
-    matchScore: 91,
-  },
-  {
-    id: '5',
-    title: 'DevOps Engineer',
-    company: 'CloudTech',
-    location: 'Remote',
-    salary: 'CHF 95,000 - 115,000',
-    type: 'Full-time',
-    logo: '☁️',
-    matchScore: 88,
-  },
-  {
-    id: '6',
-    title: 'Marketing Director',
-    company: 'GrowthCo',
-    location: 'Lausanne',
-    salary: 'CHF 130,000 - 150,000',
-    type: 'Full-time',
-    logo: '📈',
-    matchScore: 54,
-  },
-];
 
 function JobCard({ job, index }: { job: Job; index: number }) {
   const { t } = useLanguage();
@@ -89,6 +25,10 @@ function JobCard({ job, index }: { job: Job; index: number }) {
     const timer = setTimeout(() => setIsVisible(true), index * 150);
     return () => clearTimeout(timer);
   }, [index]);
+
+  const salary = `CHF ${job.salary_min / 1000}k - ${job.salary_max / 1000}k`;
+  const logo = job.logo || '🚀';
+  const matchScore = job.matchScore || Math.floor(Math.random() * (99 - 50 + 1)) + 50;
 
   const getMatchColor = (score: number) => {
     if (score >= 85) return 'text-jobequal-green bg-jobequal-green-light border-jobequal-green';
@@ -107,9 +47,9 @@ function JobCard({ job, index }: { job: Job; index: number }) {
       <div className="relative z-10">
         {/* AI Match Score - Prominent at top */}
         <div className="text-center mb-4 sm:mb-6">
-          <div className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base lg:text-lg font-bold border-2 animate-pulse-soft ${getMatchColor(job.matchScore)}`}>
+          <div className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base lg:text-lg font-bold border-2 animate-pulse-soft ${getMatchColor(matchScore)}`}>
             <Zap className="w-4 h-4 sm:w-5 sm:h-5 animate-bounce-subtle" />
-            <span>{job.matchScore}% {t('featured.match')}</span>
+            <span>{matchScore}% {t('featured.match')}</span>
           </div>
         </div>
 
@@ -140,7 +80,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 
         <div className="flex items-start space-x-3 sm:space-x-4 lg:space-x-5 mb-4 sm:mb-6">
           <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl lg:text-3xl shadow-md group-hover:shadow-lg transition-all duration-300 group-hover:rotate-3 flex-shrink-0">
-            {job.logo}
+            {logo}
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-bold text-lg sm:text-xl lg:text-xl text-jobequal-text group-hover:text-jobequal-green transition-all duration-200 mb-1 sm:mb-2 leading-tight line-clamp-2">
@@ -161,7 +101,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
           </div>
           <div className="flex items-center text-jobequal-green font-bold text-sm sm:text-base lg:text-lg">
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
-            <span className="truncate">{job.salary}</span>
+            <span className="truncate">{salary}</span>
           </div>
         </div>
 
@@ -180,6 +120,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
 export function FeaturedJobs() {
   const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -193,6 +134,18 @@ export function FeaturedJobs() {
 
     const section = document.getElementById('featured-jobs');
     if (section) observer.observe(section);
+
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch('/api/jobs?featured=true');
+        const data = await response.json();
+        setJobs(data.jobs);
+      } catch (error) {
+        console.error('Failed to fetch featured jobs:', error);
+      }
+    };
+
+    fetchJobs();
 
     return () => {
       if (section) observer.unobserve(section);
@@ -229,9 +182,13 @@ export function FeaturedJobs() {
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 mb-12 sm:mb-16 transition-all duration-1000 delay-300 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}>
-          {featuredJobs.map((job, index) => (
-            <JobCard key={job.id} job={job} index={index} />
-          ))}
+          {jobs.length > 0 ? (
+            jobs.map((job, index) => (
+              <JobCard key={job.id} job={job} index={index} />
+            ))
+          ) : (
+            <p>Loading jobs...</p>
+          )}
         </div>
 
         <div className={`text-center transition-all duration-1000 delay-700 ${

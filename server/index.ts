@@ -3,6 +3,8 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import statsRouter from "./routes/stats";
+import companiesRouter from "./routes/companies";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -25,6 +27,8 @@ export function createServer() {
 
   // ⬇️ AJOUTE CETTE LIGNE
   app.use("/api/jobs", jobsRouter);
+  app.use("/api/stats", statsRouter);
+  app.use("/api/companies", companiesRouter);
 
   return app;
 }
