@@ -91,7 +91,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       const job = await getJobById(id);
       return job;
     } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to load job details');
+      throw new Error(getErrorMessage(err));
     }
   };
 
