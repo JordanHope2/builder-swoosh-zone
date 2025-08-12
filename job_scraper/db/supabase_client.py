@@ -73,3 +73,90 @@ class SupabaseClient:
             print(f"Upserted {len(data[1])} skills for candidate ID {candidate_id}.")
         except Exception as e:
             print(f"An error occurred while upserting skills for candidate ID {candidate_id}: {e}")
+
+    def upsert_company(self, company: Dict[str, Any]) -> str | None:
+        """
+        Upserts a canonical company profile based on its Zefix UID.
+        Returns the UUID of the upserted record.
+        """
+        if not company or not company.get('zefix_uid'):
+            return None
+
+        try:
+            # We only insert the fields that are part of the 'companies' table schema
+            company_data = {
+                'zefix_uid': company.get('zefix_uid'),
+                'name': company.get('name'),
+                'legal_entity_type': company.get('legal_entity_type'),
+                'address': company.get('address'),
+                'location': company.get('location')
+            }
+
+            data, count = self.client.table('companies').upsert(
+                company_data,
+                on_conflict='zefix_uid'
+            ).execute()
+
+            if data and data[1]:
+                company_id = data[1][0]['id']
+                print(f"Upserted company {company['name']}. ID: {company_id}")
+                return company_id
+            return None
+        except Exception as e:
+            print(f"An error occurred while upserting company {company.get('name')}: {e}")
+            return None
+
+    def log_raw_company_scrape(self, company_id: str, source: str, source_id: str, raw_data: Dict[str, Any]):
+        """
+        Logs the raw scraped data for a company to the `companies_scraped_raw_data` table.
+        """
+        if not all([company_id, source, source_id, raw_data]):
+            return
+
+        log_entry = {
+            'company_id': company_id,
+            'source': source,
+            'source_id': source_id,
+            'raw_data': raw_data
+        }
+
+        try:
+            data, count = self.client.table('companies_scraped_raw_data').insert(log_entry).execute()
+            print(f"Logged raw scrape for company ID {company_id} from source {source}.")
+        except Exception as e:
+            print(f"An error occurred while logging raw company scrape: {e}")
+
+    def get_jobs_without_company_link(self) -> List[Dict[str, Any]]:
+        """
+        Fetches all jobs that do not have a company_id assigned yet.
+        """
+        try:
+            # The correct way to filter for NULL is to use the value `None`.
+            response = self.client.table('jobs').select('id, company_name').is_('company_id', None).execute()
+            print(f"Found {len(response.data)} jobs without a company link.")
+            return response.data
+        except Exception as e:
+            print(f"An error occurred while fetching jobs without company link: {e}")
+            return []
+
+    def get_all_companies(self) -> List[Dict[str, Any]]:
+        """
+        Fetches all companies from the canonical companies table.
+        """
+        try:
+            response = self.client.table('companies').select('id, name').execute()
+            print(f"Found {len(response.data)} canonical companies.")
+            return response.data
+        except Exception as e:
+            print(f"An error occurred while fetching all companies: {e}")
+            return []
+
+    def update_job_company_link(self, job_id: str, company_id: str):
+        """
+        Updates a job record to link it to a company.
+        """
+        try:
+            self.client.table('jobs').update({'company_id': company_id}).eq('id', job_id).execute()
+            print(f"Successfully linked job {job_id} to company {company_id}.")
+        except Exception as e:
+            print(f"An error occurred while updating job {job_id}: {e}")
