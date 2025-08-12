@@ -45,6 +45,7 @@ import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import RoleSwitcher from "./pages/RoleSwitcher";
 import SubscriptionBilling from "./pages/SubscriptionBilling";
 import Messages from "./pages/Messages";
+import UploadTest from "./pages/UploadTest";
 
 const queryClient = new QueryClient();
 
@@ -130,6 +131,7 @@ const App = () => (
                 <Route path="/billing" element={<SubscriptionBilling />} />
                 <Route path="/messages" element={<Messages />} />
                 <Route path="/chat" element={<Messages />} />
+                <Route path="/upload-test" element={<UploadTest />} />
 
                 {/* Catch-all 404 */}
                 <Route path="*" element={<NotFound />} />

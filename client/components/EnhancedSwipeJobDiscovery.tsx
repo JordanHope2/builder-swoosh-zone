@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, PanInfo, useAnimation, AnimatePresence } from 'framer-motion';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -13,68 +13,41 @@ import {
   Star,
   ChevronUp,
   ChevronDown,
-  Send,
-  Sparkles
+  Briefcase
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+interface JobFromApi {
+  id: string;
+  title: string;
+  location: {
+    display_name: string;
+  };
+  company: {
+    display_name: string;
+  };
+  description: string;
+  redirect_url: string;
+  contract_time?: string;
+  salary_is_predicted: string;
+}
+
+// Simplified job interface to match what we get from the API
 interface SwipeJob {
   id: string;
   title: string;
   company: string;
-  logo: string;
   location: string;
-  salary: string;
-  type: string;
   description: string;
-  requirements: string[];
-  matchScore: number;
-  featured?: boolean;
-  companySize: string;
-  benefits: string[];
-  whyMatch: string[];
-  applicationDeadline?: string;
-  postedDate: string;
+  redirect_url: string;
+  type?: string;
 }
 
-const mockSwipeJobs: SwipeJob[] = [
-  {
-    id: '1',
-    title: 'Senior Software Engineer',
-    company: 'TechCorp Zurich',
-    logo: '🚀',
-    location: 'Zurich',
-    salary: 'CHF 120,000 - 140,000',
-    type: 'Full-time',
-    description: 'Join our innovative team building next-generation financial technology solutions using React, TypeScript, and cloud technologies.',
-    requirements: ['React', 'TypeScript', 'Node.js', '5+ years experience'],
-    matchScore: 95,
-    featured: true,
-    companySize: '200-500 employees',
-    benefits: ['Health Insurance', 'Remote Work', 'Stock Options', 'Learning Budget'],
-    whyMatch: ['Perfect tech stack match', 'Seniority level matches', 'Location preference', 'Salary expectations met'],
-    applicationDeadline: '2024-02-15',
-    postedDate: '2024-01-10'
-  },
-  {
-    id: '2',
-    title: 'Product Manager',
-    company: 'InnovateCH',
-    logo: '💡',
-    location: 'Geneva',
-    salary: 'CHF 110,000 - 130,000',
-    type: 'Full-time',
-    description: 'Lead product strategy for our growing fintech platform, working with cross-functional teams to deliver exceptional user experiences.',
-    requirements: ['Product Management', 'Agile', 'Data Analysis', '3+ years experience'],
-    matchScore: 87,
-    companySize: '50-200 employees',
-    benefits: ['Flexible Hours', 'Health Insurance', 'Training Budget', 'Team Events'],
-    whyMatch: ['Leadership experience match', 'Industry expertise', 'Growth potential', 'Team collaboration skills'],
-    postedDate: '2024-01-12'
-  }
-];
-
 export function EnhancedSwipeJobDiscovery() {
+  const [jobs, setJobs] = useState<SwipeJob[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
   const [swipedJobs, setSwipedJobs] = useState<{ job: SwipeJob; action: 'like' | 'pass' }[]>([]);
   const [showDetails, setShowDetails] = useState(false);
@@ -83,15 +56,47 @@ export function EnhancedSwipeJobDiscovery() {
   const { addToFavorites } = useFavorites();
   const { t } = useLanguage();
 
-  const currentJob = mockSwipeJobs[currentJobIndex];
-  const hasMoreJobs = currentJobIndex < mockSwipeJobs.length - 1;
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/scrape?limit=20'); // Fetch 20 jobs for swiping
+        if (!response.ok) {
+          throw new Error('Failed to fetch jobs for swiping');
+        }
+        const data = await response.json();
+
+        // Map the API data to our simplified SwipeJob interface
+        const formattedJobs: SwipeJob[] = (data.results || []).map((job: JobFromApi) => ({
+          id: job.id,
+          title: job.title,
+          company: job.company.display_name,
+          location: job.location.display_name,
+          description: job.description,
+          redirect_url: job.redirect_url,
+          type: job.contract_time ? job.contract_time.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A',
+        }));
+
+        setJobs(formattedJobs);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+
+  const currentJob = jobs[currentJobIndex];
+  const hasMoreJobs = currentJobIndex < jobs.length - 1;
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
     if (!currentJob) return;
 
     setSwipeDirection(direction);
     
-    // Animate card out
     await controls.start({
       x: direction === 'right' ? 1000 : -1000,
       rotate: direction === 'right' ? 30 : -30,
@@ -103,26 +108,27 @@ export function EnhancedSwipeJobDiscovery() {
     setSwipedJobs(prev => [...prev, { job: currentJob, action }]);
 
     if (direction === 'right') {
-      // Add to favorites and submit application automatically
       addToFavorites({
         id: currentJob.id,
         title: currentJob.title,
         company: currentJob.company,
         location: currentJob.location,
-        salary: currentJob.salary,
+        salary: 'N/A', // Salary not available from this API in a structured way
         type: 'job'
       });
     }
 
-    // Move to next job
     if (hasMoreJobs) {
       setCurrentJobIndex(prev => prev + 1);
+      setShowDetails(false); // Reset details view for the next card
       await controls.start({
         x: 0,
         rotate: 0,
         opacity: 1,
         transition: { duration: 0.3 }
       });
+    } else {
+        setCurrentJobIndex(prev => prev + 1); // Go one past the end to trigger the 'finished' screen
     }
 
     setSwipeDirection(null);
@@ -150,12 +156,13 @@ export function EnhancedSwipeJobDiscovery() {
     controls.set({ x: 0, rotate: 0, opacity: 1 });
   }, [swipedJobs, controls]);
 
-  const getMatchScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
-    if (score >= 80) return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30';
-    if (score >= 70) return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30';
-    return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30';
-  };
+  if (loading) {
+    return <div className="text-center py-16">Loading jobs to swipe...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-16 text-red-500">Error: {error}</div>;
+  }
 
   if (!currentJob && swipedJobs.length > 0) {
     return (
@@ -191,7 +198,7 @@ export function EnhancedSwipeJobDiscovery() {
     );
   }
 
-  if (!currentJob) return null;
+  if (!currentJob) return <div className="text-center py-16">No jobs to display.</div>;
 
   return (
     <div className="relative">
@@ -199,22 +206,22 @@ export function EnhancedSwipeJobDiscovery() {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            {t('swipe_job.job_of').replace('{current}', String(currentJobIndex + 1)).replace('{total}', String(mockSwipeJobs.length))}
+            {t('swipe_job.job_of').replace('{current}', String(currentJobIndex + 1)).replace('{total}', String(jobs.length))}
           </span>
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            {t('swipe_job.complete').replace('{percent}', String(Math.round(((currentJobIndex + 1) / mockSwipeJobs.length) * 100)))}
+            {t('swipe_job.complete').replace('{percent}', String(Math.round(((currentJobIndex + 1) / jobs.length) * 100)))}
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
           <div 
             className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentJobIndex + 1) / mockSwipeJobs.length) * 100}%` }}
+            style={{ width: `${((currentJobIndex + 1) / jobs.length) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Swipe Container */}
-      <div className="relative h-[600px] overflow-hidden">
+      <div className="relative h-[550px] overflow-hidden">
         {/* Background Card */}
         {hasMoreJobs && (
           <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg opacity-50 scale-95" />
@@ -256,30 +263,23 @@ export function EnhancedSwipeJobDiscovery() {
           </AnimatePresence>
 
           <div className="p-6 h-full flex flex-col">
-            {/* Header with JobEqual Logo */}
+            {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-2">
+               <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center relative">
                   <span className="text-white font-bold text-xs">J</span>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-600 rounded-full">
-                    <span className="text-white text-xs">+</span>
-                  </div>
                 </div>
                 <span className="text-sm font-medium text-jobequal-green">JobEqual</span>
-              </div>
-              <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getMatchScoreColor(currentJob.matchScore)}`}>
-                {currentJob.matchScore}% {t('swipe_job.match')}
-                <Target className="w-4 h-4 inline ml-1" />
               </div>
             </div>
 
             {/* Company Info */}
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-3xl shadow-md">
-                {currentJob.logo}
+                <Briefcase/>
               </div>
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-1">
+                <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-1 line-clamp-2">
                   {currentJob.title}
                 </h2>
                 <p className="text-jobequal-green font-semibold text-lg">{currentJob.company}</p>
@@ -288,89 +288,31 @@ export function EnhancedSwipeJobDiscovery() {
                     <MapPin className="w-4 h-4 mr-1" />
                     {currentJob.location}
                   </div>
-                  <div className="flex items-center">
-                    <DollarSign className="w-4 h-4 mr-1" />
-                    {currentJob.salary}
-                  </div>
+                   {currentJob.type && <div className="flex items-center">
+                    <Briefcase className="w-4 h-4 mr-1" />
+                    {currentJob.type}
+                  </div>}
                 </div>
               </div>
-              {currentJob.featured && (
-                <div className="flex items-center space-x-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full text-xs font-medium">
-                  <Star className="w-3 h-3" />
-                  <span>{t('swipe_job.featured')}</span>
-                </div>
-              )}
             </div>
 
             {/* Job Details */}
-            <div className="flex-1 space-y-4 overflow-y-auto">
-              <div>
-                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.why_great_match')}</h3>
-                <div className="space-y-2">
-                  {currentJob.whyMatch.map((reason, index) => (
-                    <div key={index} className="flex items-start space-x-2">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-jobequal-text-muted dark:text-gray-400">{reason}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
+            <div className="flex-1 space-y-4 overflow-y-auto pr-2">
               <div>
                 <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.job_description')}</h3>
                 <p className="text-sm text-jobequal-text-muted dark:text-gray-400 leading-relaxed">
                   {currentJob.description}
                 </p>
               </div>
-
-              {showDetails && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="space-y-4"
-                >
-                  <div>
-                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.requirements')}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {currentJob.requirements.map((req, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green rounded-full text-sm"
-                        >
-                          {req}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.benefits')}</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {currentJob.benefits.map((benefit, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-full text-sm"
-                        >
-                          {benefit}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
             </div>
-
-            {/* Show More/Less Button */}
-            <button
-              onClick={() => setShowDetails(!showDetails)}
-              className="flex items-center justify-center space-x-2 py-2 text-jobequal-green hover:text-jobequal-green-hover transition-colors"
-            >
-              <span className="text-sm font-medium">
-                {showDetails ? t('swipe_job.show_less') : t('swipe_job.show_more_details')}
-              </span>
-              {showDetails ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
+             <a
+                href={currentJob.redirect_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-center mt-4 px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover"
+              >
+                View Full Job
+              </a>
           </div>
         </motion.div>
       </div>
@@ -406,8 +348,6 @@ export function EnhancedSwipeJobDiscovery() {
           <Heart className="w-8 h-8 text-green-500" />
         </motion.button>
       </div>
-
-
     </div>
   );
 }
