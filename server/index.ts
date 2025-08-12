@@ -5,6 +5,9 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import statsRouter from "./routes/stats";
 import companiesRouter from "./routes/companies";
+import footerRouter from "./routes/footer";
+import aboutRouter from "./routes/about";
+import contactRouter from "./routes/contact";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -29,6 +32,9 @@ export function createServer() {
   app.use("/api/jobs", jobsRouter);
   app.use("/api/stats", statsRouter);
   app.use("/api/companies", companiesRouter);
+  app.use("/api/footer", footerRouter);
+  app.use("/api/about", aboutRouter);
+  app.use("/api/contact", contactRouter);
 
   return app;
 }

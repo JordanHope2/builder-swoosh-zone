@@ -3,6 +3,7 @@ import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
 import { FeaturedJobs } from '../components/FeaturedJobs';
 import { Skeleton } from '../components/ui/skeleton';
+import { Footer } from '../components/Footer';
 
 interface Stats {
   activeJobs: string;
@@ -104,61 +105,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-jobequal-neutral to-jobequal-neutral-dark py-16 lg:py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 lg:gap-16">
-            <div className="md:col-span-1">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-2xl">J</span>
-                </div>
-                <span className="text-2xl font-bold text-jobequal-text">JobEqual</span>
-              </div>
-              <p className="text-jobequal-text-muted leading-relaxed text-lg">
-                Matching aspirations with opportunities across Switzerland.
-                Swiss-quality job matching for exceptional professionals.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-jobequal-text mb-6 text-lg">For Job Seekers</h4>
-              <ul className="space-y-3 text-jobequal-text-muted">
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Browse Jobs</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Upload CV</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Career Tips</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Salary Guide</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-jobequal-text mb-6 text-lg">For Employers</h4>
-              <ul className="space-y-3 text-jobequal-text-muted">
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Post Jobs</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Find Candidates</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Pricing</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Resources</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-jobequal-text mb-6 text-lg">Company</h4>
-              <ul className="space-y-3 text-jobequal-text-muted">
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">About Us</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Contact</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Privacy Policy</li>
-                <li className="hover:text-jobequal-green transition-colors duration-200 cursor-pointer">Terms of Service</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-jobequal-neutral-dark mt-12 pt-8 text-center">
-            <p className="text-jobequal-text-muted text-lg">
-              &copy; 2024 JobEqual. All rights reserved. Designed with Swiss precision.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

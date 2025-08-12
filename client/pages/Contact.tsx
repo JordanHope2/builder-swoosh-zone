@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigation } from '../components/Navigation';
 import { 
   Mail, 
@@ -20,62 +20,57 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Skeleton } from '../components/ui/skeleton';
 
-const supportTypes = [
-  {
-    title: 'Job Seekers',
-    description: 'Get help with your profile, job applications, and career guidance',
-    icon: Users,
-    color: 'from-jobequal-green to-jobequal-teal',
-    email: 'candidates@jobequal.ch',
-    phone: '+41 44 123 45 67'
-  },
-  {
-    title: 'Employers',
-    description: 'Support for job postings, candidate management, and recruitment strategy',
-    icon: Award,
-    color: 'from-jobequal-blue-dark to-jobequal-green',
-    email: 'employers@jobequal.ch',
-    phone: '+41 44 123 45 68'
-  },
-  {
-    title: 'Technical Support',
-    description: 'Platform issues, account problems, and technical assistance',
-    icon: Headphones,
-    color: 'from-jobequal-teal to-jobequal-blue',
-    email: 'support@jobequal.ch',
-    phone: '+41 44 123 45 69'
-  }
-];
+const iconMap = {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Send,
+  MessageCircle,
+  Headphones,
+  Shield,
+  Mountain,
+  CheckCircle,
+  Star,
+  Award,
+  Users,
+  Globe,
+  Linkedin,
+  Twitter,
+  ArrowRight
+};
 
-const offices = [
-  {
-    city: 'Zurich',
-    address: 'Bahnhofstrasse 45, 8001 Zurich',
-    phone: '+41 44 123 45 67',
-    email: 'zurich@jobequal.ch',
-    hours: 'Mon-Fri: 8:00-18:00',
-    isHQ: true
-  },
-  {
-    city: 'Geneva',
-    address: 'Rue du Rhône 12, 1204 Geneva',
-    phone: '+41 22 123 45 67',
-    email: 'geneva@jobequal.ch',
-    hours: 'Mon-Fri: 8:00-17:00',
-    isHQ: false
-  },
-  {
-    city: 'Basel',
-    address: 'Freie Strasse 8, 4001 Basel',
-    phone: '+41 61 123 45 67',
-    email: 'basel@jobequal.ch',
-    hours: 'Mon-Fri: 8:00-17:00',
-    isHQ: false
-  }
-];
+interface SupportType {
+  id: string;
+  title: string;
+  description: string;
+  icon: keyof typeof iconMap;
+  color: string;
+  email: string;
+  phone: string;
+}
+
+interface Office {
+  id: string;
+  city: string;
+  address: string;
+  phone: string;
+  email: string;
+  hours: string;
+  is_hq: boolean;
+}
+
+interface ContactPageData {
+  supportTypes: SupportType[];
+  offices: Office[];
+}
 
 export default function Contact() {
+  const [data, setData] = useState<ContactPageData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -85,11 +80,61 @@ export default function Contact() {
     userType: 'job-seeker'
   });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/contact');
+        if (!response.ok) {
+          throw new Error('Failed to fetch Contact page data');
+        }
+        const pageData: ContactPageData = await response.json();
+        setData(pageData);
+      } catch (error) {
+        console.error(error);
+        setError('Failed to load page content. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Contact form submitted:', formData);
     // Handle form submission
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
+          <Skeleton className="h-12 w-1/2 mx-auto mb-8" />
+          <Skeleton className="h-8 w-3/4 mx-auto mb-16" />
+          <div className="grid lg:grid-cols-3 gap-8">
+            {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-64 rounded-3xl" />)}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
+        <Navigation />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
+          <h1 className="text-3xl text-red-500">{error}</h1>
+        </div>
+      </main>
+    );
+  }
+
+  if (!data) return null;
+
+  const { supportTypes, offices } = data;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
@@ -157,31 +202,34 @@ export default function Contact() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {supportTypes.map((type, index) => (
-              <div key={index} className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group">
-                <div className={`w-16 h-16 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <type.icon className="w-8 h-8 text-white" />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-jobequal-text mb-4">{type.title}</h3>
-                <p className="text-jobequal-text-muted leading-relaxed mb-6">{type.description}</p>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-5 h-5 text-jobequal-green" />
-                    <a href={`mailto:${type.email}`} className="text-jobequal-green hover:text-jobequal-green-dark transition-colors">
-                      {type.email}
-                    </a>
+            {supportTypes.map((type) => {
+              const Icon = iconMap[type.icon];
+              return (
+                <div key={type.id} className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Phone className="w-5 h-5 text-jobequal-green" />
-                    <a href={`tel:${type.phone}`} className="text-jobequal-green hover:text-jobequal-green-dark transition-colors">
-                      {type.phone}
-                    </a>
+
+                  <h3 className="text-2xl font-bold text-jobequal-text mb-4">{type.title}</h3>
+                  <p className="text-jobequal-text-muted leading-relaxed mb-6">{type.description}</p>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <Mail className="w-5 h-5 text-jobequal-green" />
+                      <a href={`mailto:${type.email}`} className="text-jobequal-green hover:text-jobequal-green-dark transition-colors">
+                        {type.email}
+                      </a>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Phone className="w-5 h-5 text-jobequal-green" />
+                      <a href={`tel:${type.phone}`} className="text-jobequal-green hover:text-jobequal-green-dark transition-colors">
+                        {type.phone}
+                      </a>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -339,9 +387,9 @@ export default function Contact() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {offices.map((office, index) => (
-              <div key={index} className={`bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 ${office.isHQ ? 'ring-2 ring-jobequal-green' : ''}`}>
-                {office.isHQ && (
+            {offices.map((office) => (
+              <div key={office.id} className={`bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 ${office.is_hq ? 'ring-2 ring-jobequal-green' : ''}`}>
+                {office.is_hq && (
                   <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 py-2 rounded-full text-sm font-bold mb-4 text-center">
                     Headquarters
                   </div>
