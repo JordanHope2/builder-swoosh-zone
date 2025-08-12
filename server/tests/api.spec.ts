@@ -70,6 +70,11 @@ const mockSupabase = {
     };
     return handlers[tableName] || handlers.default;
   }),
+  auth: {
+    signUp: vi.fn().mockResolvedValue({ data: { session: { access_token: "test-token" } }, error: null }),
+    signInWithPassword: vi.fn().mockResolvedValue({ data: { session: { access_token: "test-token" } }, error: null }),
+    signOut: vi.fn().mockResolvedValue({ error: null }),
+  }
 };
 
 vi.mock("../supabase", () => ({
@@ -163,6 +168,30 @@ describe("API routes", () => {
         .send(invalidSubmission);
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("error");
+    });
+  });
+
+  describe("POST /api/auth", () => {
+    it("should sign up a new user", async () => {
+      const response = await request(app)
+        .post("/api/auth/signup")
+        .send({ email: "test@example.com", password: "password123" });
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("session");
+    });
+
+    it("should sign in an existing user", async () => {
+      const response = await request(app)
+        .post("/api/auth/signin")
+        .send({ email: "test@example.com", password: "password123" });
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("session");
+    });
+
+    it("should sign out a user", async () => {
+      const response = await request(app).post("/api/auth/signout");
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Signed out successfully" });
     });
   });
 });

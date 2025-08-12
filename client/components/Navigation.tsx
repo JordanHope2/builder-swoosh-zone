@@ -1,16 +1,25 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeProvider';
 import { NotificationSystem } from './NotificationSystem';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -101,18 +110,37 @@ export function Navigation() {
               >
                 🔄 Role Switch
               </Link>
-              <Link
-                to="/signin"
-                className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
-              >
-                {t('nav.sign_in')}
-              </Link>
-              <Link
-                to="/signup"
-                className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-sm xl:text-base"
-              >
-                {t('nav.sign_up')}
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-sm xl:text-base"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/signin"
+                    className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
+                  >
+                    {t('nav.sign_in')}
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 text-sm xl:text-base"
+                  >
+                    {t('nav.sign_up')}
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -177,18 +205,37 @@ export function Navigation() {
               >
                 🔄 Role Switcher
               </Link>
-              <Link
-                to="/signin"
-                className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral transition-all duration-200"
-              >
-                {t('nav.sign_in')}
-              </Link>
-              <Link
-                to="/signup"
-                className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-              >
-                {t('nav.sign_up')}
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral transition-all duration-200"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/signin"
+                    className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral transition-all duration-200"
+                  >
+                    {t('nav.sign_in')}
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
+                  >
+                    {t('nav.sign_up')}
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

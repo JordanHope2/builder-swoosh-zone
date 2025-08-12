@@ -2,6 +2,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { getSupabase, getSupabaseAdmin } from "../supabase";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 
@@ -45,10 +46,9 @@ const createJobSchema = z.object({
   salary_max: z.coerce.number().int().optional(),
 });
 
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   try {
-    const userId = req.header("x-user-id"); // ⚠️ prototype; replace with verified user id from JWT
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const user = (req as any).user;
 
     const parsed = createJobSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
     const { data, error } = await supabase
       .from("jobs")
       .insert({
-        owner_id: userId, // IMPORTANT: matches DB column name
+        owner_id: user.id, // IMPORTANT: matches DB column name
         title: parsed.data.title,
         description: parsed.data.description ?? null,
         location: parsed.data.location ?? null,

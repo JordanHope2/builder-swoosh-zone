@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
@@ -53,13 +54,14 @@ const App = () => (
     <ThemeProvider>
       <LanguageProvider>
         <FavoritesProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                {/* Home & jobs */}
-                <Route path="/" element={<Index />} />
+          <AuthProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* Home & jobs */}
+                  <Route path="/" element={<Index />} />
                 <Route path="/jobs" element={<JobSearch />} />
                 <Route path="/job-search" element={<JobSearch />} />
                 <Route path="/careers" element={<Navigate to="/job-search" replace />} />
@@ -138,6 +140,7 @@ const App = () => (
               <EnhancedAIChatbot />
             </BrowserRouter>
           </TooltipProvider>
+        </AuthProvider>
         </FavoritesProvider>
       </LanguageProvider>
     </ThemeProvider>

@@ -8,6 +8,7 @@ import companiesRouter from "./routes/companies";
 import footerRouter from "./routes/footer";
 import aboutRouter from "./routes/about";
 import contactRouter from "./routes/contact";
+import authRouter from "./routes/auth";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -35,6 +36,7 @@ export function createServer() {
   app.use("/api/footer", footerRouter);
   app.use("/api/about", aboutRouter);
   app.use("/api/contact", contactRouter);
+  app.use("/api/auth", authRouter);
 
   return app;
 }
