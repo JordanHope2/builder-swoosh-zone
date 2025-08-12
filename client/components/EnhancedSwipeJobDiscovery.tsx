@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, PanInfo, useAnimation, AnimatePresence } from 'framer-motion';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { 
   Heart, 
   X, 
@@ -9,11 +10,8 @@ import {
   CheckCircle,
   Target,
   MapPin,
-  DollarSign,
-  Star,
-  ChevronUp,
-  ChevronDown,
-  Briefcase
+  Briefcase,
+  Activity
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -39,7 +37,6 @@ interface JobFromApi {
   salary_is_predicted: string;
 }
 
-// Simplified job interface to match what we get from the API
 interface SwipeJob {
   id: string;
   title: string;
@@ -62,55 +59,25 @@ export function EnhancedSwipeJobDiscovery() {
   const controls = useAnimation();
   const { addToFavorites } = useFavorites();
   const { t } = useLanguage();
+  const { user } = useAuth();
+
   const [matchScore, setMatchScore] = useState<number | null>(null);
   const [isMatchLoading, setIsMatchLoading] = useState(false);
   const [matchError, setMatchError] = useState<string | null>(null);
 
-  // TODO: Replace this with dynamic user ID from auth context
-  // Hardcoded for demonstration purposes due to lack of a real auth flow.
-  const hardcodedCandidateId = 1;
-
-  useEffect(() => {
-    const fetchMatchScore = async () => {
-      if (!currentJob) return;
-
-      setIsMatchLoading(true);
-      setMatchError(null);
-      try {
-        const response = await fetch('/api/match', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            candidateId: hardcodedCandidateId,
-            jobId: currentJob.id,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch match score');
-        }
-        const data = await response.json();
-        setMatchScore(data.match_score);
-      } catch (err: any) {
-        setMatchError(err.message);
-      } finally {
-        setIsMatchLoading(false);
-      }
-    };
-
-    fetchMatchScore();
-  }, [currentJob]);
+  const currentJob = jobs[currentJobIndex];
+  const hasMoreJobs = currentJobIndex < jobs.length - 1;
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/scrape?limit=20'); // Fetch 20 jobs for swiping
+        const response = await fetch('/api/scrape?limit=20');
         if (!response.ok) {
           throw new Error('Failed to fetch jobs for swiping');
         }
         const data = await response.json();
 
-        // Map the API data to our simplified SwipeJob interface
         const formattedJobs: SwipeJob[] = (data.results || []).map((job: JobFromApi) => ({
           id: job.id,
           title: job.title,
@@ -132,9 +99,45 @@ export function EnhancedSwipeJobDiscovery() {
     fetchJobs();
   }, []);
 
+  useEffect(() => {
+    const fetchMatchScore = async () => {
+      // We need both a user and a job to fetch a score
+      if (!user || !currentJob) return;
 
-  const currentJob = jobs[currentJobIndex];
-  const hasMoreJobs = currentJobIndex < jobs.length - 1;
+      // Find the corresponding candidate profile for the user
+      // For now, we'll assume a direct mapping, but this might need a separate API call in a real app
+      // e.g. GET /api/profile/me to get the candidate ID.
+      // Since we hardcoded candidate ID 1, we'll use that.
+      const candidateId = 1; // This should be dynamic, e.g., user.profile.id
+
+      setIsMatchLoading(true);
+      setMatchError(null);
+      setMatchScore(null);
+
+      try {
+        const response = await fetch('/api/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            candidateId: candidateId,
+            jobId: currentJob.id,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch match score');
+        }
+        const data = await response.json();
+        setMatchScore(data.match_score);
+      } catch (err: any) {
+        setMatchError(err.message);
+      } finally {
+        setIsMatchLoading(false);
+      }
+    };
+
+    fetchMatchScore();
+  }, [currentJob, user]);
+
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
     if (!currentJob) return;
@@ -157,14 +160,14 @@ export function EnhancedSwipeJobDiscovery() {
         title: currentJob.title,
         company: currentJob.company,
         location: currentJob.location,
-        salary: 'N/A', // Salary not available from this API in a structured way
+        salary: 'N/A',
         type: 'job'
       });
     }
 
     if (hasMoreJobs) {
       setCurrentJobIndex(prev => prev + 1);
-      setShowDetails(false); // Reset details view for the next card
+      setShowDetails(false);
       await controls.start({
         x: 0,
         rotate: 0,
@@ -172,7 +175,7 @@ export function EnhancedSwipeJobDiscovery() {
         transition: { duration: 0.3 }
       });
     } else {
-        setCurrentJobIndex(prev => prev + 1); // Go one past the end to trigger the 'finished' screen
+        setCurrentJobIndex(prev => prev + 1);
     }
 
     setSwipeDirection(null);
@@ -266,12 +269,10 @@ export function EnhancedSwipeJobDiscovery() {
 
       {/* Swipe Container */}
       <div className="relative h-[550px] overflow-hidden">
-        {/* Background Card */}
         {hasMoreJobs && (
           <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg opacity-50 scale-95" />
         )}
 
-        {/* Main Card */}
         <motion.div
           className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg cursor-grab active:cursor-grabbing"
           drag="x"
@@ -280,7 +281,6 @@ export function EnhancedSwipeJobDiscovery() {
           animate={controls}
           whileDrag={{ scale: 1.02 }}
         >
-          {/* Swipe Indicators */}
           <AnimatePresence>
             {swipeDirection === 'right' && (
               <motion.div
@@ -307,7 +307,6 @@ export function EnhancedSwipeJobDiscovery() {
           </AnimatePresence>
 
           <div className="p-6 h-full flex flex-col">
-            {/* Header */}
             <div className="flex items-center justify-between mb-4">
                <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center relative">
@@ -327,7 +326,6 @@ export function EnhancedSwipeJobDiscovery() {
               </div>
             </div>
 
-            {/* Company Info */}
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-3xl shadow-md">
                 <Briefcase/>
@@ -350,7 +348,6 @@ export function EnhancedSwipeJobDiscovery() {
               </div>
             </div>
 
-            {/* Job Details */}
             <div className="flex-1 space-y-4 overflow-y-auto pr-2">
               <div>
                 <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.job_description')}</h3>
@@ -371,7 +368,6 @@ export function EnhancedSwipeJobDiscovery() {
         </motion.div>
       </div>
 
-      {/* Action Buttons */}
       <div className="flex items-center justify-center space-x-6 mt-8">
         <motion.button
           onClick={() => handleSwipe('left')}
@@ -385,7 +381,7 @@ export function EnhancedSwipeJobDiscovery() {
         {swipedJobs.length > 0 && (
           <motion.button
             onClick={handleUndo}
-            className="w-12 h-12 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors"
+            className="w-12 h-12 bg-gray-100 dark:bg-gray-700 hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >

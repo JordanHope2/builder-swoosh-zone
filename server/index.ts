@@ -9,6 +9,9 @@ import uploadRouter from "./routes/upload";
 import companiesRouter from "./routes/companies";
 import candidatesRouter from "./routes/candidates";
 import matchRouter from "./routes/match";
+import profileRouter from "./routes/profile";
+import applicationsRouter from "./routes/applications";
+import favoritesRouter from "./routes/favorites";
 
 export function createServer() {
   const app = express();
@@ -33,6 +36,9 @@ export function createServer() {
   app.use("/api/companies", companiesRouter);
   app.use("/api/candidates", candidatesRouter);
   app.use("/api/match", matchRouter);
+  app.use("/api/profile", profileRouter);
+  app.use("/api/applications", applicationsRouter);
+  app.use("/api/favorites", favoritesRouter);
 
   return app;
 }
