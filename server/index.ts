@@ -5,7 +5,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { handleDemo } from "./routes/demo";
 import { handleAiChat } from "./routes/ai";
-import { createCheckoutSession, handleStripeWebhook } from "./routes/stripe";
+import {
+  createCheckoutSession,
+  handleStripeWebhook,
+  getSubscription,
+} from "./routes/stripe";
 
 // ⬇️ AJOUTE CETTE LIGNE
 import jobsRouter from "./routes/jobs";
@@ -35,6 +39,7 @@ export function createServer() {
     express.raw({ type: "application/json" }),
     handleStripeWebhook
   );
+  app.get("/api/stripe/subscription", getSubscription);
 
   // ⬇️ AJOUTE CETTE LIGNE
   app.use("/api/jobs", jobsRouter);

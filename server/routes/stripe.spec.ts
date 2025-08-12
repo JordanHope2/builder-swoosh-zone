@@ -1,8 +1,25 @@
 // @vitest-environment node
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import { createServer } from '../index';
 import Stripe from 'stripe';
+
+// Hoist the mock functions
+const mockUpsert = vi.fn();
+const mockSelect = vi.fn();
+
+vi.mock('../lib/supabaseAdmin', () => ({
+  supabaseAdmin: {
+    from: vi.fn(() => ({
+      upsert: mockUpsert,
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          single: mockSelect,
+        })),
+      })),
+    })),
+  },
+}));
 
 // Mock the Stripe API
 vi.mock('stripe', () => {
@@ -28,10 +45,15 @@ vi.mock('stripe', () => {
 describe('Stripe API Endpoints', () => {
   const app = createServer();
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('POST /api/stripe/create-checkout-session', () => {
     it('should return a Stripe checkout session URL', async () => {
       const response = await request(app)
         .post('/api/stripe/create-checkout-session')
+        .set('x-mock-user-id', 'user_123')
         .send({ priceId: 'price_123' });
 
       expect(response.status).toBe(200);
@@ -41,24 +63,78 @@ describe('Stripe API Endpoints', () => {
       });
     });
 
-    it('should return a 400 error if priceId is not provided', async () => {
+    it('should return 401 if user is not authenticated', async () => {
       const response = await request(app)
         .post('/api/stripe/create-checkout-session')
-        .send({});
+        .send({ priceId: 'price_123' });
 
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({ error: 'Price ID is required' });
+      expect(response.status).toBe(401);
+    });
+  });
+
+  describe('GET /api/stripe/subscription', () => {
+    it('should return the user subscription', async () => {
+      const mockSubscription = {
+        user_id: 'user_123',
+        status: 'active',
+      };
+      mockSelect.mockResolvedValue({ data: mockSubscription, error: null });
+
+      const response = await request(app)
+        .get('/api/stripe/subscription')
+        .set('x-mock-user-id', 'user_123');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ subscription: mockSubscription });
+    });
+
+    it('should return 401 if user is not authenticated', async () => {
+      const response = await request(app).get('/api/stripe/subscription');
+      expect(response.status).toBe(401);
     });
   });
 
   describe('POST /api/stripe/webhook', () => {
-    it('should return a 200 and received: true for a valid webhook', async () => {
+    it('should call the upsert function with the correct data', async () => {
+      mockUpsert.mockResolvedValue({ error: null });
       const mockEvent = {
         id: 'evt_123',
         type: 'checkout.session.completed',
         data: {
           object: {
             id: 'cs_test_123',
+            client_reference_id: 'user_123',
+            subscription: 'sub_123',
+          },
+        },
+      };
+
+      const stripe = new Stripe('');
+      (stripe.webhooks.constructEvent as vi.Mock).mockReturnValue(mockEvent);
+
+      await request(app)
+        .post('/api/stripe/webhook')
+        .set('stripe-signature', 't=123,v1=123,v0=123')
+        .send(Buffer.from(JSON.stringify(mockEvent)))
+        .type('json');
+
+      expect(mockUpsert).toHaveBeenCalledWith({
+        user_id: 'user_123',
+        stripe_subscription_id: 'sub_123',
+        status: 'active',
+      }, { onConflict: 'user_id' });
+    });
+
+    it('should return a 200 and received: true for a valid webhook', async () => {
+      mockUpsert.mockResolvedValue({ error: null });
+      const mockEvent = {
+        id: 'evt_123',
+        type: 'checkout.session.completed',
+        data: {
+          object: {
+            id: 'cs_test_123',
+            client_reference_id: 'user_123',
+            subscription: 'sub_123',
           },
         },
       };

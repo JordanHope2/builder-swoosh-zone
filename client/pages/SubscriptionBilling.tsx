@@ -321,64 +321,6 @@ const pricingPlans: PricingPlan[] = [
   }
 ];
 
-const mockSubscription: Subscription = {
-  id: 'sub_1234567890',
-  planId: 'company-growth',
-  status: 'active',
-  currentPeriodStart: '2024-01-01T00:00:00Z',
-  currentPeriodEnd: '2024-02-01T00:00:00Z',
-  cancelAtPeriodEnd: false,
-  priceId: 'price_299_monthly',
-  amount: 299,
-  currency: 'CHF'
-};
-
-const mockPaymentMethods: PaymentMethod[] = [
-  {
-    id: 'pm_1234567890',
-    type: 'card',
-    last4: '4242',
-    brand: 'visa',
-    expMonth: 12,
-    expYear: 2026,
-    isDefault: true
-  },
-  {
-    id: 'pm_0987654321',
-    type: 'card',
-    last4: '0005',
-    brand: 'mastercard',
-    expMonth: 8,
-    expYear: 2025,
-    isDefault: false
-  }
-];
-
-const mockInvoices: Invoice[] = [
-  {
-    id: 'inv_2024_001',
-    number: 'INV-2024-001',
-    amount: 299,
-    currency: 'CHF',
-    status: 'paid',
-    date: '2024-01-01T00:00:00Z',
-    dueDate: '2024-01-15T00:00:00Z',
-    pdfUrl: '/invoices/inv_2024_001.pdf',
-    description: 'Company Growth Plan - January 2024'
-  },
-  {
-    id: 'inv_2023_012',
-    number: 'INV-2023-012',
-    amount: 299,
-    currency: 'CHF',
-    status: 'paid',
-    date: '2023-12-01T00:00:00Z',
-    dueDate: '2023-12-15T00:00:00Z',
-    pdfUrl: '/invoices/inv_2023_012.pdf',
-    description: 'Company Growth Plan - December 2023'
-  }
-];
-
 export default function SubscriptionBilling() {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('overview');
@@ -386,8 +328,30 @@ export default function SubscriptionBilling() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(true);
 
-  const currentPlan = pricingPlans.find(plan => plan.id === mockSubscription.planId);
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        setLoadingSubscription(true);
+        const response = await fetch('/api/stripe/subscription');
+        if (!response.ok) {
+          throw new Error('Failed to fetch subscription');
+        }
+        const { subscription: fetchedSubscription } = await response.json();
+        setSubscription(fetchedSubscription);
+      } catch (error) {
+        console.error('Error fetching subscription:', error);
+      } finally {
+        setLoadingSubscription(false);
+      }
+    };
+
+    fetchSubscription();
+  }, []);
+
+  const currentPlan = pricingPlans.find(plan => plan.id === subscription?.plan_id);
   
   const tabs = [
     { id: 'overview', label: 'Subscription Overview', icon: Package },
@@ -452,139 +416,115 @@ export default function SubscriptionBilling() {
     }
   };
 
-  const renderOverview = () => (
-    <div className="space-y-8">
-      {/* Current Subscription */}
-      <DashboardCard title="Current Subscription">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-jobequal-text dark:text-white">
-                  {currentPlan?.name}
-                </h3>
-                <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
-                  {currentPlan?.type === 'company' ? 'Company Plan' : 
-                   currentPlan?.type === 'recruiter' ? 'Recruiter Plan' : 'Candidate Plan'}
-                </p>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-jobequal-text dark:text-white">
-                  {formatCurrency(mockSubscription.amount)}
-                </div>
-                <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
-                  per month
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(mockSubscription.status)}`}>
-                {mockSubscription.status.toUpperCase()}
-              </span>
-              {currentPlan?.popular && (
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                  POPULAR
-                </span>
-              )}
-            </div>
+  const renderOverview = () => {
+    if (loadingSubscription) {
+      return <LoadingSpinner />;
+    }
 
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-jobequal-text-muted dark:text-gray-400">Current period:</span>
-                <span className="text-jobequal-text dark:text-white">
-                  {formatDate(mockSubscription.currentPeriodStart)} - {formatDate(mockSubscription.currentPeriodEnd)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-jobequal-text-muted dark:text-gray-400">Next billing:</span>
-                <span className="text-jobequal-text dark:text-white">
-                  {formatDate(mockSubscription.currentPeriodEnd)}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-medium text-jobequal-text dark:text-white">Plan Features</h4>
-            <div className="space-y-2">
-              {currentPlan?.features.slice(0, 5).map((feature, index) => (
-                <div key={index} className="flex items-center space-x-2 text-sm">
-                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                  <span className="text-jobequal-text-muted dark:text-gray-400">{feature}</span>
-                </div>
-              ))}
-              {currentPlan && currentPlan.features.length > 5 && (
-                <div className="text-sm text-jobequal-green font-medium">
-                  +{currentPlan.features.length - 5} more features
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 flex items-center space-x-3">
+    if (!subscription) {
+      return (
+        <DashboardCard title="Current Subscription">
+          <p>You do not have an active subscription.</p>
           <ActionButton
             variant="primary"
-            onClick={() => setShowUpgradeModal(true)}
-            icon={TrendingUp}
-          >
-            Upgrade Plan
-          </ActionButton>
-          <ActionButton
-            variant="secondary"
             onClick={() => setActiveTab('plans')}
-            icon={Package}
+            icon={TrendingUp}
+            className="mt-4"
           >
-            View All Plans
+            View Plans
           </ActionButton>
-          <ActionButton
-            variant="secondary"
-            onClick={() => setActiveTab('usage')}
-            icon={BarChart3}
-          >
-            View Usage
-          </ActionButton>
-        </div>
-      </DashboardCard>
+        </DashboardCard>
+      );
+    }
 
-      {/* Usage Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatsCard
-          title="Job Posts Used"
-          value="23"
-          icon={Briefcase}
-          description={`of ${currentPlan?.limits.jobPosts === -1 ? 'unlimited' : currentPlan?.limits.jobPosts}`}
-          change="85%"
-          changeType="neutral"
-        />
-        <StatsCard
-          title="Candidate Views"
-          value="687"
-          icon={Users}
-          description={`of ${currentPlan?.limits.candidateViews === -1 ? 'unlimited' : currentPlan?.limits.candidateViews}`}
-          change="68.7%"
-          changeType="neutral"
-        />
-        <StatsCard
-          title="Team Members"
-          value="8"
-          icon={Users}
-          description={`of ${currentPlan?.limits.users === -1 ? 'unlimited' : currentPlan?.limits.users}`}
-          change="53%"
-          changeType="neutral"
-        />
-        <StatsCard
-          title="Storage Used"
-          value="12.5 GB"
-          icon={Globe}
-          description={`of ${currentPlan?.limits.storage}`}
-          change="50%"
-          changeType="positive"
-        />
+    const currentPlan = pricingPlans.find(plan => plan.id === subscription.plan_id);
+
+    return (
+      <div className="space-y-8">
+        {/* Current Subscription */}
+        <DashboardCard title="Current Subscription">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-jobequal-text dark:text-white">
+                    {currentPlan?.name}
+                  </h3>
+                  <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                    {currentPlan?.type === 'company' ? 'Company Plan' :
+                     currentPlan?.type === 'recruiter' ? 'Recruiter Plan' : 'Candidate Plan'}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-jobequal-text dark:text-white">
+                    {formatCurrency(currentPlan?.price || 0)}
+                  </div>
+                  <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                    per month
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(subscription.status)}`}>
+                  {subscription.status.toUpperCase()}
+                </span>
+                {currentPlan?.popular && (
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                    POPULAR
+                  </span>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-jobequal-text-muted dark:text-gray-400">Current period:</span>
+                  <span className="text-jobequal-text dark:text-white">
+                    {formatDate(subscription.current_period_start)} - {formatDate(subscription.current_period_end)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-jobequal-text-muted dark:text-gray-400">Next billing:</span>
+                  <span className="text-jobequal-text dark:text-white">
+                    {formatDate(subscription.current_period_end)}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="font-medium text-jobequal-text dark:text-white">Plan Features</h4>
+              <div className="space-y-2">
+                {currentPlan?.features.slice(0, 5).map((feature, index) => (
+                  <div key={index} className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <span className="text-jobequal-text-muted dark:text-gray-400">{feature}</span>
+                  </div>
+                ))}
+                {currentPlan && currentPlan.features.length > 5 && (
+                  <div className="text-sm text-jobequal-green font-medium">
+                    +{currentPlan.features.length - 5} more features
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-center space-x-3">
+            <ActionButton
+              variant="primary"
+              onClick={() => setActiveTab('plans')}
+              icon={TrendingUp}
+            >
+              Change Plan
+            </ActionButton>
+            {/* Add cancel subscription button here */}
+          </div>
+        </DashboardCard>
+        {/* ... rest of the overview ... */}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderPlans = () => (
     <div className="space-y-8">
