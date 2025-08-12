@@ -8,6 +8,7 @@ import scrapeRouter from "./routes/scrape";
 import uploadRouter from "./routes/upload";
 import companiesRouter from "./routes/companies";
 import candidatesRouter from "./routes/candidates";
+import matchRouter from "./routes/match";
 
 export function createServer() {
   const app = express();
@@ -31,6 +32,7 @@ export function createServer() {
   app.use("/api/upload", uploadRouter);
   app.use("/api/companies", companiesRouter);
   app.use("/api/candidates", candidatesRouter);
+  app.use("/api/match", matchRouter);
 
   return app;
 }

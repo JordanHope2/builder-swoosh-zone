@@ -95,3 +95,24 @@ This document provides details on the API endpoints available to connect the fro
       ]
     }
     ```
+
+---
+
+## 4. Get AI Match Score
+
+-   **Endpoint:** `/api/match`
+-   **Method:** `POST`
+-   **Description:** Calculates a match score between a specific candidate and a job posting using a TF-IDF and cosine similarity model.
+-   **Request Body:**
+    ```json
+    {
+      "candidateId": 1,
+      "jobId": "some-job-uuid"
+    }
+    ```
+-   **Example Response:**
+    ```json
+    {
+      "match_score": 85
+    }
+    ```

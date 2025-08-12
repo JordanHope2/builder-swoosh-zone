@@ -28,9 +28,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        # In a real project, we would have a requirements.txt file.
-        # For now, we install the dependencies manually.
-        pip install httpx rss-parser thefuzz
+        pip install -r job_scraper/requirements.txt
 
     - name: Run scrapers
       env:
