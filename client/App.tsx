@@ -1,14 +1,16 @@
 import "./global.css";
 
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "./components/ui/toaster";
 import { createRoot } from "react-dom/client";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster as Sonner } from "./components/ui/sonner";
+import { TooltipProvider } from "./components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
@@ -51,16 +53,17 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <LanguageProvider>
-        <FavoritesProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                {/* Home & jobs */}
-                <Route path="/" element={<Index />} />
+    <AuthProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <FavoritesProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  {/* Home & jobs */}
+                  <Route path="/" element={<Index />} />
                 <Route path="/jobs" element={<JobSearch />} />
                 <Route path="/job-search" element={<JobSearch />} />
                 <Route path="/careers" element={<Navigate to="/job-search" replace />} />
@@ -76,16 +79,16 @@ const App = () => (
                 <Route path="/login" element={<Navigate to="/signin" replace />} />
                 <Route path="/sign-in" element={<Navigate to="/signin" replace />} />
 
-                {/* Dashboards */}
-                <Route path="/dashboard" element={<EnhancedDashboard />} />
-                <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
-                <Route path="/enhanced-dashboard" element={<EnhancedDashboard />} />
-                <Route path="/profile" element={<CandidateProfile />} />
-                <Route path="/candidate-profile" element={<CandidateProfile />} />
-                <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
-                <Route path="/company-dashboard" element={<CompanyDashboard />} />
-                <Route path="/enhanced-recruiter-dashboard" element={<EnhancedRecruiterDashboard />} />
-                <Route path="/owner-admin-dashboard" element={<OwnerAdminDashboard />} />
+                {/* Protected Dashboards */}
+                <Route path="/dashboard" element={<ProtectedRoute><EnhancedDashboard /></ProtectedRoute>} />
+                <Route path="/candidate-dashboard" element={<ProtectedRoute><CandidateDashboard /></ProtectedRoute>} />
+                <Route path="/enhanced-dashboard" element={<ProtectedRoute><EnhancedDashboard /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><CandidateProfile /></ProtectedRoute>} />
+                <Route path="/candidate-profile" element={<ProtectedRoute><CandidateProfile /></ProtectedRoute>} />
+                <Route path="/recruiter-dashboard" element={<ProtectedRoute><RecruiterDashboard /></ProtectedRoute>} />
+                <Route path="/company-dashboard" element={<ProtectedRoute><CompanyDashboard /></ProtectedRoute>} />
+                <Route path="/enhanced-recruiter-dashboard" element={<ProtectedRoute><EnhancedRecruiterDashboard /></ProtectedRoute>} />
+                <Route path="/owner-admin-dashboard" element={<ProtectedRoute><OwnerAdminDashboard /></ProtectedRoute>} />
 
                 {/* Companies */}
                 <Route path="/companies" element={<Companies />} />
@@ -97,15 +100,15 @@ const App = () => (
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/ai-score" element={<AIScore />} />
                 <Route path="/cv-review" element={<CVReviewBooking />} />
-                <Route path="/admin" element={<AdminPanel />} />
-                <Route path="/settings" element={<ProfileSettings />} />
-                <Route path="/profile-settings" element={<ProfileSettings />} />
+                <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
+                <Route path="/profile-settings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
                 <Route path="/salary-guide" element={<SalaryGuide />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/pricing" element={<Pricing />} />
-                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
 
                 {/* Misc */}
                 <Route
@@ -126,12 +129,12 @@ const App = () => (
                     />
                   }
                 />
-                <Route path="/swipe" element={<SwipeDiscovery />} />
-                <Route path="/subscription" element={<SubscriptionBilling />} />
-                <Route path="/billing" element={<SubscriptionBilling />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/chat" element={<Messages />} />
-                <Route path="/upload-test" element={<UploadTest />} />
+                <Route path="/swipe" element={<ProtectedRoute><SwipeDiscovery /></ProtectedRoute>} />
+                <Route path="/subscription" element={<ProtectedRoute><SubscriptionBilling /></ProtectedRoute>} />
+                <Route path="/billing" element={<ProtectedRoute><SubscriptionBilling /></ProtectedRoute>} />
+                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                <Route path="/chat" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                <Route path="/upload-test" element={<ProtectedRoute><UploadTest /></ProtectedRoute>} />
 
                 {/* Catch-all 404 */}
                 <Route path="*" element={<NotFound />} />
@@ -143,6 +146,7 @@ const App = () => (
         </FavoritesProvider>
       </LanguageProvider>
     </ThemeProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

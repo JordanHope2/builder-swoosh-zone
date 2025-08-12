@@ -1,6 +1,12 @@
 import os
 from typing import List, Dict, Set, Any
+from dotenv import load_dotenv
 from supabase import create_client, Client
+import os
+
+# Construct a path to the .env file in the project root
+dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env')
+load_dotenv(dotenv_path=dotenv_path)
 
 class SupabaseClient:
     """
@@ -8,7 +14,7 @@ class SupabaseClient:
     """
     def __init__(self):
         self.client: Client = create_client(
-            os.environ.get("SUPABASE_URL"),
+            os.environ.get("VITE_SUPABASE_URL"),
             os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         )
 

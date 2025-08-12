@@ -13,6 +13,8 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeProvider';
+import { signInWithEmail } from '../lib/supabase';
+import { useToast } from '../hooks/use-toast';
 
 const benefits = [
   {
@@ -40,17 +42,28 @@ export default function SignIn() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to dashboard
+    try {
+      await signInWithEmail(formData.email, formData.password);
+      toast({
+        title: "Signed in successfully!",
+        description: "Redirecting you to your dashboard...",
+      });
+      // Redirect to dashboard on success
       window.location.href = '/dashboard';
-    }, 2000);
+    } catch (error: any) {
+      toast({
+        title: "Sign-in Error",
+        description: error.message || "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

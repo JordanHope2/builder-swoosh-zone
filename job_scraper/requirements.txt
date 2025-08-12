@@ -3,3 +3,5 @@ rss-parser
 thefuzz
 scikit-learn
 nltk
+supabase
+python-dotenv

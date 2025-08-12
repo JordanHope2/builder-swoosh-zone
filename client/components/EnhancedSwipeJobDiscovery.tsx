@@ -17,6 +17,13 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const getMatchScoreColor = (score: number) => {
+  if (score >= 80) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
+  if (score >= 60) return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30';
+  if (score >= 40) return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30';
+  return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30';
+};
+
 interface JobFromApi {
   id: string;
   title: string;
@@ -55,6 +62,43 @@ export function EnhancedSwipeJobDiscovery() {
   const controls = useAnimation();
   const { addToFavorites } = useFavorites();
   const { t } = useLanguage();
+  const [matchScore, setMatchScore] = useState<number | null>(null);
+  const [isMatchLoading, setIsMatchLoading] = useState(false);
+  const [matchError, setMatchError] = useState<string | null>(null);
+
+  // TODO: Replace this with dynamic user ID from auth context
+  // Hardcoded for demonstration purposes due to lack of a real auth flow.
+  const hardcodedCandidateId = 1;
+
+  useEffect(() => {
+    const fetchMatchScore = async () => {
+      if (!currentJob) return;
+
+      setIsMatchLoading(true);
+      setMatchError(null);
+      try {
+        const response = await fetch('/api/match', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            candidateId: hardcodedCandidateId,
+            jobId: currentJob.id,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch match score');
+        }
+        const data = await response.json();
+        setMatchScore(data.match_score);
+      } catch (err: any) {
+        setMatchError(err.message);
+      } finally {
+        setIsMatchLoading(false);
+      }
+    };
+
+    fetchMatchScore();
+  }, [currentJob]);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -270,6 +314,16 @@ export function EnhancedSwipeJobDiscovery() {
                   <span className="text-white font-bold text-xs">J</span>
                 </div>
                 <span className="text-sm font-medium text-jobequal-green">JobEqual</span>
+              </div>
+              <div>
+                {isMatchLoading && <span className="text-sm text-gray-500">Matching...</span>}
+                {matchError && <span className="text-sm text-red-500">Error</span>}
+                {matchScore !== null && (
+                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getMatchScoreColor(matchScore)}`}>
+                    {matchScore}% Match
+                    <Target className="w-4 h-4 inline ml-1" />
+                  </div>
+                )}
               </div>
             </div>
 
