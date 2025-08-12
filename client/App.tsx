@@ -53,7 +53,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <LanguageProvider>
-        <FavoritesProvider>
+        <AuthProvider>
+          <JobsProvider>
+            <FavoritesProvider>
         <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -108,7 +110,9 @@ const App = () => (
           <EnhancedAIChatbot />
         </BrowserRouter>
         </TooltipProvider>
-        </FavoritesProvider>
+            </FavoritesProvider>
+          </JobsProvider>
+        </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>
