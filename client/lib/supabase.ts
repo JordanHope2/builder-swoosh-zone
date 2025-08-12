@@ -73,28 +73,36 @@ export const signUpWithEmail = async (
 
 // Database helpers
 export const getJobs = async (filters?: any) => {
-  let query = supabase
-    .from("jobs")
-    .select(
-      `
-      *,
-      companies(name, logo_url, location),
-      applications(id, status, candidate_id)
-    `,
-    )
-    .eq("status", "published");
+  console.log('getJobs called with filters:', filters);
 
-  if (filters?.location) {
-    query = query.ilike("location", `%${filters.location}%`);
+  try {
+    let query = supabase
+      .from("jobs")
+      .select("*")
+      .limit(20); // Add a limit to avoid large datasets initially
+
+    if (filters?.location) {
+      query = query.ilike("location", `%${filters.location}%`);
+    }
+
+    if (filters?.title) {
+      query = query.ilike("title", `%${filters.title}%`);
+    }
+
+    console.log('Executing Supabase query...');
+    const { data, error } = await query;
+
+    if (error) {
+      console.error('Supabase query error:', error);
+      throw error;
+    }
+
+    console.log('Jobs data received:', data);
+    return data || [];
+  } catch (error) {
+    console.error('Error in getJobs:', error);
+    throw error;
   }
-
-  if (filters?.title) {
-    query = query.ilike("title", `%${filters.title}%`);
-  }
-
-  const { data, error } = await query;
-  if (error) throw error;
-  return data;
 };
 
 export const getJobById = async (id: string) => {
