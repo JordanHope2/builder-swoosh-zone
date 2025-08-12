@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { EnhancedSignIn } from '../components/EnhancedSignIn';
 import { 
   Eye, 
   EyeOff, 
