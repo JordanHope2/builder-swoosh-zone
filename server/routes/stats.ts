@@ -1,15 +1,24 @@
 import { Router } from "express";
+import { getSupabase } from "../supabase";
 
 const router = Router();
 
 router.get("/", async (_req, res) => {
   try {
-    // In a real application, this data would come from a database or a caching layer.
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("stats")
+      .select("active_jobs, registered_users, success_rate")
+      .single();
+
+    if (error) throw error;
+
     const stats = {
-      activeJobs: "10,000+",
-      registeredUsers: "50,000+",
-      successRate: "95%",
+      activeJobs: data.active_jobs,
+      registeredUsers: data.registered_users,
+      successRate: data.success_rate,
     };
+
     res.json(stats);
   } catch (e: any) {
     res.status(500).json({ error: e.message ?? "Unknown error" });

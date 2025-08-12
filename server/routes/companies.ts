@@ -1,18 +1,19 @@
 import { Router } from "express";
+import { getSupabase } from "../supabase";
 
 const router = Router();
 
-const featuredCompanies = [
-  { id: "1", name: "UBS" },
-  { id: "2", name: "Nestlé" },
-  { id: "3", name: "Roche" },
-  { id: "4", name: "ABB" },
-];
-
 router.get("/featured", async (_req, res) => {
   try {
-    // In a real application, this data would come from a database.
-    res.json(featuredCompanies);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("companies")
+      .select("id, name")
+      .eq("featured", true);
+
+    if (error) throw error;
+
+    res.json(data ?? []);
   } catch (e: any) {
     res.status(500).json({ error: e.message ?? "Unknown error" });
   }

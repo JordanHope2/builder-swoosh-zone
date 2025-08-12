@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
 import { FeaturedJobs } from '../components/FeaturedJobs';
+import { Skeleton } from '../components/ui/skeleton';
 
 interface Stats {
   activeJobs: string;
@@ -17,6 +18,8 @@ interface Company {
 export default function Index() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [featuredCompanies, setFeaturedCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,12 +28,20 @@ export default function Index() {
           fetch('/api/stats'),
           fetch('/api/companies/featured')
         ]);
+
+        if (!statsResponse.ok || !companiesResponse.ok) {
+          throw new Error('Failed to fetch data');
+        }
+
         const statsData: Stats = await statsResponse.json();
         const companiesData: Company[] = await companiesResponse.json();
         setStats(statsData);
         setFeaturedCompanies(companiesData);
       } catch (error) {
         console.error('Failed to fetch data:', error);
+        setError('Failed to load page content. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -56,34 +67,36 @@ export default function Index() {
             </p>
           </div>
 
+          {error && <div className="text-center text-red-500">{error}</div>}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center justify-items-center mb-20">
-            {featuredCompanies.length > 0 ? (
+            {loading ? (
+              Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-12 w-32" />)
+            ) : (
               featuredCompanies.map((company) => (
                 <div key={company.id} className="text-3xl font-bold text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green dark:hover:text-jobequal-green transition-colors duration-200 cursor-pointer">
                   {company.name}
                 </div>
               ))
-            ) : (
-              <p>Loading companies...</p>
             )}
           </div>
 
           <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
             <div className="text-center group">
               <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
-                {stats ? stats.activeJobs : '...'}
+                {loading ? <Skeleton className="h-20 w-40 mx-auto" /> : stats?.activeJobs}
               </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Active Jobs</div>
             </div>
             <div className="text-center group">
               <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
-                {stats ? stats.registeredUsers : '...'}
+                {loading ? <Skeleton className="h-20 w-40 mx-auto" /> : stats?.registeredUsers}
               </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Registered Users</div>
             </div>
             <div className="text-center group">
               <div className="text-6xl lg:text-7xl font-bold text-jobequal-green mb-4 group-hover:scale-110 transition-transform duration-200">
-                {stats ? stats.successRate : '...'}
+                {loading ? <Skeleton className="h-20 w-40 mx-auto" /> : stats?.successRate}
               </div>
               <div className="text-xl text-jobequal-text-muted font-medium">Success Rate</div>
             </div>
