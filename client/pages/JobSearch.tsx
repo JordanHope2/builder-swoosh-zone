@@ -477,9 +477,37 @@ export default function JobSearch() {
 
             {/* Job Cards */}
             <div className="space-y-4 sm:space-y-6">
-              {mockJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
+              {isLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-jobequal-text-muted">Loading jobs...</div>
+                </div>
+              ) : jobs.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-jobequal-text-muted mb-4">No jobs found matching your criteria.</div>
+                  <button
+                    onClick={() => jobSearch.clearFilters()}
+                    className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              ) : (
+                jobs.map((job) => (
+                  <JobCard key={job.id} job={{
+                    ...job,
+                    company: job.companies?.name || 'Unknown Company',
+                    logo: job.companies?.logo_url || '🏢',
+                    salary: job.salary_min && job.salary_max
+                      ? `CHF ${job.salary_min.toLocaleString()} - ${job.salary_max.toLocaleString()}`
+                      : 'Salary not specified',
+                    posted: new Date(job.created_at).toLocaleDateString(),
+                    matchScore: 85, // TODO: Implement AI matching
+                    requirements: [], // TODO: Parse from job description or add to schema
+                    featured: false, // TODO: Add featured field to schema
+                    remote: job.type?.includes('remote') || false
+                  }} />
+                ))
+              )}
             </div>
 
             {/* Pagination */}
