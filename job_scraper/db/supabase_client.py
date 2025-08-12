@@ -76,14 +76,17 @@ class SupabaseClient:
 
     def upsert_company(self, company: Dict[str, Any]) -> str | None:
         """
-        Upserts a canonical company profile based on its Zefix UID.
-        Returns the UUID of the upserted record.
+        Upserts a company profile.
+        - If zefix_uid is present, it upserts based on that.
+        - If not, it attempts to find a match by name and update.
+        - If no match is found, it creates a new company.
+        Returns the UUID of the upserted/created record.
         """
-        if not company or not company.get('zefix_uid'):
+        if not company or not company.get('name'):
             return None
 
-        try:
-            # We only insert the fields that are part of the 'companies' table schema
+        # Case 1: We have a Zefix UID (from Zefix scraper)
+        if 'zefix_uid' in company and company['zefix_uid']:
             company_data = {
                 'zefix_uid': company.get('zefix_uid'),
                 'name': company.get('name'),
@@ -91,20 +94,40 @@ class SupabaseClient:
                 'address': company.get('address'),
                 'location': company.get('location')
             }
+            try:
+                data, count = self.client.table('companies').upsert(company_data, on_conflict='zefix_uid').execute()
+                if data and data[1]:
+                    company_id = data[1][0]['id']
+                    print(f"(Zefix) Upserted company {company['name']}. ID: {company_id}")
+                    return company_id
+                return None
+            except Exception as e:
+                print(f"An error occurred while upserting Zefix company {company.get('name')}: {e}")
+                return None
 
-            data, count = self.client.table('companies').upsert(
-                company_data,
-                on_conflict='zefix_uid'
-            ).execute()
-
-            if data and data[1]:
-                company_id = data[1][0]['id']
-                print(f"Upserted company {company['name']}. ID: {company_id}")
-                return company_id
-            return None
-        except Exception as e:
-            print(f"An error occurred while upserting company {company.get('name')}: {e}")
-            return None
+        # Case 2: No Zefix UID (from Adzuna enrichment)
+        else:
+            # This part is complex and better handled in a dedicated service/linker.
+            # For now, we will just insert, and the linking logic can merge later.
+            # A true upsert here would require a fuzzy match against the DB.
+            enrichment_data = {
+                'name': company.get('name'),
+                'description': company.get('description'),
+                'tech_stack': company.get('tech_stack')
+            }
+            try:
+                # We use upsert on 'name' as a proxy for now. This can create near-duplicates
+                # that will need to be merged later. A more robust solution would involve
+                # a separate staging area or a more complex matching function.
+                data, count = self.client.table('companies').upsert(enrichment_data, on_conflict='name').execute()
+                if data and data[1]:
+                    company_id = data[1][0]['id']
+                    print(f"(Enrichment) Upserted company {company['name']}. ID: {company_id}")
+                    return company_id
+                return None
+            except Exception as e:
+                print(f"An error occurred while upserting enrichment data for company {company.get('name')}: {e}")
+                return None
 
     def log_raw_company_scrape(self, company_id: str, source: str, source_id: str, raw_data: Dict[str, Any]):
         """
