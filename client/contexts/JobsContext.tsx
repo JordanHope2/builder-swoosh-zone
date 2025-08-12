@@ -105,7 +105,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       // Refresh jobs to update application status
       await loadJobs(filters);
     } catch (err) {
-      throw new Error(err instanceof Error ? err.message : 'Failed to submit application');
+      throw new Error(getErrorMessage(err));
     }
   };
 
