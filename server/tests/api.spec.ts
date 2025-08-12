@@ -58,10 +58,14 @@ const mockSupabase = {
       offices: {
         select: vi.fn().mockResolvedValue({ data: mockOffices, error: null }),
       },
+      contact_submissions: {
+        insert: vi.fn().mockResolvedValue({ error: null }),
+      },
       default: {
         select: vi.fn().mockReturnThis(),
         single: vi.fn().mockResolvedValue({ data: {}, error: new Error("Table not found") }),
         eq: vi.fn().mockResolvedValue({ data: [], error: new Error("Table not found") }),
+        insert: vi.fn().mockResolvedValue({ error: new Error("Table not found") }),
       }
     };
     return handlers[tableName] || handlers.default;
@@ -127,6 +131,38 @@ describe("API routes", () => {
         supportTypes: mockSupportTypes,
         offices: mockOffices,
       });
+    });
+  });
+
+  describe("POST /api/contact/submit", () => {
+    it("should return 200 for a valid submission", async () => {
+      const validSubmission = {
+        name: "Test User",
+        email: "test@example.com",
+        subject: "Test Subject",
+        message: "Test message",
+        userType: "job-seeker",
+      };
+      const response = await request(app)
+        .post("/api/contact/submit")
+        .send(validSubmission);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Message sent successfully!" });
+    });
+
+    it("should return 400 for an invalid submission", async () => {
+      const invalidSubmission = {
+        name: "", // Invalid name
+        email: "not-an-email",
+        subject: "",
+        message: "",
+        userType: "job-seeker",
+      };
+      const response = await request(app)
+        .post("/api/contact/submit")
+        .send(invalidSubmission);
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error");
     });
   });
 });
