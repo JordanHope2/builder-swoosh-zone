@@ -67,3 +67,31 @@ This document provides details on the API endpoints available to connect the fro
       }
     ]
     ```
+
+---
+
+## 3. Get All Jobs
+
+-   **Endpoint:** `/api/jobs`
+-   **Method:** `GET`
+-   **Description:** Retrieves a list of all jobs stored in the database. The jobs are returned in descending order of their creation date. This is a public endpoint and respects Row Level Security.
+-   **Example Response:**
+    ```json
+    {
+      "jobs": [
+        {
+            "id": "1",
+            "owner_id": "user-uuid-123",
+            "title": "Senior Software Engineer",
+            "description": "Join our innovative team...",
+            "location": "Zurich",
+            "salary_min": 120000,
+            "salary_max": 140000,
+            "created_at": "2025-08-12T12:00:00.000Z",
+            "company_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+            "company_name": "Example Tech Inc.",
+            "hash": "a1b2c3d4e5f6..."
+        }
+      ]
+    }
+    ```
