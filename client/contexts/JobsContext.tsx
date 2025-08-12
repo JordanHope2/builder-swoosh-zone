@@ -2,6 +2,19 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getJobs, getJobById, submitApplication, supabase } from '../lib/supabase';
 import { useAuth } from './AuthContext';
 
+// Utility function to extract error message from various error types
+const getErrorMessage = (error: unknown): string => {
+  if (typeof error === 'string') return error;
+  if (error instanceof Error) return error.message;
+  if (error && typeof error === 'object') {
+    // Handle Supabase errors
+    if ('message' in error) return String(error.message);
+    if ('error' in error && typeof error.error === 'string') return error.error;
+    if ('details' in error && typeof error.details === 'string') return error.details;
+  }
+  return 'An unexpected error occurred';
+};
+
 interface Job {
   id: string;
   title: string;
