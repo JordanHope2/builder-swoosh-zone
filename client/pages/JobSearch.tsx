@@ -371,6 +371,15 @@ export default function JobSearch() {
   const [sortBy, setSortBy] = useState('relevance');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  // Use real data from contexts
+  const jobSearch = useJobSearch();
+  const { auth } = useAppData();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+
+  // Use real jobs data instead of mock data
+  const jobs = jobSearch.results;
+  const isLoading = jobSearch.isLoading;
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
       <Navigation />
