@@ -25,3 +25,41 @@ This document lists compliant and publicly accessible sources for aggregating jo
 -   **Base URL:** `https://www.job-room.ch/`
 -   **Ingestion Method:** The public website is a Single Page Application (SPA). The public API at `https://api.job-room.ch/` is for **posting** jobs, not for public data retrieval.
 -   **Status:** Currently **not viable** for public data scraping without using a headless browser to discover the internal API endpoints used by the frontend. This would require more advanced tooling and is outside the scope of simple, compliant scraping.
+
+# Candidate Profile Sources
+
+This section documents potential sources for scraping candidate profiles. The goal is to find publicly available data on tech professionals that can be used for matching against open job positions in Switzerland.
+
+## 1. GitHub
+
+-   **Type**: API
+-   **URL**: `https://api.github.com/`
+-   **Access**: Public API with rate limits. Authentication with a personal access token is recommended to increase rate limits.
+-   **Key Endpoints**:
+    -   `GET /search/users`: Allows searching for users based on criteria like location, programming language, and number of followers. This is the primary endpoint for discovering relevant candidates.
+    -   `GET /users/{username}`: Retrieves detailed profile information for a specific user, including name, bio, company, blog/website, and social accounts.
+-   **Data Points**: `name`, `location`, `bio`, `company`, `blog`, `email` (often null), repositories (to infer skills).
+-   **Pros**:
+    -   Rich source of developer talent.
+    -   Powerful search capabilities allow for targeted discovery (e.g., "users in Zurich with >50 followers who code in Python").
+    -   Well-documented and widely used API.
+-   **Cons**:
+    -   Location and job-related fields are free-text, requiring significant normalization.
+    -   Public email is often not available, making contact difficult without further enrichment.
+    -   Requires careful handling of rate limits.
+
+## 2. GitLab
+
+-   **Type**: API
+-   **URL**: `https://gitlab.com/api/v4/`
+-   **Access**: Public API with rate limits. Authentication is required for most useful actions.
+-   **Key Endpoints**:
+    -   `GET /users`: Can be used to list or search for users. The `search` parameter allows for a fuzzy search on name, username, and public email.
+    -   `GET /users/:id`: Retrieves detailed profile information, including `job_title`, `organization`, `location`, and social links (`linkedin`, `twitter`, `github`).
+-   **Data Points**: `name`, `username`, `bio`, `location`, `organization`, `job_title`, social profiles.
+-   **Pros**:
+    -   Profile schema includes explicit `job_title` and `organization` fields, which is highly valuable.
+    -   Provides direct links to other professional profiles like LinkedIn.
+-   **Cons**:
+    -   The user search functionality is less powerful than GitHub's. It's a general text search rather than a structured search on specific fields like location or skills.
+    -   Discovering a targeted list of users (e.g., "all developers in Switzerland") is more challenging than on GitHub.

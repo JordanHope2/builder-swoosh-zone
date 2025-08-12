@@ -5,7 +5,14 @@ import os
 # Add the parent directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from job_scraper.utils.normalize import normalize_title, normalize_company, create_job_hash
+from job_scraper.utils.normalize import (
+    normalize_title,
+    normalize_company,
+    create_job_hash,
+    normalize_location,
+    extract_skills_from_text,
+    normalize_url
+)
 
 class TestNormalize(unittest.TestCase):
 
@@ -55,6 +62,39 @@ class TestNormalize(unittest.TestCase):
 
         self.assertEqual(hash1, hash2)
         self.assertNotEqual(hash1, hash3)
+
+    def test_normalize_location(self):
+        self.assertEqual(normalize_location("Zurich, Switzerland"), "Switzerland")
+        self.assertEqual(normalize_location("Geneva, Suisse"), "Switzerland")
+        self.assertEqual(normalize_location("Bern, Schweiz"), "Switzerland")
+        self.assertEqual(normalize_location("Lausanne"), "Lausanne") # No rule, return original
+        self.assertEqual(normalize_location(""), "")
+        self.assertEqual(normalize_location(None), "")
+
+    def test_extract_skills_from_text(self):
+        bio = "Experienced Python and React developer. I love working with node.js, AWS, and Docker. C# is also cool."
+        expected_skills = {"python", "react", "node.js", "aws", "docker", "c#"}
+        self.assertEqual(extract_skills_from_text(bio), expected_skills)
+
+        # Test that 'go' is extracted from "go programmer" but not from "go-getter".
+        bio2 = "I'm a go-getter, not a go programmer."
+        self.assertEqual(extract_skills_from_text(bio2), {'go'})
+
+        bio3 = "I know javascript."
+        self.assertEqual(extract_skills_from_text(bio3), {"javascript"})
+
+        self.assertEqual(extract_skills_from_text(""), set())
+        self.assertEqual(extract_skills_from_text(None), set())
+
+    def test_normalize_url(self):
+        self.assertEqual(normalize_url("example.com"), "https://example.com")
+        self.assertEqual(normalize_url("http://example.com"), "http://example.com")
+        self.assertEqual(normalize_url("https://www.example.com/path?query=1"), "https://www.example.com/path?query=1")
+        self.assertEqual(normalize_url(""), "")
+        self.assertEqual(normalize_url(None), "")
+        # It should handle being given an already correct URL
+        self.assertEqual(normalize_url("https://linkedin.com/in/user"), "https://linkedin.com/in/user")
+
 
 if __name__ == '__main__':
     unittest.main()
