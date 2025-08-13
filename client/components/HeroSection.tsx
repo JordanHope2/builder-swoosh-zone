@@ -191,12 +191,6 @@ export function HeroSection() {
                     </span>
                   </div>
                 </div>
-                <Link
-                  to="/cv-upload"
-                  className="block w-full mt-3 text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors duration-200 text-sm"
-                >
-                  {t('hero.advanced_upload_page')}
-                </Link>
               </div>
 
               <p className="text-xs sm:text-sm text-jobequal-text-muted font-medium">
