@@ -39,9 +39,9 @@ export function Navigation() {
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { to: '/job-search', label: t('nav.browse_jobs') },
-    { to: '/swipe', label: t('nav.swipe_discovery') },
     { to: '/cv-upload', label: t('nav.upload_cv') },
+    { to: '/swipe', label: t('nav.swipe_discovery') },
+    { to: '/job-search', label: t('nav.browse_jobs') },
     { to: '/companies', label: t('nav.companies') },
     { to: '/about', label: t('nav.about') },
     { to: '/contact', label: t('nav.contact') },
