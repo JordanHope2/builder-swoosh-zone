@@ -225,9 +225,11 @@ function CompanyCard({ company, index }: { company: Company; index: number }) {
           <CompanyShareButton company={{ id: company.id, name: company.name }} />
           <button
             onClick={() => setIsLiked(!isLiked)}
-            className={`p-2 rounded-lg transition-colors ${
-              isLiked ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500'
+            className={`p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg transition-colors ${
+              isLiked ? 'text-red-500 bg-red-50 hover:bg-red-100' : 'text-gray-400 hover:text-red-500 hover:bg-gray-50'
             }`}
+            aria-label={isLiked ? 'Remove from favorites' : 'Add to favorites'}
+            aria-pressed={isLiked}
           >
             <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
           </button>
@@ -324,7 +326,10 @@ function FilterSection() {
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full"
+        className="flex items-center justify-between w-full py-2 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:ring-offset-2 rounded-lg"
+        aria-expanded={isOpen}
+        aria-controls="filter-content"
+        aria-label={isOpen ? 'Hide filters' : 'Show filters'}
       >
         <div className="flex items-center space-x-3">
           <SlidersHorizontal className="w-5 h-5 text-jobequal-green" />
@@ -336,11 +341,14 @@ function FilterSection() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="filter-content"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4"
+            role="region"
+            aria-label="Filter options"
           >
             <div>
               <label className="block text-sm font-medium text-jobequal-text mb-2">Industry</label>
