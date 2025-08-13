@@ -521,12 +521,29 @@ interface LuxuryJobCardContentProps {
   onDetailsToggle?: () => void;
 }
 
-const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({ 
-  job, 
+const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
+  job,
   isPreview = false,
   showDetails = false,
-  onDetailsToggle 
+  onDetailsToggle
 }) => {
+  // Get handlers from parent component
+  const handleMatchClick = () => {
+    if (!isPreview) {
+      // This will be passed down from the parent component
+      const event = new CustomEvent('openAIMatchReport', { detail: { jobId: job.id } });
+      window.dispatchEvent(event);
+    }
+  };
+
+  const handleLocationClick = () => {
+    if (!isPreview) {
+      // Extract city name from location
+      const cityName = job.location.split(',')[0].trim();
+      const event = new CustomEvent('openCityEvents', { detail: { cityName } });
+      window.dispatchEvent(event);
+    }
+  };
   return (
     <div className={`w-full h-full bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50 backdrop-blur-xl ${isPreview ? 'opacity-60' : ''}`}>
       {/* Premium Header */}
