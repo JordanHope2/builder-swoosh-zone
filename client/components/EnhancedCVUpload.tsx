@@ -91,7 +91,7 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
         fileName: file.name,
         fileContent,
         fileType: file.type,
-        userId: user.id
+        userId: userId
       });
 
       setAnalysisResult(analysis);
