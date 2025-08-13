@@ -1,31 +1,25 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  Mail, 
-  ArrowLeft, 
-  CheckCircle,
-  Sparkles,
-  Shield
-} from 'lucide-react';
-import { ThemeToggle } from '../components/ThemeProvider';
-import { applicationToast } from '../hooks/use-toast';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Mail, ArrowLeft, CheckCircle, Sparkles, Shield } from "lucide-react";
+import { ThemeToggle } from "../components/ThemeProvider";
+import { applicationToast } from "../hooks/use-toast";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email.trim()) {
-      applicationToast.error('Please enter your email address');
+      applicationToast.error("Please enter your email address");
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      applicationToast.error('Please enter a valid email address');
+      applicationToast.error("Please enter a valid email address");
       return;
     }
 
@@ -33,19 +27,19 @@ export default function ForgotPassword() {
 
     try {
       // Simulate API call for password reset
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // In a real app, this would call supabase.auth.resetPasswordForEmail(email)
-      console.log('Password reset requested for:', email);
-      
+      console.log("Password reset requested for:", email);
+
       setIsSubmitted(true);
       applicationToast.success(
-        'Reset link sent!',
-        'Check your email for further instructions.'
+        "Reset link sent!",
+        "Check your email for further instructions.",
       );
     } catch (error) {
-      applicationToast.error('Failed to send reset email. Please try again.');
-      console.error('Password reset error:', error);
+      applicationToast.error("Failed to send reset email. Please try again.");
+      console.error("Password reset error:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -69,7 +63,7 @@ export default function ForgotPassword() {
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
           </div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -82,7 +76,8 @@ export default function ForgotPassword() {
               We've sent a password reset link to <strong>{email}</strong>
             </p>
             <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-8">
-              Don't see the email? Check your spam folder or try again with a different email address.
+              Don't see the email? Check your spam folder or try again with a
+              different email address.
             </p>
           </motion.div>
 
@@ -99,11 +94,11 @@ export default function ForgotPassword() {
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Sign In</span>
             </Link>
-            
+
             <button
               onClick={() => {
                 setIsSubmitted(false);
-                setEmail('');
+                setEmail("");
               }}
               className="w-full text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors"
             >
@@ -135,7 +130,9 @@ export default function ForgotPassword() {
                 <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
                   <span className="text-white font-bold text-xl">J</span>
                 </div>
-                <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">JobEqual</span>
+                <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">
+                  JobEqual
+                </span>
               </Link>
             </motion.div>
 
@@ -148,7 +145,8 @@ export default function ForgotPassword() {
                 Reset your password
               </h2>
               <p className="text-jobequal-text-muted dark:text-gray-300">
-                Enter your email address and we'll send you a link to reset your password
+                Enter your email address and we'll send you a link to reset your
+                password
               </p>
             </motion.div>
           </div>
@@ -163,7 +161,10 @@ export default function ForgotPassword() {
           >
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-jobequal-text dark:text-white mb-2"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -222,7 +223,10 @@ export default function ForgotPassword() {
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10 dark:opacity-5">
           <div className="absolute top-20 left-20 w-32 h-32 bg-jobequal-green rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
 
         <div className="relative z-10 flex flex-col justify-center px-12 py-20">
@@ -246,7 +250,8 @@ export default function ForgotPassword() {
               </span>
             </h3>
             <p className="text-lg text-jobequal-text-muted dark:text-gray-300 leading-relaxed">
-              We use industry-standard security measures to protect your account and ensure your data privacy.
+              We use industry-standard security measures to protect your account
+              and ensure your data privacy.
             </p>
           </motion.div>
 
@@ -264,7 +269,8 @@ export default function ForgotPassword() {
                 Swiss-Level Security
               </h4>
               <p className="text-jobequal-text-muted dark:text-gray-300">
-                Your password reset is handled with the same security standards used by Swiss financial institutions.
+                Your password reset is handled with the same security standards
+                used by Swiss financial institutions.
               </p>
             </div>
           </motion.div>
