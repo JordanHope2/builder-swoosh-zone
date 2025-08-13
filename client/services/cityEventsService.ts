@@ -361,10 +361,20 @@ class CityEventsService {
         });
 
       if (error) {
-        console.error('Failed to cache city data:', error);
+        console.warn('Failed to cache city data to database:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        // Don't throw error - caching failure shouldn't break the feature
       }
     } catch (error) {
-      console.error('Error caching city data:', error);
+      console.warn('Error caching city data (non-critical):', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        cityName: cityData.cityName
+      });
+      // Gracefully handle caching failures - the feature should still work without caching
     }
   }
 
