@@ -289,6 +289,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
               {/* Next Card Preview */}
               {jobs[currentJobIndex + 1] && (
                 <motion.div
+                  key={`preview-next-${jobs[currentJobIndex + 1].id}`}
                   className="absolute inset-0 w-full h-full"
                   initial={{ scale: 0.9, opacity: 0.6, y: 20, rotateY: -15 }}
                   animate={{ scale: 0.9, opacity: 0.6, y: 20, rotateY: -15 }}
@@ -301,6 +302,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
               {/* Third Card Preview */}
               {jobs[currentJobIndex + 2] && (
                 <motion.div
+                  key={`preview-third-${jobs[currentJobIndex + 2].id}`}
                   className="absolute inset-0 w-full h-full"
                   initial={{ scale: 0.8, opacity: 0.3, y: 40, rotateY: -30 }}
                   animate={{ scale: 0.8, opacity: 0.3, y: 40, rotateY: -30 }}
