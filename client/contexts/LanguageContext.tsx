@@ -151,7 +151,7 @@ const translations = {
     'ai.help_find_job': "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?",
     'ai.find_jobs_response': "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
     'ai.zurich_jobs_response': "Here are some great opportunities in Zurich:\n\n🚀 Software Engineer at Google Zurich - CHF 120k-140k\n🏦 UBS Investment Banking - CHF 110k-150k\n📊 Credit Suisse Risk Analyst - CHF 95k-120k\n\nWould you like me to help you apply to any of these?",
-    'ai.remote_jobs_response': "Here are excellent remote opportunities from Swiss companies:\n\n🏠 Remote Frontend Developer - Migros Digital - CHF 100k-120k\n📱 Flutter Developer - SBB - CHF 95k-115k\n📈 Product Manager - Swisscom - CHF 110k-130k\n\nSwiss companies are embracing remote work more than ever. Should I help you apply to any of these?",
+    'ai.remote_jobs_response': "Here are excellent remote opportunities from Swiss companies:\n\n🏠 Remote Frontend Developer - Migros Digital - CHF 100k-120k\n�� Flutter Developer - SBB - CHF 95k-115k\n📈 Product Manager - Swisscom - CHF 110k-130k\n\nSwiss companies are embracing remote work more than ever. Should I help you apply to any of these?",
   },
   
   de: {
@@ -249,7 +249,6 @@ const translations = {
     'swipe_job.complete': '{percent}% Abgeschlossen',
 
     // Hero Section
-    'hero.advanced_upload_page': 'Oder nutzen Sie unsere erweiterte Upload-Seite',
     'hero.uploading': 'Hochladen... {percent}%',
 
     // Featured Jobs
@@ -379,7 +378,6 @@ const translations = {
     'swipe_job.complete': '{percent}% Terminé',
 
     // Hero Section
-    'hero.advanced_upload_page': 'Ou utilisez notre page de téléchargement avancée',
     'hero.uploading': 'Téléchargement... {percent}%',
 
     // Featured Jobs
@@ -509,7 +507,6 @@ const translations = {
     'swipe_job.complete': '{percent}% Completato',
 
     // Hero Section
-    'hero.advanced_upload_page': 'O usa la nostra pagina di caricamento avanzata',
     'hero.uploading': 'Caricamento... {percent}%',
 
     // Featured Jobs
@@ -639,7 +636,6 @@ const translations = {
     'swipe_job.complete': '{percent}% Cumplettà',
 
     // Hero Section
-    'hero.advanced_upload_page': 'U duvrai nossa pagina da chargiada avanzada',
     'hero.uploading': 'Chargiar... {percent}%',
 
     // Featured Jobs
