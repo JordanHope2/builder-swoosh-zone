@@ -99,12 +99,35 @@ function ApplicationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     availability: ''
   });
 
-  const handleSubmit = () => {
-    // Here you would typically send the application data to your backend
-    console.log('Submitting application:', applicationData);
-    // Reset form and close modal
-    setApplicationData({ coverLetter: '', portfolio: '', availability: '' });
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      // Here you would typically send the application data to your backend
+      const submissionData = {
+        ...applicationData,
+        jobId: mockJob.id,
+        jobTitle: mockJob.title,
+        timestamp: new Date().toISOString()
+      };
+
+      console.log('Submitting application:', submissionData);
+
+      // Simulate API call with loading state
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Show success toast with job title and timestamp
+      applicationToast.success(
+        mockJob.title,
+        new Date().toLocaleTimeString()
+      );
+
+      // Reset form and close modal
+      setApplicationData({ coverLetter: '', portfolio: '', availability: '' });
+      onClose();
+    } catch (error) {
+      // Show error toast if submission fails
+      applicationToast.error('Failed to submit application. Please try again.');
+      console.error('Application submission error:', error);
+    }
   };
 
   if (!isOpen) return null;
