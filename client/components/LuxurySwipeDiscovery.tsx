@@ -174,6 +174,35 @@ const LuxurySwipeDiscovery: React.FC = () => {
 
   const currentJob = jobs[currentJobIndex];
 
+  const createApplication = async (job: LuxuryJob, swipeAction: 'like' | 'superlike') => {
+    try {
+      // Create application data
+      const applicationData = {
+        jobId: job.id,
+        jobTitle: job.title,
+        company: job.company,
+        swipeAction,
+        timestamp: new Date().toISOString(),
+        userId: auth?.user?.id || 'guest',
+        coverLetter: swipeAction === 'superlike'
+          ? 'I am very interested in this position and would love to discuss how I can contribute to your team.'
+          : 'I believe my skills and experience make me a great fit for this role.',
+        source: 'swipe_discovery'
+      };
+
+      // Log application creation (in real app, this would be an API call)
+      console.log('Creating swipe-based application:', applicationData);
+
+      // Here you would typically make an API call to create the application
+      // The API should handle idempotency by job+user combination
+      // await applicationService.createApplication(applicationData);
+
+    } catch (error) {
+      console.error('Failed to create application:', error);
+      applicationToast.error('Failed to submit application. Please try again.');
+    }
+  };
+
   const handleSwipe = (dir: number, action: 'like' | 'pass' | 'superlike' = dir > 0 ? 'like' : 'pass') => {
     if (isAnimating || !currentJob) return;
     
