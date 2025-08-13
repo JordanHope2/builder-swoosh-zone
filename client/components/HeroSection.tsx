@@ -153,16 +153,25 @@ export function HeroSection() {
                 {t('hero.subtitle')}
               </p>
 
+              {/* Error Display */}
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-red-600 text-sm font-medium">{error}</p>
+                </div>
+              )}
+
               <div className="relative mb-6">
-                {isUploading && (
+                {(isUploading || isAnalyzing) && (
                   <div className="mb-4">
                     <div className="w-full bg-jobequal-neutral-dark rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full transition-all duration-200"
+                        className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full transition-all duration-300"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-sm text-jobequal-text-muted mt-2">{t('hero.uploading').replace('{percent}', String(uploadProgress))}</p>
+                    <p className="text-sm text-jobequal-text-muted mt-2">
+                      {isAnalyzing ? 'AI is analyzing your CV...' : `Uploading... ${uploadProgress}%`}
+                    </p>
                   </div>
                 )}
                 <div className="relative">
