@@ -1,4 +1,6 @@
 import { Navigation } from '../components/Navigation';
+import { PageHeader, SectionHeader } from '../components/ui/page-header';
+import { motion } from 'framer-motion';
 import {
   Target,
   Heart,
@@ -6,95 +8,152 @@ import {
   Users,
   TrendingUp,
   Shield,
-  Mountain,
   Clock,
   Globe,
   CheckCircle,
   Zap,
-  Crown,
   Star,
-  Gem,
   Compass,
   ArrowRight,
   Mail,
   MapPin,
-  Phone,
   Linkedin,
-  Twitter,
-  Building
+  Building,
+  Flag,
+  Mountain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const teamMembers = [
-  {
-    name: 'Christian Mah',
-    role: 'Founder & CEO',
-    avatar: '👨‍💼',
-    bio: 'Visionary leader with deep expertise in talent acquisition and AI-driven career matching. Passionate about transforming the Swiss job market.',
-    linkedin: 'https://linkedin.com/in/christianmah'
-  },
-  {
-    name: 'Jeanne Ba',
-    role: 'President & Founder',
-    avatar: '👩‍💼',
-    bio: 'Strategic executive with extensive experience in business development and international markets. Co-founder driving JobEqual\'s global expansion.',
-    linkedin: 'https://linkedin.com/in/jeanneba'
-  },
-  {
-    name: 'Marie Dubois',
-    role: 'Head of Design',
-    avatar: '👩‍🎨',
-    bio: 'Swiss design expert with background in luxury brands. Believes in creating experiences that reflect Swiss precision and elegance.',
-    linkedin: 'https://linkedin.com/in/mariedubois'
-  },
-  {
-    name: 'Marco Rossi',
-    role: 'Head of Business Development',
-    avatar: '👨‍💼',
-    bio: 'Former head of partnerships at LinkedIn Europe. Specializes in building relationships with Switzerland\'s leading employers.',
-    linkedin: 'https://linkedin.com/in/marcorossi'
-  }
-];
+const foundersStory = {
+  hero: "Bridging Afro roots with Swiss precision, Christian Mah and Jeanne BA founded JobEqual to democratize opportunity. From diverse backgrounds across continents, they recognized that talent knows no borders—but access to opportunity often does. Their vision: create a platform where skills meet opportunity, where precision meets inclusion, and where Swiss excellence serves global social mobility.",
+  
+  detailed: [
+    "Christian Mah's journey from West Africa to the peaks of Swiss innovation taught him that excellence transcends geography. His background in technology and deep understanding of both African dynamism and Swiss precision uniquely positioned him to see gaps in the global talent market.",
+    
+    "Jeanne BA brought a powerful combination of business acumen and social consciousness, having witnessed firsthand how traditional recruitment systems often overlook exceptional talent due to unconscious bias or geographical constraints.",
+    
+    "Together, they envisioned JobEqual as more than a job platform—a bridge connecting global talent with Swiss quality standards, ensuring that opportunity flows as freely as talent exists.",
+    
+    "Their mission crystallized around five core values: precision in matching, trust in every interaction, inclusion by design, Swiss-quality execution, and unwavering commitment to social mobility for all."
+  ]
+};
 
-const stats = [
-  { label: 'Companies Trust Us', value: '2,500+', icon: Building },
-  { label: 'Successful Placements', value: '50,000+', icon: CheckCircle },
-  { label: 'AI Match Accuracy', value: '96%', icon: Target },
-  { label: 'User Satisfaction', value: '4.9/5', icon: Star }
+const timeline = [
+  {
+    year: "2019",
+    title: "The Vision",
+    description: "Christian and Jeanne meet at a tech conference in Zurich, sharing stories about talent barriers"
+  },
+  {
+    year: "2020",
+    title: "Foundation",
+    description: "JobEqual founded with seed funding, focusing on AI-driven talent matching"
+  },
+  {
+    year: "2021",
+    title: "Swiss Launch",
+    description: "Platform launches in Switzerland, connecting 1,000+ professionals"
+  },
+  {
+    year: "2022",
+    title: "European Expansion",
+    description: "Expanded to Germany and France, reaching 10,000+ users"
+  },
+  {
+    year: "2023",
+    title: "Global Scale",
+    description: "Serving 50,000+ professionals across Europe and Africa"
+  },
+  {
+    year: "2024",
+    title: "AI Revolution",
+    description: "Launched advanced AI matching, achieving 95% satisfaction rate"
+  }
 ];
 
 const values = [
   {
-    title: 'Swiss Precision',
-    description: 'Every algorithm, every match, every interaction is crafted with the meticulous attention to detail that defines Swiss excellence.',
     icon: Target,
-    color: 'from-jobequal-green to-jobequal-teal'
+    title: "Precision",
+    description: "Swiss-engineered matching algorithms that connect the right talent with the right opportunities",
+    color: "from-red-500 to-red-600"
   },
   {
-    title: 'Quality First',
-    description: 'We believe in quality over quantity. Every candidate and company on our platform undergoes rigorous verification.',
-    icon: Award,
-    color: 'from-jobequal-blue-dark to-jobequal-green'
+    icon: Heart,
+    title: "Inclusion",
+    description: "Breaking down barriers and creating equal access to opportunities for all backgrounds",
+    color: "from-green-500 to-green-600"
   },
   {
-    title: 'Innovation',
-    description: 'Combining cutting-edge AI with human expertise to create the most sophisticated job matching platform in Europe.',
-    icon: Zap,
-    color: 'from-jobequal-teal to-jobequal-blue'
-  },
-  {
-    title: 'Trust & Integrity',
-    description: 'Building lasting relationships based on transparency, reliability, and the Swiss values of honesty and dependability.',
     icon: Shield,
-    color: 'from-yellow-400 to-orange-500'
+    title: "Trust",
+    description: "Building reliable relationships between candidates and employers through transparency",
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    icon: TrendingUp,
+    title: "Social Mobility",
+    description: "Empowering individuals to advance their careers regardless of their starting point",
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    icon: Award,
+    title: "Excellence",
+    description: "Delivering Swiss-quality service and results that exceed expectations",
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    icon: Globe,
+    title: "Global Vision",
+    description: "Connecting talent across continents while maintaining local cultural understanding",
+    color: "from-teal-500 to-teal-600"
   }
+];
+
+const teamMembers = [
+  {
+    name: 'Christian Mah',
+    role: 'Co-Founder & CEO',
+    bio: 'Bridging African innovation with Swiss precision, Christian leads JobEqual\'s vision of democratizing global opportunity. His journey from West Africa to Zurich\'s tech scene brings unique insights to talent mobility.',
+    image: '/api/placeholder/300/300',
+    linkedin: 'https://linkedin.com/in/christianmah'
+  },
+  {
+    name: 'Jeanne BA',
+    role: 'Co-Founder & COO',
+    bio: 'A passionate advocate for inclusive hiring, Jeanne combines business excellence with social impact. Her multicultural background drives JobEqual\'s commitment to breaking down recruitment barriers.',
+    image: '/api/placeholder/300/300',
+    linkedin: 'https://linkedin.com/in/jeanneba'
+  }
+];
+
+const missionPoints = [
+  "Democratize access to quality employment opportunities",
+  "Eliminate bias in recruitment through AI-driven matching",
+  "Connect global talent with Swiss-standard employers",
+  "Create pathways for social and economic mobility",
+  "Foster inclusive workplaces across industries"
+];
+
+const visionPoints = [
+  "A world where talent meets opportunity without barriers",
+  "AI-powered recruitment that amplifies human potential",
+  "Global talent mobility with local cultural respect",
+  "Sustainable economic growth through inclusive hiring",
+  "Technology that serves social mobility and equity"
 ];
 
 function TeamMemberCard({ member }: { member: typeof teamMembers[0] }) {
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group text-center">
-      <div className="w-24 h-24 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-full flex items-center justify-center text-4xl mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-        {member.avatar}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 text-center group"
+    >
+      <div className="w-32 h-32 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-full mx-auto mb-6 flex items-center justify-center">
+        <span className="text-white font-bold text-2xl">{member.name.split(' ').map(n => n[0]).join('')}</span>
       </div>
       
       <h3 className="text-xl font-bold text-jobequal-text mb-2">{member.name}</h3>
@@ -110,19 +169,45 @@ function TeamMemberCard({ member }: { member: typeof teamMembers[0] }) {
         <Linkedin className="w-4 h-4" />
         <span>Connect</span>
       </a>
-    </div>
+    </motion.div>
   );
 }
 
 function ValueCard({ value }: { value: typeof values[0] }) {
   return (
-    <div className="group">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="group"
+    >
       <div className={`w-16 h-16 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
         <value.icon className="w-8 h-8 text-white" />
       </div>
       <h3 className="text-xl font-bold text-jobequal-text mb-4">{value.title}</h3>
       <p className="text-jobequal-text-muted leading-relaxed">{value.description}</p>
-    </div>
+    </motion.div>
+  );
+}
+
+function TimelineItem({ item, index }: { item: typeof timeline[0], index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="flex items-center space-x-4"
+    >
+      <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+        {item.year}
+      </div>
+      <div className="flex-1">
+        <h3 className="text-lg font-bold text-jobequal-text">{item.title}</h3>
+        <p className="text-jobequal-text-muted">{item.description}</p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -136,294 +221,194 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-br from-jobequal-neutral via-jobequal-blue to-white opacity-60"></div>
         
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center mb-8">
-              <Mountain className="w-12 h-12 text-red-600 mr-4" />
-              <div className="text-red-600 font-bold text-lg tracking-wide uppercase">Swiss Made Excellence</div>
-              <Mountain className="w-12 h-12 text-red-600 ml-4" />
-            </div>
-            
-            <h1 className="text-5xl lg:text-7xl font-bold text-jobequal-text mb-8 leading-tight">
-              Crafted in Switzerland
-              <span className="block text-jobequal-green">For the World</span>
-            </h1>
-            
-            <p className="text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed">
-              JobEqual represents the pinnacle of Swiss engineering and design in talent acquisition. 
-              We don't just match jobs — we match aspirations with opportunities, 
-              creating careers that transform lives.
-            </p>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid md:grid-cols-4 gap-8 mb-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <stat.icon className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-jobequal-green mb-2">{stat.value}</div>
-                <div className="text-jobequal-text-muted font-medium">{stat.label}</div>
+          <PageHeader
+            subtitle="Our Story"
+            title="Bridging Continents, Connecting Futures"
+            description={foundersStory.hero}
+          >
+            <div className="flex items-center justify-center space-x-3 mt-6">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                <Flag className="w-4 h-4 text-red-600" />
+                <span className="text-sm font-medium text-jobequal-text">Designed in Switzerland</span>
               </div>
+              <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                <Globe className="w-4 h-4 text-jobequal-green" />
+                <span className="text-sm font-medium text-jobequal-text">Serving Globally</span>
+              </div>
+            </div>
+          </PageHeader>
+        </div>
+      </section>
+
+      {/* Founder Story Details */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <SectionHeader
+            title="From Vision to Reality"
+            description="The journey that led to JobEqual's creation"
+          />
+          
+          <div className="space-y-8">
+            {foundersStory.detailed.map((paragraph, index) => (
+              <motion.p
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="text-lg text-jobequal-text-muted leading-relaxed"
+              >
+                {paragraph}
+              </motion.p>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Our Story Section */}
-      <section className="py-20 bg-white">
+      {/* Founders */}
+      <section className="py-20 bg-gradient-to-br from-jobequal-neutral to-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="flex items-center space-x-3 mb-6">
-                <Compass className="w-8 h-8 text-jobequal-green" />
-                <span className="text-jobequal-green font-semibold text-lg">Our Story</span>
-              </div>
-              
-              <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-8 leading-tight">
-                Born from Swiss Innovation
-              </h2>
-              
-              <div className="space-y-6 text-lg text-jobequal-text-muted leading-relaxed">
-                <p>
-                  Founded in the heart of Zurich in 2022, JobEqual emerged from a simple yet profound realization: 
-                  traditional job matching was fundamentally broken. It focused on keywords and qualifications, 
-                  but ignored the human element — aspirations, values, and cultural fit.
-                </p>
-                
-                <p>
-                  Our founders, Dr. Sarah Müller and Thomas Weber, combined their expertise in talent acquisition 
-                  and artificial intelligence to create something unprecedented: a platform that matches not just 
-                  skills, but souls to their perfect professional home.
-                </p>
-                
-                <p>
-                  Rooted in Swiss values of precision, quality, and reliability, JobEqual has grown to become 
-                  Europe's most trusted premium talent platform, serving over 2,500 companies and helping 
-                  50,000+ professionals find their dream careers.
-                </p>
-              </div>
-            </div>
+          <SectionHeader
+            title="Meet Our Founders"
+            description="Visionaries bridging cultures and creating opportunities"
+          />
+          
+          <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+            {teamMembers.map((member, index) => (
+              <TeamMemberCard key={member.name} member={member} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-            <div className="relative">
-              <div className="bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-3xl p-8 shadow-2xl">
-                <div className="text-center mb-8">
-                  <Crown className="w-16 h-16 text-jobequal-green mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-jobequal-text mb-4">Swiss Excellence Award</h3>
-                  <p className="text-jobequal-text-muted">
-                    Recognized as "Switzerland's Most Innovative HR Technology" by Swiss Tech Awards 2024
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white/50 rounded-xl p-4 text-center">
-                    <Gem className="w-8 h-8 text-jobequal-green mx-auto mb-2" />
-                    <div className="font-bold text-jobequal-text">Premium Quality</div>
-                  </div>
-                  <div className="bg-white/50 rounded-xl p-4 text-center">
-                    <Mountain className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                    <div className="font-bold text-jobequal-text">Swiss Made</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Timeline */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <SectionHeader
+            title="Our Journey"
+            description="Key milestones in building a global platform for opportunity"
+          />
+          
+          <div className="space-y-8">
+            {timeline.map((item, index) => (
+              <TimelineItem key={item.year} item={item} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-20 bg-gradient-to-br from-jobequal-blue to-jobequal-neutral">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <SectionHeader
+            title="Our Values"
+            description="The principles that guide everything we do"
+          />
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {values.map((value, index) => (
+              <ValueCard key={value.title} value={value} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 bg-gradient-to-b from-jobequal-neutral to-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-8">
-              Our Mission & Vision
-            </h2>
-            <p className="text-xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed">
-              Driven by Swiss precision and global ambition
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center mb-6">
-                <Target className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-jobequal-text mb-6">Our Mission</h3>
-              <p className="text-lg text-jobequal-text-muted leading-relaxed">
-                To revolutionize how people find meaningful careers by creating the world's most precise 
-                and human-centered job matching platform. We believe every person deserves a role that 
-                not only matches their skills but ignites their passion and aligns with their values.
-              </p>
-            </div>
-
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300">
-              <div className="w-16 h-16 bg-gradient-to-br from-jobequal-blue-dark to-jobequal-green rounded-2xl flex items-center justify-center mb-6">
-                <Globe className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-jobequal-text mb-6">Our Vision</h3>
-              <p className="text-lg text-jobequal-text-muted leading-relaxed">
-                To become the global standard for premium talent acquisition, where Swiss quality meets 
-                cutting-edge innovation. We envision a world where career transitions are seamless, 
-                opportunities are accessible to all, and every hire is a perfect match.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Swiss Values */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center mb-6">
-              <Mountain className="w-8 h-8 text-red-600 mr-3" />
-              <span className="text-red-600 font-bold text-lg tracking-wide uppercase">Swiss Values</span>
-              <Mountain className="w-8 h-8 text-red-600 ml-3" />
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-8">
-              What Drives Us
-            </h2>
-            <p className="text-xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed">
-              Every feature, every algorithm, every interaction is built on the foundation of Swiss excellence
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <ValueCard key={index} value={value} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-20 bg-gradient-to-b from-jobequal-neutral to-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-8">
-              Meet Our Swiss Team
-            </h2>
-            <p className="text-xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed">
-              Passionate professionals from across Switzerland, united by a shared vision of 
-              transforming how the world thinks about careers
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <TeamMemberCard key={index} member={member} />
-            ))}
-          </div>
-
-          <div className="text-center mt-16">
-            <div className="bg-jobequal-green-light rounded-3xl p-8 max-w-2xl mx-auto">
-              <Users className="w-12 h-12 text-jobequal-green mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-jobequal-text mb-4">Join Our Team</h3>
-              <p className="text-jobequal-text-muted mb-6">
-                We're always looking for exceptional talent to join our mission of revolutionizing careers
-              </p>
-              <Link
-                to="/careers"
-                className="inline-flex items-center space-x-2 bg-jobequal-green text-white px-6 py-3 rounded-xl font-semibold hover:bg-jobequal-green-hover transition-colors"
-              >
-                <span>View Open Positions</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16">
-            <div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-8">
-                Get in Touch
-              </h2>
-              <p className="text-xl text-jobequal-text-muted mb-12 leading-relaxed">
-                Experience Swiss-quality service and support. Our team is here to help you 
-                discover the perfect career opportunity or find exceptional talent.
-              </p>
-
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-jobequal-text">Headquarters</div>
-                    <div className="text-jobequal-text-muted">Avenue de la Gare 12, 1003 Lausanne, Switzerland</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-jobequal-text">Email</div>
-                    <div className="text-jobequal-text-muted">hello@jobequal.ch</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-jobequal-text">Phone</div>
-                    <div className="text-jobequal-text-muted">+41 44 123 45 67</div>
-                  </div>
-                </div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="flex items-center space-x-3 mb-6">
+                <Target className="w-8 h-8 text-jobequal-green" />
+                <h2 className="text-3xl font-bold text-jobequal-text">Our Mission</h2>
               </div>
-
-              <div className="flex items-center space-x-6 mt-12">
-                <a
-                  href="https://linkedin.com/company/jobequal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-jobequal-green rounded-xl text-white hover:bg-jobequal-green-hover transition-colors"
-                >
-                  <Linkedin className="w-6 h-6" />
-                </a>
-                <a
-                  href="https://twitter.com/jobequal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-jobequal-blue-dark rounded-xl text-white hover:bg-jobequal-blue-hover transition-colors"
-                >
-                  <Twitter className="w-6 h-6" />
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-3xl p-10">
-              <div className="text-center mb-8">
-                <Crown className="w-16 h-16 text-jobequal-green mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-jobequal-text mb-4">Ready to Experience Swiss Excellence?</h3>
-                <p className="text-jobequal-text-muted">
-                  Join thousands of professionals who trust JobEqual with their career journey
-                </p>
-              </div>
-
               <div className="space-y-4">
-                <Link
-                  to="/cv-upload"
-                  className="block w-full bg-jobequal-green text-white py-4 px-6 rounded-xl font-semibold text-center hover:bg-jobequal-green-hover transition-colors"
-                >
-                  Upload Your CV
-                </Link>
-                <Link
-                  to="/job-search"
-                  className="block w-full border-2 border-jobequal-green text-jobequal-green py-4 px-6 rounded-xl font-semibold text-center hover:bg-jobequal-green hover:text-white transition-all duration-200"
-                >
-                  Browse Opportunities
-                </Link>
+                {missionPoints.map((point, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="flex items-start space-x-3"
+                  >
+                    <CheckCircle className="w-5 h-5 text-jobequal-green mt-1 flex-shrink-0" />
+                    <span className="text-jobequal-text-muted">{point}</span>
+                  </motion.div>
+                ))}
               </div>
-            </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="flex items-center space-x-3 mb-6">
+                <Compass className="w-8 h-8 text-jobequal-blue" />
+                <h2 className="text-3xl font-bold text-jobequal-text">Our Vision</h2>
+              </div>
+              <div className="space-y-4">
+                {visionPoints.map((point, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="flex items-start space-x-3"
+                  >
+                    <Star className="w-5 h-5 text-jobequal-blue mt-1 flex-shrink-0" />
+                    <span className="text-jobequal-text-muted">{point}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-jobequal-green to-jobequal-teal">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+              Ready to Join Our Mission?
+            </h2>
+            <p className="text-xl text-white/90 mb-8">
+              Whether you're seeking opportunities or looking to hire exceptional talent, 
+              we're here to bridge the gap.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/cv-upload"
+                className="inline-flex items-center space-x-2 bg-white text-jobequal-green px-8 py-4 rounded-2xl font-semibold hover:bg-gray-50 transition-colors"
+              >
+                <span>Upload Your CV</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              
+              <Link
+                to="/contact"
+                className="inline-flex items-center space-x-2 border-2 border-white text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white hover:text-jobequal-green transition-all"
+              >
+                <Mail className="w-5 h-5" />
+                <span>Get in Touch</span>
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
     </main>
