@@ -121,7 +121,6 @@ const translations = {
     'swipe_job.complete': '{percent}% Complete',
 
     // Hero Section
-    'hero.advanced_upload_page': 'Or use our advanced upload page',
     'hero.uploading': 'Uploading... {percent}%',
 
     // Featured Jobs
@@ -255,7 +254,7 @@ const translations = {
 
     // Featured Jobs
     'featured.title': 'Empfohlene Schweizer Stellenangebote',
-    'featured.subtitle': 'Entdecken Sie handverlesene Stellenangebote von den renommiertesten Unternehmen der Schweiz. Qualitätspositionen für außergewöhnliche Fachkräfte.',
+    'featured.subtitle': 'Entdecken Sie handverlesene Stellenangebote von den renommiertesten Unternehmen der Schweiz. Qualit��tspositionen für außergewöhnliche Fachkräfte.',
     'featured.featured': 'Empfohlen',
     'featured.match': 'Übereinstimmung',
     'featured.view_all': 'Alle Empfohlenen Jobs Anzeigen',
@@ -316,8 +315,8 @@ const translations = {
     'hero.cta_secondary': 'Télécharger Votre CV',
     
     // Profile Settings
-    'profile.title': 'Paramètres du Profil',
-    'profile.subtitle': 'Gérez vos paramètres de compte et préférences',
+    'profile.title': 'Param��tres du Profil',
+    'profile.subtitle': 'Gérez vos paramètres de compte et pr��férences',
     'profile.personal_info': 'Informations Personnelles',
     'profile.professional_info': 'Informations Professionnelles',
     'profile.preferences': 'Préférences',
