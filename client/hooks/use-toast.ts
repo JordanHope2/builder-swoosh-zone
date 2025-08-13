@@ -192,17 +192,10 @@ export const applicationToast = {
       title: "Application Submitted",
       description: `Your application for ${jobTitle} was submitted at ${timestamp}`,
       variant: "success",
-      action: {
-        altText: "View applications",
-        children: "View applications",
-        onClick: () => {
-          window.location.href = '/dashboard'
-        }
-      } as ToastActionElement,
       duration: 8000,
     })
   },
-  
+
   error: (message: string = "Failed to submit application") => {
     return toast({
       title: "Application Error",
@@ -217,13 +210,6 @@ export const applicationToast = {
       title: "Application Submitted",
       description: `Great choice! Your application for ${jobTitle} has been submitted.`,
       variant: "success",
-      action: {
-        altText: "View applications",
-        children: "View applications",
-        onClick: () => {
-          window.location.href = '/dashboard'
-        }
-      } as ToastActionElement,
       duration: 8000,
     })
   },
