@@ -272,7 +272,8 @@ export default function JobDetails() {
                 </div>
                 
                 <div className="flex items-center space-x-4">
-                  <button 
+                  <JobShareButton job={{ id: job.id, title: job.title, company: job.company }} />
+                  <button
                     onClick={() => setIsBookmarked(!isBookmarked)}
                     className={`p-3 rounded-xl border border-jobequal-neutral-dark transition-all duration-200 ${
                       isBookmarked ? 'bg-red-50 text-red-500' : 'text-jobequal-text-muted hover:text-red-500'
