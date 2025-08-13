@@ -116,14 +116,16 @@ export function Navigation() {
             </div>
 
             {/* Mobile menu button */}
-            <div className="lg:hidden flex items-center space-x-3">
+            <div className="lg:hidden flex items-center space-x-2">
               <NotificationSystem />
               <ThemeToggle />
               <LanguageSwitcher />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-jobequal-text hover:text-jobequal-green transition-colors duration-200 p-2"
-                aria-label="Toggle mobile menu"
+                className="text-jobequal-text hover:text-jobequal-green transition-colors duration-200 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-jobequal-neutral active:bg-jobequal-neutral-dark"
+                aria-label={isMobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
               >
                 {isMobileMenuOpen ? (
                   <X className="w-6 h-6" />
@@ -147,9 +149,14 @@ export function Navigation() {
         />
         
         {/* Mobile Menu Panel */}
-        <div className={`absolute top-16 right-0 bottom-0 w-80 max-w-[90vw] bg-white shadow-2xl transition-all duration-300 overflow-y-auto ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        <div
+          id="mobile-menu"
+          className={`absolute top-16 right-0 bottom-0 w-80 max-w-[90vw] bg-white shadow-2xl transition-all duration-300 overflow-y-auto ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          role="navigation"
+          aria-label="Mobile navigation menu"
+        >
           <div className="p-6 space-y-6">
             {/* Navigation Links */}
             <div className="space-y-4">
@@ -157,12 +164,13 @@ export function Navigation() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`block py-3 px-4 rounded-xl font-medium transition-all duration-200 animate-slide-in-right ${
+                  className={`block py-4 px-4 rounded-xl font-medium transition-all duration-200 animate-slide-in-right min-h-[48px] flex items-center ${
                     isActiveLink(link.to)
                       ? 'bg-jobequal-green-light text-jobequal-green border-l-4 border-jobequal-green'
-                      : 'text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral'
+                      : 'text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral active:bg-jobequal-neutral-dark'
                   }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
+                  role="menuitem"
                 >
                   {link.label}
                 </Link>
