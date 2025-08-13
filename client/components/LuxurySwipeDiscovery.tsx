@@ -186,7 +186,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
       [action === 'like' ? 'liked' : action === 'pass' ? 'passed' : 'superLiked']: prev[action === 'like' ? 'liked' : action === 'pass' ? 'passed' : 'superLiked'] + 1
     }));
 
-    // Add to favorites if liked or super liked
+    // Add to favorites and create application if liked or super liked
     if ((action === 'like' || action === 'superlike') && currentJob) {
       addToFavorites({
         id: currentJob.id,
@@ -196,6 +196,12 @@ const LuxurySwipeDiscovery: React.FC = () => {
         salary: currentJob.salary,
         type: 'job'
       });
+
+      // Create application (idempotent by job+user)
+      createApplication(currentJob, action);
+
+      // Show success toast for swipe match
+      applicationToast.swipeMatch(currentJob.title);
     }
 
     // Move to next job
