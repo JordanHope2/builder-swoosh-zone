@@ -15,6 +15,8 @@ import {
   X
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeProvider';
+import { signUpWithEmail } from '../lib/supabase';
+import { useToast } from '../hooks/use-toast';
 
 const userTypes = [
   {
@@ -64,17 +66,38 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!canSubmit()) return;
+
     setIsLoading(true);
-    
-    // Simulate registration process
-    setTimeout(() => {
+    try {
+      await signUpWithEmail(formData.email, formData.password, {
+        full_name: `${formData.firstName} ${formData.lastName}`,
+        username: formData.firstName, // Using firstName as a simple username for now
+        // TODO: Add user_type to profiles table and pass it here
+      });
+
+      toast({
+        title: "Account created!",
+        description: "Please check your email to verify your account and complete registration.",
+        variant: "default",
+      });
+      // Don't redirect immediately, wait for email confirmation.
+      // Or redirect to a "please check your email" page.
+      // For now, we just show the toast and reset the loading state.
+
+    } catch (error: any) {
+      toast({
+        title: "Registration Error",
+        description: error.message || "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      // Redirect to onboarding
-      window.location.href = '/onboarding';
-    }, 2000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -42,7 +42,7 @@ export const slideInRight = {
 
 // Unified Dashboard Container
 interface DashboardContainerProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
@@ -250,7 +250,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
 // Unified Dashboard Card
 interface DashboardCardProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   className?: string;
   loading?: boolean;
