@@ -209,9 +209,44 @@ export default function JobDetails() {
   const { id } = useParams();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+  const [isAIMatchModalOpen, setIsAIMatchModalOpen] = useState(false);
+  const [isCityEventsModalOpen, setIsCityEventsModalOpen] = useState(false);
 
   // In real app, fetch job data based on id
   const job = mockJob;
+
+  // Generate profiles for AI analysis
+  const generateJobProfile = () => ({
+    title: job.title,
+    company: job.company,
+    description: job.description,
+    requirements: job.responsibilities,
+    location: job.location,
+    salaryRange: { min: 120000, max: 140000 },
+    techStack: ['React', 'TypeScript', 'Node.js', 'PostgreSQL']
+  });
+
+  const generateCandidateProfile = () => ({
+    skills: ['React', 'TypeScript', 'Node.js', 'Python', 'AWS'],
+    experience: {
+      years: 5,
+      positions: [
+        {
+          title: 'Senior Software Engineer',
+          company: 'Tech Solutions AG',
+          duration: '2021-Present',
+          technologies: ['React', 'TypeScript', 'AWS']
+        }
+      ]
+    },
+    education: {
+      degree: 'Master of Science',
+      field: 'Computer Science',
+      institution: 'ETH Zurich'
+    },
+    location: 'Zurich, Switzerland',
+    salaryExpectation: { min: 110000, max: 130000 }
+  });
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
