@@ -312,6 +312,61 @@ class AIAnalysisService {
     };
   }
 
+  private generateSmartFallbackAnalysis(cvText: string, jobs: any[]): CVAnalysisResult {
+    // Extract actual information from CV text for better fallback analysis
+    const extractedSkills = this.extractSkills(cvText);
+    const estimatedExperience = this.estimateExperience(cvText);
+    const education = this.extractEducation(cvText);
+
+    const matchedSkills = extractedSkills.slice(0, Math.min(extractedSkills.length, 5));
+    const overallScore = Math.min(Math.max(40 + (matchedSkills.length * 8) + (estimatedExperience * 2), 50), 95);
+
+    return {
+      overallScore,
+      skillsMatch: {
+        matched: matchedSkills,
+        missing: ['AI/ML', 'Cloud Architecture', 'DevOps'],
+        score: Math.min(60 + (matchedSkills.length * 8), 90)
+      },
+      experienceAnalysis: {
+        yearsOfExperience: estimatedExperience,
+        relevantExperience: Math.max(1, Math.floor(estimatedExperience * 0.7)),
+        score: Math.min(50 + (estimatedExperience * 5), 90)
+      },
+      educationAnalysis: {
+        degree: education,
+        relevance: 85,
+        score: 80
+      },
+      recommendations: [
+        'Consider highlighting more specific technical achievements',
+        'Add quantifiable results to your experience',
+        'Include relevant certifications or training',
+        'Customize your CV for Swiss market standards'
+      ],
+      improvementAreas: [
+        'Add more specific project outcomes',
+        'Include technology stack details',
+        'Highlight leadership experience'
+      ],
+      strengths: [
+        'Solid technical background',
+        'Professional experience in relevant field',
+        'Good educational foundation'
+      ],
+      compatibilityWithJobs: jobs.slice(0, 3).map((job, index) => ({
+        jobId: job.id,
+        jobTitle: job.title,
+        compatibilityScore: Math.max(60 - (index * 8), 45),
+        reasons: [
+          'Skills alignment with requirements',
+          'Experience level matches expectations',
+          'Background fits company culture'
+        ]
+      }))
+    };
+  }
+
   private generateFallbackAnalysis(cvData: CVData): CVAnalysisResult {
     return {
       overallScore: 70,
