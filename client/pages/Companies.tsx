@@ -1,30 +1,28 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navigation } from '../components/Navigation';
-import { EnhancedMotionDiv, StaggeredList } from '../components/ui/enhanced-animations';
-import { 
-  Building, 
-  Users, 
-  MapPin, 
-  Globe, 
-  TrendingUp, 
-  Award, 
-  Star,
+import { PageHeader } from '../components/ui/page-header';
+import { CompanyShareButton } from '../components/ui/share-button';
+import {
+  Building,
+  MapPin,
+  Users,
+  TrendingUp,
+  Award,
   Search,
   Filter,
+  ChevronDown,
   ExternalLink,
+  Star,
   Briefcase,
+  Globe,
   Heart,
-  Target,
-  Shield,
-  Zap,
   CheckCircle,
-  ArrowRight,
-  Crown,
-  Gem,
-  Mountain
+  Grid3X3,
+  List,
+  SlidersHorizontal
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface Company {
   id: string;
@@ -33,476 +31,482 @@ interface Company {
   industry: string;
   size: string;
   location: string;
+  canton: string;
   description: string;
   website: string;
   openJobs: number;
-  founded: string;
   rating: number;
-  employees: string;
-  specialties: string[];
-  featured: boolean;
+  reviewCount: number;
+  benefits: string[];
+  techStack: string[];
+  remotePolicy: 'onsite' | 'hybrid' | 'remote' | 'flexible';
   verified: boolean;
-  swissMade: boolean;
+  featured: boolean;
+  founded: number;
+  funding: string;
+  growthStage: 'startup' | 'scaleup' | 'enterprise';
 }
 
-const featuredCompanies: Company[] = [
+const companies: Company[] = [
   {
     id: '1',
-    name: 'UBS',
-    logo: '🏦',
-    industry: 'Financial Services',
-    size: 'Enterprise',
+    name: 'TechCorp Zurich',
+    logo: '🏢',
+    industry: 'Financial Technology',
+    size: '200-500',
     location: 'Zurich',
-    description: 'Global financial services firm providing wealth management, asset management and investment banking services to private, corporate and institutional clients.',
-    website: 'https://ubs.com',
-    openJobs: 47,
-    founded: '1862',
+    canton: 'Zurich',
+    description: 'Leading fintech company revolutionizing digital banking solutions across Europe.',
+    website: 'https://techcorp.ch',
+    openJobs: 12,
     rating: 4.8,
-    employees: '70,000+',
-    specialties: ['Investment Banking', 'Wealth Management', 'Asset Management'],
-    featured: true,
+    reviewCount: 156,
+    benefits: ['Health Insurance', 'Flexible Hours', 'Remote Work', 'Learning Budget'],
+    techStack: ['React', 'Node.js', 'PostgreSQL', 'AWS'],
+    remotePolicy: 'hybrid',
     verified: true,
-    swissMade: true
+    featured: true,
+    founded: 2015,
+    funding: 'Series B',
+    growthStage: 'scaleup'
   },
   {
     id: '2',
-    name: 'Nestlé',
-    logo: '🥛',
-    industry: 'Food & Beverages',
-    size: 'Enterprise',
-    location: 'Vevey',
-    description: 'World\'s largest food and beverage company, committed to unlocking the power of food to enhance quality of life for everyone.',
-    website: 'https://nestle.com',
-    openJobs: 89,
-    founded: '1866',
-    rating: 4.7,
-    employees: '280,000+',
-    specialties: ['Food Technology', 'Brand Management', 'Supply Chain'],
-    featured: true,
+    name: 'Swiss Innovations',
+    logo: '🔬',
+    industry: 'Biotechnology',
+    size: '50-200',
+    location: 'Basel',
+    canton: 'Basel-Stadt',
+    description: 'Pioneering biotech research and development for next-generation therapeutics.',
+    website: 'https://swissinnovations.com',
+    openJobs: 8,
+    rating: 4.6,
+    reviewCount: 89,
+    benefits: ['Research Budget', 'Conference Travel', 'Health Insurance', 'Stock Options'],
+    techStack: ['Python', 'R', 'Docker', 'Kubernetes'],
+    remotePolicy: 'onsite',
     verified: true,
-    swissMade: true
+    featured: false,
+    founded: 2018,
+    funding: 'Series A',
+    growthStage: 'startup'
   },
   {
     id: '3',
-    name: 'Roche',
-    logo: '💊',
-    industry: 'Pharmaceuticals',
-    size: 'Enterprise',
-    location: 'Basel',
-    description: 'Pioneer in pharmaceuticals and diagnostics focused on advancing science to improve people\'s lives.',
-    website: 'https://roche.com',
-    openJobs: 156,
-    founded: '1896',
+    name: 'Alpine Digital',
+    logo: '⛰️',
+    industry: 'Software Development',
+    size: '10-50',
+    location: 'Geneva',
+    canton: 'Geneva',
+    description: 'Boutique software consultancy specializing in enterprise digital transformation.',
+    website: 'https://alpinedigital.ch',
+    openJobs: 5,
     rating: 4.9,
-    employees: '100,000+',
-    specialties: ['Drug Development', 'Biotechnology', 'Medical Devices'],
-    featured: true,
+    reviewCount: 34,
+    benefits: ['Unlimited PTO', 'Remote Work', 'Profit Sharing', 'Training Budget'],
+    techStack: ['TypeScript', 'React', 'Next.js', 'Supabase'],
+    remotePolicy: 'remote',
     verified: true,
-    swissMade: true
+    featured: true,
+    founded: 2020,
+    funding: 'Bootstrapped',
+    growthStage: 'startup'
   },
   {
     id: '4',
-    name: 'ABB',
-    logo: '⚡',
-    industry: 'Technology',
-    size: 'Enterprise',
-    location: 'Baden',
-    description: 'Technology leader in electrification and automation, enabling a more sustainable and resource-efficient future.',
-    website: 'https://abb.com',
-    openJobs: 203,
-    founded: '1988',
-    rating: 4.6,
-    employees: '110,000+',
-    specialties: ['Automation', 'Electrification', 'Robotics'],
-    featured: true,
+    name: 'SwissBank Digital',
+    logo: '🏦',
+    industry: 'Banking',
+    size: '1000+',
+    location: 'Bern',
+    canton: 'Bern',
+    description: 'Traditional Swiss bank embracing digital transformation and innovative banking solutions.',
+    website: 'https://swissbank.ch',
+    openJobs: 25,
+    rating: 4.2,
+    reviewCount: 312,
+    benefits: ['Pension Plan', 'Health Insurance', 'Bonuses', 'Career Development'],
+    techStack: ['Java', 'Spring', 'Oracle', 'Jenkins'],
+    remotePolicy: 'flexible',
     verified: true,
-    swissMade: true
+    featured: false,
+    founded: 1856,
+    funding: 'Public',
+    growthStage: 'enterprise'
   },
   {
     id: '5',
-    name: 'Novartis',
-    logo: '🧬',
-    industry: 'Pharmaceuticals',
-    size: 'Enterprise',
-    location: 'Basel',
-    description: 'Global healthcare company using science and digital technologies to create transformative treatments.',
-    website: 'https://novartis.com',
-    openJobs: 124,
-    founded: '1996',
-    rating: 4.8,
-    employees: '108,000+',
-    specialties: ['Gene Therapy', 'Digital Health', 'Oncology'],
-    featured: true,
+    name: 'Crypto Valley Labs',
+    logo: '₿',
+    industry: 'Blockchain',
+    size: '20-50',
+    location: 'Zug',
+    canton: 'Zug',
+    description: 'Blockchain and cryptocurrency research lab developing next-gen DeFi protocols.',
+    website: 'https://cryptovalleylabs.com',
+    openJobs: 7,
+    rating: 4.7,
+    reviewCount: 45,
+    benefits: ['Crypto Salary', 'Remote Work', 'Equity', 'Conference Budget'],
+    techStack: ['Solidity', 'Rust', 'Web3', 'IPFS'],
+    remotePolicy: 'remote',
     verified: true,
-    swissMade: true
+    featured: true,
+    founded: 2019,
+    funding: 'Token Sale',
+    growthStage: 'startup'
   },
   {
     id: '6',
-    name: 'Credit Suisse',
-    logo: '🏛️',
-    industry: 'Financial Services',
-    size: 'Enterprise',
-    location: 'Zurich',
-    description: 'Leading global financial services company headquartered in Zurich, Switzerland.',
-    website: 'https://credit-suisse.com',
-    openJobs: 67,
-    founded: '1856',
+    name: 'MedTech Innovations',
+    logo: '🏥',
+    industry: 'Medical Technology',
+    size: '100-200',
+    location: 'Lausanne',
+    canton: 'Vaud',
+    description: 'Medical device company developing AI-powered diagnostic and treatment solutions.',
+    website: 'https://medtechinnovations.ch',
+    openJobs: 15,
     rating: 4.5,
-    employees: '50,000+',
-    specialties: ['Private Banking', 'Investment Banking', 'Asset Management'],
-    featured: true,
+    reviewCount: 78,
+    benefits: ['Research Time', 'Health Insurance', 'Patent Bonuses', 'Continuing Education'],
+    techStack: ['Python', 'TensorFlow', 'C++', 'Azure'],
+    remotePolicy: 'hybrid',
     verified: true,
-    swissMade: true
+    featured: false,
+    founded: 2017,
+    funding: 'Series A',
+    growthStage: 'scaleup'
   }
 ];
 
-const industries = [
-  'Financial Services',
-  'Pharmaceuticals',
-  'Technology',
-  'Food & Beverages',
-  'Manufacturing',
-  'Healthcare',
-  'Consulting',
-  'Insurance'
-];
+const industries = ['All Industries', 'Financial Technology', 'Biotechnology', 'Software Development', 'Banking', 'Blockchain', 'Medical Technology'];
+const companySizes = ['All Sizes', '1-10', '10-50', '50-200', '200-500', '500-1000', '1000+'];
+const cantons = ['All Cantons', 'Zurich', 'Geneva', 'Basel-Stadt', 'Bern', 'Vaud', 'Zug'];
+const remotePolicies = ['All Policies', 'onsite', 'hybrid', 'remote', 'flexible'];
+const sortOptions = ['relevance', 'newest', 'size', 'rating', 'jobs'];
 
-function CompanyCard({ company }: { company: Company }) {
+function CompanyCard({ company, index }: { company: Company; index: number }) {
+  const [isLiked, setIsLiked] = useState(false);
+
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark hover:shadow-2xl transition-all duration-300 group cursor-pointer transform hover:scale-105">
-      {/* Swiss Made Badge */}
-      {company.swissMade && (
-        <div className="flex justify-end mb-4">
-          <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center space-x-2">
-            <Mountain className="w-4 h-4" />
-            <span>Swiss Made</span>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-jobequal-green/20"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex items-start space-x-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+            {company.logo}
           </div>
-        </div>
-      )}
-
-      <div className="flex items-start space-x-6 mb-6">
-        <div className="w-20 h-20 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-3xl flex items-center justify-center text-4xl shadow-lg">
-          {company.logo}
+          <div>
+            <div className="flex items-center space-x-2 mb-2">
+              <h3 className="text-xl font-bold text-jobequal-text group-hover:text-jobequal-green transition-colors">
+                {company.name}
+              </h3>
+              {company.verified && (
+                <CheckCircle className="w-5 h-5 text-jobequal-green" />
+              )}
+              {company.featured && (
+                <Star className="w-5 h-5 text-yellow-500" />
+              )}
+            </div>
+            <p className="text-jobequal-text-muted font-medium">{company.industry}</p>
+          </div>
         </div>
         
-        <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-2">
-            <h3 className="text-2xl font-bold text-jobequal-text group-hover:text-jobequal-green transition-colors">
-              {company.name}
-            </h3>
-            {company.verified && (
-              <div className="bg-jobequal-green text-white rounded-full p-1">
-                <CheckCircle className="w-4 h-4" />
-              </div>
-            )}
-            {company.featured && (
-              <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center space-x-1">
-                <Crown className="w-3 h-3" />
-                <span>Premium</span>
-              </div>
-            )}
-          </div>
-          
-          <div className="flex items-center space-x-4 mb-3">
-            <span className="text-jobequal-green font-semibold">{company.industry}</span>
-            <div className="flex items-center text-jobequal-text-muted">
-              <MapPin className="w-4 h-4 mr-1" />
-              <span>{company.location}</span>
-            </div>
-            <div className="flex items-center text-jobequal-text-muted">
-              <Users className="w-4 h-4 mr-1" />
-              <span>{company.employees}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(company.rating)
-                      ? 'text-yellow-400 fill-current'
-                      : 'text-jobequal-neutral-dark'
-                  }`}
-                />
-              ))}
-              <span className="text-sm text-jobequal-text-muted ml-2">
-                {company.rating} • Founded {company.founded}
-              </span>
-            </div>
-          </div>
-
-          <p className="text-jobequal-text-muted leading-relaxed mb-4">
-            {company.description}
-          </p>
-
-          <div className="flex flex-wrap gap-2 mb-6">
-            {company.specialties.map((specialty, index) => (
-              <span 
-                key={index}
-                className="bg-jobequal-green-light text-jobequal-green-dark px-3 py-1 rounded-full text-sm font-medium"
-              >
-                {specialty}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between pt-6 border-t border-jobequal-neutral-dark">
-        <div className="flex items-center space-x-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-jobequal-green">{company.openJobs}</div>
-            <div className="text-sm text-jobequal-text-muted">Open Positions</div>
-          </div>
-          <a
-            href={company.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center space-x-2 text-jobequal-green hover:text-jobequal-green-dark transition-colors"
+        <div className="flex items-center space-x-2">
+          <CompanyShareButton company={{ id: company.id, name: company.name }} />
+          <button
+            onClick={() => setIsLiked(!isLiked)}
+            className={`p-2 rounded-lg transition-colors ${
+              isLiked ? 'text-red-500 bg-red-50' : 'text-gray-400 hover:text-red-500'
+            }`}
           >
-            <Globe className="w-4 h-4" />
-            <span>Visit Website</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        </div>
-        
-        <div className="flex items-center space-x-3">
-          <button className="p-2 rounded-xl border border-jobequal-neutral-dark text-jobequal-text-muted hover:text-red-500 hover:bg-red-50 transition-all duration-200">
-            <Heart className="w-5 h-5" />
+            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
           </button>
-          <Link
-            to={`/company/${company.id}`}
-            className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-6 py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105"
-          >
-            View Jobs
-          </Link>
         </div>
       </div>
-    </div>
+
+      {/* Description */}
+      <p className="text-jobequal-text-muted mb-6 leading-relaxed">
+        {company.description}
+      </p>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="flex items-center space-x-2">
+          <MapPin className="w-4 h-4 text-jobequal-green" />
+          <span className="text-sm text-jobequal-text-muted">{company.location}</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Users className="w-4 h-4 text-jobequal-blue" />
+          <span className="text-sm text-jobequal-text-muted">{company.size} employees</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Briefcase className="w-4 h-4 text-jobequal-teal" />
+          <span className="text-sm text-jobequal-text-muted">{company.openJobs} open jobs</span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Star className="w-4 h-4 text-yellow-500" />
+          <span className="text-sm text-jobequal-text-muted">{company.rating} ({company.reviewCount})</span>
+        </div>
+      </div>
+
+      {/* Tech Stack */}
+      <div className="mb-6">
+        <div className="flex flex-wrap gap-2">
+          {company.techStack.slice(0, 4).map((tech) => (
+            <span
+              key={tech}
+              className="px-2 py-1 bg-jobequal-green-light text-jobequal-green text-xs font-medium rounded-lg"
+            >
+              {tech}
+            </span>
+          ))}
+          {company.techStack.length > 4 && (
+            <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-lg">
+              +{company.techStack.length - 4} more
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Remote Policy */}
+      <div className="mb-6">
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+          company.remotePolicy === 'remote' ? 'bg-green-100 text-green-800' :
+          company.remotePolicy === 'hybrid' ? 'bg-blue-100 text-blue-800' :
+          company.remotePolicy === 'flexible' ? 'bg-purple-100 text-purple-800' :
+          'bg-gray-100 text-gray-800'
+        }`}>
+          <Globe className="w-3 h-3 mr-1" />
+          {company.remotePolicy.charAt(0).toUpperCase() + company.remotePolicy.slice(1)}
+        </span>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center space-x-3">
+        <Link
+          to={`/company/${company.id}`}
+          className="flex-1 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold text-center hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200 transform hover:scale-105"
+        >
+          View Company
+        </Link>
+        <a
+          href={company.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-3 border border-jobequal-neutral-dark rounded-xl text-jobequal-text-muted hover:text-jobequal-green hover:border-jobequal-green transition-colors"
+        >
+          <ExternalLink className="w-5 h-5" />
+        </a>
+      </div>
+    </motion.div>
+  );
+}
+
+function FilterSection() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mb-8"
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full"
+      >
+        <div className="flex items-center space-x-3">
+          <SlidersHorizontal className="w-5 h-5 text-jobequal-green" />
+          <span className="font-semibold text-jobequal-text">Filters</span>
+        </div>
+        <ChevronDown className={`w-5 h-5 text-jobequal-text-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            <div>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">Industry</label>
+              <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
+                {industries.map(industry => (
+                  <option key={industry} value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">Company Size</label>
+              <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
+                {companySizes.map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">Canton</label>
+              <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
+                {cantons.map(canton => (
+                  <option key={canton} value={canton}>{canton}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">Remote Policy</label>
+              <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
+                {remotePolicies.map(policy => (
+                  <option key={policy} value={policy}>{policy}</option>
+                ))}
+              </select>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
 export default function Companies() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedIndustry, setSelectedIndustry] = useState('');
-  const [selectedSize, setSelectedSize] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('relevance');
+
+  const filteredCompanies = useMemo(() => {
+    return companies.filter(company =>
+      company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      company.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      company.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
+    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-jobequal-neutral via-jobequal-blue to-white opacity-60"></div>
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center mb-8">
-            <Mountain className="w-12 h-12 text-red-600 mr-4" />
-            <div className="text-red-600 font-bold text-lg tracking-wide uppercase">Swiss Excellence</div>
-            <Mountain className="w-12 h-12 text-red-600 ml-4" />
-          </div>
-          
-          <h1 className="text-5xl lg:text-7xl font-bold text-jobequal-text mb-8 leading-tight">
-            Premium Swiss
-            <span className="block text-jobequal-green">Companies</span>
-          </h1>
-          
-          <p className="text-xl lg:text-2xl text-jobequal-text-muted max-w-4xl mx-auto leading-relaxed mb-12">
-            Discover opportunities with Switzerland's most prestigious companies. 
-            Experience Swiss quality, precision, and excellence in every career opportunity.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-white" />
+      <section className="py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <PageHeader
+            subtitle="Company Directory"
+            title="Discover Switzerland's Top Employers"
+            description="Connect with innovative companies across Switzerland. From startups to enterprises, find your next career opportunity with leading Swiss employers."
+          >
+            <div className="flex items-center justify-center space-x-3 mt-6">
+              <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                <CheckCircle className="w-4 h-4 text-jobequal-green" />
+                <span className="text-sm font-medium text-jobequal-text">Designed in Switzerland</span>
               </div>
-              <h3 className="font-bold text-lg text-jobequal-text mb-2">Verified Companies</h3>
-              <p className="text-jobequal-text-muted">All companies undergo rigorous Swiss-quality verification</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Crown className="w-8 h-8 text-white" />
+              <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
+                <Building className="w-4 h-4 text-jobequal-blue" />
+                <span className="text-sm font-medium text-jobequal-text">{companies.length}+ Companies</span>
               </div>
-              <h3 className="font-bold text-lg text-jobequal-text mb-2">Premium Employers</h3>
-              <p className="text-jobequal-text-muted">Access to Switzerland's most prestigious organizations</p>
             </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Target className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="font-bold text-lg text-jobequal-text mb-2">Perfect Matching</h3>
-              <p className="text-jobequal-text-muted">AI-powered matching with Swiss precision</p>
-            </div>
-          </div>
+          </PageHeader>
         </div>
       </section>
 
-      {/* Search & Filter Section */}
-      <section className="py-16 bg-white">
+      {/* Search and Controls */}
+      <section className="py-8">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="bg-jobequal-neutral rounded-3xl p-8 mb-12">
-            <h2 className="text-3xl font-bold text-jobequal-text mb-8 text-center">
-              Find Your Perfect Swiss Employer
-            </h2>
-            
-            <div className="grid md:grid-cols-4 gap-6">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
-                <input
-                  type="text"
-                  placeholder="Search companies..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-                />
+          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between mb-8">
+            {/* Search */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-jobequal-text-muted" />
+              <input
+                type="text"
+                placeholder="Search companies..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent bg-white shadow-sm"
+              />
+            </div>
+
+            {/* View Mode and Sort */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center bg-white rounded-xl border border-gray-300 p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'grid' ? 'bg-jobequal-green text-white' : 'text-jobequal-text-muted'
+                  }`}
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'list' ? 'bg-jobequal-green text-white' : 'text-jobequal-text-muted'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
               </div>
-              
+
               <select
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="w-full p-4 rounded-xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent bg-white"
               >
-                <option value="">All Industries</option>
-                {industries.map(industry => (
-                  <option key={industry} value={industry}>{industry}</option>
+                {sortOptions.map(option => (
+                  <option key={option} value={option}>
+                    Sort by {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </option>
                 ))}
               </select>
-              
-              <select
-                value={selectedSize}
-                onChange={(e) => setSelectedSize(e.target.value)}
-                className="w-full p-4 rounded-xl border border-jobequal-neutral-dark bg-white text-jobequal-text focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-              >
-                <option value="">Company Size</option>
-                <option value="startup">Startup (1-50)</option>
-                <option value="medium">Medium (51-500)</option>
-                <option value="large">Large (501-5000)</option>
-                <option value="enterprise">Enterprise (5000+)</option>
-              </select>
-              
-              <button className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 px-8 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200">
-                Search Companies
-              </button>
             </div>
           </div>
+
+          <FilterSection />
         </div>
       </section>
 
-      {/* Featured Companies */}
-      <section className="py-20 bg-gradient-to-b from-white to-jobequal-neutral">
+      {/* Companies Grid */}
+      <section className="pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center mb-6">
-              <Gem className="w-8 h-8 text-jobequal-green mr-3" />
-              <span className="text-jobequal-text-muted font-medium text-lg tracking-wide uppercase">
-                Premium Partners
-              </span>
-              <Gem className="w-8 h-8 text-jobequal-green ml-3" />
-            </div>
-            <h2 className="text-4xl lg:text-6xl font-bold text-jobequal-text mb-8 leading-tight">
-              Switzerland's Finest
-            </h2>
-            <p className="text-xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed">
-              Discover career opportunities with companies that define Swiss excellence, 
-              innovation, and quality worldwide.
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-jobequal-text-muted">
+              Showing {filteredCompanies.length} companies
             </p>
           </div>
 
-          <div className="space-y-8">
-            {featuredCompanies.map((company) => (
-              <CompanyCard key={company.id} company={company} />
-            ))}
+          <div className={`grid gap-8 ${
+            viewMode === 'grid' 
+              ? 'md:grid-cols-2 lg:grid-cols-3' 
+              : 'grid-cols-1 max-w-4xl mx-auto'
+          }`}>
+            <AnimatePresence>
+              {filteredCompanies.map((company, index) => (
+                <CompanyCard key={company.id} company={company} index={index} />
+              ))}
+            </AnimatePresence>
           </div>
 
-          <div className="text-center mt-16">
-            <Link
-              to="/job-search"
-              className="inline-flex items-center space-x-3 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-12 py-5 rounded-2xl font-bold text-lg hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          {filteredCompanies.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-16"
             >
-              <span>Explore All Opportunities</span>
-              <ArrowRight className="w-6 h-6" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* For Employers Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-jobequal-text mb-6">
-              Join Switzerland's Premier Talent Network
-            </h2>
-            <p className="text-xl text-jobequal-text-muted max-w-3xl mx-auto leading-relaxed">
-              Connect with top Swiss talent through our premium recruitment platform. 
-              Experience the precision and quality that defines Swiss business excellence.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xl text-jobequal-text mb-2">AI-Powered Matching</h3>
-                  <p className="text-jobequal-text-muted leading-relaxed">
-                    Our Swiss-engineered AI matches your openings with the most qualified candidates, 
-                    ensuring precision in every hire.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xl text-jobequal-text mb-2">Verified Talent Pool</h3>
-                  <p className="text-jobequal-text-muted leading-relaxed">
-                    Access Switzerland's most qualified professionals, all verified through 
-                    our rigorous quality assurance process.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xl text-jobequal-text mb-2">Premium Service</h3>
-                  <p className="text-jobequal-text-muted leading-relaxed">
-                    Enjoy white-glove service with dedicated account management and 
-                    personalized recruitment strategies.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-3xl p-10 text-center">
-              <Crown className="w-16 h-16 text-jobequal-green mx-auto mb-6" />
-              <h3 className="text-2xl font-bold text-jobequal-text mb-4">
-                Ready to Find Swiss Excellence?
-              </h3>
-              <p className="text-jobequal-text-muted mb-8 leading-relaxed">
-                Join leading Swiss companies in discovering exceptional talent through 
-                our premium recruitment platform.
-              </p>
-              <Link
-                to="/signup"
-                className="inline-flex items-center space-x-2 bg-jobequal-green text-white px-8 py-4 rounded-2xl font-bold hover:bg-jobequal-green-hover shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
-              >
-                <span>Start Hiring Today</span>
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
-          </div>
+              <Building className="w-16 h-16 text-jobequal-text-muted mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-jobequal-text mb-2">No companies found</h3>
+              <p className="text-jobequal-text-muted">Try adjusting your search or filters</p>
+            </motion.div>
+          )}
         </div>
       </section>
     </main>
