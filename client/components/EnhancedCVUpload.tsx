@@ -33,12 +33,33 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
   const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [isDragActive, setIsDragActive] = useState(false);
   const { user } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
+  const validateFile = (file: File): boolean => {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      setError('Please upload a PDF, DOC, DOCX, or TXT file');
+      return false;
+    }
+
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+      setError('File size must be less than 10MB');
+      return false;
+    }
+
+    return true;
+  };
+
+  const processFile = useCallback(async (file: File) => {
+    if (!validateFile(file)) return;
 
     setError(null);
     setUploadedFile(file);
@@ -62,10 +83,10 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
 
     try {
       setIsAnalyzing(true);
-      
+
       // Read file content
       const fileContent = await readFileContent(file);
-      
+
       // Perform AI analysis
       const analysis = await aiAnalysisService.analyzeCVWithAI({
         fileName: file.name,
@@ -85,17 +106,39 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
     }
   }, [user, onUploadComplete]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/msword': ['.doc'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'text/plain': ['.txt']
-    },
-    maxSize: 10 * 1024 * 1024, // 10MB
-    multiple: false
-  });
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      processFile(files[0]);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      processFile(files[0]);
+    }
+  };
+
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const readFileContent = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
