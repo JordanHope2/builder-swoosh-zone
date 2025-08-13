@@ -30,6 +30,7 @@ import {
 import { useJobs } from '../contexts/JobsContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useAppData } from '../hooks/useAppData';
+import { applicationToast } from '../hooks/use-toast';
 
 interface LuxuryJob {
   id: string;
