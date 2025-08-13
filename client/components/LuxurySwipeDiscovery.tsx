@@ -169,6 +169,9 @@ const LuxurySwipeDiscovery: React.FC = () => {
     superLiked: 0
   });
   const [showJobDetails, setShowJobDetails] = useState(false);
+  const [isAIMatchModalOpen, setIsAIMatchModalOpen] = useState(false);
+  const [isCityEventsModalOpen, setIsCityEventsModalOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<string>('');
   
   const { addToFavorites } = useFavorites();
   const { auth } = useAppData();
