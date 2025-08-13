@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, DragEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertCircle, 
-  Brain, 
-  Target, 
+import {
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertCircle,
+  Brain,
+  Target,
   TrendingUp,
   Star,
   Download,
@@ -15,7 +15,6 @@ import {
   Award,
   BarChart3
 } from 'lucide-react';
-import { useDropzone } from 'react-dropzone';
 import { aiAnalysisService, CVAnalysisResult } from '../services/aiAnalysisService';
 import { useAuth } from '../contexts/AuthContext';
 import { AnimatedButton, EnhancedMotion, StaggeredList, GradientText } from './ui/enhanced-motion';
