@@ -134,7 +134,11 @@ export function HeroSection() {
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 xl:p-14 shadow-2xl border border-jobequal-neutral-dark hover:shadow-3xl transition-all duration-300 group">
             <div className="text-center">
               <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8 shadow-lg group-hover:scale-105 transition-transform duration-300">
-                {isUploading ? (
+                {isAnalyzing ? (
+                  <div className="relative">
+                    <Brain className="w-8 h-8 sm:w-10 sm:h-10 text-white animate-pulse" />
+                  </div>
+                ) : isUploading ? (
                   <div className="relative">
                     <div className="animate-spin w-8 h-8 sm:w-10 sm:h-10 border-2 border-white border-t-transparent rounded-full" />
                   </div>
