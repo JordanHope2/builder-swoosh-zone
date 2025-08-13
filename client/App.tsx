@@ -79,6 +79,8 @@ const App = () => (
                     {/* Auth — URL canonique = /signin */}
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/signin" element={<SignIn />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<Navigate to="/forgot-password" replace />} />
                     <Route path="/login" element={<Navigate to="/signin" replace />} />
                     <Route path="/sign-in" element={<Navigate to="/signin" replace />} />
 
