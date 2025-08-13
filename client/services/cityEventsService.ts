@@ -69,13 +69,19 @@ class CityEventsService {
         .eq('city_name', cityName.toLowerCase())
         .single();
 
-      if (error || !data) {
+      if (error) {
+        // If table doesn't exist or other DB errors, just return null (no cache)
+        console.debug('No cached city data available:', error.message);
+        return null;
+      }
+
+      if (!data) {
         return null;
       }
 
       return this.transformDatabaseRecord(data);
     } catch (error) {
-      console.error('Error getting cached city data:', error);
+      console.debug('Cache lookup failed (non-critical):', error instanceof Error ? error.message : 'Unknown error');
       return null;
     }
   }
