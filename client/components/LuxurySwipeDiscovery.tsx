@@ -625,10 +625,14 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
           <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">{job.title}</h2>
           
           <div className="flex flex-wrap gap-3 mb-4">
-            <div className="flex items-center space-x-1 text-gray-600">
-              <MapPin className="w-4 h-4" />
-              <span className="text-sm">{job.location}</span>
-            </div>
+            <button
+              onClick={handleLocationClick}
+              className="flex items-center space-x-1 text-gray-600 hover:text-blue-600 transition-colors duration-200 cursor-pointer group"
+              disabled={isPreview}
+            >
+              <MapPin className="w-4 h-4 group-hover:scale-110 transition-transform" />
+              <span className="text-sm group-hover:underline">{job.location}</span>
+            </button>
             <div className="flex items-center space-x-1 text-gray-600">
               <DollarSign className="w-4 h-4" />
               <span className="text-sm font-semibold">{job.salary}</span>
