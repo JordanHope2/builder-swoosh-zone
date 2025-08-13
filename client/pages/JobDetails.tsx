@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Navigation } from '../components/Navigation';
 import { EnhancedApplicationForm } from '../components/EnhancedApplicationForm';
 import { PageTransition, AnimatedButton } from '../components/ui/enhanced-motion';
+import { applicationToast } from '../hooks/use-toast';
 import {
   MapPin,
   Clock,
