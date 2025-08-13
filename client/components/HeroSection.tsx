@@ -12,32 +12,92 @@ export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setIsUploading(true);
-      setUploadProgress(0);
+  const readFileContent = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsText(file);
+    });
+  };
 
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setError(null);
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    // Validate file
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Please upload a PDF, DOC, or DOCX file');
+      setIsUploading(false);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB
+      setError('File size must be less than 5MB');
+      setIsUploading(false);
+      return;
+    }
+
+    if (!user) {
+      // Redirect to enhanced CV upload page for non-authenticated users
+      navigate('/cv-upload');
+      return;
+    }
+
+    try {
       // Simulate upload progress
-      const interval = setInterval(() => {
+      const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-              setIsUploading(false);
-              setUploadProgress(0);
-            }, 500);
+            clearInterval(progressInterval);
             return 100;
           }
-          return prev + 10;
+          return prev + 20;
         });
-      }, 100);
+      }, 200);
+
+      setIsAnalyzing(true);
+
+      // Read file content
+      const fileContent = await readFileContent(file);
+
+      // Perform AI analysis
+      const analysis = await aiAnalysisService.analyzeCVWithAI({
+        fileName: file.name,
+        fileContent,
+        fileType: file.type,
+        userId: user.id
+      });
+
+      setAnalysisResult(analysis);
+
+      // Navigate to results page after a brief delay
+      setTimeout(() => {
+        navigate('/cv-upload', { state: { analysisResult: analysis } });
+      }, 1500);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to analyze CV');
+    } finally {
+      setIsAnalyzing(false);
+      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
 
