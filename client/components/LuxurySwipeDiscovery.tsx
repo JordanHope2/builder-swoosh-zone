@@ -199,6 +199,45 @@ const LuxurySwipeDiscovery: React.FC = () => {
 
   const currentJob = jobs[currentJobIndex];
 
+  // Helper functions for AI Match Report
+  const generateJobProfile = (job: LuxuryJob) => ({
+    title: job.title,
+    company: job.company,
+    description: job.description,
+    requirements: job.tags || [],
+    location: job.location,
+    salaryRange: job.salaryRange,
+    techStack: job.techStack || []
+  });
+
+  const generateCandidateProfile = () => ({
+    skills: ['React', 'TypeScript', 'Node.js', 'Python', 'AWS'],
+    experience: {
+      years: 5,
+      positions: [
+        {
+          title: 'Senior Software Engineer',
+          company: 'Tech Solutions AG',
+          duration: '2021-Present',
+          technologies: ['React', 'TypeScript', 'AWS']
+        },
+        {
+          title: 'Software Engineer',
+          company: 'Innovation Labs',
+          duration: '2019-2021',
+          technologies: ['JavaScript', 'Node.js', 'PostgreSQL']
+        }
+      ]
+    },
+    education: {
+      degree: 'Master of Science',
+      field: 'Computer Science',
+      institution: 'ETH Zurich'
+    },
+    location: 'Zurich, Switzerland',
+    salaryExpectation: { min: 90000, max: 120000 }
+  });
+
   const createApplication = async (job: LuxuryJob, swipeAction: 'like' | 'superlike') => {
     try {
       // Create application data
