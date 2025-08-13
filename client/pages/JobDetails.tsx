@@ -98,6 +98,14 @@ function ApplicationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     availability: ''
   });
 
+  const handleSubmit = () => {
+    // Here you would typically send the application data to your backend
+    console.log('Submitting application:', applicationData);
+    // Reset form and close modal
+    setApplicationData({ coverLetter: '', portfolio: '', availability: '' });
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
