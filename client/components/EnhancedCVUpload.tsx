@@ -65,10 +65,9 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
     setUploadedFile(file);
     setUploadProgress(0);
 
-    if (!user) {
-      setError('Please sign in to upload and analyze your CV');
-      return;
-    }
+    // Allow analysis for both authenticated and non-authenticated users
+    // Use a guest user ID if not authenticated
+    const userId = user?.id || 'guest-user';
 
     // Simulate upload progress
     const progressInterval = setInterval(() => {
