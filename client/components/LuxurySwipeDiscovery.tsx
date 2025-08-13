@@ -240,6 +240,14 @@ const LuxurySwipeDiscovery: React.FC = () => {
           className="flex justify-between items-center mb-8"
         >
           <div className="flex items-center space-x-6">
+            {/* JobEqual Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-sm">JE</span>
+              </div>
+              <span className="text-white/90 font-medium text-sm">JobEqual</span>
+            </div>
+
             <div className="flex items-center space-x-2">
               <Diamond className="w-6 h-6 text-yellow-400" />
               <span className="text-white font-semibold text-lg">Dream Jobs</span>
@@ -454,7 +462,7 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
         className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-purple-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-2xl border border-purple-400/50"
         style={{ opacity: useTransform(y, [-150, -50], [1, 0]) }}
       >
-        ⭐ SUPER LIKE
+        ��� SUPER LIKE
       </motion.div>
     </motion.div>
   );
