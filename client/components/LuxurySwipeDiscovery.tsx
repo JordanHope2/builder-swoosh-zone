@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion';
-import { 
-  Heart, 
-  X, 
-  Star, 
-  MapPin, 
-  Clock, 
-  Building, 
+import {
+  Heart,
+  X,
+  Star,
+  MapPin,
+  Clock,
+  Building,
   DollarSign,
   Zap,
   Award,
@@ -462,7 +463,7 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
         className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-purple-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-2xl border border-purple-400/50"
         style={{ opacity: useTransform(y, [-150, -50], [1, 0]) }}
       >
-        ��� SUPER LIKE
+        ⭐ SUPER LIKE
       </motion.div>
     </motion.div>
   );
