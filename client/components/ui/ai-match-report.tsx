@@ -213,7 +213,14 @@ export function AIMatchReportModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-end p-4">
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-end p-4"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onClose();
+          }
+        }}
+      >
         <motion.div
           initial={{ x: '100%', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -241,7 +248,7 @@ export function AIMatchReportModal({
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               aria-label="Close match report"
             >
               <X className="w-5 h-5 text-gray-500" />
@@ -261,7 +268,8 @@ export function AIMatchReportModal({
                 <p className="text-gray-600 text-center mb-4">{error}</p>
                 <button
                   onClick={loadMatchReport}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  className="px-6 py-3 min-h-[44px] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  aria-label="Retry loading match analysis"
                 >
                   Try Again
                 </button>
@@ -381,7 +389,8 @@ export function AIMatchReportModal({
                 >
                   <button
                     onClick={handleImproveProfile}
-                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 px-6 min-h-[48px] rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                    aria-label="Go to profile settings to improve your match score"
                   >
                     <User className="w-5 h-5" />
                     <span>Improve My Profile</span>
