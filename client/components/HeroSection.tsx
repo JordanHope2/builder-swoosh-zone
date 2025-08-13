@@ -183,10 +183,12 @@ export function HeroSection() {
                     disabled={isUploading}
                   />
                   <div className={`w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 sm:py-5 px-6 sm:px-10 rounded-xl sm:rounded-2xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:scale-105 text-center flex items-center justify-center space-x-3 ${
-                    isUploading ? 'opacity-50 cursor-not-allowed' : ''
+                    (isUploading || isAnalyzing) ? 'opacity-50 cursor-not-allowed' : ''
                   }`}>
-                    <FileText className="w-5 h-5" />
-                    <span>{isUploading ? t('common.loading') : t('hero.cta_secondary')}</span>
+                    {isAnalyzing ? <Brain className="w-5 h-5 animate-pulse" /> : <FileText className="w-5 h-5" />}
+                    <span>
+                      {isAnalyzing ? 'Analyzing CV...' : isUploading ? 'Uploading...' : t('hero.cta_secondary')}
+                    </span>
                   </div>
                 </div>
                 <Link
