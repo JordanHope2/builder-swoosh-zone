@@ -325,14 +325,17 @@ export default function JobDetails() {
               </div>
 
               {/* Job Meta */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-jobequal-green" />
+              <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                <button
+                  onClick={() => setIsCityEventsModalOpen(true)}
+                  className="flex items-center space-x-3 text-left hover:bg-gray-50 p-2 rounded-lg transition-colors group"
+                >
+                  <MapPin className="w-5 h-5 text-jobequal-green group-hover:scale-110 transition-transform" />
                   <div>
                     <div className="text-sm text-jobequal-text-muted">Location</div>
-                    <div className="font-semibold text-jobequal-text">{job.location}</div>
+                    <div className="font-semibold text-jobequal-text group-hover:text-jobequal-green group-hover:underline">{job.location}</div>
                   </div>
-                </div>
+                </button>
                 <div className="flex items-center space-x-3">
                   <Clock className="w-5 h-5 text-jobequal-blue-dark" />
                   <div>
