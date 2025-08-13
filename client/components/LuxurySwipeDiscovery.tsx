@@ -595,15 +595,19 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
           </div>
         </div>
 
-        {/* Match Score */}
+        {/* Match Score - Clickable */}
         <div className="absolute bottom-6 right-6">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-2 border border-white/20">
+          <button
+            onClick={handleMatchClick}
+            className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-2 border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-200 cursor-pointer group"
+            disabled={isPreview}
+          >
             <div className="flex items-center space-x-2">
-              <Zap className="w-4 h-4 text-yellow-400" />
+              <Zap className="w-4 h-4 text-yellow-400 group-hover:animate-pulse" />
               <span className="font-bold text-lg">{job.matchScore}%</span>
-              <span className="text-sm text-white/80">Match</span>
+              <span className="text-sm text-white/80">AI Match</span>
             </div>
-          </div>
+          </button>
         </div>
 
         {/* Job Level Badge */}
