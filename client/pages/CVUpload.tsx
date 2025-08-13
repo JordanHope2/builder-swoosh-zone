@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Navigation } from '../components/Navigation';
-import { EnhancedCVUpload } from '../components/EnhancedCVUpload';
+import { SimplifiedCVUpload } from '../components/SimplifiedCVUpload';
 import { PageTransition } from '../components/ui/enhanced-motion';
 import { CVAnalysisResult } from '../services/aiAnalysisService';
 
