@@ -177,6 +177,26 @@ const LuxurySwipeDiscovery: React.FC = () => {
   const { auth } = useAppData();
   const constraintsRef = useRef(null);
 
+  // Event listeners for modal triggers
+  useEffect(() => {
+    const handleAIMatchReport = (event: any) => {
+      setIsAIMatchModalOpen(true);
+    };
+
+    const handleCityEvents = (event: any) => {
+      setSelectedCity(event.detail.cityName);
+      setIsCityEventsModalOpen(true);
+    };
+
+    window.addEventListener('openAIMatchReport', handleAIMatchReport);
+    window.addEventListener('openCityEvents', handleCityEvents);
+
+    return () => {
+      window.removeEventListener('openAIMatchReport', handleAIMatchReport);
+      window.removeEventListener('openCityEvents', handleCityEvents);
+    };
+  }, []);
+
   const currentJob = jobs[currentJobIndex];
 
   const createApplication = async (job: LuxuryJob, swipeAction: 'like' | 'superlike') => {
