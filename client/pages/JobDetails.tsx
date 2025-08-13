@@ -165,7 +165,10 @@ function ApplicationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             >
               Cancel
             </button>
-            <button className="flex-1 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200">
+            <button
+              onClick={handleSubmit}
+              className="flex-1 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200"
+            >
               Submit Application
             </button>
           </div>
