@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Upload, Search, MapPin, Calendar, Sparkles, FileText, ChevronDown } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Upload, Search, MapPin, Calendar, Sparkles, FileText, ChevronDown, Brain } from 'lucide-react';
 import { RedwoodTreeBackground } from './RedwoodTreeBackground';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
+import { aiAnalysisService, CVAnalysisResult } from '../services/aiAnalysisService';
 
 export function HeroSection() {
   const [selectedLocation, setSelectedLocation] = useState('');
