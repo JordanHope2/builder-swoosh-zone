@@ -42,25 +42,38 @@ class AIAnalysisService {
     try {
       // First, extract text from CV
       const extractedText = await this.extractTextFromCV(cvData);
-      
+
       // Get job postings for compatibility analysis
-      const { data: jobs } = await supabase
-        .from('jobs')
-        .select('id, title, description, requirements')
-        .eq('status', 'published')
-        .limit(10);
+      let jobs: any[] = [];
+      try {
+        const { data: jobsData } = await supabase
+          .from('jobs')
+          .select('id, title, description, requirements')
+          .eq('status', 'published')
+          .limit(10);
+
+        jobs = jobsData || [];
+      } catch (dbError) {
+        console.warn('Could not fetch jobs for compatibility analysis:', dbError);
+        jobs = [];
+      }
 
       // Perform AI analysis
-      const analysis = await this.performAIAnalysis(extractedText, jobs || []);
-      
-      // Save analysis results
-      await this.saveAnalysisResults(cvData.userId, analysis);
-      
+      const analysis = await this.performAIAnalysis(extractedText, jobs);
+
+      // Try to save analysis results (non-blocking)
+      try {
+        await this.saveAnalysisResults(cvData.userId, analysis);
+      } catch (saveError) {
+        console.warn('Could not save analysis results:', saveError);
+        // Continue without saving - don't fail the entire operation
+      }
+
       return analysis;
     } catch (error) {
-      console.error('CV Analysis Error:', error);
-      
-      // Return fallback analysis if AI fails
+      console.warn('CV Analysis Error, using fallback:', error);
+
+      // Return fallback analysis if everything fails
       return this.generateFallbackAnalysis(cvData);
     }
   }
