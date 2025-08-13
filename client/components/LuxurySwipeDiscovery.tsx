@@ -31,6 +31,8 @@ import { useJobs } from '../contexts/JobsContext';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useAppData } from '../hooks/useAppData';
 import { applicationToast } from '../hooks/use-toast';
+import { AIMatchReportModal } from './ui/ai-match-report';
+import { CityEventsModal } from './ui/city-events-modal';
 
 interface LuxuryJob {
   id: string;
