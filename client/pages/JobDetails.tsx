@@ -92,12 +92,6 @@ As a Senior Software Engineer, you'll work on challenging problems in a collabor
 };
 
 function ApplicationModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [applicationData, setApplicationData] = useState({
-    coverLetter: '',
-    portfolio: '',
-    availability: ''
-  });
-
   if (!isOpen) return null;
 
   return (
