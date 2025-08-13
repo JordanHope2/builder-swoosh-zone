@@ -176,16 +176,25 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
       {!uploadedFile && (
         <EnhancedMotion animation="scaleInBounce" delay={0.2}>
           <div
-            {...getRootProps()}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            onClick={handleClick}
             className={`
               relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300
-              ${isDragActive 
-                ? 'border-jobequal-green bg-jobequal-green-light' 
+              ${isDragActive
+                ? 'border-jobequal-green bg-jobequal-green-light'
                 : 'border-gray-300 hover:border-jobequal-green hover:bg-gray-50'
               }
             `}
           >
-            <input {...getInputProps()} ref={fileInputRef} />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
             <motion.div
               animate={isDragActive ? { scale: 1.1 } : { scale: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
