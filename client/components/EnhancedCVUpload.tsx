@@ -180,12 +180,21 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             onDrop={handleDrop}
             onClick={handleClick}
             className={`
-              relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300
+              relative border-2 border-dashed rounded-3xl p-8 sm:p-12 text-center cursor-pointer transition-all duration-300 min-h-[200px] flex flex-col items-center justify-center
               ${isDragActive
                 ? 'border-jobequal-green bg-jobequal-green-light'
-                : 'border-gray-300 hover:border-jobequal-green hover:bg-gray-50'
+                : 'border-gray-300 hover:border-jobequal-green hover:bg-gray-50 focus-within:border-jobequal-green focus-within:ring-2 focus-within:ring-jobequal-green focus-within:ring-offset-2'
               }
             `}
+            role="button"
+            tabIndex={0}
+            aria-label="Click to upload CV or drag and drop file here"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleClick();
+              }
+            }}
           >
             <input
               ref={fileInputRef}
@@ -484,6 +493,8 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
                 setUploadProgress(0);
                 setError(null);
               }}
+              className="min-h-[44px] px-6 py-3"
+              aria-label="Upload a new CV"
             >
               <Upload className="w-4 h-4 mr-2" />
               Upload Another CV
@@ -492,6 +503,8 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             <AnimatedButton
               variant="secondary"
               onClick={() => window.print()}
+              className="min-h-[44px] px-6 py-3"
+              aria-label="Download analysis report as PDF"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -500,6 +513,8 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             <AnimatedButton
               variant="accent"
               onClick={() => window.location.href = '/job-search'}
+              className="min-h-[44px] px-6 py-3"
+              aria-label="Browse matching jobs based on your CV"
             >
               <Eye className="w-4 h-4 mr-2" />
               View Matching Jobs
