@@ -392,10 +392,19 @@ class AIMatchService {
         });
 
       if (error) {
-        console.error('Failed to save match report:', error);
+        console.warn('Failed to save match report to database (non-critical):', {
+          message: error.message,
+          code: error.code,
+          jobId: report.jobId
+        });
+        // Don't throw - saving failure shouldn't break the analysis feature
       }
     } catch (error) {
-      console.error('Error saving match report:', error);
+      console.warn('Error saving match report (non-critical):', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        jobId: report.jobId
+      });
+      // Gracefully handle saving failures
     }
   }
 
