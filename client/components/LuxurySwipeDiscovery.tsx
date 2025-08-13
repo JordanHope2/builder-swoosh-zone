@@ -463,6 +463,24 @@ const LuxurySwipeDiscovery: React.FC = () => {
           />
         </motion.div>
       </div>
+
+      {/* AI Match Report Modal */}
+      <AIMatchReportModal
+        isOpen={isAIMatchModalOpen}
+        onClose={() => setIsAIMatchModalOpen(false)}
+        jobId={currentJob?.id || ''}
+        userId={auth?.user?.id || 'guest-user'}
+        initialMatchPercent={currentJob?.matchScore || 75}
+        jobProfile={currentJob ? generateJobProfile(currentJob) : {} as any}
+        candidateProfile={generateCandidateProfile()}
+      />
+
+      {/* City Events Modal */}
+      <CityEventsModal
+        isOpen={isCityEventsModalOpen}
+        onClose={() => setIsCityEventsModalOpen(false)}
+        cityName={selectedCity}
+      />
     </div>
   );
 };
