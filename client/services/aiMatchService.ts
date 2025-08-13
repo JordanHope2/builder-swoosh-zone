@@ -54,19 +54,28 @@ class AIMatchService {
   private readonly OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '';
 
   async getOrGenerateMatchReport(
-    jobId: string, 
-    userId: string, 
+    jobId: string,
+    userId: string,
     jobProfile: JobProfile,
     candidateProfile: CandidateProfile
   ): Promise<AIMatchReport> {
     try {
-      // First, check if we have a cached report
-      const { data: existingReport } = await supabase
-        .from('ai_matches')
-        .select('*')
-        .eq('job_id', jobId)
-        .eq('user_id', userId)
-        .single();
+      // First, check if we have a cached report (non-blocking)
+      let existingReport = null;
+      try {
+        const { data } = await supabase
+          .from('ai_matches')
+          .select('*')
+          .eq('job_id', jobId)
+          .eq('user_id', userId)
+          .single();
+
+        if (data) {
+          existingReport = data;
+        }
+      } catch (dbError) {
+        console.debug('Database lookup failed, proceeding to generate new report:', dbError);
+      }
 
       if (existingReport) {
         return this.transformDatabaseRecord(existingReport);
@@ -74,13 +83,15 @@ class AIMatchService {
 
       // Generate new report using AI
       const report = await this.generateMatchReport(jobId, userId, jobProfile, candidateProfile);
-      
-      // Save to database
-      await this.saveMatchReport(report);
-      
+
+      // Save to database (non-blocking)
+      this.saveMatchReport(report).catch(err => {
+        console.debug('Report saving failed but continuing:', err);
+      });
+
       return report;
     } catch (error) {
-      console.error('Error getting/generating match report:', error);
+      console.warn('Error getting/generating match report, using fallback:', error instanceof Error ? error.message : 'Unknown error');
       // Return fallback report
       return this.generateFallbackReport(jobId, userId, jobProfile, candidateProfile);
     }
