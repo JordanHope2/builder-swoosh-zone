@@ -18,7 +18,7 @@ export default function CVUpload() {
         <Navigation />
         
         <div className="container mx-auto px-4 py-12">
-          <EnhancedCVUpload 
+          <SimplifiedCVUpload
             onUploadComplete={handleAnalysisComplete}
             className="mt-8"
           />
