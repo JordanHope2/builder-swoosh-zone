@@ -132,8 +132,14 @@ class AIAnalysisService {
 
   private async performAIAnalysis(cvText: string, jobs: any[]): Promise<CVAnalysisResult> {
     try {
+      // Check if API key is available
+      if (!this.OPENAI_API_KEY || this.OPENAI_API_KEY === 'your-openai-api-key-here') {
+        console.warn('OpenAI API key not configured, using fallback analysis');
+        return this.generateSmartFallbackAnalysis(cvText, jobs);
+      }
+
       const prompt = this.createAnalysisPrompt(cvText, jobs);
-      
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -141,7 +147,7 @@ class AIAnalysisService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4',
+          model: 'gpt-4o-mini', // Using more affordable model
           messages: [
             {
               role: 'system',
@@ -158,15 +164,23 @@ class AIAnalysisService {
       });
 
       if (!response.ok) {
-        throw new Error('OpenAI API request failed');
+        const errorText = await response.text();
+        console.warn('OpenAI API request failed:', response.status, errorText);
+        return this.generateSmartFallbackAnalysis(cvText, jobs);
       }
 
       const result = await response.json();
+
+      if (!result.choices || !result.choices[0] || !result.choices[0].message) {
+        console.warn('Invalid OpenAI API response structure');
+        return this.generateSmartFallbackAnalysis(cvText, jobs);
+      }
+
       const analysisText = result.choices[0].message.content;
-      
+
       return this.parseAIResponse(analysisText, jobs);
     } catch (error) {
-      console.error('AI Analysis Error:', error);
+      console.warn('AI Analysis Error, using fallback:', error);
       return this.generateSmartFallbackAnalysis(cvText, jobs);
     }
   }
