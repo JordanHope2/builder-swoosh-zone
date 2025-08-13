@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React from "react"
-=======
-import { useToast } from "../../hooks/use-toast";
->>>>>>> 33153d85e12907d914e88dfe4a57cab614d8392b
 import {
   Toast,
   ToastClose,
@@ -10,13 +6,9 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-<<<<<<< HEAD
   getToastIcon,
 } from "./toast"
 import { useToast } from "../../hooks/use-toast"
-=======
-} from "./toast";
->>>>>>> 33153d85e12907d914e88dfe4a57cab614d8392b
 
 export function Toaster() {
   const { toasts } = useToast()
