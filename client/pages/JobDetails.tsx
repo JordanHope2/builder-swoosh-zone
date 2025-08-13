@@ -357,6 +357,16 @@ export default function JobDetails() {
                     <div className="font-semibold text-jobequal-text">{job.posted}</div>
                   </div>
                 </div>
+                <button
+                  onClick={() => setIsAIMatchModalOpen(true)}
+                  className="flex items-center space-x-3 text-left hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 p-2 rounded-lg transition-all group"
+                >
+                  <Zap className="w-5 h-5 text-blue-500 group-hover:scale-110 group-hover:animate-pulse transition-transform" />
+                  <div>
+                    <div className="text-sm text-jobequal-text-muted">AI Match</div>
+                    <div className="font-bold text-blue-600 group-hover:text-purple-600">{job.matchScore}%</div>
+                  </div>
+                </button>
               </div>
 
               {/* Apply Button */}
