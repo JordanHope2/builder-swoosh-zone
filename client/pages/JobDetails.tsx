@@ -510,9 +510,27 @@ export default function JobDetails() {
       </div>
 
       {/* Application Modal */}
-      <ApplicationModal 
-        isOpen={isApplicationModalOpen} 
-        onClose={() => setIsApplicationModalOpen(false)} 
+      <ApplicationModal
+        isOpen={isApplicationModalOpen}
+        onClose={() => setIsApplicationModalOpen(false)}
+      />
+
+      {/* AI Match Report Modal */}
+      <AIMatchReportModal
+        isOpen={isAIMatchModalOpen}
+        onClose={() => setIsAIMatchModalOpen(false)}
+        jobId={job.id}
+        userId="guest-user"
+        initialMatchPercent={job.matchScore}
+        jobProfile={generateJobProfile()}
+        candidateProfile={generateCandidateProfile()}
+      />
+
+      {/* City Events Modal */}
+      <CityEventsModal
+        isOpen={isCityEventsModalOpen}
+        onClose={() => setIsCityEventsModalOpen(false)}
+        cityName={job.location.split(',')[0].trim()}
       />
     </main>
   );
