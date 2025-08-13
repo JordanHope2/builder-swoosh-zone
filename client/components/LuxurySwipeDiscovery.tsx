@@ -242,12 +242,15 @@ const LuxurySwipeDiscovery: React.FC = () => {
         >
           <div className="flex items-center space-x-6">
             {/* JobEqual Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center shadow-lg">
+            <Link
+              to="/"
+              className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200 cursor-pointer group"
+            >
+              <div className="w-8 h-8 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
                 <span className="text-white font-bold text-sm">JE</span>
               </div>
-              <span className="text-white/90 font-medium text-sm">JobEqual</span>
-            </div>
+              <span className="text-white/90 font-medium text-sm group-hover:text-white transition-colors duration-200">JobEqual</span>
+            </Link>
 
             <div className="flex items-center space-x-2">
               <Diamond className="w-6 h-6 text-yellow-400" />
