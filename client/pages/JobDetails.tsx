@@ -4,6 +4,8 @@ import { Navigation } from '../components/Navigation';
 import { EnhancedApplicationForm } from '../components/EnhancedApplicationForm';
 import { PageTransition, AnimatedButton } from '../components/ui/enhanced-motion';
 import { JobShareButton } from '../components/ui/share-button';
+import { AIMatchReportModal } from '../components/ui/ai-match-report';
+import { CityEventsModal } from '../components/ui/city-events-modal';
 import { applicationToast } from '../hooks/use-toast';
 import {
   MapPin,
