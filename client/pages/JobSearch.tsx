@@ -160,8 +160,9 @@ function JobCard({ job }: { job: Job }) {
 
           <button
             onClick={handleBookmark}
-            className={`transition-all duration-200 hover:scale-110 p-1 ${isBookmarked ? 'text-red-500' : 'text-jobequal-text-muted hover:text-red-500'}`}
-            aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
+            className={`transition-all duration-200 hover:scale-110 p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-50 active:bg-gray-100 ${isBookmarked ? 'text-red-500' : 'text-jobequal-text-muted hover:text-red-500'}`}
+            aria-label={isBookmarked ? 'Remove from bookmarks' : 'Add to bookmarks'}
+            aria-pressed={isBookmarked}
           >
             <Bookmark className={`w-5 h-5 sm:w-6 sm:h-6 ${isBookmarked ? 'fill-current' : ''}`} />
           </button>
@@ -263,7 +264,7 @@ function FilterSidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => 
         {onClose && (
           <button
             onClick={onClose}
-            className="lg:hidden text-jobequal-text-muted hover:text-jobequal-text p-1"
+            className="lg:hidden text-jobequal-text-muted hover:text-jobequal-text p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 active:bg-gray-200"
             aria-label="Close filters"
           >
             <X className="w-5 h-5" />
@@ -435,7 +436,8 @@ export default function JobSearch() {
           <div className="lg:hidden mb-6">
             <button
               onClick={() => setIsFilterOpen(true)}
-              className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-xl border border-jobequal-neutral-dark hover:shadow-md transition-all duration-200"
+              className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 min-h-[44px] rounded-xl border border-jobequal-neutral-dark hover:shadow-md transition-all duration-200 active:bg-gray-50"
+              aria-label="Open job filters"
             >
               <Filter className="w-4 h-4 text-jobequal-green" />
               <span className="font-medium text-jobequal-text">Filters</span>
