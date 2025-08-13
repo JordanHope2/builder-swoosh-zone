@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 import { Navigation } from '../components/Navigation';
-import { ResumeScore } from '../components/RealtimeFeedback';
+import { EnhancedCVUpload } from '../components/EnhancedCVUpload';
+import { PageTransition } from '../components/ui/enhanced-motion';
+import { CVAnalysisResult } from '../services/aiAnalysisService';
 import { Upload, FileText, CheckCircle, AlertCircle, Download, Zap, Target, User, Briefcase, GraduationCap, Award, Eye, X, Plus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
