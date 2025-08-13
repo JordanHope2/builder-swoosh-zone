@@ -42,21 +42,28 @@ class CityEventsService {
 
   async getCityEvents(cityName: string): Promise<CityEventsData> {
     try {
-      // Check cache first
-      const cachedData = await this.getCachedCityData(cityName);
-      if (cachedData && !this.isCacheExpired(cachedData)) {
-        return cachedData;
+      // Check cache first (non-blocking)
+      let cachedData: CityEventsData | null = null;
+      try {
+        cachedData = await this.getCachedCityData(cityName);
+        if (cachedData && !this.isCacheExpired(cachedData)) {
+          return cachedData;
+        }
+      } catch (cacheError) {
+        console.debug('Cache check failed, proceeding without cache:', cacheError);
       }
 
       // Fetch fresh data
       const cityData = await this.fetchCityData(cityName);
-      
-      // Cache the result
-      await this.cacheCityData(cityData);
-      
+
+      // Cache the result (non-blocking)
+      this.cacheCityData(cityData).catch(err => {
+        console.debug('Caching failed but continuing:', err);
+      });
+
       return cityData;
     } catch (error) {
-      console.error('Error getting city events:', error);
+      console.warn('Error getting city events, using fallback:', error instanceof Error ? error.message : 'Unknown error');
       return this.getFallbackCityData(cityName);
     }
   }
