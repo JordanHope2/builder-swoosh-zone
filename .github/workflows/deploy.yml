@@ -15,7 +15,7 @@ jobs:
       NODE_VERSION: '20'
       BUILD_CMD: 'npm run build'
       INSTALL_CMD: 'npm ci'
-      BUILD_DIR: 'dist/spa'
+      BUILD_DIR: 'dist/spa/'
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
@@ -65,6 +65,11 @@ jobs:
           name: build-artifact
           path: build-artifact.tgz
           retention-days: 7
+
+      - name: Show build dir contents
+        run: |
+          echo "BUILD_DIR=$BUILD_DIR"
+          find "$BUILD_DIR" -maxdepth 2
 
       # --- FTP (Swizzonic) ---
       - name: Deploy via FTP
