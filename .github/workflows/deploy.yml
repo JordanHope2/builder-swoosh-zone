@@ -27,11 +27,14 @@ jobs:
       NODE_VERSION: '20'
       INSTALL_CMD: 'npm ci'
       BUILD_CMD: 'npm run build'
-      BUILD_DIR: 'dist/spa'        # <— your build outputs here (Quasar SPA typical)
+      BUILD_DIR: 'dist/spa'        # CHANGE if your framework outputs elsewhere
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
       HEALTHCHECK_WAIT_SEC: '6'
+
+      # Track if a deploy actually happened
+      DEPLOYED: '0'
 
       # Builder at build-time
       NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
@@ -80,12 +83,22 @@ jobs:
 
       - name: Archive build artifact (for debugging/proof)
         run: tar -czf build-artifact.tgz "${BUILD_DIR}"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: build-artifact.tgz
           retention-days: 7
+
+      - name: Show deploy conditions (debug)
+        run: |
+          echo "SFTP_HOST='${SFTP_HOST}'"
+          echo "SFTP_USERNAME='${SFTP_USERNAME}'"
+          echo "SFTP_PASSWORD set? $([ -n "${SFTP_PASSWORD:-}" ] && echo yes || echo no)"
+          echo "FTP_SERVER='${FTP_SERVER}'"
+          echo "FTP_USERNAME='${FTP_USERNAME}'"
+          echo "FTP_PASSWORD set? $([ -n "${FTP_PASSWORD:-}" ] && echo yes || echo no)"
 
       # =========================
       # Deploy (prefer SFTP over FTP if both are configured)
@@ -105,6 +118,7 @@ jobs:
             mirror -R -P 4 -v ${BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
             bye
           "
+          echo "DEPLOYED=1" >> "$GITHUB_ENV"
 
       # --- FTP (fallback if SFTP not configured) ---
       - name: Deploy via FTP
@@ -121,16 +135,19 @@ jobs:
           protocol:   ftps
           log-level:  verbose
           dangerous-clean-slate: false
+      - name: Mark FTP as deployed (flag)
+        if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
+        run: echo "DEPLOYED=1" >> "$GITHUB_ENV"
 
       # =========================
-      # Cloudflare cache purge (only if token + zone configured)
+      # Cloudflare cache purge (only if token + zone configured AND we deployed)
       # =========================
       - name: Install jq (for JSON check)
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        if: ${{ env.DEPLOYED == '1' && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Purge Cloudflare cache
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        if: ${{ env.DEPLOYED == '1' && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
         run: |
           set -euo pipefail
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -140,20 +157,22 @@ jobs:
           jq -e '.success == true' purge_cf.json
 
       # =========================
-      # Health check
+      # Health check (only if we deployed)
       # =========================
       - name: Health check after deploy
+        if: ${{ env.DEPLOYED == '1' }}
         run: |
           set -euo pipefail
           url="${SITE_URL}${HEALTHCHECK_PATH}"
           echo "Checking $url ..."
           ok=0
           for i in $(seq 1 ${HEALTHCHECK_RETRIES}); do
-            code=$(curl -sk -o /dev/null -I -w "%{http_code}" "$url")
+            # Follow redirects and accept any 2xx as success
+            code=$(curl -skL -o /dev/null -w "%{http_code}" "$url")
             echo "Attempt $i: HTTP $code"
-            if [ "$code" = "200" ] || [ "$code" = "204" ]; then
-              ok=1; break
-            fi
+            case "$code" in
+              20*) ok=1; break ;;
+            esac
             sleep ${HEALTHCHECK_WAIT_SEC}
           done
           if [ $ok -ne 1 ]; then
@@ -162,4 +181,5 @@ jobs:
           fi
 
       - name: Show response headers (proof)
+        if: ${{ env.DEPLOYED == '1' }}
         run: curl -sI "${SITE_URL}${HEALTHCHECK_PATH}"
