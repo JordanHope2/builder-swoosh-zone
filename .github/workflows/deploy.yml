@@ -1,0 +1,117 @@
+name: Deploy jobequal.ch (Swizzonic + Cloudflare + Builder.io)
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch:
+
+env:
+  # === Adjust these for your project ===
+  NODE_VERSION: '20'
+  BUILD_CMD: 'npm run build'
+  INSTALL_CMD: 'npm ci'
+  BUILD_DIR: 'dist/spa'
+  # Health check
+  SITE_URL: 'https://jobequal.ch'
+  HEALTHCHECK_PATH: '/'
+  HEALTHCHECK_RETRIES: '10'
+  HEALTHCHECK_WAIT_SEC: '6'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install deps
+        run: ${{ env.INSTALL_CMD }}
+
+      - name: Build
+        run: ${{ env.BUILD_CMD }}
+
+      - name: Archive build artifact
+        run: |
+          tar -czf build-artifact.tgz $BUILD_DIR || (echo "Build dir not found: $BUILD_DIR" && exit 1)
+      - name: Upload artifact (for debugging/proof)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build-artifact.tgz
+          retention-days: 7
+
+      # ===== Choose ONE deploy method: FTP or SFTP =====
+      # --- FTP (Swizzonic) ---
+      - name: Deploy via FTP
+        if: ${{ secrets.FTP_SERVER && secrets.FTP_USERNAME && secrets.FTP_PASSWORD }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ${{ env.BUILD_DIR }}
+          # Set to / if your web root is the account root, else /httpdocs or /web as per Swizzonic
+          server-dir: ${{ secrets.FTP_TARGET_DIR || '/' }}
+          protocol: ftps
+          log-level: verbose
+          dangerous-clean-slate: false
+
+      # --- SFTP (preferred if available) ---
+      - name: Deploy via SFTP (lftp)
+        if: ${{ secrets.SFTP_HOST && secrets.SFTP_USERNAME && secrets.SFTP_PASSWORD }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y lftp
+          lftp -u "${{ secrets.SFTP_USERNAME }},${{ secrets.SFTP_PASSWORD }}" sftp://${{ secrets.SFTP_HOST }} -e "
+            set net:max-retries 3;
+            set sftp:auto-confirm yes;
+            set ssl:verify-certificate no;
+            mirror -R -P 4 -v $BUILD_DIR ${{ secrets.SFTP_TARGET_DIR || '/' }};
+            bye
+          "
+
+      # ===== Cloudflare cache purge =====
+      - name: Purge Cloudflare cache
+        if: ${{ secrets.CF_API_TOKEN && secrets.CF_ZONE_ID }}
+        run: |
+          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}' | tee purge_cf.json
+          jq -e '.success == true' purge_cf.json
+
+      # ===== Health check (retry with backoff) =====
+      - name: Health check after deploy
+        run: |
+          url="${SITE_URL}${HEALTHCHECK_PATH}"
+          echo "Checking $url ..."
+          ok=0
+          for i in $(seq 1 $HEALTHCHECK_RETRIES); do
+            code=$(curl -sk -o /dev/null -I -w "%{http_code}" "$url")
+            echo "Attempt $i: HTTP $code"
+            if [ "$code" = "200" ] || [ "$code" = "204" ]; then
+              ok=1; break
+            fi
+            sleep $HEALTHCHECK_WAIT_SEC
+          done
+          if [ $ok -ne 1 ]; then
+            echo "Health check failed for $url"
+            exit 1
+          fi
+
+      - name: Show response headers (proof)
+        run: |
+          curl -sI "${SITE_URL}${HEALTHCHECK_PATH}"
