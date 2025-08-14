@@ -57,7 +57,7 @@ jobs:
       # ===== Choose ONE deploy method: FTP or SFTP =====
       # --- FTP (Swizzonic) ---
       - name: Deploy via FTP
-        if: ${{ secrets.FTP_SERVER && secrets.FTP_USERNAME && secrets.FTP_PASSWORD }}
+        if: secrets.FTP_SERVER && secrets.FTP_USERNAME && secrets.FTP_PASSWORD
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -72,7 +72,7 @@ jobs:
 
       # --- SFTP (preferred if available) ---
       - name: Deploy via SFTP (lftp)
-        if: ${{ secrets.SFTP_HOST && secrets.SFTP_USERNAME && secrets.SFTP_PASSWORD }}
+        if: secrets.SFTP_HOST && secrets.SFTP_USERNAME && secrets.SFTP_PASSWORD
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           lftp -u "${{ secrets.SFTP_USERNAME }},${{ secrets.SFTP_PASSWORD }}" sftp://${{ secrets.SFTP_HOST }} -e "
@@ -85,7 +85,7 @@ jobs:
 
       # ===== Cloudflare cache purge =====
       - name: Purge Cloudflare cache
-        if: ${{ secrets.CF_API_TOKEN && secrets.CF_ZONE_ID }}
+        if: secrets.CF_API_TOKEN && secrets.CF_ZONE_ID
         run: |
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
