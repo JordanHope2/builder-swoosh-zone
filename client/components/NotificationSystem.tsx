@@ -526,12 +526,13 @@ export const NotificationSystem: React.FC = () => {
 
             {/* Footer */}
             <div className="p-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-              <button
+              <a
+                href="/applications"
                 onClick={() => setIsOpen(false)}
-                className="w-full text-center text-sm text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors"
+                className="block w-full text-center text-sm text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors"
               >
-                View All Notifications
-              </button>
+                View All Applications
+              </a>
             </div>
           </motion.div>
         )}
