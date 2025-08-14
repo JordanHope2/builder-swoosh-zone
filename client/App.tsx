@@ -216,6 +216,8 @@ const App = () => (
                     />
                     <Route path="/faq" element={<FAQ />} />
                     <Route path="/pricing" element={<Pricing />} />
+                    <Route path="/system-status" element={<SystemStatus />} />
+                    <Route path="/status" element={<SystemStatus />} />
                     <Route
                       path="/favorites"
                       element={
