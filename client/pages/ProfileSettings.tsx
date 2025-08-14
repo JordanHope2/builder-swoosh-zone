@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import { Navigation } from '../components/Navigation';
 import { useLanguage } from '../contexts/LanguageContext';
 import { 
