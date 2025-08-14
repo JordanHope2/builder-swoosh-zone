@@ -50,6 +50,7 @@ import RoleSwitcher from "./pages/RoleSwitcher";
 import SubscriptionBilling from "./pages/SubscriptionBilling";
 import Messages from "./pages/Messages";
 import UploadTest from "./pages/UploadTest";
+import SystemStatus from "./pages/SystemStatus";
 
 const queryClient = new QueryClient();
 
