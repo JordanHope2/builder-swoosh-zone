@@ -8,12 +8,10 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
   workflow_dispatch:
 
-# Keep runs tidy and avoid overlapping deploys
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
-# Least-privileged default
 permissions:
   contents: read
 
@@ -25,18 +23,21 @@ jobs:
     env:
       # Build/runtime config
       NODE_VERSION: '20'
-      INSTALL_CMD: 'npm ci'
+      WORKDIR: 'client'           # <— your app lives here
       BUILD_CMD: 'npm run build'
-      BUILD_DIR: 'dist'        # <— your build outputs here (Quasar SPA typical)
+      INSTALL_CMD: 'npm ci'
+      BUILD_DIR: 'client/dist'    # <— Vite output in client/
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
       HEALTHCHECK_WAIT_SEC: '6'
 
-      # Builder at build-time
+      # Builder.io (Vite needs VITE_* for client exposure)
+      VITE_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
+      # Keep this ONLY if something in your stack is Next.js:
       NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
 
-      # FTP / SFTP (promote secrets to env so `if:` can read them)
+      # FTP / SFTP
       FTP_SERVER:     ${{ secrets.FTP_SERVER }}
       FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
       FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
@@ -46,6 +47,7 @@ jobs:
       SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
       SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
       SFTP_TARGET_DIR: ${{ secrets.SFTP_TARGET_DIR }}
+      SFTP_PORT:       ${{ secrets.SFTP_PORT || 22 }}
 
       # Cloudflare
       CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
@@ -62,11 +64,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+          cache-dependency-path: ${{ env.WORKDIR }}/package-lock.json
 
       - name: Install dependencies
+        working-directory: ${{ env.WORKDIR }}
         run: ${{ env.INSTALL_CMD }}
 
       - name: Build
+        working-directory: ${{ env.WORKDIR }}
         run: ${{ env.BUILD_CMD }}
 
       - name: Verify build dir
@@ -78,8 +83,9 @@ jobs:
           echo "Preview files to deploy:"
           find "${BUILD_DIR}" -maxdepth 2 -type f | head -n 50
 
-      - name: Archive build artifact (for debugging/proof)
+      - name: Archive build artifact (for debugging)
         run: tar -czf build-artifact.tgz "${BUILD_DIR}"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -87,50 +93,59 @@ jobs:
           path: build-artifact.tgz
           retention-days: 7
 
+      # Ensure at least one deploy method is configured
+      - name: Ensure deploy method configured
+        id: ensure_deploy
+        run: |
+          set -euo pipefail
+          if [ -z "${SFTP_HOST}" ] && [ -z "${FTP_SERVER}" ]; then
+            echo "No SFTP_HOST or FTP_SERVER configured; cannot deploy." >&2
+            exit 1
+          fi
+
       # =========================
-      # Deploy (prefer SFTP over FTP if both are configured)
+      # Deploy (prefer SFTP)
       # =========================
 
-      # --- SFTP (preferred) ---
       - name: Deploy via SFTP (lftp)
+        id: deploy_sftp
         if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
         run: |
           set -euo pipefail
           sudo apt-get update && sudo apt-get install -y lftp
-          # Trailing slash uploads the CONTENTS of BUILD_DIR
-          lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" sftp://${SFTP_HOST} -e "
+          lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" -p "${SFTP_PORT}" sftp://${SFTP_HOST} -e "
             set net:max-retries 3;
             set sftp:auto-confirm yes;
-            set ssl:verify-certificate no;
+            # OPTIONAL: add --delete to fully sync and remove stale files
             mirror -R -P 4 -v ${BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
             bye
           "
 
-      # --- FTP (fallback if SFTP not configured) ---
-      - name: Deploy via FTP
+      - name: Deploy via FTP (FTPS)
+        id: deploy_ftp
         if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server:     ${{ env.FTP_SERVER }}
           username:   ${{ env.FTP_USERNAME }}
           password:   ${{ env.FTP_PASSWORD }}
-          # Trailing slash REQUIRED by this action
-          local-dir:  ${{ env.BUILD_DIR }}/
-          # Choose your real docroot; common defaults shown:
+          local-dir:  ${{ env.Build_DIR || env.BUILD_DIR }}/
+          # Default to common docroots if not provided
           server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
           protocol:   ftps
           log-level:  verbose
           dangerous-clean-slate: false
 
       # =========================
-      # Cloudflare cache purge (only if token + zone configured)
+      # Cloudflare cache purge
+      # (only if token+zone and a deploy step succeeded)
       # =========================
-      - name: Install jq (for JSON check)
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+      - name: Install jq
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' && (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') }}
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Purge Cloudflare cache
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' && (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') }}
         run: |
           set -euo pipefail
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -140,18 +155,19 @@ jobs:
           jq -e '.success == true' purge_cf.json
 
       # =========================
-      # Health check
+      # Health check (only if deployed)
       # =========================
       - name: Health check after deploy
+        if: ${{ steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success' }}
         run: |
           set -euo pipefail
           url="${SITE_URL}${HEALTHCHECK_PATH}"
           echo "Checking $url ..."
           ok=0
           for i in $(seq 1 ${HEALTHCHECK_RETRIES}); do
-            code=$(curl -sk -o /dev/null -I -w "%{http_code}" "$url")
+            code=$(curl -s -L -o /dev/null -w "%{http_code}" "$url")
             echo "Attempt $i: HTTP $code"
-            if [ "$code" = "200" ] || [ "$code" = "204" ]; then
+            if [ "$code" -ge 200 ] && [ "$code" -lt 400 ]; then
               ok=1; break
             fi
             sleep ${HEALTHCHECK_WAIT_SEC}
@@ -162,4 +178,5 @@ jobs:
           fi
 
       - name: Show response headers (proof)
+        if: ${{ steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success' }}
         run: curl -sI "${SITE_URL}${HEALTHCHECK_PATH}"
