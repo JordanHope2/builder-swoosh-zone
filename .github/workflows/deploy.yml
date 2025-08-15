@@ -1,0 +1,165 @@
+name: Deploy jobequal.ch (Swizzonic + Cloudflare + Builder.io)
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch:
+
+# Keep runs tidy and avoid overlapping deploys
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least-privileged default
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      # Build/runtime config
+      NODE_VERSION: '20'
+      INSTALL_CMD: 'npm ci'
+      BUILD_CMD: 'npm run build'
+      BUILD_DIR: 'dist'        # <— your build outputs here (Quasar SPA typical)
+      SITE_URL: 'https://jobequal.ch'
+      HEALTHCHECK_PATH: '/'
+      HEALTHCHECK_RETRIES: '10'
+      HEALTHCHECK_WAIT_SEC: '6'
+
+      # Builder at build-time
+      NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
+
+      # FTP / SFTP (promote secrets to env so `if:` can read them)
+      FTP_SERVER:     ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
+      FTP_TARGET_DIR: ${{ secrets.FTP_TARGET_DIR }}
+
+      SFTP_HOST:       ${{ secrets.SFTP_HOST }}
+      SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
+      SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
+      SFTP_TARGET_DIR: ${{ secrets.SFTP_TARGET_DIR }}
+
+      # Cloudflare
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      CF_ZONE_ID:   ${{ secrets.CF_ZONE_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: ${{ env.INSTALL_CMD }}
+
+      - name: Build
+        run: ${{ env.BUILD_CMD }}
+
+      - name: Verify build dir
+        run: |
+          set -euo pipefail
+          echo "BUILD_DIR=${BUILD_DIR}"
+          ls -la
+          ls -la "${BUILD_DIR}" || (echo "Build dir not found: ${BUILD_DIR}" && exit 1)
+          echo "Preview files to deploy:"
+          find "${BUILD_DIR}" -maxdepth 2 -type f | head -n 50
+
+      - name: Archive build artifact (for debugging/proof)
+        run: tar -czf build-artifact.tgz "${BUILD_DIR}"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build-artifact.tgz
+          retention-days: 7
+
+      # =========================
+      # Deploy (prefer SFTP over FTP if both are configured)
+      # =========================
+
+      # --- SFTP (preferred) ---
+      - name: Deploy via SFTP (lftp)
+        if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update && sudo apt-get install -y lftp
+          # Trailing slash uploads the CONTENTS of BUILD_DIR
+          lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" sftp://${SFTP_HOST} -e "
+            set net:max-retries 3;
+            set sftp:auto-confirm yes;
+            set ssl:verify-certificate no;
+            mirror -R -P 4 -v ${BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
+            bye
+          "
+
+      # --- FTP (fallback if SFTP not configured) ---
+      - name: Deploy via FTP
+        if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server:     ${{ env.FTP_SERVER }}
+          username:   ${{ env.FTP_USERNAME }}
+          password:   ${{ env.FTP_PASSWORD }}
+          # Trailing slash REQUIRED by this action
+          local-dir:  ${{ env.BUILD_DIR }}/
+          # Choose your real docroot; common defaults shown:
+          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
+          protocol:   ftps
+          log-level:  verbose
+          dangerous-clean-slate: false
+
+      # =========================
+      # Cloudflare cache purge (only if token + zone configured)
+      # =========================
+      - name: Install jq (for JSON check)
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Purge Cloudflare cache
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        run: |
+          set -euo pipefail
+          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}' | tee purge_cf.json
+          jq -e '.success == true' purge_cf.json
+
+      # =========================
+      # Health check
+      # =========================
+      - name: Health check after deploy
+        run: |
+          set -euo pipefail
+          url="${SITE_URL}${HEALTHCHECK_PATH}"
+          echo "Checking $url ..."
+          ok=0
+          for i in $(seq 1 ${HEALTHCHECK_RETRIES}); do
+            code=$(curl -sk -o /dev/null -I -w "%{http_code}" "$url")
+            echo "Attempt $i: HTTP $code"
+            if [ "$code" = "200" ] || [ "$code" = "204" ]; then
+              ok=1; break
+            fi
+            sleep ${HEALTHCHECK_WAIT_SEC}
+          done
+          if [ $ok -ne 1 ]; then
+            echo "Health check failed for $url"
+            exit 1
+          fi
+
+      - name: Show response headers (proof)
+        run: curl -sI "${SITE_URL}${HEALTHCHECK_PATH}"
