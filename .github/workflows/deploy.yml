@@ -27,7 +27,7 @@ jobs:
       NODE_VERSION: '20'
       INSTALL_CMD: 'npm ci'
       BUILD_CMD: 'npm run build'
-      BUILD_DIR: 'dist/spa'        # <— your build outputs here (Quasar SPA typical)
+      BUILD_DIR: 'dist'        # <— your build outputs here (Quasar SPA typical)
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
