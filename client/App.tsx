@@ -52,6 +52,9 @@ import Messages from "./pages/Messages";
 import UploadTest from "./pages/UploadTest";
 import SystemStatus from "./pages/SystemStatus";
 import Applications from "./pages/Applications";
+import CareerTips from "./pages/CareerTips";
+import FindCandidates from "./pages/FindCandidates";
+import PostJob from "./pages/PostJob";
 
 const queryClient = new QueryClient();
 
