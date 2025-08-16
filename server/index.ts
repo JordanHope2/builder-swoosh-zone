@@ -9,6 +9,8 @@ import uploadRouter from "./routes/upload";
 import companiesRouter from "./routes/companies";
 import candidatesRouter from "./routes/candidates";
 import matchRouter from "./routes/match";
+import openaiRouter from "./routes/openai";
+import adzunaRouter from "./routes/adzuna";
 
 export function createServer() {
   const app = express();
@@ -33,6 +35,8 @@ export function createServer() {
   app.use("/api/companies", companiesRouter);
   app.use("/api/candidates", candidatesRouter);
   app.use("/api/match", matchRouter);
+  app.use("/api/openai", openaiRouter);
+  app.use("/api/adzuna", adzunaRouter);
 
   return app;
 }

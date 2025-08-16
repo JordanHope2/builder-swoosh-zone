@@ -14,7 +14,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeProvider';
-import { signInWithEmail } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import { useToast } from '../hooks/use-toast';
 
 const benefits = [
@@ -49,21 +49,45 @@ export default function SignIn() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await signInWithEmail(formData.email, formData.password);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (error) throw error;
       toast({
-        title: "Signed in successfully!",
-        description: "Redirecting you to your dashboard...",
+        title: 'Signed in successfully!',
+        description: 'Redirecting you to your dashboard...',
       });
       // Redirect to dashboard on success
       window.location.href = '/dashboard';
     } catch (error: any) {
       toast({
-        title: "Sign-in Error",
-        description: error.message || "Invalid email or password. Please try again.",
-        variant: "destructive",
+        title: 'Sign-in Error',
+        description:
+          error.message || 'Invalid email or password. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleOAuthSignIn = async (provider: 'google') => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast({
+        title: 'Sign-in Error',
+        description:
+          error.message || 'Could not sign in with Google. Please try again.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -221,7 +245,43 @@ export default function SignIn() {
             </button>
 
             {/* Divider */}
-            <div className="relative">
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-gray-800 text-jobequal-text-muted dark:text-gray-400">
+                  OR
+                </span>
+              </div>
+            </div>
+
+            {/* Google Sign In Button */}
+            <button
+              type="button"
+              onClick={() => handleOAuthSignIn('google')}
+              className="group relative w-full flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 text-jobequal-text dark:text-white bg-white dark:bg-gray-800 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-jobequal-green transition-all duration-200 transform hover:scale-105"
+            >
+              <svg
+                className="w-5 h-5 mr-2"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fab"
+                data-icon="google"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 488 512"
+              >
+                <path
+                  fill="currentColor"
+                  d="M488 261.8C488 403.3 381.5 512 244 512 109.8 512 0 402.2 0 256S109.8 0 244 0c73.2 0 136 29.3 182.4 75.8l-67.8 67.8C338.5 119.2 296.3 96 244 96c-88.6 0-160 71.7-160 160s71.4 160 160 160c97.9 0 134-56.9 140.5-85.3H244v-74.3h235.9c1.6 13.8 2.1 27.9 2.1 42.2z"
+                ></path>
+              </svg>
+              <span>Sign in with Google</span>
+            </button>
+
+            {/* Divider */}
+            <div className="relative pt-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
