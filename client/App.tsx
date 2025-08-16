@@ -226,6 +226,9 @@ const App = () => (
                     <Route path="/system-status" element={<SystemStatus />} />
                     <Route path="/status" element={<SystemStatus />} />
                     <Route path="/applications" element={<Applications />} />
+                    <Route path="/career-tips" element={<CareerTips />} />
+                    <Route path="/find-candidates" element={<FindCandidates />} />
+                    <Route path="/post-job" element={<PostJob />} />
                     <Route
                       path="/favorites"
                       element={
@@ -235,17 +238,6 @@ const App = () => (
                       }
                     />
                     <Route path="/role-switcher" element={<RoleSwitcher />} />
-
-                    {/* Misc */}
-                    <Route
-                      path="/post-job"
-                      element={
-                        <PlaceholderPage
-                          title="Post a Job"
-                          description="Create and publish job listings to find the best candidates for your company."
-                        />
-                      }
-                    />
                     <Route
                       path="/applicants"
                       element={
