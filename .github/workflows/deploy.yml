@@ -8,12 +8,10 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
   workflow_dispatch:
 
-# Keep runs tidy and avoid overlapping deploys
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
-# Least-privileged default
 permissions:
   contents: read
 
@@ -23,20 +21,22 @@ jobs:
     timeout-minutes: 30
 
     env:
-      # Build/runtime config
       NODE_VERSION: '20'
       INSTALL_CMD: 'npm ci'
       BUILD_CMD: 'npm run build'
-      BUILD_DIR: 'dist/spa'    # <— NOTE: We only deploy the SPA to static hosting
+      # Default; we’ll auto-detect below if it's actually dist/spa
+      BUILD_DIR: 'dist'
+
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
       HEALTHCHECK_WAIT_SEC: '6'
 
-      # Builder at build-time
+      # Builder at build-time (support both Next and Vite/Quasar)
       NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
+      VITE_BUILDER_API_KEY:        ${{ secrets.BUILDER_IO_API_KEY }}
 
-      # FTP / SFTP (promote secrets to env so `if:` can read them)
+      # FTP / SFTP secrets (may be empty)
       FTP_SERVER:     ${{ secrets.FTP_SERVER }}
       FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
       FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
@@ -69,17 +69,35 @@ jobs:
       - name: Build
         run: ${{ env.BUILD_CMD }}
 
-      - name: Verify build dir
+      # Detect actual build output (dist/spa > dist) and expose as an output
+      - name: Detect build dir
+        id: detect__build_dir
+        shell: bash
         run: |
           set -euo pipefail
-          echo "BUILD_DIR=${BUILD_DIR}"
-          ls -la
-          ls -la "${BUILD_DIR}" || (echo "Build dir not found: ${BUILD_DIR}" && exit 1)
+          if [ -d "${BUILD_DIR}" ] && [ "$(ls -A "${BUILD_DIR}")" ]; then
+            use="${BUILD_DIR}"
+          elif [ -d "dist/spa" ] && [ "$(ls -A dist/spa)" ]; then
+            use="dist/spa"
+          elif [ -d "dist" ] && [ "$(ls -A dist)" ]; then
+            use="dist"
+          else
+            echo "❌ No build dir found (checked ${BUILD_DIR}, dist/spa, dist)"; exit 1
+          fi
+          echo "build_dir=$use" >> "$GITHUB_OUTPUT"
+          echo "✅ Using build dir: $use"
+
+      - name: Preview build contents
+        run: |
+          set -euo pipefail
+          echo "BUILD_DIR=${{ steps.detect_build_dir.outputs.build_dir }}"
+          ls -la "${{ steps.detect_build_dir.outputs.build_dir }}"
           echo "Preview files to deploy:"
-          find "${BUILD_DIR}" -maxdepth 2 -type f | head -n 50
+          find "${{ steps.detect_build_dir.outputs.build_dir }}" -maxdepth 2 -type f | head -n 50
 
       - name: Archive build artifact (for debugging/proof)
-        run: tar -czf build-artifact.tgz "${BUILD_DIR}"
+        run: tar -czf build-artifact.tgz "${{ steps.detect_build_dir.outputs.build_dir }}"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -93,44 +111,46 @@ jobs:
 
       # --- SFTP (preferred) ---
       - name: Deploy via SFTP (lftp)
+        id: deploy_sftp
         if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
+        env:
+          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
         run: |
           set -euo pipefail
           sudo apt-get update && sudo apt-get install -y lftp
-          # Trailing slash uploads the CONTENTS of BUILD_DIR
           lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" sftp://${SFTP_HOST} -e "
             set net:max-retries 3;
             set sftp:auto-confirm yes;
-            set ssl:verify-certificate no;
-            mirror -R -P 4 -v ${BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
+            mirror -R -P 4 -v ${USE_BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
             bye
           "
+          echo "ok=true" >> "$GITHUB_OUTPUT"
 
       # --- FTP (fallback if SFTP not configured) ---
       - name: Deploy via FTP
+        id: deploy_ftp
         if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server:     ${{ env.FTP_SERVER }}
           username:   ${{ env.FTP_USERNAME }}
           password:   ${{ env.FTP_PASSWORD }}
-          # Trailing slash REQUIRED by this action
-          local-dir:  ${{ env.BUILD_DIR }}/
-          # Choose your real docroot; common defaults shown:
+          # MUST be trailing slash
+          local-dir:  ${{ steps.detect_build_dir.outputs.build_dir }}/
           server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
           protocol:   ftps
           log-level:  verbose
           dangerous-clean-slate: false
 
       # =========================
-      # Cloudflare cache purge (only if token + zone configured)
+      # Cloudflare cache purge (only if token+zone configured AND deploy ran)
       # =========================
-      - name: Install jq (for JSON check)
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+      - name: Install jq
+        if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
         run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Purge Cloudflare cache
-        if: ${{ env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
         run: |
           set -euo pipefail
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
@@ -140,7 +160,7 @@ jobs:
           jq -e '.success == true' purge_cf.json
 
       # =========================
-      # Health check
+      # Health check (follow redirects; accept 2xx/3xx)
       # =========================
       - name: Health check after deploy
         run: |
@@ -149,9 +169,9 @@ jobs:
           echo "Checking $url ..."
           ok=0
           for i in $(seq 1 ${HEALTHCHECK_RETRIES}); do
-            code=$(curl -sk -o /dev/null -I -w "%{http_code}" "$url")
+            code=$(curl -sk -o /dev/null -I -L -w "%{http_code}" "$url")
             echo "Attempt $i: HTTP $code"
-            if [ "$code" = "200" ] || [ "$code" = "204" ]; then
+            if [ "$code" -ge 200 ] && [ "$code" -lt 400 ]; then
               ok=1; break
             fi
             sleep ${HEALTHCHECK_WAIT_SEC}
@@ -162,4 +182,4 @@ jobs:
           fi
 
       - name: Show response headers (proof)
-        run: curl -sI "${SITE_URL}${HEALTHCHECK_PATH}"
+        run: curl -sIL "${SITE_URL}${HEALTHCHECK_PATH}"
