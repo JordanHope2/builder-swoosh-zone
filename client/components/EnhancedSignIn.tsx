@@ -1,39 +1,48 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
-import { GoogleSignIn } from './GoogleSignIn';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
+import { GoogleSignIn } from "./GoogleSignIn";
 
 interface EnhancedSignInProps {
   redirectTo?: string;
 }
 
-export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export function EnhancedSignIn({
+  redirectTo = "/dashboard",
+}: EnhancedSignInProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [mode, setMode] = useState<'signin' | 'magic-link'>('signin');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [mode, setMode] = useState<"signin" | "magic-link">("signin");
 
   const { signIn, signInWithOtp } = useAuth();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       await signIn(email, password);
-      setSuccess('Successfully signed in!');
+      setSuccess("Successfully signed in!");
       // Redirect after successful signin
       setTimeout(() => {
         window.location.href = redirectTo;
       }, 1000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign in');
+      setError(err instanceof Error ? err.message : "Failed to sign in");
     } finally {
       setIsLoading(false);
     }
@@ -42,14 +51,16 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       await signInWithOtp(email);
-      setSuccess('Magic link sent! Check your email to sign in.');
+      setSuccess("Magic link sent! Check your email to sign in.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send magic link');
+      setError(
+        err instanceof Error ? err.message : "Failed to send magic link",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +77,7 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
             Welcome back
           </h2>
           <p className="mt-2 text-center text-sm text-jobequal-text-muted">
-            Or{' '}
+            Or{" "}
             <Link
               to="/signup"
               className="font-medium text-jobequal-green hover:text-jobequal-green-hover"
@@ -80,21 +91,21 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
           {/* Mode Toggle */}
           <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => setMode('signin')}
+              onClick={() => setMode("signin")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                mode === 'signin'
-                  ? 'bg-white text-jobequal-text shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                mode === "signin"
+                  ? "bg-white text-jobequal-text shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Password
             </button>
             <button
-              onClick={() => setMode('magic-link')}
+              onClick={() => setMode("magic-link")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                mode === 'magic-link'
-                  ? 'bg-white text-jobequal-text shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                mode === "magic-link"
+                  ? "bg-white text-jobequal-text shadow-sm"
+                  : "text-gray-500 hover:text-gray-700"
               }`}
             >
               Magic Link
@@ -116,10 +127,16 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
             </div>
           )}
 
-          <form onSubmit={mode === 'signin' ? handleSignIn : handleMagicLink} className="space-y-6">
+          <form
+            onSubmit={mode === "signin" ? handleSignIn : handleMagicLink}
+            className="space-y-6"
+          >
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-jobequal-text mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-jobequal-text mb-2"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -141,9 +158,12 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
             </div>
 
             {/* Password Field (only for password mode) */}
-            {mode === 'signin' && (
+            {mode === "signin" && (
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-jobequal-text mb-2">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-jobequal-text mb-2"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -153,7 +173,7 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
                   <input
                     id="password"
                     name="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     required
                     value={password}
@@ -185,10 +205,10 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : mode === 'signin' ? (
-                  'Sign in'
+                ) : mode === "signin" ? (
+                  "Sign in"
                 ) : (
-                  'Send Magic Link'
+                  "Send Magic Link"
                 )}
               </button>
             </div>
@@ -199,7 +219,9 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                <span className="px-2 bg-white text-gray-500">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -207,11 +229,11 @@ export function EnhancedSignIn({ redirectTo = '/dashboard' }: EnhancedSignInProp
             <GoogleSignIn redirectTo={redirectTo} />
 
             {/* Forgot Password Link (only for password mode) */}
-            {mode === 'signin' && (
+            {mode === "signin" && (
               <div className="text-center">
                 <button
                   type="button"
-                  onClick={() => setMode('magic-link')}
+                  onClick={() => setMode("magic-link")}
                   className="text-sm text-jobequal-green hover:text-jobequal-green-hover"
                 >
                   Forgot your password?

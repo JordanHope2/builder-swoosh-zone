@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useForm, useController, Control, FieldValues, Path } from 'react-hook-form';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Icons } from './icons';
-import { Button } from './button';
-import { Badge } from './badge';
-import { cn } from '../../lib/utils';
-import SecurityUtils from '../../lib/security';
+import React, { useState, useEffect } from "react";
+import {
+  useForm,
+  useController,
+  Control,
+  FieldValues,
+  Path,
+} from "react-hook-form";
+import { motion, AnimatePresence } from "framer-motion";
+import { Icons } from "./icons";
+import { Button } from "./button";
+import { Badge } from "./badge";
+import { cn } from "../../lib/utils";
+import SecurityUtils from "../../lib/security";
 
 interface EnhancedInputProps<T extends FieldValues> {
   name: Path<T>;
   control: Control<T>;
   label: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  type?: "text" | "email" | "password" | "number" | "tel" | "url";
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
@@ -28,7 +34,7 @@ export function EnhancedInput<T extends FieldValues>({
   name,
   control,
   label,
-  type = 'text',
+  type = "text",
   placeholder,
   required = false,
   disabled = false,
@@ -38,43 +44,43 @@ export function EnhancedInput<T extends FieldValues>({
   helperText,
   validateOnBlur = true,
   rules = {},
-  className
+  className,
 }: EnhancedInputProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
     field,
-    fieldState: { error, isTouched }
+    fieldState: { error, isTouched },
   } = useController({
     name,
     control,
     rules: {
       required: required ? `${label} is required` : false,
       validate: (value) => {
-        if (type === 'email' && value && !SecurityUtils.isValidEmail(value)) {
-          return 'Please enter a valid email address';
+        if (type === "email" && value && !SecurityUtils.isValidEmail(value)) {
+          return "Please enter a valid email address";
         }
         return true;
       },
-      ...rules
-    }
+      ...rules,
+    },
   });
 
   const hasError = error && (isTouched || !validateOnBlur);
-  const isPassword = type === 'password';
-  const inputType = isPassword && showPassword ? 'text' : type;
+  const isPassword = type === "password";
+  const inputType = isPassword && showPassword ? "text" : type;
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn("space-y-2", className)}>
       <div className="relative">
         {/* Label */}
-        <label 
+        <label
           htmlFor={name}
           className={cn(
-            'block text-sm font-medium transition-colors duration-200',
-            hasError ? 'text-destructive' : 'text-foreground',
-            disabled && 'text-muted-foreground'
+            "block text-sm font-medium transition-colors duration-200",
+            hasError ? "text-destructive" : "text-foreground",
+            disabled && "text-muted-foreground",
           )}
         >
           {label}
@@ -86,10 +92,16 @@ export function EnhancedInput<T extends FieldValues>({
           {/* Left Icon */}
           {Icon && (
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Icon className={cn(
-                'h-5 w-5 transition-colors duration-200',
-                hasError ? 'text-destructive' : isFocused ? 'text-primary' : 'text-muted-foreground'
-              )} />
+              <Icon
+                className={cn(
+                  "h-5 w-5 transition-colors duration-200",
+                  hasError
+                    ? "text-destructive"
+                    : isFocused
+                      ? "text-primary"
+                      : "text-muted-foreground",
+                )}
+              />
             </div>
           )}
 
@@ -101,14 +113,15 @@ export function EnhancedInput<T extends FieldValues>({
             autoComplete={autoComplete}
             disabled={disabled}
             className={cn(
-              'block w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground',
-              'focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20',
-              'transition-all duration-200',
-              Icon && 'pl-10',
-              (isPassword || rightElement) && 'pr-10',
-              hasError && 'border-destructive focus:border-destructive focus:ring-destructive/20',
-              disabled && 'cursor-not-allowed opacity-50',
-              className
+              "block w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground",
+              "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
+              "transition-all duration-200",
+              Icon && "pl-10",
+              (isPassword || rightElement) && "pr-10",
+              hasError &&
+                "border-destructive focus:border-destructive focus:ring-destructive/20",
+              disabled && "cursor-not-allowed opacity-50",
+              className,
             )}
             {...field}
             onFocus={(e) => {
@@ -197,25 +210,27 @@ export function EnhancedTextarea<T extends FieldValues>({
   maxLength,
   helperText,
   rules = {},
-  className
+  className,
 }: EnhancedTextareaProps<T>) {
   const [isFocused, setIsFocused] = useState(false);
   const [charCount, setCharCount] = useState(0);
 
   const {
     field,
-    fieldState: { error, isTouched }
+    fieldState: { error, isTouched },
   } = useController({
     name,
     control,
     rules: {
       required: required ? `${label} is required` : false,
-      maxLength: maxLength ? {
-        value: maxLength,
-        message: `${label} must be ${maxLength} characters or less`
-      } : undefined,
-      ...rules
-    }
+      maxLength: maxLength
+        ? {
+            value: maxLength,
+            message: `${label} must be ${maxLength} characters or less`,
+          }
+        : undefined,
+      ...rules,
+    },
   });
 
   useEffect(() => {
@@ -225,25 +240,29 @@ export function EnhancedTextarea<T extends FieldValues>({
   const hasError = error && isTouched;
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between">
-        <label 
+        <label
           htmlFor={name}
           className={cn(
-            'block text-sm font-medium transition-colors duration-200',
-            hasError ? 'text-destructive' : 'text-foreground',
-            disabled && 'text-muted-foreground'
+            "block text-sm font-medium transition-colors duration-200",
+            hasError ? "text-destructive" : "text-foreground",
+            disabled && "text-muted-foreground",
           )}
         >
           {label}
           {required && <span className="text-destructive ml-1">*</span>}
         </label>
         {maxLength && (
-          <span className={cn(
-            'text-xs transition-colors duration-200',
-            charCount > maxLength * 0.9 ? 'text-warning' : 'text-muted-foreground',
-            charCount >= maxLength && 'text-destructive'
-          )}>
+          <span
+            className={cn(
+              "text-xs transition-colors duration-200",
+              charCount > maxLength * 0.9
+                ? "text-warning"
+                : "text-muted-foreground",
+              charCount >= maxLength && "text-destructive",
+            )}
+          >
             {charCount}/{maxLength}
           </span>
         )}
@@ -256,11 +275,12 @@ export function EnhancedTextarea<T extends FieldValues>({
         disabled={disabled}
         maxLength={maxLength}
         className={cn(
-          'block w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground',
-          'focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20',
-          'transition-all duration-200 resize-none',
-          hasError && 'border-destructive focus:border-destructive focus:ring-destructive/20',
-          disabled && 'cursor-not-allowed opacity-50'
+          "block w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm placeholder:text-muted-foreground",
+          "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
+          "transition-all duration-200 resize-none",
+          hasError &&
+            "border-destructive focus:border-destructive focus:ring-destructive/20",
+          disabled && "cursor-not-allowed opacity-50",
         )}
         {...field}
         onFocus={() => setIsFocused(true)}
@@ -315,46 +335,47 @@ export function EnhancedSelect<T extends FieldValues>({
   control,
   label,
   options,
-  placeholder = 'Select an option...',
+  placeholder = "Select an option...",
   required = false,
   disabled = false,
   multiple = false,
   searchable = false,
   helperText,
   rules = {},
-  className
+  className,
 }: EnhancedSelectProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const {
     field,
-    fieldState: { error, isTouched }
+    fieldState: { error, isTouched },
   } = useController({
     name,
     control,
     rules: {
       required: required ? `${label} is required` : false,
-      ...rules
-    }
+      ...rules,
+    },
   });
 
   const hasError = error && isTouched;
   const filteredOptions = searchable
-    ? options.filter(option =>
-        option.label.toLowerCase().includes(searchTerm.toLowerCase())
+    ? options.filter((option) =>
+        option.label.toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : options;
 
-  const selectedOptions = multiple && Array.isArray(field.value)
-    ? options.filter(option => field.value.includes(option.value))
-    : options.filter(option => option.value === field.value);
+  const selectedOptions =
+    multiple && Array.isArray(field.value)
+      ? options.filter((option) => field.value.includes(option.value))
+      : options.filter((option) => option.value === field.value);
 
   const handleSelect = (value: string) => {
     if (multiple) {
       const currentValues = Array.isArray(field.value) ? field.value : [];
       const newValues = currentValues.includes(value)
-        ? currentValues.filter(v => v !== value)
+        ? currentValues.filter((v) => v !== value)
         : [...currentValues, value];
       field.onChange(newValues);
     } else {
@@ -364,13 +385,13 @@ export function EnhancedSelect<T extends FieldValues>({
   };
 
   return (
-    <div className={cn('space-y-2', className)}>
-      <label 
+    <div className={cn("space-y-2", className)}>
+      <label
         htmlFor={name}
         className={cn(
-          'block text-sm font-medium transition-colors duration-200',
-          hasError ? 'text-destructive' : 'text-foreground',
-          disabled && 'text-muted-foreground'
+          "block text-sm font-medium transition-colors duration-200",
+          hasError ? "text-destructive" : "text-foreground",
+          disabled && "text-muted-foreground",
         )}
       >
         {label}
@@ -384,16 +405,20 @@ export function EnhancedSelect<T extends FieldValues>({
           disabled={disabled}
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            'w-full justify-between text-left font-normal',
-            hasError && 'border-destructive',
-            !field.value && 'text-muted-foreground'
+            "w-full justify-between text-left font-normal",
+            hasError && "border-destructive",
+            !field.value && "text-muted-foreground",
           )}
         >
           <span className="truncate">
             {multiple && selectedOptions.length > 0 ? (
               <div className="flex gap-1 flex-wrap">
-                {selectedOptions.slice(0, 2).map(option => (
-                  <Badge key={option.value} variant="secondary" className="text-xs">
+                {selectedOptions.slice(0, 2).map((option) => (
+                  <Badge
+                    key={option.value}
+                    variant="secondary"
+                    className="text-xs"
+                  >
                     {option.label}
                   </Badge>
                 ))}
@@ -403,12 +428,16 @@ export function EnhancedSelect<T extends FieldValues>({
                   </Badge>
                 )}
               </div>
-            ) : selectedOptions[0]?.label || placeholder}
+            ) : (
+              selectedOptions[0]?.label || placeholder
+            )}
           </span>
-          <Icons.chevronDown className={cn(
-            'h-4 w-4 transition-transform duration-200',
-            isOpen && 'rotate-180'
-          )} />
+          <Icons.chevronDown
+            className={cn(
+              "h-4 w-4 transition-transform duration-200",
+              isOpen && "rotate-180",
+            )}
+          />
         </Button>
 
         <AnimatePresence>
@@ -434,18 +463,19 @@ export function EnhancedSelect<T extends FieldValues>({
                   </div>
                 </div>
               )}
-              
+
               <div className="max-h-48 overflow-auto">
                 {filteredOptions.length === 0 ? (
                   <div className="p-3 text-sm text-muted-foreground text-center">
                     No options found
                   </div>
                 ) : (
-                  filteredOptions.map(option => {
+                  filteredOptions.map((option) => {
                     const isSelected = multiple
-                      ? Array.isArray(field.value) && field.value.includes(option.value)
+                      ? Array.isArray(field.value) &&
+                        field.value.includes(option.value)
                       : field.value === option.value;
-                    
+
                     return (
                       <button
                         key={option.value}
@@ -453,17 +483,15 @@ export function EnhancedSelect<T extends FieldValues>({
                         disabled={option.disabled}
                         onClick={() => handleSelect(option.value)}
                         className={cn(
-                          'w-full px-3 py-2 text-left text-sm hover:bg-accent focus:bg-accent focus:outline-none',
-                          'transition-colors duration-150',
-                          isSelected && 'bg-primary text-primary-foreground',
-                          option.disabled && 'opacity-50 cursor-not-allowed'
+                          "w-full px-3 py-2 text-left text-sm hover:bg-accent focus:bg-accent focus:outline-none",
+                          "transition-colors duration-150",
+                          isSelected && "bg-primary text-primary-foreground",
+                          option.disabled && "opacity-50 cursor-not-allowed",
                         )}
                       >
                         <div className="flex items-center justify-between">
                           <span>{option.label}</span>
-                          {isSelected && (
-                            <Icons.check className="h-4 w-4" />
-                          )}
+                          {isSelected && <Icons.check className="h-4 w-4" />}
                         </div>
                       </button>
                     );
@@ -498,17 +526,24 @@ export function EnhancedSelect<T extends FieldValues>({
   );
 }
 
-interface EnhancedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+interface EnhancedButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  size?: "default" | "sm" | "lg" | "icon";
   loading?: boolean;
   icon?: React.ComponentType<{ className?: string }>;
   children: React.ReactNode;
 }
 
 export function EnhancedButton({
-  variant = 'default',
-  size = 'default',
+  variant = "default",
+  size = "default",
   loading = false,
   icon: Icon,
   children,
@@ -519,22 +554,26 @@ export function EnhancedButton({
   return (
     <motion.button
       className={cn(
-        'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary',
-        'disabled:pointer-events-none disabled:opacity-50',
+        "inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200",
+        "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary",
+        "disabled:pointer-events-none disabled:opacity-50",
         // Variants
-        variant === 'default' && 'bg-primary text-primary-foreground hover:bg-primary/90',
-        variant === 'destructive' && 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        variant === 'outline' && 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        variant === 'secondary' && 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        variant === 'ghost' && 'hover:bg-accent hover:text-accent-foreground',
-        variant === 'link' && 'text-primary underline-offset-4 hover:underline',
+        variant === "default" &&
+          "bg-primary text-primary-foreground hover:bg-primary/90",
+        variant === "destructive" &&
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        variant === "outline" &&
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        variant === "secondary" &&
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
+        variant === "link" && "text-primary underline-offset-4 hover:underline",
         // Sizes
-        size === 'default' && 'h-10 px-4 py-2',
-        size === 'sm' && 'h-9 rounded-md px-3',
-        size === 'lg' && 'h-11 rounded-md px-8',
-        size === 'icon' && 'h-10 w-10',
-        className
+        size === "default" && "h-10 px-4 py-2",
+        size === "sm" && "h-9 rounded-md px-3",
+        size === "lg" && "h-11 rounded-md px-8",
+        size === "icon" && "h-10 w-10",
+        className,
       )}
       disabled={disabled || loading}
       whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
