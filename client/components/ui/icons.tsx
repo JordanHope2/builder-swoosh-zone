@@ -32,7 +32,7 @@ import {
   AlertCircle,
   Info,
   HelpCircle,
-  External Link,
+  ExternalLink,
   Copy,
   Edit,
   Trash2,
