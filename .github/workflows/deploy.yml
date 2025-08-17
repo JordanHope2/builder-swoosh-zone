@@ -71,7 +71,7 @@ jobs:
 
       # Detect actual build output (dist/spa > dist) and expose as an output
       - name: Detect build dir
-        id: detect__build_dir
+        id: detect_build_dir
         shell: bash
         run: |
           set -euo pipefail
@@ -86,6 +86,16 @@ jobs:
           fi
           echo "build_dir=$use" >> "$GITHUB_OUTPUT"
           echo "✅ Using build dir: $use"
+
+      - name: Add robots.txt and .htaccess
+        shell: bash
+        env:
+          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
+        run: |
+          set -euo pipefail
+          cp -f scripts/deploy/robots.txt  "${USE_BUILD_DIR}/robots.txt"
+          cp -f scripts/deploy/.htaccess   "${USE_BUILD_DIR}/.htaccess"
+          echo "Injected robots.txt and .htaccess into ${USE_BUILD_DIR}"
 
       - name: Preview build contents
         run: |

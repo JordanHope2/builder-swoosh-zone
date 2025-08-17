@@ -1,46 +1,59 @@
 // server/supabase.ts
 import "dotenv/config";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "../../shared/types/supabase";
 
-let _anon: SupabaseClient | null = null;
-let _admin: SupabaseClient | null = null;
+let _anon: SupabaseClient<Database> | null = null;
+let _admin: SupabaseClient<Database> | null = null;
 
-export function getSupabase(): SupabaseClient {
+function getEnv(name: string) {
+  return process.env[name];
+}
+
+export function getSupabase(): SupabaseClient<Database> {
   if (_anon) return _anon;
 
+  // Prefer server names; keep Vite/Next fallbacks
   const url =
-    process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    getEnv("SUPABASE_URL") ||
+    getEnv("VITE_SUPABASE_URL") ||
+    getEnv("NEXT_PUBLIC_SUPABASE_URL");
+
   const anon =
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    getEnv("SUPABASE_ANON_KEY") ||
+    getEnv("VITE_SUPABASE_ANON_KEY") ||
+    getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
 
   if (!url || !anon) {
     throw new Error(
-      "Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY (or NEXT_PUBLIC_*) in your .env"
+      "Missing Supabase env: set SUPABASE_URL and SUPABASE_ANON_KEY (or VITE_/NEXT_PUBLIC_ fallbacks)."
     );
   }
 
-  _anon = createClient(url, anon, {
+  _anon = createClient<Database>(url, anon, {
     auth: { persistSession: false, autoRefreshToken: true },
   });
   return _anon;
 }
 
-export function getSupabaseAdmin(): SupabaseClient {
+export function getSupabaseAdmin(): SupabaseClient<Database> {
   if (_admin) return _admin;
 
   const url =
-    process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    getEnv("SUPABASE_URL") ||
+    getEnv("VITE_SUPABASE_URL") ||
+    getEnv("NEXT_PUBLIC_SUPABASE_URL");
+
+  const serviceKey = getEnv("SUPABASE_SERVICE_ROLE_KEY");
 
   if (!url || !serviceKey) {
     throw new Error(
-      "Set VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your .env"
+      "Missing Supabase admin env: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
     );
   }
 
   // ⚠ server-only: bypasses RLS
-  _admin = createClient(url, serviceKey, {
+  _admin = createClient<Database>(url, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return _admin;
