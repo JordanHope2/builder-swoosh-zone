@@ -15,50 +15,46 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  NODE_VERSION: '20'
+  INSTALL_CMD: 'npm ci'
+  BUILD_CMD: 'npm run build'
+  BUILD_DIR: 'dist'
+  SITE_URL: 'https://jobequal.ch'
+  HEALTHCHECK_PATH: '/version.txt'
+  HEALTHCHECK_RETRIES: '10'
+  HEALTHCHECK_WAIT_SEC: '6'
+  NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
+  VITE_BUILDER_API_KEY:        ${{ secrets.BUILDER_IO_API_KEY }}
+  FTP_SERVER:     ${{ secrets.FTP_SERVER }}
+  FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
+  FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
+  FTP_TARGET_DIR: ${{ secrets.FTP_TARGET_DIR }}
+  SFTP_HOST:       ${{ secrets.SFTP_HOST }}
+  SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
+  SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
+  SFTP_TARGET_DIR: ${{ secrets.SFTP_TARGET_DIR }}
+  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  CF_ZONE_ID:   ${{ secrets.CF_ZONE_ID }}
+  # Optional toggles
+  CLEAN_REMOTE: 'false'   # set true to delete remote files not in build
+  CI: 'true'
+  NODE_OPTIONS: '--max-old-space-size=4096'
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
-    env:
-      NODE_VERSION: '20'
-      INSTALL_CMD: 'npm ci'
-      BUILD_CMD: 'npm run build'
-      # Default; we’ll auto-detect below if it's actually dist/spa
-      BUILD_DIR: 'dist'
-
-      SITE_URL: 'https://jobequal.ch'
-      HEALTHCHECK_PATH: '/'
-      HEALTHCHECK_RETRIES: '10'
-      HEALTHCHECK_WAIT_SEC: '6'
-
-      # Builder at build-time (support both Next and Vite/Quasar)
-      NEXT_PUBLIC_BUILDER_API_KEY: ${{ secrets.BUILDER_IO_API_KEY }}
-      VITE_BUILDER_API_KEY:        ${{ secrets.BUILDER_IO_API_KEY }}
-
-      # FTP / SFTP secrets (may be empty)
-      FTP_SERVER:     ${{ secrets.FTP_SERVER }}
-      FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
-      FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
-      FTP_TARGET_DIR: ${{ secrets.FTP_TARGET_DIR }}
-
-      SFTP_HOST:       ${{ secrets.SFTP_HOST }}
-      SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
-      SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
-      SFTP_TARGET_DIR: ${{ secrets.SFTP_TARGET_DIR }}
-
-      # Cloudflare
-      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-      CF_ZONE_ID:   ${{ secrets.CF_ZONE_ID }}
+    environment: production
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 1
 
       - name: Use Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
@@ -69,23 +65,47 @@ jobs:
       - name: Build
         run: ${{ env.BUILD_CMD }}
 
-      # Detect actual build output (dist/spa > dist) and expose as an output
       - name: Detect build dir
-        id: detect__build_dir
+        id: detect_build_dir
         shell: bash
         run: |
           set -euo pipefail
-          if [ -d "${BUILD_DIR}" ] && [ "$(ls -A "${BUILD_DIR}")" ]; then
-            use="${BUILD_DIR}"
-          elif [ -d "dist/spa" ] && [ "$(ls -A dist/spa)" ]; then
-            use="dist/spa"
-          elif [ -d "dist" ] && [ "$(ls -A dist)" ]; then
-            use="dist"
-          else
-            echo "❌ No build dir found (checked ${BUILD_DIR}, dist/spa, dist)"; exit 1
-          fi
-          echo "build_dir=$use" >> "$GITHUB_OUTPUT"
-          echo "✅ Using build dir: $use"
+          for cand in "${BUILD_DIR}" "dist/spa" "dist"; do
+            if [ -d "$cand" ] && [ "$(ls -A "$cand")" ]; then
+              echo "build_dir=$cand" >> "$GITHUB_OUTPUT"
+              echo "✅ Using build dir: $cand"
+              exit 0
+            fi
+          done
+          echo "❌ No build dir found (checked ${BUILD_DIR}, dist/spa, dist)"; exit 1
+
+      - name: Add robots.txt and .htaccess (if present)
+        shell: bash
+        env: { USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }} }
+        run: |
+          set -euo pipefail
+          for f in robots.txt .htaccess; do
+            src="scripts/deploy/$f"
+            if [ -f "$src" ]; then
+              cp -f "$src" "${USE_BUILD_DIR}/$f"
+              echo "Injected $f into ${USE_BUILD_DIR}"
+            else
+              echo "Skipping $f (not found at $src)"
+            fi
+          done
+
+      - name: Write version.txt
+        env:
+          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
+        run: |
+          set -euo pipefail
+          {
+            echo "commit=${GITHUB_SHA}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "run_number=${GITHUB_RUN_NUMBER}"
+            echo "repo=${GITHUB_REPOSITORY}"
+            echo "built_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > "${USE_BUILD_DIR}/version.txt"
 
       - name: Preview build contents
         run: |
@@ -95,73 +115,89 @@ jobs:
           echo "Preview files to deploy:"
           find "${{ steps.detect_build_dir.outputs.build_dir }}" -maxdepth 2 -type f | head -n 50
 
-      - name: Archive build artifact (for debugging/proof)
+      - name: Archive build artifact (.tgz)
         run: tar -czf build-artifact.tgz "${{ steps.detect_build_dir.outputs.build_dir }}"
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact (tgz)
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4
         with:
           name: build-artifact
           path: build-artifact.tgz
           retention-days: 7
 
-      # =========================
-      # Deploy (prefer SFTP over FTP if both are configured)
-      # =========================
+      - name: Upload artifact (expanded dir) # optional but handy
+        uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a
+        with:
+          name: build-dir
+          path: ${{ steps.detect_build_dir.outputs.build_dir }}
+          retention-days: 3
+
+      # --- Fail fast if no deploy target configured ---
+      - name: Ensure deploy target is configured
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${SFTP_HOST}" ] && { [ -z "${FTP_SERVER}" ] || [ -z "${FTP_USERNAME}" ] || [ -z "${FTP_PASSWORD}" ]; }; then
+            echo "❌ No SFTP or FTP credentials configured. Cannot deploy."; exit 1
+          fi
 
       # --- SFTP (preferred) ---
       - name: Deploy via SFTP (lftp)
         id: deploy_sftp
         if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
-        env:
-          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
+        env: { USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }} }
         run: |
           set -euo pipefail
           sudo apt-get update && sudo apt-get install -y lftp
+          delete_flag=""
+          if [ "${CLEAN_REMOTE}" = "true" ]; then delete_flag="--delete"; fi
           lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" sftp://${SFTP_HOST} -e "
             set net:max-retries 3;
             set sftp:auto-confirm yes;
-            mirror -R -P 4 -v ${USE_BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
+            mirror -R -P 4 -v ${delete_flag} ${USE_BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
             bye
           "
           echo "ok=true" >> "$GITHUB_OUTPUT"
 
-      # --- FTP (fallback if SFTP not configured) ---
+      # --- FTP (fallback) ---
       - name: Deploy via FTP
         id: deploy_ftp
         if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: SamKirkland/FTP-Deploy-Action@f0c3a7ed274d7f0f7a5a2d8f5dc7d3b1d0b2e3a5 # v4.3.5
         with:
           server:     ${{ env.FTP_SERVER }}
           username:   ${{ env.FTP_USERNAME }}
           password:   ${{ env.FTP_PASSWORD }}
-          # MUST be trailing slash
           local-dir:  ${{ steps.detect_build_dir.outputs.build_dir }}/
           server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
           protocol:   ftps
           log-level:  verbose
-          dangerous-clean-slate: false
+          dangerous-clean-slate: ${{ env.CLEAN_REMOTE }}
 
-      # =========================
-      # Cloudflare cache purge (only if token+zone configured AND deploy ran)
-      # =========================
+      # --- Cloudflare purge (prefer targeted purge) ---
       - name: Install jq
         if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Purge Cloudflare cache
+      - name: Purge Cloudflare cache (targeted)
         if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
+        env:
+          URLS_JSON: >-
+            {"files":[
+              "${{ env.SITE_URL }}/",
+              "${{ env.SITE_URL }}${{ env.HEALTHCHECK_PATH }}",
+              "${{ env.SITE_URL }}/index.html",
+              "${{ env.SITE_URL }}/assets/"
+            ]}
         run: |
           set -euo pipefail
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
             -H "Authorization: Bearer ${CF_API_TOKEN}" \
             -H "Content-Type: application/json" \
-            --data '{"purge_everything":true}' | tee purge_cf.json
+            --data "${URLS_JSON}" | tee purge_cf.json
           jq -e '.success == true' purge_cf.json
 
-      # =========================
-      # Health check (follow redirects; accept 2xx/3xx)
-      # =========================
+      # --- Health check (code + content) ---
       - name: Health check after deploy
         run: |
           set -euo pipefail
@@ -172,7 +208,10 @@ jobs:
             code=$(curl -sk -o /dev/null -I -L -w "%{http_code}" "$url")
             echo "Attempt $i: HTTP $code"
             if [ "$code" -ge 200 ] && [ "$code" -lt 400 ]; then
-              ok=1; break
+              body=$(curl -skL "$url" || true)
+              if echo "$body" | grep -q "commit=${GITHUB_SHA}"; then
+                ok=1; break
+              fi
             fi
             sleep ${HEALTHCHECK_WAIT_SEC}
           done
@@ -180,6 +219,5 @@ jobs:
             echo "Health check failed for $url"
             exit 1
           fi
-
       - name: Show response headers (proof)
         run: curl -sIL "${SITE_URL}${HEALTHCHECK_PATH}"
