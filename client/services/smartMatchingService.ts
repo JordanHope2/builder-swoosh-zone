@@ -140,7 +140,7 @@ class SmartMatchingService {
 
       return data.map((job) => ({
         ...job,
-        company: job.companies?.name || "Unknown Company",
+        company: job.companies?.[0]?.name || "Unknown Company",
         requirements: Array.isArray(job.requirements) ? job.requirements : [],
         skills: Array.isArray(job.skills) ? job.skills : [],
       }));
@@ -513,7 +513,7 @@ class SmartMatchingService {
           ? {
               id: match.jobs.id,
               title: match.jobs.title,
-              company: match.jobs.companies?.name || "Unknown Company",
+              company: match.jobs.companies?.[0]?.name || "Unknown Company",
               location: match.jobs.location,
               salary_min: match.jobs.salary_min,
               salary_max: match.jobs.salary_max,
