@@ -23,10 +23,9 @@ jobs:
     env:
       # Build/runtime config
       NODE_VERSION: '20'
-      WORKDIR: 'client'           # <— your app lives here
       BUILD_CMD: 'npm run build'
       INSTALL_CMD: 'npm ci'
-      BUILD_DIR: 'client/dist'    # <— Vite output in client/
+      BUILD_DIR: 'dist'    # <— Corrected: build output is at the root
       SITE_URL: 'https://jobequal.ch'
       HEALTHCHECK_PATH: '/'
       HEALTHCHECK_RETRIES: '10'
@@ -64,14 +63,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: ${{ env.WORKDIR }}/package-lock.json
 
       - name: Install dependencies
-        working-directory: ${{ env.WORKDIR }}
         run: ${{ env.INSTALL_CMD }}
 
       - name: Build
-        working-directory: ${{ env.WORKDIR }}
         run: ${{ env.BUILD_CMD }}
 
       - name: Verify build dir
@@ -129,7 +125,7 @@ jobs:
           server:     ${{ env.FTP_SERVER }}
           username:   ${{ env.FTP_USERNAME }}
           password:   ${{ env.FTP_PASSWORD }}
-          local-dir:  ${{ env.Build_DIR || env.BUILD_DIR }}/
+          local-dir:  ${{ env.BUILD_DIR }}/
           # Default to common docroots if not provided
           server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
           protocol:   ftps
