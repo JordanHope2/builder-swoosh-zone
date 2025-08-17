@@ -1,122 +1,150 @@
-import { motion, Variants, AnimatePresence } from 'framer-motion';
+import { motion, Variants, AnimatePresence, TargetAndTransition, Transition } from 'framer-motion';
 import React from 'react';
 
+// Define a structured type for our animation configurations
+interface AnimationConfig {
+  variants: Variants;
+  transition?: Transition;
+  whileHover?: TargetAndTransition;
+  whileTap?: TargetAndTransition;
+}
+
 // Enhanced animation variants for better fluidity
-export const enhancedAnimations = {
+export const enhancedAnimations: Record<string, AnimationConfig> = {
   // Smooth fade animations
   fadeIn: {
-    initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    exit: { opacity: 0 },
+    variants: {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+    },
     transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
   },
 
   fadeInUp: {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -10 },
+    variants: {
+      initial: { opacity: 0, y: 20 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -10 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   fadeInDown: {
-    initial: { opacity: 0, y: -20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 10 },
+    variants: {
+      initial: { opacity: 0, y: -20 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: 10 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   fadeInLeft: {
-    initial: { opacity: 0, x: -20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: 20 },
+    variants: {
+      initial: { opacity: 0, x: -20 },
+      animate: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: 20 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   fadeInRight: {
-    initial: { opacity: 0, x: 20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
+    variants: {
+      initial: { opacity: 0, x: 20 },
+      animate: { opacity: 1, x: 0 },
+      exit: { opacity: 0, x: -20 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   // Scale animations
   scaleIn: {
-    initial: { opacity: 0, scale: 0.9 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.95 },
+    variants: {
+      initial: { opacity: 0, scale: 0.9 },
+      animate: { opacity: 1, scale: 1 },
+      exit: { opacity: 0, scale: 0.95 },
+    },
     transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
   },
 
   scaleInBounce: {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.9 },
+    variants: {
+      initial: { opacity: 0, scale: 0.8 },
+      animate: { opacity: 1, scale: 1 },
+      exit: { opacity: 0, scale: 0.9 },
+    },
     transition: { 
       duration: 0.5, 
       ease: [0.68, -0.55, 0.265, 1.55],
-      opacity: { duration: 0.3 }
     }
   },
 
   // Slide animations
   slideInFromBottom: {
-    initial: { y: '100%', opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: '100%', opacity: 0 },
+    variants: {
+      initial: { y: '100%', opacity: 0 },
+      animate: { y: 0, opacity: 1 },
+      exit: { y: '100%', opacity: 0 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   slideInFromTop: {
-    initial: { y: '-100%', opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: '-100%', opacity: 0 },
+    variants: {
+      initial: { y: '-100%', opacity: 0 },
+      animate: { y: 0, opacity: 1 },
+      exit: { y: '-100%', opacity: 0 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   slideInFromLeft: {
-    initial: { x: '-100%', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '-100%', opacity: 0 },
+    variants: {
+      initial: { x: '-100%', opacity: 0 },
+      animate: { x: 0, opacity: 1 },
+      exit: { x: '-100%', opacity: 0 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   slideInFromRight: {
-    initial: { x: '100%', opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: '100%', opacity: 0 },
+    variants: {
+      initial: { x: '100%', opacity: 0 },
+      animate: { x: 0, opacity: 1 },
+      exit: { x: '100%', opacity: 0 },
+    },
     transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
   },
 
   // Staggered animations
   staggerContainer: {
-    initial: {},
-    animate: {
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
+    variants: {
+      initial: {},
+      animate: {},
+      exit: {},
     },
-    exit: {
-      transition: {
-        staggerChildren: 0.05,
-        staggerDirection: -1
-      }
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
     }
   },
 
   staggerItem: {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -10 },
+    variants: {
+      initial: { opacity: 0, y: 20 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -10 },
+    },
     transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
   },
 
   // Hover animations
   hoverScale: {
+    variants: {},
     whileHover: { 
       scale: 1.02,
-      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
     },
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
     whileTap: { 
       scale: 0.98,
       transition: { duration: 0.1 }
@@ -124,73 +152,87 @@ export const enhancedAnimations = {
   },
 
   hoverFloat: {
+    variants: {},
     whileHover: { 
       y: -2,
-      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
-    }
+    },
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
   },
 
   hoverRotate: {
+    variants: {},
     whileHover: { 
       rotate: 5,
-      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
-    }
+    },
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
   },
 
   // Loading animations
   pulse: {
-    animate: {
-      scale: [1, 1.05, 1],
-      opacity: [0.7, 1, 0.7],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+    variants: {
+      animate: {
+        scale: [1, 1.05, 1],
+        opacity: [0.7, 1, 0.7],
+      },
+    },
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut"
     }
   },
 
   spin: {
-    animate: {
-      rotate: 360,
-      transition: {
-        duration: 1,
-        repeat: Infinity,
-        ease: "linear"
-      }
+    variants: {
+      animate: {
+        rotate: 360,
+      },
+    },
+    transition: {
+      duration: 1,
+      repeat: Infinity,
+      ease: "linear"
     }
   },
 
   bounce: {
-    animate: {
-      y: [0, -10, 0],
-      transition: {
-        duration: 0.6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+    variants: {
+      animate: {
+        y: [0, -10, 0],
+      },
+    },
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      ease: "easeInOut"
     }
   },
 
   // Advanced transitions
   morphShape: {
-    initial: { borderRadius: "0%" },
-    animate: { borderRadius: "50%" },
-    exit: { borderRadius: "0%" },
+    variants: {
+      initial: { borderRadius: "0%" },
+      animate: { borderRadius: "50%" },
+      exit: { borderRadius: "0%" },
+    },
     transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
   },
 
   flipIn: {
-    initial: { rotateY: -90, opacity: 0 },
-    animate: { rotateY: 0, opacity: 1 },
-    exit: { rotateY: 90, opacity: 0 },
+    variants: {
+      initial: { rotateY: -90, opacity: 0 },
+      animate: { rotateY: 0, opacity: 1 },
+      exit: { rotateY: 90, opacity: 0 },
+    },
     transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
   },
 
   slideInHeight: {
-    initial: { height: 0, opacity: 0 },
-    animate: { height: 'auto', opacity: 1 },
-    exit: { height: 0, opacity: 0 },
+    variants: {
+      initial: { height: 0, opacity: 0 },
+      animate: { height: 'auto', opacity: 1 },
+      exit: { height: 0, opacity: 0 },
+    },
     transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
   }
 };
@@ -215,14 +257,15 @@ export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
 
   return (
     <motion.div
-      initial={animConfig.initial}
-      animate={animConfig.animate}
-      exit={animConfig.exit}
+      variants={animConfig.variants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       whileHover={animConfig.whileHover}
       whileTap={animConfig.whileTap}
       transition={{
-        ...(animConfig.transition || {}),
-        delay: typeof animConfig.transition === 'object' && animConfig.transition?.delay ? animConfig.transition.delay + delay : delay
+        ...animConfig.transition,
+        delay
       }}
       className={className}
       onClick={onClick}
@@ -268,7 +311,8 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
     {children.map((child, index) => (
       <motion.div
         key={index}
-        variants={enhancedAnimations.staggerItem}
+        variants={enhancedAnimations.staggerItem.variants}
+        transition={enhancedAnimations.staggerItem.transition}
       >
         {child}
       </motion.div>

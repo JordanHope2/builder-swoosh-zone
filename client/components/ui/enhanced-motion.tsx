@@ -1,14 +1,28 @@
 import React from 'react';
-import { motion, AnimatePresence, useInView, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence, useInView, useAnimation, Variants } from 'framer-motion';
 import { useRef, useEffect } from 'react';
 
+import { TargetAndTransition, Transition } from 'framer-motion';
+
+// Define a structured type for our animation configurations
+interface AnimationConfig {
+  variants: Variants;
+  transition?: Transition;
+  whileHover?: TargetAndTransition;
+  whileTap?: TargetAndTransition;
+  drag?: 'x' | 'y' | boolean;
+  dragConstraints?: object;
+}
+
 // Modern animation variants with latest effects
-export const modernAnimations = {
+export const modernAnimations: Record<string, AnimationConfig> = {
   // Smooth entrance animations
   slideInFromBottom: {
-    initial: { y: 100, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: 100, opacity: 0 },
+    variants: {
+      initial: { y: 100, opacity: 0 },
+      animate: { y: 0, opacity: 1 },
+      exit: { y: 100, opacity: 0 },
+    },
     transition: { 
       type: "spring",
       stiffness: 100,
@@ -18,9 +32,11 @@ export const modernAnimations = {
   },
 
   slideInFromLeft: {
-    initial: { x: -100, opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: -100, opacity: 0 },
+    variants: {
+      initial: { x: -100, opacity: 0 },
+      animate: { x: 0, opacity: 1 },
+      exit: { x: -100, opacity: 0 },
+    },
     transition: { 
       type: "spring",
       stiffness: 120,
@@ -29,9 +45,11 @@ export const modernAnimations = {
   },
 
   slideInFromRight: {
-    initial: { x: 100, opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: 100, opacity: 0 },
+    variants: {
+      initial: { x: 100, opacity: 0 },
+      animate: { x: 0, opacity: 1 },
+      exit: { x: 100, opacity: 0 },
+    },
     transition: { 
       type: "spring",
       stiffness: 120,
@@ -41,18 +59,17 @@ export const modernAnimations = {
 
   // Modern scale animations
   scaleInBounce: {
-    initial: { scale: 0, opacity: 0 },
-    animate: { 
-      scale: 1, 
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 10,
-        mass: 0.8
-      }
+    variants: {
+      initial: { scale: 0, opacity: 0 },
+      animate: { scale: 1, opacity: 1 },
+      exit: { scale: 0, opacity: 0 },
     },
-    exit: { scale: 0, opacity: 0 },
+    transition: {
+      type: "spring",
+      stiffness: 200,
+      damping: 10,
+      mass: 0.8
+    },
     whileHover: { 
       scale: 1.05,
       transition: { duration: 0.2 }
@@ -65,39 +82,43 @@ export const modernAnimations = {
 
   // Morphing animations
   morphIn: {
-    initial: { 
-      scale: 0.8, 
-      opacity: 0, 
-      rotateX: -90,
-      transformPerspective: 1000
-    },
-    animate: { 
-      scale: 1, 
-      opacity: 1, 
-      rotateX: 0,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 20,
-        staggerChildren: 0.1
+    variants: {
+      initial: {
+        scale: 0.8,
+        opacity: 0,
+        rotateX: -90,
+        transformPerspective: 1000
+      },
+      animate: {
+        scale: 1,
+        opacity: 1,
+        rotateX: 0,
+      },
+      exit: {
+        scale: 0.8,
+        opacity: 0,
+        rotateX: 90
       }
     },
-    exit: { 
-      scale: 0.8, 
-      opacity: 0, 
-      rotateX: 90 
+    transition: {
+      type: "spring",
+      stiffness: 200,
+      damping: 20,
+      staggerChildren: 0.1
     }
   },
 
   // Floating animations
   floatingCard: {
-    animate: {
-      y: [0, -20, 0],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+    variants: {
+      animate: {
+        y: [0, -20, 0],
+      },
+    },
+    transition: {
+      duration: 6,
+      repeat: Infinity,
+      ease: "easeInOut"
     },
     whileHover: {
       y: -10,
@@ -109,71 +130,67 @@ export const modernAnimations = {
 
   // Stagger container
   staggerContainer: {
-    initial: {},
-    animate: {
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
+    variants: {
+      initial: {},
+      animate: {},
+    },
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
     }
   },
 
   // Stagger items
   staggerItem: {
-    initial: { y: 60, opacity: 0 },
-    animate: { 
-      y: 0, 
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
+    variants: {
+      initial: { y: 60, opacity: 0 },
+      animate: { y: 0, opacity: 1 },
+    },
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15
     }
   },
 
   // Gradient text animation
   gradientText: {
-    animate: {
-      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "linear"
-      }
+    variants: {
+      animate: {
+        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+      },
+    },
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "linear"
     }
   },
 
   // Page transitions
   pageTransition: {
-    initial: { opacity: 0, y: 20 },
-    animate: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99]
-      }
+    variants: {
+      initial: { opacity: 0, y: 20 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -20 },
     },
-    exit: { 
-      opacity: 0, 
-      y: -20,
-      transition: {
-        duration: 0.3
-      }
+    transition: {
+      duration: 0.6,
+      ease: [0.6, -0.05, 0.01, 0.99]
     }
   },
 
   // Button interactions
   buttonHover: {
+    variants: {},
     whileHover: {
       scale: 1.05,
       boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 20
-      }
+    },
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 20
     },
     whileTap: {
       scale: 0.95,
@@ -183,51 +200,52 @@ export const modernAnimations = {
 
   // Card interactions
   cardHover: {
+    variants: {},
     whileHover: {
       y: -8,
       scale: 1.02,
       boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30
-      }
+    },
+    transition: {
+      type: "spring",
+      stiffness: 300,
+      damping: 30
     }
   },
 
   // Loading animations
   pulse: {
-    animate: {
-      scale: [1, 1.05, 1],
-      opacity: [0.7, 1, 0.7],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
+    variants: {
+      animate: {
+        scale: [1, 1.05, 1],
+        opacity: [0.7, 1, 0.7],
+      },
+    },
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut"
     }
   },
 
   // Swipe animations
   swipeCard: {
-    initial: { scale: 0.9, opacity: 0, y: 50 },
-    animate: { 
-      scale: 1, 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 20
-      }
+    variants: {
+      initial: { scale: 0.9, opacity: 0, y: 50 },
+      animate: { scale: 1, opacity: 1, y: 0, },
+      exit: (direction: number) => ({
+        x: direction * 1000,
+        opacity: 0,
+        scale: 0.5,
+        rotate: direction * 30,
+      }),
     },
-    exit: (direction: number) => ({
-      x: direction * 1000,
-      opacity: 0,
-      scale: 0.5,
-      rotate: direction * 30,
-      transition: { duration: 0.3 }
-    }),
+    transition: {
+      type: "spring",
+      stiffness: 200,
+      damping: 20,
+      duration: 0.3
+    },
     drag: "x",
     dragConstraints: { left: 0, right: 0 }
   }
@@ -255,9 +273,10 @@ export const EnhancedMotion: React.FC<EnhancedMotionProps> = ({
   
   return (
     <motion.div
-      initial={animConfig.initial}
-      animate={animConfig.animate}
-      exit={animConfig.exit}
+      variants={animConfig.variants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       whileHover={animConfig.whileHover}
       whileTap={animConfig.whileTap}
       transition={{
@@ -295,9 +314,10 @@ export const ScrollTriggeredMotion: React.FC<EnhancedMotionProps> = ({
   return (
     <motion.div
       ref={ref}
-      initial={animConfig.initial}
+      variants={animConfig.variants}
+      initial="initial"
       animate={controls}
-      variants={animConfig}
+      transition={animConfig.transition}
       className={className}
       onClick={onClick}
     >
@@ -308,7 +328,7 @@ export const ScrollTriggeredMotion: React.FC<EnhancedMotionProps> = ({
 
 // Staggered list animation
 interface StaggeredListProps {
-  children: React.ReactNode[];
+  children: React.ReactNode;
   className?: string;
   itemClassName?: string;
   staggerDelay?: number;
@@ -334,10 +354,11 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
       initial="initial"
       animate="animate"
     >
-      {children.map((child, index) => (
+      {React.Children.toArray(children).map((child, index) => (
         <motion.div
           key={index}
-          variants={modernAnimations.staggerItem}
+          variants={modernAnimations.staggerItem.variants}
+          transition={modernAnimations.staggerItem.transition}
           className={itemClassName}
         >
           {child}
@@ -349,12 +370,14 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
 
 // Page transition wrapper
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const animConfig = modernAnimations.pageTransition;
   return (
     <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
-      variants={modernAnimations.pageTransition}
+      variants={animConfig.variants}
+      transition={animConfig.transition}
     >
       {children}
     </motion.div>
@@ -364,12 +387,13 @@ export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ childr
 // Interactive button with enhanced animations
 interface AnimatedButtonProps {
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   variant?: 'primary' | 'secondary' | 'accent';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   disabled?: boolean;
   loading?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
@@ -379,7 +403,8 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   size = 'md',
   className,
   disabled = false,
-  loading = false
+  loading = false,
+  type = 'button'
 }) => {
   const baseClasses = "relative overflow-hidden font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
   
@@ -403,6 +428,7 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
       }}
       whileTap={{ scale: 0.95 }}
       className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      type={type}
       onClick={onClick}
       disabled={disabled || loading}
     >
@@ -441,11 +467,13 @@ export const AnimatedCard: React.FC<{
   onClick?: () => void;
   hoverable?: boolean;
 }> = ({ children, className, onClick, hoverable = true }) => {
+  const animConfig = hoverable ? modernAnimations.cardHover : null;
   return (
     <motion.div
       className={`bg-white rounded-2xl shadow-lg ${hoverable ? 'cursor-pointer' : ''} ${className}`}
-      variants={hoverable ? modernAnimations.cardHover : {}}
-      whileHover={hoverable ? "whileHover" : {}}
+      variants={animConfig?.variants}
+      whileHover={animConfig?.whileHover}
+      transition={animConfig?.transition}
       onClick={onClick}
     >
       {children}
@@ -458,11 +486,13 @@ export const GradientText: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => {
+  const animConfig = modernAnimations.gradientText;
   return (
     <motion.span
       className={`bg-gradient-to-r from-jobequal-green via-jobequal-teal to-purple-500 bg-clip-text text-transparent bg-300% ${className}`}
-      variants={modernAnimations.gradientText}
+      variants={animConfig.variants}
       animate="animate"
+      transition={animConfig.transition}
       style={{
         backgroundSize: "300% 300%"
       }}

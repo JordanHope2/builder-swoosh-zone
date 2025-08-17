@@ -70,6 +70,8 @@ export function EnhancedSwipeJobDiscovery() {
   // Hardcoded for demonstration purposes due to lack of a real auth flow.
   const hardcodedCandidateId = 1;
 
+  const currentJob = jobs[currentJobIndex];
+
   useEffect(() => {
     const fetchMatchScore = async () => {
       if (!currentJob) return;
@@ -133,7 +135,6 @@ export function EnhancedSwipeJobDiscovery() {
   }, []);
 
 
-  const currentJob = jobs[currentJobIndex];
   const hasMoreJobs = currentJobIndex < jobs.length - 1;
 
   const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
