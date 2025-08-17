@@ -81,7 +81,8 @@ jobs:
 
       - name: Add robots.txt and .htaccess (if present)
         shell: bash
-        env: { USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }} }
+        env:
+          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
         run: |
           set -euo pipefail
           for f in robots.txt .htaccess; do
@@ -145,7 +146,8 @@ jobs:
       - name: Deploy via SFTP (lftp)
         id: deploy_sftp
         if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
-        env: { USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }} }
+        env:
+          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
         run: |
           set -euo pipefail
           sudo apt-get update && sudo apt-get install -y lftp
@@ -154,7 +156,7 @@ jobs:
           lftp -u "${SFTP_USERNAME},${SFTP_PASSWORD}" sftp://${SFTP_HOST} -e "
             set net:max-retries 3;
             set sftp:auto-confirm yes;
-            mirror -R -P 4 -v ${delete_flag} ${USE_BUILD_DIR}/ ${SFTP_TARGET_DIR:-/httpdocs};
+            mirror -R -P 4 -v ${delete_flag} "${USE_BUILD_DIR}/" "${SFTP_TARGET_DIR:-/public_html}";
             bye
           "
           echo "ok=true" >> "$GITHUB_OUTPUT"
