@@ -95,18 +95,8 @@ jobs:
             fi
           done
 
-      - name: Write version.txt
-        env:
-          USE_BUILD_DIR: ${{ steps.detect_build_dir.outputs.build_dir }}
-        run: |
-          set -euo pipefail
-          {
-            echo "commit=${GITHUB_SHA}"
-            echo "run_id=${GITHUB_RUN_ID}"
-            echo "run_number=${GITHUB_RUN_NUMBER}"
-            echo "repo=${GITHUB_REPOSITORY}"
-            echo "built_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          } > "${USE_BUILD_DIR}/version.txt"
+      - name: Write deploy marker
+        run: echo "${{ github.sha }} $(date -u +%FT%TZ)" > "${{ steps.detect_build_dir.outputs.build_dir }}/version.txt"
 
       - name: Preview build contents
         run: |
@@ -171,7 +161,7 @@ jobs:
           username:   ${{ env.FTP_USERNAME }}
           password:   ${{ env.FTP_PASSWORD }}
           local-dir:  ${{ steps.detect_build_dir.outputs.build_dir }}/
-          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
+          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || 'public_html' }}
           protocol:   ftps
           log-level:  verbose
           dangerous-clean-slate: ${{ env.CLEAN_REMOTE }}
