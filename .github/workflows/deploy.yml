@@ -97,6 +97,9 @@ jobs:
           cp -f scripts/deploy/.htaccess   "${USE_BUILD_DIR}/.htaccess"
           echo "Injected robots.txt and .htaccess into ${USE_BUILD_DIR}"
 
+      - name: Write deploy marker
+        run: echo "${{ github.sha }} $(date -u +%FT%TZ)" > "${{ steps.detect_build_dir.outputs.build_dir }}/version.txt"
+
       - name: Preview build contents
         run: |
           set -euo pipefail
@@ -147,7 +150,7 @@ jobs:
           password:   ${{ env.FTP_PASSWORD }}
           # MUST be trailing slash
           local-dir:  ${{ steps.detect_build_dir.outputs.build_dir }}/
-          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || '/public_html' }}
+          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || 'public_html' }}
           protocol:   ftps
           log-level:  verbose
           dangerous-clean-slate: false
