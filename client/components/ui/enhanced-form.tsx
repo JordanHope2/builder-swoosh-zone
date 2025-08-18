@@ -124,13 +124,13 @@ export function EnhancedInput<T extends FieldValues>({
               className,
             )}
             {...field}
-            onFocus={(e) => {
+            onFocus={() => {
               setIsFocused(true);
-              field.onBlur(e);
+              field.onBlur();
             }}
-            onBlur={(e) => {
+            onBlur={() => {
               setIsFocused(false);
-              field.onBlur(e);
+              field.onBlur();
             }}
             whileFocus={{ scale: 1.02 }}
             transition={{ duration: 0.2 }}
@@ -284,9 +284,9 @@ export function EnhancedTextarea<T extends FieldValues>({
         )}
         {...field}
         onFocus={() => setIsFocused(true)}
-        onBlur={(e) => {
+        onBlur={() => {
           setIsFocused(false);
-          field.onBlur(e);
+          field.onBlur();
         }}
         whileFocus={{ scale: 1.01 }}
         transition={{ duration: 0.2 }}
@@ -523,75 +523,5 @@ export function EnhancedSelect<T extends FieldValues>({
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-interface EnhancedButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  size?: "default" | "sm" | "lg" | "icon";
-  loading?: boolean;
-  icon?: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
-}
-
-export function EnhancedButton({
-  variant = "default",
-  size = "default",
-  loading = false,
-  icon: Icon,
-  children,
-  disabled,
-  className,
-  ...props
-}: EnhancedButtonProps) {
-  return (
-    <motion.button
-      className={cn(
-        "inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200",
-        "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary",
-        "disabled:pointer-events-none disabled:opacity-50",
-        // Variants
-        variant === "default" &&
-          "bg-primary text-primary-foreground hover:bg-primary/90",
-        variant === "destructive" &&
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        variant === "outline" &&
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        variant === "secondary" &&
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        variant === "ghost" && "hover:bg-accent hover:text-accent-foreground",
-        variant === "link" && "text-primary underline-offset-4 hover:underline",
-        // Sizes
-        size === "default" && "h-10 px-4 py-2",
-        size === "sm" && "h-9 rounded-md px-3",
-        size === "lg" && "h-11 rounded-md px-8",
-        size === "icon" && "h-10 w-10",
-        className,
-      )}
-      disabled={disabled || loading}
-      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
-      whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
-      transition={{ duration: 0.1 }}
-      {...props}
-    >
-      {loading ? (
-        <>
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          Loading...
-        </>
-      ) : (
-        <>
-          {Icon && <Icon className="mr-2 h-4 w-4" />}
-          {children}
-        </>
-      )}
-    </motion.button>
   );
 }

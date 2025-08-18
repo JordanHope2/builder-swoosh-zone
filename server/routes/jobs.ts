@@ -2,6 +2,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { getSupabase, getSupabaseAdmin } from "../supabase";
+import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
 
@@ -26,34 +27,31 @@ router.get("/", async (_req, res) => {
 
 /**
  * POST /api/jobs — create a job
- * TEMP auth: reads x-user-id header (replace with real auth soon)
- * Uses admin client to allow server-side insert (bypasses RLS).
- * DB column is owner_id (NOT "owner").
+ * SECURED: Uses authMiddleware to verify JWT.
+ * Uses admin client to allow server-side insert (bypasses RLS), but owner_id is from a verified token.
  */
 const createJobSchema = z.object({
   title: z.string().min(1, "title required"),
   description: z.string().optional(),
   location: z.string().optional(),
-  // coerce allows "60000" (string) or 60000 (number)
   salary_min: z.coerce.number().int().optional(),
   salary_max: z.coerce.number().int().optional(),
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
   try {
-    const userId = req.header("x-user-id"); // ⚠️ prototype; replace with verified user id from JWT
-    if (!userId) return res.status(401).json({ error: "Unauthorized" });
+    const userId = req.user.id;
 
     const parsed = createJobSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ error: parsed.error.flatten() });
     }
 
-    const supabase = getSupabaseAdmin(); // server-only
+    const supabase = getSupabaseAdmin();
     const { data, error } = await supabase
       .from("jobs")
       .insert({
-        owner_id: userId, // IMPORTANT: matches DB column name
+        owner_id: userId,
         title: parsed.data.title,
         description: parsed.data.description ?? null,
         location: parsed.data.location ?? null,

@@ -517,7 +517,7 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
             ) : (
               <AnimatedButton
                 variant="primary"
-                onClick={handleSubmit}
+                type="submit"
                 disabled={isSubmitting || submitStatus.type === 'success'}
                 loading={isSubmitting}
               >

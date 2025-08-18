@@ -260,59 +260,6 @@ class AIAnalysisService {
   }
 
   private generateSmartFallbackAnalysis(cvText: string, jobs: any[]): CVAnalysisResult {
-    // Smart text analysis when AI is not available
-    const skills = this.extractSkills(cvText);
-    const experience = this.estimateExperience(cvText);
-    const education = this.extractEducation(cvText);
-    
-    return {
-      overallScore: 75,
-      skillsMatch: {
-        matched: skills.slice(0, 5),
-        missing: ['Machine Learning', 'DevOps', 'Data Science'],
-        score: 70
-      },
-      experienceAnalysis: {
-        yearsOfExperience: experience,
-        relevantExperience: Math.max(experience - 2, 0),
-        score: Math.min(experience * 10, 100)
-      },
-      educationAnalysis: {
-        degree: education,
-        relevance: 85,
-        score: 80
-      },
-      recommendations: [
-        'Consider adding more specific project examples',
-        'Highlight quantifiable achievements',
-        'Add relevant certifications in cloud technologies',
-        'Improve the professional summary section'
-      ],
-      improvementAreas: [
-        'Technical skills section could be more detailed',
-        'Add more metrics to demonstrate impact',
-        'Include relevant certifications'
-      ],
-      strengths: [
-        'Strong technical background',
-        'Good educational foundation',
-        'Relevant work experience',
-        'Clear career progression'
-      ],
-      compatibilityWithJobs: jobs.slice(0, 3).map((job, index) => ({
-        jobId: job.id,
-        jobTitle: job.title,
-        compatibilityScore: 85 - (index * 10),
-        reasons: [
-          'Strong technical skill match',
-          'Relevant experience level',
-          'Good cultural fit indicators'
-        ]
-      }))
-    };
-  }
-
-  private generateSmartFallbackAnalysis(cvText: string, jobs: any[]): CVAnalysisResult {
     // Extract actual information from CV text for better fallback analysis
     const extractedSkills = this.extractSkills(cvText);
     const estimatedExperience = this.estimateExperience(cvText);

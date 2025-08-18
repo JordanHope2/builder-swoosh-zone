@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # The main application server (Node.js backend + React frontend)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      # Pass environment variables from a .env file at the root
+      - NODE_ENV=production
+      - PING_MESSAGE=pong
+      # Ensure you have a .env file with these values
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    env_file:
+      - .env
+
+  # The Python job scraper
+  scraper:
+    build:
+      context: ./job_scraper
+      dockerfile: Dockerfile
+    environment:
+      # Pass environment variables from a .env file at the root
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - ADZUNA_APP_ID=${ADZUNA_APP_ID}
+      - ADZUNA_API_KEY=${ADZUNA_API_KEY}
+    env_file:
+      - .env
+    # The scraper doesn't need to be running all the time.
+    # You can run it on a schedule (e.g., with a cron job on the host that runs 'docker-compose run scraper')
+    # or just run it manually when needed. For development, you can uncomment the following lines
+    # to run it once when you start the services.
+    # command: python main.py
+    # restart: "no"

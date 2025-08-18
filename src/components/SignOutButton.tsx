@@ -1,9 +1,9 @@
 'use client';
-import { supabaseClient } from '@/lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 export default function SignOutButton() {
   async function signOut() {
-    await supabaseClient.auth.signOut();
+    await supabase.auth.signOut();
     window.location.reload();
   }
   return (

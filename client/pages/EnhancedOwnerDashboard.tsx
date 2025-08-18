@@ -55,7 +55,7 @@ import {
   ArrowDown,
   Minus,
   Plus,
-  Link,
+  Link as LinkIcon,
   ExternalLink,
   Share2,
   Copy,
