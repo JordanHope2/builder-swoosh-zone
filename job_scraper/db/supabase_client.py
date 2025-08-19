@@ -14,7 +14,7 @@ class SupabaseClient:
     """
     def __init__(self):
         self.client: Client = create_client(
-            os.environ.get("VITE_SUPABASE_URL"),
+            os.environ.get("SUPABASE_URL"),
             os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         )
 

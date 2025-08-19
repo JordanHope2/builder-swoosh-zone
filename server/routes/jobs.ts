@@ -13,13 +13,21 @@ const router = Router();
 router.get("/", async (_req, res) => {
   try {
     const supabase = getSupabase();
+    // Select jobs and join the related company data
     const { data, error } = await supabase
       .from("jobs")
-      .select("*")
+      .select("*, companies(*)")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    res.json({ jobs: data ?? [] });
+
+    // Add a placeholder matchScore to each job for frontend development
+    const jobsWithMatchScore = (data ?? []).map(job => ({
+      ...job,
+      matchScore: Math.floor(Math.random() * (99 - 50 + 1)) + 50, // Random score between 50-99
+    }));
+
+    res.json({ jobs: jobsWithMatchScore });
   } catch (e: any) {
     res.status(500).json({ error: e.message ?? "Unknown error" });
   }
