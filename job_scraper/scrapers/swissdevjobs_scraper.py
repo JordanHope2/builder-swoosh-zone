@@ -23,25 +23,37 @@ class SwissDevJobsScraper(BaseScraper):
 
     async def scrape(self) -> List[Dict]:
         """
-        Scrapes job data from the SwissDevJobs.ch RSS feed.
+        Scrapes job data from the SwissDevJobs.ch RSS feed and generates embeddings.
         """
         logging.info("Scraping SwissDevJobs.ch RSS feed...")
         try:
             feed = await self.parser.parse_from_url('https://swissdevjobs.ch/jobs/rss')
+            embedding_service = EmbeddingService()
+
             jobs = []
             for item in feed.items:
+                description = item.get("description", item.get("contentSnippet", ""))
                 job = {
                     "title": item.title,
-                    "company_name": item.creator, # Use company_name to match schema
-                    "location": item.get("location", item.title), # Fallback to title for location
-                    "description": item.get("description", item.get("contentSnippet", "")),
+                    "company_name": item.creator,
+                    "location": item.get("location", item.title),
+                    "description": description,
                     "date_posted": item.pubDate,
                     "url": item.link,
-                    "source": "SwissDevJobs.ch"
+                    "source": "SwissDevJobs.ch",
+                    "embedding": None # Default to None
                 }
                 job["hash"] = create_job_hash(job)
+
+                # Generate embedding
+                embedding_text = f"Job Title: {item.title}\nDescription: {description}"
+                embedding = embedding_service.get_embedding(embedding_text)
+                if embedding:
+                    job["embedding"] = embedding
+
                 jobs.append(job)
-            logging.info(f"Found {len(jobs)} jobs from SwissDevJobs.ch.")
+
+            logging.info(f"Found and processed {len(jobs)} jobs from SwissDevJobs.ch.")
             return jobs
         except Exception as e:
             logging.error(f"Error scraping SwissDevJobs.ch: {e}", exc_info=True)

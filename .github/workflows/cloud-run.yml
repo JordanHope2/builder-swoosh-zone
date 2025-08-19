@@ -1,0 +1,54 @@
+name: Deploy Backend to Google Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'server/**'
+      - 'shared/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.server.ts'
+      - 'Dockerfile'
+      - '.github/workflows/cloud-run.yml'
+
+jobs:
+  deploy:
+    name: Build and Deploy Backend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write' # Required for Workload Identity Federation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          # Using Workload Identity Federation, which is more secure than service account keys.
+          # The user will need to set this up in GCP, but it's the best practice.
+          # I will provide instructions if needed.
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          gcloud builds submit --tag ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/containers/je-api .
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy je-api \
+            --image ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/containers/je-api \
+            --region ${{ vars.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --service-account ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }} \
+            --set-secrets "SUPABASE_URL=SUPABASE_URL:latest,SUPABASE_SERVICE_ROLE_KEY=SUPABASE_SERVICE_ROLE_KEY:latest,OPENAI_API_KEY=OPENAI_API_KEY:latest"
