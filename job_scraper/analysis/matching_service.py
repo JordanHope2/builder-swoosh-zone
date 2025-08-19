@@ -1,9 +1,14 @@
 import sys
+import json
+import logging
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from openai import OpenAI
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def download_nltk_data():
     """
@@ -63,13 +68,81 @@ def calculate_match_score(candidate_text: str, job_text: str) -> int:
 
     return score
 
+def get_gpt4_match_score(candidate_text: str, job_text: str):
+    """
+    Uses GPT-4 to calculate a detailed match score and provide an explanation.
+    """
+    if not candidate_text or not job_text:
+        return {"score": 0, "explanation": "Missing candidate or job information."}
+
+    try:
+        client = OpenAI() # Assumes OPENAI_API_KEY is set in environment
+        prompt = f"""
+        Analyze the following job description and candidate profile. Provide a match score from 0 to 100
+        and a brief, one-sentence explanation for your score.
+
+        Job Description:
+        ---
+        {job_text}
+        ---
+
+        Candidate Profile:
+        ---
+        {candidate_text}
+        ---
+
+        Return your response as a JSON object with two keys: "score" (integer) and "explanation" (string).
+        """
+
+        logging.info("Calling GPT-4 for match score analysis...")
+        response = client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"},
+            temperature=0.2,
+        )
+
+        content = response.choices[0].message.content
+        if not content:
+            raise ValueError("Received empty content from OpenAI.")
+
+        result = json.loads(content)
+        logging.info(f"Received match score from GPT-4: {result.get('score')}")
+        return result
+
+    except Exception as e:
+        logging.error(f"Error getting GPT-4 match score: {e}", exc_info=True)
+        # Fallback to TF-IDF score in case of GPT-4 failure
+        fallback_score = calculate_match_score(candidate_text, job_text)
+        return {
+            "score": fallback_score,
+            "explanation": f"AI analysis failed. Using basic keyword match. (Error: {e})"
+        }
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python matching_service.py <candidate_text> <job_text>")
+    # This allows testing either the TF-IDF or GPT-4 scorer from the command line.
+    if len(sys.argv) < 3:
+        print("Usage: python matching_service.py <candidate_text> <job_text> [--gpt4]")
         sys.exit(1)
 
     candidate_text_arg = sys.argv[1]
     job_text_arg = sys.argv[2]
+    use_gpt4 = "--gpt4" in sys.argv
 
-    match_score = calculate_match_score(candidate_text_arg, job_text_arg)
-    print(match_score)
+    if use_gpt4:
+        print("--- Using GPT-4 Matcher ---")
+        # Note: Requires OPENAI_API_KEY to be set as an environment variable.
+        from dotenv import load_dotenv
+        import os
+        dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env')
+        load_dotenv(dotenv_path=dotenv_path)
+        if not os.getenv("OPENAI_API_KEY"):
+             print("Error: OPENAI_API_KEY environment variable not set.")
+             sys.exit(1)
+        match_result = get_gpt4_match_score(candidate_text_arg, job_text_arg)
+        print(json.dumps(match_result, indent=2))
+    else:
+        print("--- Using TF-IDF Matcher ---")
+        match_score = calculate_match_score(candidate_text_arg, job_text_arg)
+        print(f"TF-IDF Score: {match_score}")
