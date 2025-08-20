@@ -23,7 +23,7 @@ jobs:
       - uses: google-github-actions/auth@v2
         with:
           project_id: ${{ vars.GCP_PROJECT_ID }}
-          workload_identity_provider: projects/${{ vars.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github/providers/gha
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: deploy@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - uses: google-github-actions/setup-gcloud@v2
