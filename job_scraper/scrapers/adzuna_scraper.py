@@ -76,27 +76,46 @@ class AdzunaScraper(BaseScraper):
                 print(f"An unexpected error occurred while scraping Adzuna: {e}")
                 return [], []
 
-if __name__ == '__main__':
-    import asyncio
+import asyncio
+from job_scraper.db.supabase_client import SupabaseClient
 
-    async def main():
-        # You need to set ADZUNA_APP_ID and ADZUNA_API_KEY in your environment
-        # for this to work.
-        if "ADZUNA_APP_ID" not in os.environ or "ADZUNA_API_KEY" not in os.environ:
-            print("Please set ADZUNA_APP_ID and ADZUNA_API_KEY environment variables to test the Adzuna scraper.")
-            return
-
+async def main():
+    """
+    Main function to run the Adzuna scraper and upsert the data.
+    """
+    print("Starting Adzuna scraper...")
+    try:
         scraper = AdzunaScraper()
-        jobs, company_data = await scraper.scrape(limit=5)
+        jobs, company_data = await scraper.scrape()
 
-        print(f"Found {len(jobs)} jobs from Adzuna.")
         if jobs:
-            print("\nFirst job:")
-            print(jobs[0])
+            print(f"Attempting to upsert {len(jobs)} jobs to Supabase...")
+            supabase_client = SupabaseClient()
+            supabase_client.upsert_jobs(jobs)
+        else:
+            print("No jobs found from Adzuna to upsert.")
 
-        print(f"\nFound {len(company_data)} pieces of company enrichment data.")
         if company_data:
-            print("\nFirst piece of company data:")
-            print(company_data[0])
+            print(f"Attempting to upsert {len(company_data)} pieces of company enrichment data...")
+            supabase_client = SupabaseClient()
+            for company in company_data:
+                supabase_client.upsert_company(company)
+        else:
+            print("No company enrichment data found from Adzuna to upsert.")
 
-    asyncio.run(main())
+    except ValueError as e:
+        print(f"Configuration error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred in Adzuna main: {e}")
+
+    print("Adzuna scraper finished.")
+
+
+if __name__ == '__main__':
+    # This allows the script to be run directly for testing.
+    # You need to set ADZUNA_APP_ID and ADZUNA_API_KEY in your environment
+    # for this to work.
+    if "ADZUNA_APP_ID" not in os.environ or "ADZUNA_API_KEY" not in os.environ:
+        print("Please set ADZUNA_APP_ID and ADZUNA_API_KEY environment variables to test the Adzuna scraper.")
+    else:
+        asyncio.run(main())
