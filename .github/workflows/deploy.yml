@@ -166,6 +166,19 @@ jobs:
           log-level:  verbose
           dangerous-clean-slate: ${{ env.CLEAN_REMOTE }}
 
+      - name: Deploy .htaccess explicitly
+        if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') }}
+        uses: SamKirkland/FTP-Deploy-Action@f0c3a7ed274d7f0f7a5a2d8f5dc7d3b1d0b2e3a5 # v4.3.5
+        with:
+          server:     ${{ env.FTP_SERVER || env.SFTP_HOST }}
+          username:   ${{ env.FTP_USERNAME || env.SFTP_USERNAME }}
+          password:   ${{ env.FTP_PASSWORD || env.SFTP_PASSWORD }}
+          protocol:   ${{ env.SFTP_HOST != '' && 'sftp' || 'ftps' }}
+          local-dir:  scripts/deploy/
+          server-dir: ${{ env.FTP_TARGET_DIR != '' && env.FTP_TARGET_DIR || 'public_html' }}
+          include: |
+            .htaccess
+
       # --- Cloudflare purge (prefer targeted purge) ---
       - name: Install jq
         if: ${{ (steps.deploy_sftp.outcome == 'success' || steps.deploy_ftp.outcome == 'success') && env.CF_API_TOKEN != '' && env.CF_ZONE_ID != '' }}
