@@ -11,13 +11,10 @@ import {
   Server,
   Shield,
   Settings,
-  Search,
-  Eye,
-  Edit,
   Trash2,
   Loader2,
   AlertCircle,
-  MoreVertical,
+  Briefcase,
 } from "lucide-react";
 
 // Helper function to make authenticated API requests
@@ -35,7 +32,7 @@ const fetchFromApi = async (endpoint: string, token: string | undefined, options
 };
 
 
-// --- User Management Components ---
+// --- User Management Tab ---
 
 const UserManagementTab = () => {
   const { session } = useAuth();
@@ -85,49 +82,114 @@ const UserManagementTab = () => {
   if (error) return <div className="p-8 text-red-500 flex items-center space-x-2"><AlertCircle /> <span>Error loading users: {error.message}</span></div>;
 
   return (
-    <motion.div
-      key="users"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-    >
+    <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
+      <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6">
+        User Management ({users?.length || 0})
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">User</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Role</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+            {users?.map((user: any) => (
+              <tr key={user.id}>
+                <td className="px-6 py-4">
+                  <div className="font-medium text-jobequal-text dark:text-white">{user.full_name || user.username}</div>
+                  <div className="text-sm text-jobequal-text-muted dark:text-gray-400">{user.id}</div>
+                </td>
+                <td className="px-6 py-4">
+                  <select
+                    value={user.role}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                    className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-jobequal-text dark:text-white"
+                  >
+                    <option value="free">Free</option>
+                    <option value="pro">Pro</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex space-x-2">
+                    <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+
+// --- Job Management Tab ---
+
+const JobManagementTab = () => {
+    const { session } = useAuth();
+    const token = session?.access_token;
+    const queryClient = useQueryClient();
+
+    const { data: jobs, isLoading, error } = useQuery({
+      queryKey: ["adminJobs"],
+      queryFn: () => fetchFromApi("/api/admin/jobs", token),
+      enabled: !!token,
+    });
+
+    const deleteJobMutation = useMutation({
+      mutationFn: (jobId: string) =>
+        fetchFromApi(`/api/admin/jobs/${jobId}`, token, {
+          method: "DELETE",
+        }),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["adminJobs"] });
+      },
+    });
+
+    const handleDeleteJob = (jobId: string) => {
+      if (confirm("Are you sure you want to permanently delete this job posting?")) {
+        deleteJobMutation.mutate(jobId);
+      }
+    };
+
+    if (isLoading) return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    if (error) return <div className="p-8 text-red-500 flex items-center space-x-2"><AlertCircle /> <span>Error loading jobs: {error.message}</span></div>;
+
+    return (
       <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
         <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6">
-          User Management ({users?.length || 0})
+          Job Management ({jobs?.length || 0})
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">User</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Role</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Job Title</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Owner</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {users?.map((user: any) => (
-                <tr key={user.id}>
+              {jobs?.map((job: any) => (
+                <tr key={job.id}>
                   <td className="px-6 py-4">
-                    <div className="font-medium text-jobequal-text dark:text-white">{user.full_name || user.username}</div>
-                    <div className="text-sm text-jobequal-text-muted dark:text-gray-400">{user.id}</div>
+                    <div className="font-medium text-jobequal-text dark:text-white">{job.title}</div>
+                    <div className="text-sm text-jobequal-text-muted dark:text-gray-400">{job.id}</div>
                   </td>
+                  <td className="px-6 py-4">{job.owner?.full_name || 'N/A'}</td>
+                  <td className="px-6 py-4">{job.status || 'N/A'}</td>
                   <td className="px-6 py-4">
-                    <select
-                      value={user.role}
-                      onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                      className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-jobequal-text dark:text-white"
-                    >
-                      <option value="free">Free</option>
-                      <option value="pro">Pro</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex space-x-2">
-                      <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <button onClick={() => handleDeleteJob(job.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -135,19 +197,19 @@ const UserManagementTab = () => {
           </table>
         </div>
       </div>
-    </motion.div>
-  );
-};
+    );
+  };
 
 
 // --- Main Dashboard Component ---
 
 export default function OwnerAdminDashboard() {
-  const [activeTab, setActiveTab] = useState("users"); // Default to the functional tab
+  const [activeTab, setActiveTab] = useState("users");
 
   const tabs = [
     { id: "overview", label: "Platform Overview", icon: BarChart3 },
     { id: "users", label: "User Management", icon: Users },
+    { id: "jobs", label: "Job Management", icon: Briefcase },
     { id: "companies", label: "Companies", icon: Building },
     { id: "revenue", label: "Revenue & Analytics", icon: DollarSign },
     { id: "system", label: "System Health", icon: Server },
@@ -159,6 +221,8 @@ export default function OwnerAdminDashboard() {
     switch (activeTab) {
       case "users":
         return <UserManagementTab />;
+      case "jobs":
+        return <JobManagementTab />;
       default:
         return (
           <div className="p-8 bg-white/90 rounded-2xl border text-center">

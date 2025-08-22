@@ -112,4 +112,62 @@ router.delete("/users/:id", protectedAdminRoute, async (req, res) => {
 });
 
 
+// --- Job Management ---
+
+// GET /api/admin/jobs - List all jobs
+router.get("/jobs", protectedAdminRoute, async (req, res) => {
+    try {
+      const supabase = getSupabaseAdmin();
+      const { data, error } = await supabase
+        .from("jobs")
+        .select(`*, owner:profiles(full_name)`)
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      res.json(data);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+});
+
+// POST /api/admin/jobs/:id - Update a job
+router.post("/jobs/:id", protectedAdminRoute, async (req, res) => {
+    const { id: jobId } = req.params;
+    const { title, description, status } = req.body;
+
+    try {
+        const supabase = getSupabaseAdmin();
+        const { data, error } = await supabase
+            .from("jobs")
+            .update({ title, description, status })
+            .eq("id", jobId)
+            .select();
+
+        if (error) throw error;
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// DELETE /api/admin/jobs/:id - Delete a job
+router.delete("/jobs/:id", protectedAdminRoute, async (req, res) => {
+    const { id: jobId } = req.params;
+
+    try {
+        const supabase = getSupabaseAdmin();
+        const { error } = await supabase
+            .from("jobs")
+            .delete()
+            .eq("id", jobId);
+
+        if (error) throw error;
+        res.status(200).json({ message: "Job deleted successfully." });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 export default router;

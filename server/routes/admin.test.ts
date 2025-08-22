@@ -89,4 +89,46 @@ describe("/api/admin", () => {
         expect(mockSupabaseClient.auth.admin.deleteUser).toHaveBeenCalledWith("user-to-delete");
     });
   });
+
+  // --- Job Management Tests ---
+
+  describe("GET /jobs", () => {
+    it("should return a list of all jobs for an admin", async () => {
+        const mockJobs = [{ id: "job-1", title: "Test Job" }];
+        const adminCheckFrom = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { role: "admin" }, error: null }) };
+        const jobListFrom = { select: vi.fn().mockReturnThis(), order: vi.fn().mockResolvedValue({ data: mockJobs, error: null }) };
+        mockSupabaseClient.from
+            .mockReturnValueOnce(adminCheckFrom)
+            .mockReturnValueOnce(jobListFrom);
+
+        const response = await request(app).get("/api/admin/jobs");
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(mockJobs);
+    });
+
+    it("should return 403 if a non-admin tries to access jobs", async () => {
+        const adminCheckFrom = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { role: "free" }, error: null }) };
+        mockSupabaseClient.from.mockReturnValueOnce(adminCheckFrom);
+
+        const response = await request(app).get("/api/admin/jobs");
+        expect(response.status).toBe(403);
+    });
+  });
+
+  describe("DELETE /jobs/:id", () => {
+    it("should delete a job successfully for an admin", async () => {
+        const adminCheckFrom = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { role: "admin" }, error: null }) };
+        const deleteFrom = { delete: vi.fn().mockReturnThis(), eq: vi.fn().mockResolvedValue({ error: null }) };
+        mockSupabaseClient.from
+            .mockReturnValueOnce(adminCheckFrom)
+            .mockReturnValueOnce(deleteFrom);
+
+        const response = await request(app).delete("/api/admin/jobs/job-to-delete");
+
+        expect(response.status).toBe(200);
+        expect(response.body.message).toBe("Job deleted successfully.");
+        expect(deleteFrom.eq).toHaveBeenCalledWith("id", "job-to-delete");
+    });
+  });
 });
