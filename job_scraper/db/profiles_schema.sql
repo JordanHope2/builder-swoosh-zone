@@ -1,3 +1,6 @@
+-- Create a custom type for user roles
+CREATE TYPE public.user_role AS ENUM ('free', 'pro', 'admin');
+
 -- Schema for public user profiles
 CREATE TABLE public.profiles (
   id UUID NOT NULL PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -5,6 +8,7 @@ CREATE TABLE public.profiles (
   full_name TEXT,
   avatar_url TEXT,
   website TEXT,
+  role public.user_role DEFAULT 'free',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
