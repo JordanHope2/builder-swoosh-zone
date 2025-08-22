@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
 import {
   BarChart3,
   Users,
@@ -42,8 +42,8 @@ import {
   Mail,
   Phone,
   Linkedin,
-  Twitter
-} from 'lucide-react';
+  Twitter,
+} from "lucide-react";
 import {
   DashboardContainer,
   StatsCard,
@@ -52,9 +52,9 @@ import {
   DashboardCard,
   LoadingSpinner,
   fadeInUp,
-  slideInLeft
-} from '../components/ui/unified-dashboard';
-import SecurityUtils from '../lib/security';
+  slideInLeft,
+} from "../components/ui/unified-dashboard";
+import SecurityUtils from "../lib/security";
 
 interface DashboardStats {
   totalJobPosts: number;
@@ -76,7 +76,7 @@ interface JobPost {
   location: string;
   type: string;
   salary: string;
-  status: 'active' | 'paused' | 'closed' | 'draft';
+  status: "active" | "paused" | "closed" | "draft";
   applications: number;
   views: number;
   postedDate: string;
@@ -91,7 +91,14 @@ interface Application {
   candidateName: string;
   candidateEmail: string;
   appliedDate: string;
-  status: 'new' | 'reviewing' | 'shortlisted' | 'interviewed' | 'offered' | 'hired' | 'rejected';
+  status:
+    | "new"
+    | "reviewing"
+    | "shortlisted"
+    | "interviewed"
+    | "offered"
+    | "hired"
+    | "rejected";
   matchScore: number;
   experience: string;
   location: string;
@@ -120,148 +127,149 @@ const mockStats: DashboardStats = {
   averageRating: 4.2,
   totalReviews: 156,
   responseRate: 95,
-  averageResponseTime: '2.3 hours'
+  averageResponseTime: "2.3 hours",
 };
 
 const mockJobs: JobPost[] = [
   {
-    id: '1',
-    title: 'Senior Software Engineer',
-    department: 'Engineering',
-    location: 'Zurich',
-    type: 'Full-time',
-    salary: 'CHF 120,000 - 140,000',
-    status: 'active',
+    id: "1",
+    title: "Senior Software Engineer",
+    department: "Engineering",
+    location: "Zurich",
+    type: "Full-time",
+    salary: "CHF 120,000 - 140,000",
+    status: "active",
     applications: 45,
     views: 234,
-    postedDate: '2024-01-15',
-    deadline: '2024-02-15',
-    urgent: true
+    postedDate: "2024-01-15",
+    deadline: "2024-02-15",
+    urgent: true,
   },
   {
-    id: '2',
-    title: 'Product Manager',
-    department: 'Product',
-    location: 'Zurich',
-    type: 'Full-time',
-    salary: 'CHF 110,000 - 130,000',
-    status: 'active',
+    id: "2",
+    title: "Product Manager",
+    department: "Product",
+    location: "Zurich",
+    type: "Full-time",
+    salary: "CHF 110,000 - 130,000",
+    status: "active",
     applications: 28,
     views: 156,
-    postedDate: '2024-01-10',
-    deadline: '2024-02-10'
+    postedDate: "2024-01-10",
+    deadline: "2024-02-10",
   },
   {
-    id: '3',
-    title: 'UX Designer',
-    department: 'Design',
-    location: 'Remote',
-    type: 'Full-time',
-    salary: 'CHF 85,000 - 105,000',
-    status: 'paused',
+    id: "3",
+    title: "UX Designer",
+    department: "Design",
+    location: "Remote",
+    type: "Full-time",
+    salary: "CHF 85,000 - 105,000",
+    status: "paused",
     applications: 67,
     views: 298,
-    postedDate: '2024-01-05',
-    deadline: '2024-02-05'
-  }
+    postedDate: "2024-01-05",
+    deadline: "2024-02-05",
+  },
 ];
 
 const mockApplications: Application[] = [
   {
-    id: '1',
-    jobId: '1',
-    jobTitle: 'Senior Software Engineer',
-    candidateName: 'Sarah Johnson',
-    candidateEmail: 'sarah.johnson@email.com',
-    appliedDate: '2024-01-16',
-    status: 'new',
+    id: "1",
+    jobId: "1",
+    jobTitle: "Senior Software Engineer",
+    candidateName: "Sarah Johnson",
+    candidateEmail: "sarah.johnson@email.com",
+    appliedDate: "2024-01-16",
+    status: "new",
     matchScore: 95,
-    experience: '8 years',
-    location: 'Zurich',
-    salary: 'CHF 130,000'
+    experience: "8 years",
+    location: "Zurich",
+    salary: "CHF 130,000",
   },
   {
-    id: '2',
-    jobId: '1',
-    jobTitle: 'Senior Software Engineer',
-    candidateName: 'Michael Chen',
-    candidateEmail: 'michael.chen@email.com',
-    appliedDate: '2024-01-16',
-    status: 'reviewing',
+    id: "2",
+    jobId: "1",
+    jobTitle: "Senior Software Engineer",
+    candidateName: "Michael Chen",
+    candidateEmail: "michael.chen@email.com",
+    appliedDate: "2024-01-16",
+    status: "reviewing",
     matchScore: 88,
-    experience: '6 years',
-    location: 'Zurich',
-    salary: 'CHF 125,000'
+    experience: "6 years",
+    location: "Zurich",
+    salary: "CHF 125,000",
   },
   {
-    id: '3',
-    jobId: '2',
-    jobTitle: 'Product Manager',
-    candidateName: 'Emma Rodriguez',
-    candidateEmail: 'emma.rodriguez@email.com',
-    appliedDate: '2024-01-15',
-    status: 'shortlisted',
+    id: "3",
+    jobId: "2",
+    jobTitle: "Product Manager",
+    candidateName: "Emma Rodriguez",
+    candidateEmail: "emma.rodriguez@email.com",
+    appliedDate: "2024-01-15",
+    status: "shortlisted",
     matchScore: 91,
-    experience: '5 years',
-    location: 'Geneva',
-    salary: 'CHF 120,000'
-  }
+    experience: "5 years",
+    location: "Geneva",
+    salary: "CHF 120,000",
+  },
 ];
 
 const mockCompanyProfile: CompanyProfile = {
-  id: '1',
-  name: 'TechCorp Zurich',
-  logo: '🚀',
-  industry: 'Technology',
-  size: '200-500 employees',
-  headquarters: 'Zurich, Switzerland',
-  website: 'https://techcorp.ch',
-  description: 'Leading fintech company revolutionizing digital banking solutions across Europe.',
-  verified: true
+  id: "1",
+  name: "TechCorp Zurich",
+  logo: "🚀",
+  industry: "Technology",
+  size: "200-500 employees",
+  headquarters: "Zurich, Switzerland",
+  website: "https://techcorp.ch",
+  description:
+    "Leading fintech company revolutionizing digital banking solutions across Europe.",
+  verified: true,
 };
 
 export default function CompanyDashboard() {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('overview');
-  const [jobFilter, setJobFilter] = useState('all');
-  const [applicationFilter, setApplicationFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [jobFilter, setJobFilter] = useState("all");
+  const [applicationFilter, setApplicationFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'jobs', label: 'Job Posts', icon: Briefcase },
-    { id: 'applications', label: 'Applications', icon: Users },
-    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-    { id: 'profile', label: 'Company Profile', icon: Building },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: "overview", label: "Overview", icon: BarChart3 },
+    { id: "jobs", label: "Job Posts", icon: Briefcase },
+    { id: "applications", label: "Applications", icon: Users },
+    { id: "analytics", label: "Analytics", icon: TrendingUp },
+    { id: "profile", label: "Company Profile", icon: Building },
+    { id: "settings", label: "Settings", icon: Settings },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'paused':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-      case 'closed':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
-      case 'draft':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'new':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-      case 'reviewing':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-      case 'shortlisted':
-        return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
-      case 'interviewed':
-        return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400';
-      case 'offered':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400';
-      case 'hired':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'rejected':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
+      case "active":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "paused":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      case "closed":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
+      case "draft":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      case "new":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+      case "reviewing":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
+      case "shortlisted":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
+      case "interviewed":
+        return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400";
+      case "offered":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
+      case "hired":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "rejected":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400';
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
   };
 
@@ -270,28 +278,33 @@ export default function CompanyDashboard() {
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < Math.floor(rating) 
-            ? 'text-yellow-400 fill-current' 
-            : i < rating 
-            ? 'text-yellow-400 fill-current opacity-50' 
-            : 'text-gray-300'
+          i < Math.floor(rating)
+            ? "text-yellow-400 fill-current"
+            : i < rating
+              ? "text-yellow-400 fill-current opacity-50"
+              : "text-gray-300"
         }`}
       />
     ));
   };
 
-  const filteredJobs = mockJobs.filter(job => {
-    const matchesFilter = jobFilter === 'all' || job.status === jobFilter;
-    const matchesSearch = searchTerm === '' || 
+  const filteredJobs = mockJobs.filter((job) => {
+    const matchesFilter = jobFilter === "all" || job.status === jobFilter;
+    const matchesSearch =
+      searchTerm === "" ||
       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.department.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
-  const filteredApplications = mockApplications.filter(application => {
-    const matchesFilter = applicationFilter === 'all' || application.status === applicationFilter;
-    const matchesSearch = searchTerm === '' || 
-      application.candidateName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredApplications = mockApplications.filter((application) => {
+    const matchesFilter =
+      applicationFilter === "all" || application.status === applicationFilter;
+    const matchesSearch =
+      searchTerm === "" ||
+      application.candidateName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       application.jobTitle.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
@@ -299,7 +312,7 @@ export default function CompanyDashboard() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -324,7 +337,7 @@ export default function CompanyDashboard() {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex gap-3">
               <button className="flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-jobequal-neutral-dark dark:border-gray-600 text-jobequal-text dark:text-white rounded-xl hover:bg-jobequal-neutral dark:hover:bg-gray-700 transition-colors">
                 <Bell className="w-4 h-4 mr-2" />
@@ -348,8 +361,12 @@ export default function CompanyDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Active Jobs</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockStats.activeJobs}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Active Jobs
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockStats.activeJobs}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +12% from last month
@@ -364,11 +381,15 @@ export default function CompanyDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Applications</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockStats.totalApplications}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Applications
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockStats.totalApplications}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
-                  <ArrowUp className="w-3 h-3 mr-1" />
-                  +{mockStats.newApplications} new today
+                  <ArrowUp className="w-3 h-3 mr-1" />+
+                  {mockStats.newApplications} new today
                 </p>
               </div>
               <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -380,8 +401,12 @@ export default function CompanyDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Profile Views</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockStats.profileViews}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Profile Views
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockStats.profileViews}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +8% this week
@@ -396,8 +421,12 @@ export default function CompanyDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Rating</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockStats.averageRating}/5</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Rating
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockStats.averageRating}/5
+                </p>
                 <div className="flex items-center mt-1">
                   {renderStars(mockStats.averageRating)}
                   <span className="text-xs text-jobequal-text-muted dark:text-gray-400 ml-1">
@@ -426,8 +455,8 @@ export default function CompanyDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-jobequal-green text-white shadow-md'
-                    : 'text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700'
+                    ? "bg-jobequal-green text-white shadow-md"
+                    : "text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700"
                 }`}
               >
                 <tab.icon className="w-4 h-4 mr-2" />
@@ -446,7 +475,7 @@ export default function CompanyDashboard() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === 'overview' && (
+            {activeTab === "overview" && (
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Recent Activity */}
                 <div className="lg:col-span-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
@@ -460,9 +489,15 @@ export default function CompanyDashboard() {
                         <Users className="w-4 h-4 text-green-600 dark:text-green-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-jobequal-text dark:text-white font-medium">New application received</p>
-                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">Sarah Johnson applied for Senior Software Engineer</p>
-                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">2 hours ago</p>
+                        <p className="text-jobequal-text dark:text-white font-medium">
+                          New application received
+                        </p>
+                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          Sarah Johnson applied for Senior Software Engineer
+                        </p>
+                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                          2 hours ago
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4 p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
@@ -470,9 +505,15 @@ export default function CompanyDashboard() {
                         <Eye className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-jobequal-text dark:text-white font-medium">High profile view activity</p>
-                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">Your company profile was viewed 45 times today</p>
-                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">1 day ago</p>
+                        <p className="text-jobequal-text dark:text-white font-medium">
+                          High profile view activity
+                        </p>
+                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          Your company profile was viewed 45 times today
+                        </p>
+                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                          1 day ago
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-4 p-4 bg-purple-50 dark:bg-purple-900/10 rounded-xl">
@@ -480,9 +521,15 @@ export default function CompanyDashboard() {
                         <Star className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-jobequal-text dark:text-white font-medium">New review received</p>
-                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">5-star review from a former employee</p>
-                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">3 days ago</p>
+                        <p className="text-jobequal-text dark:text-white font-medium">
+                          New review received
+                        </p>
+                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          5-star review from a former employee
+                        </p>
+                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                          3 days ago
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -492,34 +539,48 @@ export default function CompanyDashboard() {
                 <div className="space-y-8">
                   {/* Quick Actions */}
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Quick Actions</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Quick Actions
+                    </h3>
                     <div className="space-y-3">
                       <button className="w-full flex items-center p-3 bg-jobequal-green/10 hover:bg-jobequal-green/20 rounded-xl transition-colors">
                         <Plus className="w-5 h-5 mr-3 text-jobequal-green" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Post New Job</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Post New Job
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl transition-colors">
                         <MessageCircle className="w-5 h-5 mr-3 text-blue-600 dark:text-blue-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Message Candidates</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Message Candidates
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-purple-50 dark:bg-purple-900/10 hover:bg-purple-100 dark:hover:bg-purple-900/20 rounded-xl transition-colors">
                         <BarChart3 className="w-5 h-5 mr-3 text-purple-600 dark:text-purple-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">View Analytics</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          View Analytics
+                        </span>
                       </button>
                     </div>
                   </div>
 
                   {/* Performance Metrics */}
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Performance</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Performance
+                    </h3>
                     <div className="space-y-4">
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Response Rate</span>
-                          <span className="text-sm font-bold text-jobequal-green">{mockStats.responseRate}%</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Response Rate
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            {mockStats.responseRate}%
+                          </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full"
                             style={{ width: `${mockStats.responseRate}%` }}
                           />
@@ -527,14 +588,22 @@ export default function CompanyDashboard() {
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Avg. Response Time</span>
-                          <span className="text-sm font-bold text-jobequal-green">{mockStats.averageResponseTime}</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Avg. Response Time
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            {mockStats.averageResponseTime}
+                          </span>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Followers</span>
-                          <span className="text-sm font-bold text-jobequal-green">{mockStats.followers}</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Followers
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            {mockStats.followers}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -543,7 +612,7 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {activeTab === 'jobs' && (
+            {activeTab === "jobs" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0">
@@ -592,7 +661,9 @@ export default function CompanyDashboard() {
                             <h3 className="text-xl font-semibold text-jobequal-text dark:text-white mr-3">
                               {job.title}
                             </h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(job.status)}`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(job.status)}`}
+                            >
                               {job.status}
                             </span>
                             {job.urgent && (
@@ -616,7 +687,8 @@ export default function CompanyDashboard() {
                             </span>
                             <span className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
-                              Posted {new Date(job.postedDate).toLocaleDateString()}
+                              Posted{" "}
+                              {new Date(job.postedDate).toLocaleDateString()}
                             </span>
                           </div>
                           <div className="flex items-center space-x-6">
@@ -652,7 +724,7 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {activeTab === 'applications' && (
+            {activeTab === "applications" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0">
@@ -704,15 +776,21 @@ export default function CompanyDashboard() {
                             <h3 className="text-lg font-semibold text-jobequal-text dark:text-white mr-3">
                               {application.candidateName}
                             </h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(application.status)}`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(application.status)}`}
+                            >
                               {application.status}
                             </span>
                             <div className="ml-3 flex items-center">
                               <Target className="w-4 h-4 text-jobequal-green mr-1" />
-                              <span className="text-sm font-medium text-jobequal-green">{application.matchScore}% Match</span>
+                              <span className="text-sm font-medium text-jobequal-green">
+                                {application.matchScore}% Match
+                              </span>
                             </div>
                           </div>
-                          <p className="text-jobequal-text-muted dark:text-gray-400 mb-2">{application.jobTitle}</p>
+                          <p className="text-jobequal-text-muted dark:text-gray-400 mb-2">
+                            {application.jobTitle}
+                          </p>
                           <div className="flex flex-wrap items-center gap-4 text-sm text-jobequal-text-muted dark:text-gray-400">
                             <span className="flex items-center">
                               <Mail className="w-4 h-4 mr-1" />
@@ -732,7 +810,10 @@ export default function CompanyDashboard() {
                             </span>
                             <span className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
-                              Applied {new Date(application.appliedDate).toLocaleDateString()}
+                              Applied{" "}
+                              {new Date(
+                                application.appliedDate,
+                              ).toLocaleDateString()}
                             </span>
                           </div>
                         </div>
@@ -751,7 +832,7 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {activeTab === 'analytics' && (
+            {activeTab === "analytics" && (
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6 flex items-center">
@@ -760,16 +841,28 @@ export default function CompanyDashboard() {
                   </h2>
                   <div className="space-y-6">
                     <div className="flex items-center justify-between p-4 bg-jobequal-green/5 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Time to Fill</span>
-                      <span className="text-xl font-bold text-jobequal-green">18 days</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Time to Fill
+                      </span>
+                      <span className="text-xl font-bold text-jobequal-green">
+                        18 days
+                      </span>
                     </div>
                     <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Quality of Hire</span>
-                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">4.3/5</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Quality of Hire
+                      </span>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                        4.3/5
+                      </span>
                     </div>
                     <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-900/10 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Offer Acceptance Rate</span>
-                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">85%</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Offer Acceptance Rate
+                      </span>
+                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
+                        85%
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -781,39 +874,67 @@ export default function CompanyDashboard() {
                   </h2>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">JobEqual Platform</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        JobEqual Platform
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-jobequal-green h-2 rounded-full" style={{ width: '65%' }}></div>
+                          <div
+                            className="bg-jobequal-green h-2 rounded-full"
+                            style={{ width: "65%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">65%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          65%
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">Direct Applications</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        Direct Applications
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: '20%' }}></div>
+                          <div
+                            className="bg-blue-500 h-2 rounded-full"
+                            style={{ width: "20%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">20%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          20%
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">Referrals</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        Referrals
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-purple-500 h-2 rounded-full" style={{ width: '10%' }}></div>
+                          <div
+                            className="bg-purple-500 h-2 rounded-full"
+                            style={{ width: "10%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">10%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          10%
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">Other</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        Other
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '5%' }}></div>
+                          <div
+                            className="bg-yellow-500 h-2 rounded-full"
+                            style={{ width: "5%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">5%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          5%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -821,7 +942,7 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {activeTab === 'profile' && (
+            {activeTab === "profile" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white flex items-center">
@@ -837,7 +958,9 @@ export default function CompanyDashboard() {
                 <div className="grid lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2 space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Company Name</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Company Name
+                      </label>
                       <input
                         type="text"
                         value={mockCompanyProfile.name}
@@ -846,7 +969,9 @@ export default function CompanyDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Industry</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Industry
+                      </label>
                       <input
                         type="text"
                         value={mockCompanyProfile.industry}
@@ -855,7 +980,9 @@ export default function CompanyDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Company Size</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Company Size
+                      </label>
                       <input
                         type="text"
                         value={mockCompanyProfile.size}
@@ -864,7 +991,9 @@ export default function CompanyDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Headquarters</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Headquarters
+                      </label>
                       <input
                         type="text"
                         value={mockCompanyProfile.headquarters}
@@ -873,7 +1002,9 @@ export default function CompanyDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Website</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Website
+                      </label>
                       <input
                         type="text"
                         value={mockCompanyProfile.website}
@@ -882,7 +1013,9 @@ export default function CompanyDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Description</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Description
+                      </label>
                       <textarea
                         value={mockCompanyProfile.description}
                         rows={4}
@@ -904,7 +1037,9 @@ export default function CompanyDashboard() {
                     </div>
 
                     <div className="border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl p-6">
-                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-4">Verification Status</h3>
+                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-4">
+                        Verification Status
+                      </h3>
                       <div className="flex items-center space-x-2 text-green-600 dark:text-green-400">
                         <CheckCircle className="w-5 h-5" />
                         <span className="font-medium">Verified Company</span>
@@ -915,19 +1050,33 @@ export default function CompanyDashboard() {
                     </div>
 
                     <div className="border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl p-6">
-                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-4">Quick Stats</h3>
+                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-4">
+                        Quick Stats
+                      </h3>
                       <div className="space-y-3">
                         <div className="flex justify-between">
-                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">Profile Views</span>
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">{mockStats.profileViews}</span>
+                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            Profile Views
+                          </span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            {mockStats.profileViews}
+                          </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">Followers</span>
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">{mockStats.followers}</span>
+                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            Followers
+                          </span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            {mockStats.followers}
+                          </span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">Rating</span>
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">{mockStats.averageRating}/5</span>
+                          <span className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            Rating
+                          </span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            {mockStats.averageRating}/5
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -936,7 +1085,7 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {activeTab === 'settings' && (
+            {activeTab === "settings" && (
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6 flex items-center">
@@ -945,32 +1094,65 @@ export default function CompanyDashboard() {
                   </h2>
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Email Notifications</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Email Notifications
+                      </label>
                       <div className="space-y-2">
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">New applications</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            New applications
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Profile views</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Profile views
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Marketing updates</span>
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Marketing updates
+                          </span>
                         </label>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Privacy Settings</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Privacy Settings
+                      </label>
                       <div className="space-y-2">
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Show company in public listings</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Show company in public listings
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Allow candidates to contact directly</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Allow candidates to contact directly
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -984,27 +1166,42 @@ export default function CompanyDashboard() {
                   </h2>
                   <div className="space-y-6">
                     <div className="p-4 bg-jobequal-green/10 rounded-xl">
-                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Enterprise Plan</h3>
+                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                        Enterprise Plan
+                      </h3>
                       <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
-                        Unlimited job posts, advanced analytics, priority support
+                        Unlimited job posts, advanced analytics, priority
+                        support
                       </p>
                       <div className="flex justify-between items-center">
-                        <span className="text-lg font-bold text-jobequal-green">CHF 299/month</span>
+                        <span className="text-lg font-bold text-jobequal-green">
+                          CHF 299/month
+                        </span>
                         <button className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors">
                           Manage
                         </button>
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Usage This Month</h3>
+                      <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                        Usage This Month
+                      </h3>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-jobequal-text-muted dark:text-gray-400">Job Posts</span>
-                          <span className="text-jobequal-text dark:text-white">{mockStats.activeJobs} / Unlimited</span>
+                          <span className="text-jobequal-text-muted dark:text-gray-400">
+                            Job Posts
+                          </span>
+                          <span className="text-jobequal-text dark:text-white">
+                            {mockStats.activeJobs} / Unlimited
+                          </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-jobequal-text-muted dark:text-gray-400">Applications</span>
-                          <span className="text-jobequal-text dark:text-white">{mockStats.totalApplications} / Unlimited</span>
+                          <span className="text-jobequal-text-muted dark:text-gray-400">
+                            Applications
+                          </span>
+                          <span className="text-jobequal-text dark:text-white">
+                            {mockStats.totalApplications} / Unlimited
+                          </span>
                         </div>
                       </div>
                     </div>

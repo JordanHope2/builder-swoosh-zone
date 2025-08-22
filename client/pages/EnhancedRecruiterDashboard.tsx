@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { useLanguage } from '../contexts/LanguageContext';
-import { 
-  Users, 
-  Briefcase, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
+  Users,
+  Briefcase,
+  TrendingUp,
   Eye,
   Calendar,
   Clock,
@@ -52,9 +52,9 @@ import {
   StopCircle,
   Archive,
   Copy,
-  X
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  X,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Candidate {
   id: string;
@@ -65,7 +65,14 @@ interface Candidate {
   experience: string;
   skills: string[];
   matchScore: number;
-  status: 'new' | 'reviewed' | 'screened' | 'interviewed' | 'offered' | 'hired' | 'rejected';
+  status:
+    | "new"
+    | "reviewed"
+    | "screened"
+    | "interviewed"
+    | "offered"
+    | "hired"
+    | "rejected";
   appliedDate: string;
   salary: string;
   availability: string;
@@ -77,9 +84,9 @@ interface Candidate {
   notes?: string;
   interviews: Array<{
     date: string;
-    type: 'phone' | 'video' | 'onsite';
+    type: "phone" | "video" | "onsite";
     interviewer: string;
-    status: 'scheduled' | 'completed' | 'cancelled';
+    status: "scheduled" | "completed" | "cancelled";
     feedback?: string;
     rating?: number;
   }>;
@@ -91,7 +98,7 @@ interface JobPosting {
   department: string;
   location: string;
   type: string;
-  status: 'active' | 'paused' | 'closed' | 'draft';
+  status: "active" | "paused" | "closed" | "draft";
   applicants: number;
   views: number;
   posted: string;
@@ -101,7 +108,7 @@ interface JobPosting {
   requirements: string[];
   benefits: string[];
   applications: Candidate[];
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: "low" | "medium" | "high" | "urgent";
   responseRate: number;
   timeToFill?: number;
 }
@@ -140,7 +147,7 @@ const mockMetrics: RecruiterMetrics = {
   interviews: {
     scheduled: 12,
     completed: 28,
-    pending: 4
+    pending: 4,
   },
   pipeline: {
     new: 45,
@@ -149,163 +156,181 @@ const mockMetrics: RecruiterMetrics = {
     interviewed: 12,
     offered: 6,
     hired: 5,
-    rejected: 89
+    rejected: 89,
   },
   trends: {
     applications: [
-      { date: '2024-01-01', count: 45 },
-      { date: '2024-01-08', count: 52 },
-      { date: '2024-01-15', count: 38 },
-      { date: '2024-01-22', count: 67 }
+      { date: "2024-01-01", count: 45 },
+      { date: "2024-01-08", count: 52 },
+      { date: "2024-01-15", count: 38 },
+      { date: "2024-01-22", count: 67 },
     ],
     hires: [
-      { date: '2024-01-01', count: 2 },
-      { date: '2024-01-08', count: 1 },
-      { date: '2024-01-15', count: 3 },
-      { date: '2024-01-22', count: 2 }
+      { date: "2024-01-01", count: 2 },
+      { date: "2024-01-08", count: 1 },
+      { date: "2024-01-15", count: 3 },
+      { date: "2024-01-22", count: 2 },
     ],
     views: [
-      { date: '2024-01-01', count: 234 },
-      { date: '2024-01-08', count: 298 },
-      { date: '2024-01-15', count: 187 },
-      { date: '2024-01-22', count: 345 }
-    ]
-  }
+      { date: "2024-01-01", count: 234 },
+      { date: "2024-01-08", count: 298 },
+      { date: "2024-01-15", count: 187 },
+      { date: "2024-01-22", count: 345 },
+    ],
+  },
 };
 
 const mockJobPostings: JobPosting[] = [
   {
-    id: '1',
-    title: 'Senior Software Engineer',
-    department: 'Engineering',
-    location: 'Zurich',
-    type: 'Full-time',
-    status: 'active',
+    id: "1",
+    title: "Senior Software Engineer",
+    department: "Engineering",
+    location: "Zurich",
+    type: "Full-time",
+    status: "active",
     applicants: 47,
     views: 324,
-    posted: '2024-01-15',
-    deadline: '2024-02-15',
-    salary: 'CHF 120,000 - 140,000',
-    description: 'We are looking for a senior software engineer...',
-    requirements: ['React', 'TypeScript', '5+ years experience'],
-    benefits: ['Health Insurance', 'Remote Work', 'Stock Options'],
-    priority: 'high',
+    posted: "2024-01-15",
+    deadline: "2024-02-15",
+    salary: "CHF 120,000 - 140,000",
+    description: "We are looking for a senior software engineer...",
+    requirements: ["React", "TypeScript", "5+ years experience"],
+    benefits: ["Health Insurance", "Remote Work", "Stock Options"],
+    priority: "high",
     responseRate: 94,
     timeToFill: 21,
     applications: [
       {
-        id: '1',
-        name: 'Jordan Hope',
-        avatar: '👨‍💻',
-        title: 'Senior Software Engineer',
-        location: 'Zurich',
-        experience: '5 years',
-        skills: ['React', 'Node.js', 'TypeScript'],
+        id: "1",
+        name: "Jordan Hope",
+        avatar: "👨‍💻",
+        title: "Senior Software Engineer",
+        location: "Zurich",
+        experience: "5 years",
+        skills: ["React", "Node.js", "TypeScript"],
         matchScore: 95,
-        status: 'interviewed',
-        appliedDate: '2024-01-16',
-        salary: 'CHF 130,000',
-        availability: 'Immediately',
-        resume: 'jordan-hope-resume.pdf',
-        linkedin: 'linkedin.com/in/jordanhope',
+        status: "interviewed",
+        appliedDate: "2024-01-16",
+        salary: "CHF 130,000",
+        availability: "Immediately",
+        resume: "jordan-hope-resume.pdf",
+        linkedin: "linkedin.com/in/jordanhope",
         rating: 4.8,
         interviews: [
           {
-            date: '2024-01-18',
-            type: 'video',
-            interviewer: 'Sarah Kim',
-            status: 'completed',
-            feedback: 'Excellent technical skills, good cultural fit',
-            rating: 4.5
-          }
-        ]
+            date: "2024-01-18",
+            type: "video",
+            interviewer: "Sarah Kim",
+            status: "completed",
+            feedback: "Excellent technical skills, good cultural fit",
+            rating: 4.5,
+          },
+        ],
       },
       {
-        id: '2',
-        name: 'Sarah Chen',
-        avatar: '👩‍💻',
-        title: 'Full Stack Developer',
-        location: 'Geneva',
-        experience: '4 years',
-        skills: ['Vue.js', 'Python', 'AWS'],
+        id: "2",
+        name: "Sarah Chen",
+        avatar: "👩‍💻",
+        title: "Full Stack Developer",
+        location: "Geneva",
+        experience: "4 years",
+        skills: ["Vue.js", "Python", "AWS"],
         matchScore: 87,
-        status: 'reviewed',
-        appliedDate: '2024-01-17',
-        salary: 'CHF 125,000',
-        availability: '2 weeks notice',
-        resume: 'sarah-chen-resume.pdf',
-        portfolio: 'sarahchen.dev',
-        interviews: []
-      }
-    ]
+        status: "reviewed",
+        appliedDate: "2024-01-17",
+        salary: "CHF 125,000",
+        availability: "2 weeks notice",
+        resume: "sarah-chen-resume.pdf",
+        portfolio: "sarahchen.dev",
+        interviews: [],
+      },
+    ],
   },
   {
-    id: '2',
-    title: 'Product Manager',
-    department: 'Product',
-    location: 'Basel',
-    type: 'Full-time',
-    status: 'active',
+    id: "2",
+    title: "Product Manager",
+    department: "Product",
+    location: "Basel",
+    type: "Full-time",
+    status: "active",
     applicants: 28,
     views: 156,
-    posted: '2024-01-10',
-    deadline: '2024-02-10',
-    salary: 'CHF 110,000 - 130,000',
-    description: 'Seeking an experienced product manager...',
-    requirements: ['Product Management', '3+ years experience', 'Agile'],
-    benefits: ['Health Insurance', 'Flexible Hours', 'Learning Budget'],
-    priority: 'medium',
+    posted: "2024-01-10",
+    deadline: "2024-02-10",
+    salary: "CHF 110,000 - 130,000",
+    description: "Seeking an experienced product manager...",
+    requirements: ["Product Management", "3+ years experience", "Agile"],
+    benefits: ["Health Insurance", "Flexible Hours", "Learning Budget"],
+    priority: "medium",
     responseRate: 88,
-    applications: []
-  }
+    applications: [],
+  },
 ];
 
 export default function EnhancedRecruiterDashboard() {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('overview');
-  const [selectedJob, setSelectedJob] = useState<JobPosting | null>(mockJobPostings[0]);
-  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [timeRange, setTimeRange] = useState('7d');
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedJob, setSelectedJob] = useState<JobPosting | null>(
+    mockJobPostings[0],
+  );
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(
+    null,
+  );
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [timeRange, setTimeRange] = useState("7d");
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: BarChart3 },
-    { id: 'jobs', label: 'Job Posts', icon: Briefcase },
-    { id: 'candidates', label: 'Candidates', icon: Users },
-    { id: 'interviews', label: 'Interviews', icon: Video },
-    { id: 'analytics', label: 'Analytics', icon: TrendingUp },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: "overview", label: "Overview", icon: BarChart3 },
+    { id: "jobs", label: "Job Posts", icon: Briefcase },
+    { id: "candidates", label: "Candidates", icon: Users },
+    { id: "interviews", label: "Interviews", icon: Video },
+    { id: "analytics", label: "Analytics", icon: TrendingUp },
+    { id: "settings", label: "Settings", icon: Settings },
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'new': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200';
-      case 'reviewed': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200';
-      case 'screened': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200';
-      case 'interviewed': return 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200';
-      case 'offered': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200';
-      case 'hired': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200';
-      case 'rejected': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+      case "new":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200";
+      case "reviewed":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200";
+      case "screened":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-200";
+      case "interviewed":
+        return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-200";
+      case "offered":
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-200";
+      case "hired":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200";
+      case "rejected":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-200';
-      case 'high': return 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-200';
-      case 'low': return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/30 dark:text-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/30 dark:text-gray-200';
+      case "urgent":
+        return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-200";
+      case "high":
+        return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-200";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-200";
+      case "low":
+        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/30 dark:text-gray-200";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/30 dark:text-gray-200";
     }
   };
 
   const getMatchColor = (score: number) => {
-    if (score >= 90) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
-    if (score >= 80) return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30';
-    if (score >= 70) return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30';
-    return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30';
+    if (score >= 90) return "text-green-600 bg-green-100 dark:bg-green-900/30";
+    if (score >= 80) return "text-blue-600 bg-blue-100 dark:bg-blue-900/30";
+    if (score >= 70)
+      return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30";
+    return "text-orange-600 bg-orange-100 dark:bg-orange-900/30";
   };
 
   const renderStars = (rating: number) => {
@@ -313,28 +338,31 @@ export default function EnhancedRecruiterDashboard() {
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < Math.floor(rating) 
-            ? 'text-yellow-400 fill-current' 
-            : i < rating 
-            ? 'text-yellow-400 fill-current opacity-50' 
-            : 'text-gray-300'
+          i < Math.floor(rating)
+            ? "text-yellow-400 fill-current"
+            : i < rating
+              ? "text-yellow-400 fill-current opacity-50"
+              : "text-gray-300"
         }`}
       />
     ));
   };
 
-  const filteredJobs = mockJobPostings.filter(job => {
-    const matchesFilter = filterStatus === 'all' || job.status === filterStatus;
-    const matchesSearch = searchTerm === '' || 
+  const filteredJobs = mockJobPostings.filter((job) => {
+    const matchesFilter = filterStatus === "all" || job.status === filterStatus;
+    const matchesSearch =
+      searchTerm === "" ||
       job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.department.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
-  const allCandidates = mockJobPostings.flatMap(job => job.applications);
-  const filteredCandidates = allCandidates.filter(candidate => {
-    const matchesFilter = filterStatus === 'all' || candidate.status === filterStatus;
-    const matchesSearch = searchTerm === '' || 
+  const allCandidates = mockJobPostings.flatMap((job) => job.applications);
+  const filteredCandidates = allCandidates.filter((candidate) => {
+    const matchesFilter =
+      filterStatus === "all" || candidate.status === filterStatus;
+    const matchesSearch =
+      searchTerm === "" ||
       candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       candidate.title.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
@@ -343,7 +371,7 @@ export default function EnhancedRecruiterDashboard() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -360,12 +388,14 @@ export default function EnhancedRecruiterDashboard() {
                 Advanced recruiting tools and analytics at your fingertips
               </p>
             </div>
-            
+
             <div className="flex gap-3">
               <button className="flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-jobequal-neutral-dark dark:border-gray-600 text-jobequal-text dark:text-white rounded-xl hover:bg-jobequal-neutral dark:hover:bg-gray-700 transition-colors">
                 <Bell className="w-4 h-4 mr-2" />
                 Notifications
-                <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">3</span>
+                <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                  3
+                </span>
               </button>
               <button className="flex items-center px-6 py-2 bg-jobequal-green text-white rounded-xl hover:bg-jobequal-green-hover transition-colors">
                 <Plus className="w-4 h-4 mr-2" />
@@ -385,8 +415,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Active Jobs</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.activeJobs}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Active Jobs
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.activeJobs}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +15%
@@ -401,8 +435,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Applicants</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.totalApplicants}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Applicants
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.totalApplicants}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +22%
@@ -417,8 +455,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Hired</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.hiredThisMonth}</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Hired
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.hiredThisMonth}
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +2 this month
@@ -433,8 +475,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Avg. Time</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.averageTimeToHire}d</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Avg. Time
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.averageTimeToHire}d
+                </p>
                 <p className="text-xs text-blue-600 dark:text-blue-400 flex items-center">
                   <ArrowDown className="w-3 h-3 mr-1" />
                   -3d faster
@@ -449,8 +495,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Response Rate</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.responseRate}%</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Response Rate
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.responseRate}%
+                </p>
                 <p className="text-xs text-green-600 dark:text-green-400 flex items-center">
                   <ArrowUp className="w-3 h-3 mr-1" />
                   +5%
@@ -465,8 +515,12 @@ export default function EnhancedRecruiterDashboard() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Quality Score</p>
-                <p className="text-2xl font-bold text-jobequal-text dark:text-white">{mockMetrics.qualityScore}/5</p>
+                <p className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                  Quality Score
+                </p>
+                <p className="text-2xl font-bold text-jobequal-text dark:text-white">
+                  {mockMetrics.qualityScore}/5
+                </p>
                 <div className="flex items-center mt-1">
                   {renderStars(mockMetrics.qualityScore)}
                 </div>
@@ -492,8 +546,8 @@ export default function EnhancedRecruiterDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-jobequal-green text-white shadow-md'
-                    : 'text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700'
+                    ? "bg-jobequal-green text-white shadow-md"
+                    : "text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700"
                 }`}
               >
                 <tab.icon className="w-4 h-4 mr-2" />
@@ -512,7 +566,7 @@ export default function EnhancedRecruiterDashboard() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === 'overview' && (
+            {activeTab === "overview" && (
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Pipeline Overview */}
                 <div className="lg:col-span-2">
@@ -522,24 +576,42 @@ export default function EnhancedRecruiterDashboard() {
                       Hiring Pipeline
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {Object.entries(mockMetrics.pipeline).map(([stage, count], index) => (
-                        <div key={stage} className="text-center">
-                          <div className={`w-full h-20 rounded-xl flex items-center justify-center mb-3 relative overflow-hidden ${
-                            index === 0 ? 'bg-blue-500' :
-                            index === 1 ? 'bg-yellow-500' :
-                            index === 2 ? 'bg-purple-500' :
-                            index === 3 ? 'bg-indigo-500' :
-                            index === 4 ? 'bg-orange-500' :
-                            index === 5 ? 'bg-green-500' : 'bg-red-500'
-                          }`}>
-                            <div className="text-2xl font-bold text-white">{count}</div>
+                      {Object.entries(mockMetrics.pipeline).map(
+                        ([stage, count], index) => (
+                          <div key={stage} className="text-center">
+                            <div
+                              className={`w-full h-20 rounded-xl flex items-center justify-center mb-3 relative overflow-hidden ${
+                                index === 0
+                                  ? "bg-blue-500"
+                                  : index === 1
+                                    ? "bg-yellow-500"
+                                    : index === 2
+                                      ? "bg-purple-500"
+                                      : index === 3
+                                        ? "bg-indigo-500"
+                                        : index === 4
+                                          ? "bg-orange-500"
+                                          : index === 5
+                                            ? "bg-green-500"
+                                            : "bg-red-500"
+                              }`}
+                            >
+                              <div className="text-2xl font-bold text-white">
+                                {count}
+                              </div>
+                            </div>
+                            <h4 className="font-semibold text-jobequal-text dark:text-white text-sm mb-1 capitalize">
+                              {stage}
+                            </h4>
+                            <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                              {Math.round(
+                                (count / mockMetrics.totalApplicants) * 100,
+                              )}
+                              %
+                            </p>
                           </div>
-                          <h4 className="font-semibold text-jobequal-text dark:text-white text-sm mb-1 capitalize">{stage}</h4>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
-                            {Math.round((count / mockMetrics.totalApplicants) * 100)}%
-                          </p>
-                        </div>
-                      ))}
+                        ),
+                      )}
                     </div>
                   </div>
 
@@ -555,9 +627,15 @@ export default function EnhancedRecruiterDashboard() {
                           <UserCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-jobequal-text dark:text-white font-medium">Candidate hired</p>
-                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">Jordan Hope hired for Senior Software Engineer</p>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">2 hours ago</p>
+                          <p className="text-jobequal-text dark:text-white font-medium">
+                            Candidate hired
+                          </p>
+                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            Jordan Hope hired for Senior Software Engineer
+                          </p>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            2 hours ago
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-4 p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
@@ -565,9 +643,15 @@ export default function EnhancedRecruiterDashboard() {
                           <Video className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-jobequal-text dark:text-white font-medium">Interview scheduled</p>
-                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">Video interview with Sarah Chen for Product Manager</p>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">1 day ago</p>
+                          <p className="text-jobequal-text dark:text-white font-medium">
+                            Interview scheduled
+                          </p>
+                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            Video interview with Sarah Chen for Product Manager
+                          </p>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            1 day ago
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-start space-x-4 p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl">
@@ -575,9 +659,15 @@ export default function EnhancedRecruiterDashboard() {
                           <Briefcase className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
                         </div>
                         <div className="flex-1">
-                          <p className="text-jobequal-text dark:text-white font-medium">New job posted</p>
-                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">UX Designer position published</p>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">3 days ago</p>
+                          <p className="text-jobequal-text dark:text-white font-medium">
+                            New job posted
+                          </p>
+                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                            UX Designer position published
+                          </p>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            3 days ago
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -595,24 +685,44 @@ export default function EnhancedRecruiterDashboard() {
                     <div className="space-y-3">
                       <div className="p-3 bg-jobequal-green/5 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-jobequal-text dark:text-white text-sm">Sarah Chen</span>
-                          <span className="text-xs text-jobequal-green font-medium">Today 2:00 PM</span>
+                          <span className="font-medium text-jobequal-text dark:text-white text-sm">
+                            Sarah Chen
+                          </span>
+                          <span className="text-xs text-jobequal-green font-medium">
+                            Today 2:00 PM
+                          </span>
                         </div>
-                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">Product Manager - Video Interview</p>
+                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                          Product Manager - Video Interview
+                        </p>
                         <div className="flex gap-2 mt-2">
-                          <button className="px-2 py-1 bg-jobequal-green text-white rounded text-xs">Join</button>
-                          <button className="px-2 py-1 border border-jobequal-green text-jobequal-green rounded text-xs">Reschedule</button>
+                          <button className="px-2 py-1 bg-jobequal-green text-white rounded text-xs">
+                            Join
+                          </button>
+                          <button className="px-2 py-1 border border-jobequal-green text-jobequal-green rounded text-xs">
+                            Reschedule
+                          </button>
                         </div>
                       </div>
                       <div className="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-jobequal-text dark:text-white text-sm">Michael Johnson</span>
-                          <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">Tomorrow 10:00 AM</span>
+                          <span className="font-medium text-jobequal-text dark:text-white text-sm">
+                            Michael Johnson
+                          </span>
+                          <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                            Tomorrow 10:00 AM
+                          </span>
                         </div>
-                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">DevOps Engineer - Phone Interview</p>
+                        <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                          DevOps Engineer - Phone Interview
+                        </p>
                         <div className="flex gap-2 mt-2">
-                          <button className="px-2 py-1 bg-blue-600 text-white rounded text-xs">Prepare</button>
-                          <button className="px-2 py-1 border border-blue-600 text-blue-600 rounded text-xs">Details</button>
+                          <button className="px-2 py-1 bg-blue-600 text-white rounded text-xs">
+                            Prepare
+                          </button>
+                          <button className="px-2 py-1 border border-blue-600 text-blue-600 rounded text-xs">
+                            Details
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -620,53 +730,79 @@ export default function EnhancedRecruiterDashboard() {
 
                   {/* Performance Metrics */}
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Performance</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Performance
+                    </h3>
                     <div className="space-y-4">
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Interview-to-Hire Rate</span>
-                          <span className="text-sm font-bold text-jobequal-green">68%</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Interview-to-Hire Rate
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            68%
+                          </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full" style={{ width: '68%' }}></div>
+                          <div
+                            className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full"
+                            style={{ width: "68%" }}
+                          ></div>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Offer Acceptance</span>
-                          <span className="text-sm font-bold text-jobequal-green">85%</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Offer Acceptance
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            85%
+                          </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full" style={{ width: '85%' }}></div>
+                          <div
+                            className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full"
+                            style={{ width: "85%" }}
+                          ></div>
                         </div>
                       </div>
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium text-jobequal-text dark:text-white">Source Quality</span>
-                          <span className="text-sm font-bold text-jobequal-green">4.3/5</span>
+                          <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                            Source Quality
+                          </span>
+                          <span className="text-sm font-bold text-jobequal-green">
+                            4.3/5
+                          </span>
                         </div>
-                        <div className="flex">
-                          {renderStars(4.3)}
-                        </div>
+                        <div className="flex">{renderStars(4.3)}</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Quick Actions */}
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Quick Actions</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Quick Actions
+                    </h3>
                     <div className="space-y-3">
                       <button className="w-full flex items-center p-3 bg-jobequal-green/10 hover:bg-jobequal-green/20 rounded-xl transition-colors">
                         <Plus className="w-5 h-5 mr-3 text-jobequal-green" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Post New Job</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Post New Job
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl transition-colors">
                         <Download className="w-5 h-5 mr-3 text-blue-600 dark:text-blue-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Export Report</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Export Report
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-purple-50 dark:bg-purple-900/10 hover:bg-purple-100 dark:hover:bg-purple-900/20 rounded-xl transition-colors">
                         <MessageCircle className="w-5 h-5 mr-3 text-purple-600 dark:text-purple-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Bulk Message</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Bulk Message
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -674,7 +810,7 @@ export default function EnhancedRecruiterDashboard() {
               </div>
             )}
 
-            {activeTab === 'jobs' && (
+            {activeTab === "jobs" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0">
@@ -723,10 +859,14 @@ export default function EnhancedRecruiterDashboard() {
                             <h3 className="text-xl font-semibold text-jobequal-text dark:text-white mr-3">
                               {job.title}
                             </h3>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(job.status)}`}>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(job.status)}`}
+                            >
                               {job.status}
                             </span>
-                            <span className={`ml-2 px-2 py-1 rounded-full text-xs font-medium capitalize border ${getPriorityColor(job.priority)}`}>
+                            <span
+                              className={`ml-2 px-2 py-1 rounded-full text-xs font-medium capitalize border ${getPriorityColor(job.priority)}`}
+                            >
                               {job.priority}
                             </span>
                           </div>
@@ -787,7 +927,7 @@ export default function EnhancedRecruiterDashboard() {
               </div>
             )}
 
-            {activeTab === 'candidates' && (
+            {activeTab === "candidates" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0">
@@ -844,15 +984,21 @@ export default function EnhancedRecruiterDashboard() {
                               <h3 className="text-lg font-semibold text-jobequal-text dark:text-white mr-3">
                                 {candidate.name}
                               </h3>
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(candidate.status)}`}>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusColor(candidate.status)}`}
+                              >
                                 {candidate.status}
                               </span>
                               <div className="ml-3 flex items-center">
                                 <Target className="w-4 h-4 text-jobequal-green mr-1" />
-                                <span className="text-sm font-medium text-jobequal-green">{candidate.matchScore}% Match</span>
+                                <span className="text-sm font-medium text-jobequal-green">
+                                  {candidate.matchScore}% Match
+                                </span>
                               </div>
                             </div>
-                            <p className="text-jobequal-text-muted dark:text-gray-400 mb-2">{candidate.title}</p>
+                            <p className="text-jobequal-text-muted dark:text-gray-400 mb-2">
+                              {candidate.title}
+                            </p>
                             <div className="flex flex-wrap items-center gap-4 text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
                               <span className="flex items-center">
                                 <MapPin className="w-4 h-4 mr-1" />
@@ -868,15 +1014,23 @@ export default function EnhancedRecruiterDashboard() {
                               </span>
                               <span className="flex items-center">
                                 <Calendar className="w-4 h-4 mr-1" />
-                                Applied {new Date(candidate.appliedDate).toLocaleDateString()}
+                                Applied{" "}
+                                {new Date(
+                                  candidate.appliedDate,
+                                ).toLocaleDateString()}
                               </span>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                              {candidate.skills.slice(0, 4).map((skill, index) => (
-                                <span key={index} className="px-2 py-1 bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green rounded-full text-xs">
-                                  {skill}
-                                </span>
-                              ))}
+                              {candidate.skills
+                                .slice(0, 4)
+                                .map((skill, index) => (
+                                  <span
+                                    key={index}
+                                    className="px-2 py-1 bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green rounded-full text-xs"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
                               {candidate.skills.length > 4 && (
                                 <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full text-xs">
                                   +{candidate.skills.length - 4} more
@@ -903,7 +1057,7 @@ export default function EnhancedRecruiterDashboard() {
               </div>
             )}
 
-            {activeTab === 'interviews' && (
+            {activeTab === "interviews" && (
               <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6 flex items-center">
@@ -913,69 +1067,110 @@ export default function EnhancedRecruiterDashboard() {
                   <div className="space-y-6">
                     <div className="grid grid-cols-3 gap-4 mb-6">
                       <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
-                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{mockMetrics.interviews.scheduled}</div>
-                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Scheduled</div>
+                        <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                          {mockMetrics.interviews.scheduled}
+                        </div>
+                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          Scheduled
+                        </div>
                       </div>
                       <div className="text-center p-4 bg-green-50 dark:bg-green-900/10 rounded-xl">
-                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">{mockMetrics.interviews.completed}</div>
-                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Completed</div>
+                        <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                          {mockMetrics.interviews.completed}
+                        </div>
+                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          Completed
+                        </div>
                       </div>
                       <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl">
-                        <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{mockMetrics.interviews.pending}</div>
-                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Pending</div>
+                        <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+                          {mockMetrics.interviews.pending}
+                        </div>
+                        <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                          Pending
+                        </div>
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      {mockJobPostings.flatMap(job => 
-                        job.applications.flatMap(candidate => 
-                          candidate.interviews.map(interview => (
-                            <div key={`${candidate.id}-${interview.date}`} className="border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl p-6">
+                      {mockJobPostings.flatMap((job) =>
+                        job.applications.flatMap((candidate) =>
+                          candidate.interviews.map((interview) => (
+                            <div
+                              key={`${candidate.id}-${interview.date}`}
+                              className="border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl p-6"
+                            >
                               <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center space-x-3">
                                   <div className="w-10 h-10 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-xl flex items-center justify-center text-lg">
                                     {candidate.avatar}
                                   </div>
                                   <div>
-                                    <h4 className="font-semibold text-jobequal-text dark:text-white">{candidate.name}</h4>
-                                    <p className="text-sm text-jobequal-text-muted dark:text-gray-400">{job.title}</p>
+                                    <h4 className="font-semibold text-jobequal-text dark:text-white">
+                                      {candidate.name}
+                                    </h4>
+                                    <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                                      {job.title}
+                                    </p>
                                   </div>
                                 </div>
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(interview.status)}`}>
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(interview.status)}`}
+                                >
                                   {interview.status}
                                 </span>
                               </div>
                               <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
-                                  <span className="text-jobequal-text-muted dark:text-gray-400">Date & Time:</span>
-                                  <p className="font-medium text-jobequal-text dark:text-white">{new Date(interview.date).toLocaleString()}</p>
+                                  <span className="text-jobequal-text-muted dark:text-gray-400">
+                                    Date & Time:
+                                  </span>
+                                  <p className="font-medium text-jobequal-text dark:text-white">
+                                    {new Date(interview.date).toLocaleString()}
+                                  </p>
                                 </div>
                                 <div>
-                                  <span className="text-jobequal-text-muted dark:text-gray-400">Type:</span>
-                                  <p className="font-medium text-jobequal-text dark:text-white capitalize">{interview.type}</p>
+                                  <span className="text-jobequal-text-muted dark:text-gray-400">
+                                    Type:
+                                  </span>
+                                  <p className="font-medium text-jobequal-text dark:text-white capitalize">
+                                    {interview.type}
+                                  </p>
                                 </div>
                                 <div>
-                                  <span className="text-jobequal-text-muted dark:text-gray-400">Interviewer:</span>
-                                  <p className="font-medium text-jobequal-text dark:text-white">{interview.interviewer}</p>
+                                  <span className="text-jobequal-text-muted dark:text-gray-400">
+                                    Interviewer:
+                                  </span>
+                                  <p className="font-medium text-jobequal-text dark:text-white">
+                                    {interview.interviewer}
+                                  </p>
                                 </div>
                                 {interview.rating && (
                                   <div>
-                                    <span className="text-jobequal-text-muted dark:text-gray-400">Rating:</span>
+                                    <span className="text-jobequal-text-muted dark:text-gray-400">
+                                      Rating:
+                                    </span>
                                     <div className="flex items-center">
                                       {renderStars(interview.rating)}
-                                      <span className="ml-1 text-sm font-medium text-jobequal-text dark:text-white">{interview.rating}/5</span>
+                                      <span className="ml-1 text-sm font-medium text-jobequal-text dark:text-white">
+                                        {interview.rating}/5
+                                      </span>
                                     </div>
                                   </div>
                                 )}
                               </div>
                               {interview.feedback && (
                                 <div className="mt-4 p-3 bg-jobequal-green/5 rounded-lg">
-                                  <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">Feedback:</span>
-                                  <p className="text-sm text-jobequal-text dark:text-white mt-1">{interview.feedback}</p>
+                                  <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
+                                    Feedback:
+                                  </span>
+                                  <p className="text-sm text-jobequal-text dark:text-white mt-1">
+                                    {interview.feedback}
+                                  </p>
                                 </div>
                               )}
                               <div className="flex gap-2 mt-4">
-                                {interview.status === 'scheduled' && (
+                                {interview.status === "scheduled" && (
                                   <>
                                     <button className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors">
                                       Join Interview
@@ -985,15 +1180,15 @@ export default function EnhancedRecruiterDashboard() {
                                     </button>
                                   </>
                                 )}
-                                {interview.status === 'completed' && (
+                                {interview.status === "completed" && (
                                   <button className="px-3 py-1 border border-jobequal-green text-jobequal-green rounded text-sm hover:bg-jobequal-green hover:text-white transition-colors">
                                     View Details
                                   </button>
                                 )}
                               </div>
                             </div>
-                          ))
-                        )
+                          )),
+                        ),
                       )}
                     </div>
                   </div>
@@ -1001,37 +1196,53 @@ export default function EnhancedRecruiterDashboard() {
 
                 <div className="space-y-6">
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Schedule Interview</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Schedule Interview
+                    </h3>
                     <div className="space-y-4">
                       <button className="w-full flex items-center p-3 bg-jobequal-green/10 hover:bg-jobequal-green/20 rounded-xl transition-colors">
                         <Video className="w-5 h-5 mr-3 text-jobequal-green" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Video Interview</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Video Interview
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded-xl transition-colors">
                         <Phone className="w-5 h-5 mr-3 text-blue-600 dark:text-blue-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">Phone Interview</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          Phone Interview
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-3 bg-purple-50 dark:bg-purple-900/10 hover:bg-purple-100 dark:hover:bg-purple-900/20 rounded-xl transition-colors">
                         <Building className="w-5 h-5 mr-3 text-purple-600 dark:text-purple-400" />
-                        <span className="text-jobequal-text dark:text-white font-medium">On-site Interview</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          On-site Interview
+                        </span>
                       </button>
                     </div>
                   </div>
 
                   <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-6">
-                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">Interview Tools</h3>
+                    <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-4">
+                      Interview Tools
+                    </h3>
                     <div className="space-y-3">
                       <button className="w-full flex items-center p-2 text-left hover:bg-jobequal-neutral dark:hover:bg-gray-700 rounded-lg transition-colors">
                         <FileText className="w-4 h-4 mr-3 text-jobequal-green" />
-                        <span className="text-jobequal-text dark:text-white text-sm">Question Templates</span>
+                        <span className="text-jobequal-text dark:text-white text-sm">
+                          Question Templates
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-2 text-left hover:bg-jobequal-neutral dark:hover:bg-gray-700 rounded-lg transition-colors">
                         <Target className="w-4 h-4 mr-3 text-blue-600" />
-                        <span className="text-jobequal-text dark:text-white text-sm">Scoring Rubrics</span>
+                        <span className="text-jobequal-text dark:text-white text-sm">
+                          Scoring Rubrics
+                        </span>
                       </button>
                       <button className="w-full flex items-center p-2 text-left hover:bg-jobequal-neutral dark:hover:bg-gray-700 rounded-lg transition-colors">
                         <Camera className="w-4 h-4 mr-3 text-purple-600" />
-                        <span className="text-jobequal-text dark:text-white text-sm">Recording Settings</span>
+                        <span className="text-jobequal-text dark:text-white text-sm">
+                          Recording Settings
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -1039,7 +1250,7 @@ export default function EnhancedRecruiterDashboard() {
               </div>
             )}
 
-            {activeTab === 'analytics' && (
+            {activeTab === "analytics" && (
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6 flex items-center">
@@ -1048,16 +1259,28 @@ export default function EnhancedRecruiterDashboard() {
                   </h2>
                   <div className="space-y-6">
                     <div className="flex items-center justify-between p-4 bg-jobequal-green/5 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Time to Fill</span>
-                      <span className="text-xl font-bold text-jobequal-green">{mockMetrics.averageTimeToHire} days</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Time to Fill
+                      </span>
+                      <span className="text-xl font-bold text-jobequal-green">
+                        {mockMetrics.averageTimeToHire} days
+                      </span>
                     </div>
                     <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/10 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Cost per Hire</span>
-                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">CHF 2,340</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Cost per Hire
+                      </span>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                        CHF 2,340
+                      </span>
                     </div>
                     <div className="flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-900/10 rounded-xl">
-                      <span className="font-medium text-jobequal-text dark:text-white">Source Effectiveness</span>
-                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">78%</span>
+                      <span className="font-medium text-jobequal-text dark:text-white">
+                        Source Effectiveness
+                      </span>
+                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400">
+                        78%
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1069,30 +1292,51 @@ export default function EnhancedRecruiterDashboard() {
                   </h2>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">JobEqual Platform</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        JobEqual Platform
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-jobequal-green h-2 rounded-full" style={{ width: '65%' }}></div>
+                          <div
+                            className="bg-jobequal-green h-2 rounded-full"
+                            style={{ width: "65%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">65%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          65%
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">Referrals</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        Referrals
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: '25%' }}></div>
+                          <div
+                            className="bg-blue-500 h-2 rounded-full"
+                            style={{ width: "25%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">25%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          25%
+                        </span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-jobequal-text dark:text-white">Direct Applications</span>
+                      <span className="text-jobequal-text dark:text-white">
+                        Direct Applications
+                      </span>
                       <div className="flex items-center">
                         <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2 mr-3">
-                          <div className="bg-purple-500 h-2 rounded-full" style={{ width: '10%' }}></div>
+                          <div
+                            className="bg-purple-500 h-2 rounded-full"
+                            style={{ width: "10%" }}
+                          ></div>
                         </div>
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">10%</span>
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          10%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -1100,7 +1344,7 @@ export default function EnhancedRecruiterDashboard() {
               </div>
             )}
 
-            {activeTab === 'settings' && (
+            {activeTab === "settings" && (
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6 flex items-center">
@@ -1109,32 +1353,64 @@ export default function EnhancedRecruiterDashboard() {
                   </h2>
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Email Notifications</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Email Notifications
+                      </label>
                       <div className="space-y-2">
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">New applications</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            New applications
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Interview reminders</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Interview reminders
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Weekly reports</span>
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Weekly reports
+                          </span>
                         </label>
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">Auto-Response Settings</label>
+                      <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+                        Auto-Response Settings
+                      </label>
                       <div className="space-y-2">
                         <label className="flex items-center">
-                          <input type="checkbox" defaultChecked className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Send acknowledgment emails</span>
+                          <input
+                            type="checkbox"
+                            defaultChecked
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Send acknowledgment emails
+                          </span>
                         </label>
                         <label className="flex items-center">
-                          <input type="checkbox" className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green" />
-                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">Auto-schedule screening calls</span>
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
+                          />
+                          <span className="ml-2 text-sm text-jobequal-text dark:text-white">
+                            Auto-schedule screening calls
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -1153,8 +1429,12 @@ export default function EnhancedRecruiterDashboard() {
                           <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-jobequal-text dark:text-white">Google Calendar</h4>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">Sync interview schedules</p>
+                          <h4 className="font-medium text-jobequal-text dark:text-white">
+                            Google Calendar
+                          </h4>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            Sync interview schedules
+                          </p>
                         </div>
                       </div>
                       <button className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -1167,8 +1447,12 @@ export default function EnhancedRecruiterDashboard() {
                           <Video className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-jobequal-text dark:text-white">Zoom</h4>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">Video interviews</p>
+                          <h4 className="font-medium text-jobequal-text dark:text-white">
+                            Zoom
+                          </h4>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            Video interviews
+                          </p>
                         </div>
                       </div>
                       <button className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
@@ -1181,8 +1465,12 @@ export default function EnhancedRecruiterDashboard() {
                           <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-jobequal-text dark:text-white">Slack</h4>
-                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">Team notifications</p>
+                          <h4 className="font-medium text-jobequal-text dark:text-white">
+                            Slack
+                          </h4>
+                          <p className="text-xs text-jobequal-text-muted dark:text-gray-400">
+                            Team notifications
+                          </p>
                         </div>
                       </div>
                       <button className="px-3 py-1 border border-jobequal-green text-jobequal-green rounded-full text-xs font-medium hover:bg-jobequal-green hover:text-white transition-colors">
@@ -1220,15 +1508,23 @@ export default function EnhancedRecruiterDashboard() {
                     {selectedCandidate.avatar}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-jobequal-text dark:text-white">{selectedCandidate.name}</h2>
-                    <p className="text-jobequal-text-muted dark:text-gray-400">{selectedCandidate.title}</p>
+                    <h2 className="text-2xl font-bold text-jobequal-text dark:text-white">
+                      {selectedCandidate.name}
+                    </h2>
+                    <p className="text-jobequal-text-muted dark:text-gray-400">
+                      {selectedCandidate.title}
+                    </p>
                     <div className="flex items-center mt-2">
                       <Target className="w-4 h-4 text-jobequal-green mr-1" />
-                      <span className="text-sm font-medium text-jobequal-green">{selectedCandidate.matchScore}% Match</span>
+                      <span className="text-sm font-medium text-jobequal-green">
+                        {selectedCandidate.matchScore}% Match
+                      </span>
                       {selectedCandidate.rating && (
                         <div className="flex items-center ml-4">
                           {renderStars(selectedCandidate.rating)}
-                          <span className="ml-1 text-sm text-jobequal-text dark:text-white">{selectedCandidate.rating}/5</span>
+                          <span className="ml-1 text-sm text-jobequal-text dark:text-white">
+                            {selectedCandidate.rating}/5
+                          </span>
                         </div>
                       )}
                     </div>
@@ -1245,28 +1541,49 @@ export default function EnhancedRecruiterDashboard() {
               <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-jobequal-text-muted dark:text-gray-400">Location:</span>
-                    <p className="font-medium text-jobequal-text dark:text-white">{selectedCandidate.location}</p>
+                    <span className="text-jobequal-text-muted dark:text-gray-400">
+                      Location:
+                    </span>
+                    <p className="font-medium text-jobequal-text dark:text-white">
+                      {selectedCandidate.location}
+                    </p>
                   </div>
                   <div>
-                    <span className="text-jobequal-text-muted dark:text-gray-400">Experience:</span>
-                    <p className="font-medium text-jobequal-text dark:text-white">{selectedCandidate.experience}</p>
+                    <span className="text-jobequal-text-muted dark:text-gray-400">
+                      Experience:
+                    </span>
+                    <p className="font-medium text-jobequal-text dark:text-white">
+                      {selectedCandidate.experience}
+                    </p>
                   </div>
                   <div>
-                    <span className="text-jobequal-text-muted dark:text-gray-400">Salary Expectation:</span>
-                    <p className="font-medium text-jobequal-text dark:text-white">{selectedCandidate.salary}</p>
+                    <span className="text-jobequal-text-muted dark:text-gray-400">
+                      Salary Expectation:
+                    </span>
+                    <p className="font-medium text-jobequal-text dark:text-white">
+                      {selectedCandidate.salary}
+                    </p>
                   </div>
                   <div>
-                    <span className="text-jobequal-text-muted dark:text-gray-400">Availability:</span>
-                    <p className="font-medium text-jobequal-text dark:text-white">{selectedCandidate.availability}</p>
+                    <span className="text-jobequal-text-muted dark:text-gray-400">
+                      Availability:
+                    </span>
+                    <p className="font-medium text-jobequal-text dark:text-white">
+                      {selectedCandidate.availability}
+                    </p>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-jobequal-text dark:text-white mb-3">Skills</h3>
+                  <h3 className="font-semibold text-jobequal-text dark:text-white mb-3">
+                    Skills
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {selectedCandidate.skills.map((skill, index) => (
-                      <span key={index} className="px-3 py-1 bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green rounded-full text-sm">
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green rounded-full text-sm"
+                      >
                         {skill}
                       </span>
                     ))}
@@ -1275,13 +1592,22 @@ export default function EnhancedRecruiterDashboard() {
 
                 {selectedCandidate.interviews.length > 0 && (
                   <div>
-                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-3">Interview History</h3>
+                    <h3 className="font-semibold text-jobequal-text dark:text-white mb-3">
+                      Interview History
+                    </h3>
                     <div className="space-y-3">
                       {selectedCandidate.interviews.map((interview, index) => (
-                        <div key={index} className="p-4 border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl">
+                        <div
+                          key={index}
+                          className="p-4 border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl"
+                        >
                           <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium text-jobequal-text dark:text-white">{new Date(interview.date).toLocaleDateString()}</span>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(interview.status)}`}>
+                            <span className="font-medium text-jobequal-text dark:text-white">
+                              {new Date(interview.date).toLocaleDateString()}
+                            </span>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(interview.status)}`}
+                            >
                               {interview.status}
                             </span>
                           </div>
@@ -1289,12 +1615,16 @@ export default function EnhancedRecruiterDashboard() {
                             {interview.type} with {interview.interviewer}
                           </p>
                           {interview.feedback && (
-                            <p className="text-sm text-jobequal-text dark:text-white">{interview.feedback}</p>
+                            <p className="text-sm text-jobequal-text dark:text-white">
+                              {interview.feedback}
+                            </p>
                           )}
                           {interview.rating && (
                             <div className="flex items-center mt-2">
                               {renderStars(interview.rating)}
-                              <span className="ml-1 text-sm text-jobequal-text dark:text-white">{interview.rating}/5</span>
+                              <span className="ml-1 text-sm text-jobequal-text dark:text-white">
+                                {interview.rating}/5
+                              </span>
                             </div>
                           )}
                         </div>

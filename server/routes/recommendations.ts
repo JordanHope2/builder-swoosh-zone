@@ -26,9 +26,13 @@ router.get("/", authMiddleware, async (req, res) => {
     }
 
     // 2. Generate an embedding for the user's profile
-    const profileText = `Bio: ${profile.bio || ''}\nSkills: ${(profile.skills || []).join(', ')}`;
+    const profileText = `Bio: ${profile.bio || ""}\nSkills: ${(profile.skills || []).join(", ")}`;
     if (!profileText.trim()) {
-        return res.status(400).json({ error: "User profile is empty, cannot generate recommendations." });
+      return res
+        .status(400)
+        .json({
+          error: "User profile is empty, cannot generate recommendations.",
+        });
     }
     const userEmbedding = await getEmbedding(profileText);
 
@@ -36,7 +40,7 @@ router.get("/", authMiddleware, async (req, res) => {
     const { data: jobs, error: matchError } = await supabase.rpc("match_jobs", {
       query_embedding: userEmbedding,
       match_threshold: 0.7, // This can be tuned
-      match_count: 10,      // Limit to top 10 matches
+      match_count: 10, // Limit to top 10 matches
     });
 
     if (matchError) {
@@ -46,7 +50,6 @@ router.get("/", authMiddleware, async (req, res) => {
     // For now, we are just returning the pre-filtered jobs.
     // In the future, this is where we would add the GPT-4 re-ranking step.
     res.json({ jobs: jobs ?? [] });
-
   } catch (e: any) {
     console.error(e);
     res.status(500).json({ error: e.message ?? "Unknown error" });

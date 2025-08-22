@@ -1,7 +1,7 @@
 // server/supabase.ts
 import "dotenv/config";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "../../shared/types/supabase";
+import type { Database } from "@shared/types/supabase";
 
 let _anon: SupabaseClient<Database> | null = null;
 let _admin: SupabaseClient<Database> | null = null;
@@ -26,7 +26,7 @@ export function getSupabase(): SupabaseClient<Database> {
 
   if (!url || !anon) {
     throw new Error(
-      "Missing Supabase env: set SUPABASE_URL and SUPABASE_ANON_KEY (or VITE_/NEXT_PUBLIC_ fallbacks)."
+      "Missing Supabase env: set SUPABASE_URL and SUPABASE_ANON_KEY (or VITE_/NEXT_PUBLIC_ fallbacks).",
     );
   }
 
@@ -48,7 +48,7 @@ export function getSupabaseAdmin(): SupabaseClient<Database> {
 
   if (!url || !serviceKey) {
     throw new Error(
-      "Missing Supabase admin env: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
+      "Missing Supabase admin env: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
     );
   }
 

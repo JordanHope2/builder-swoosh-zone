@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface FavoriteJob {
   id: string;
@@ -7,33 +13,38 @@ export interface FavoriteJob {
   location: string;
   salary: string;
   dateAdded: Date;
-  type: 'job' | 'profile' | 'company';
+  type: "job" | "profile" | "company";
 }
 
 interface FavoritesContextType {
   favorites: FavoriteJob[];
-  addToFavorites: (item: Omit<FavoriteJob, 'dateAdded'>) => void;
-  removeFromFavorites: (id: string, type?: 'job' | 'profile' | 'company') => void;
-  isFavorite: (id: string, type?: 'job' | 'profile' | 'company') => boolean;
+  addToFavorites: (item: Omit<FavoriteJob, "dateAdded">) => void;
+  removeFromFavorites: (
+    id: string,
+    type?: "job" | "profile" | "company",
+  ) => void;
+  isFavorite: (id: string, type?: "job" | "profile" | "company") => boolean;
   clearFavorites: () => void;
-  getFavoritesByType: (type: 'job' | 'profile' | 'company') => FavoriteJob[];
+  getFavoritesByType: (type: "job" | "profile" | "company") => FavoriteJob[];
 }
 
-const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
+const FavoritesContext = createContext<FavoritesContextType | undefined>(
+  undefined,
+);
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [favorites, setFavorites] = useState<FavoriteJob[]>(() => {
     // Load favorites from localStorage
-    const savedFavorites = localStorage.getItem('jobequal-favorites');
+    const savedFavorites = localStorage.getItem("jobequal-favorites");
     if (savedFavorites) {
       try {
         const parsed = JSON.parse(savedFavorites);
         return parsed.map((fav: any) => ({
           ...fav,
-          dateAdded: new Date(fav.dateAdded)
+          dateAdded: new Date(fav.dateAdded),
         }));
       } catch (error) {
-        console.error('Error parsing saved favorites:', error);
+        console.error("Error parsing saved favorites:", error);
         return [];
       }
     }
@@ -42,33 +53,36 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
 
   // Save to localStorage whenever favorites change
   useEffect(() => {
-    localStorage.setItem('jobequal-favorites', JSON.stringify(favorites));
+    localStorage.setItem("jobequal-favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  const addToFavorites = (item: Omit<FavoriteJob, 'dateAdded'>) => {
+  const addToFavorites = (item: Omit<FavoriteJob, "dateAdded">) => {
     const newFavorite: FavoriteJob = {
       ...item,
-      dateAdded: new Date()
+      dateAdded: new Date(),
     };
-    
-    setFavorites(prev => {
+
+    setFavorites((prev) => {
       // Check if already exists
-      if (prev.some(fav => fav.id === item.id)) {
+      if (prev.some((fav) => fav.id === item.id)) {
         return prev;
       }
       return [...prev, newFavorite];
     });
   };
 
-  const removeFromFavorites = (id: string, type?: 'job' | 'profile' | 'company') => {
-    setFavorites(prev => prev.filter(fav =>
-      fav.id !== id || (type && fav.type !== type)
-    ));
+  const removeFromFavorites = (
+    id: string,
+    type?: "job" | "profile" | "company",
+  ) => {
+    setFavorites((prev) =>
+      prev.filter((fav) => fav.id !== id || (type && fav.type !== type)),
+    );
   };
 
-  const isFavorite = (id: string, type?: 'job' | 'profile' | 'company') => {
-    return favorites.some(fav =>
-      fav.id === id && (!type || fav.type === type)
+  const isFavorite = (id: string, type?: "job" | "profile" | "company") => {
+    return favorites.some(
+      (fav) => fav.id === id && (!type || fav.type === type),
     );
   };
 
@@ -76,19 +90,21 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     setFavorites([]);
   };
 
-  const getFavoritesByType = (type: 'job' | 'profile' | 'company') => {
-    return favorites.filter(fav => fav.type === type);
+  const getFavoritesByType = (type: "job" | "profile" | "company") => {
+    return favorites.filter((fav) => fav.type === type);
   };
 
   return (
-    <FavoritesContext.Provider value={{
-      favorites,
-      addToFavorites,
-      removeFromFavorites,
-      isFavorite,
-      clearFavorites,
-      getFavoritesByType
-    }}>
+    <FavoritesContext.Provider
+      value={{
+        favorites,
+        addToFavorites,
+        removeFromFavorites,
+        isFavorite,
+        clearFavorites,
+        getFavoritesByType,
+      }}
+    >
       {children}
     </FavoritesContext.Provider>
   );
@@ -97,7 +113,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
 export function useFavorites() {
   const context = useContext(FavoritesContext);
   if (context === undefined) {
-    throw new Error('useFavorites must be used within a FavoritesProvider');
+    throw new Error("useFavorites must be used within a FavoritesProvider");
   }
   return context;
 }

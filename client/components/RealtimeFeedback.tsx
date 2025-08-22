@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  TrendingUp, 
-  Award, 
-  Target, 
-  Zap, 
-  Star, 
-  Trophy, 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  TrendingUp,
+  Award,
+  Target,
+  Zap,
+  Star,
+  Trophy,
   CheckCircle,
   AlertCircle,
   Clock,
@@ -16,11 +16,17 @@ import {
   Crown,
   Gem,
   Shield,
-  Rocket
-} from 'lucide-react';
+  Rocket,
+} from "lucide-react";
 
 // Resume Score Component
-export function ResumeScore({ score, onScoreChange }: { score: number; onScoreChange?: (score: number) => void }) {
+export function ResumeScore({
+  score,
+  onScoreChange,
+}: {
+  score: number;
+  onScoreChange?: (score: number) => void;
+}) {
   const [animatedScore, setAnimatedScore] = useState(0);
   const [improvements, setImprovements] = useState<string[]>([]);
 
@@ -38,9 +44,9 @@ export function ResumeScore({ score, onScoreChange }: { score: number; onScoreCh
       "Include quantified achievements",
       "Improve summary section",
       "Add relevant certifications",
-      "Include project descriptions"
+      "Include project descriptions",
     ];
-    
+
     if (score < 70) {
       setImprovements(suggestions.slice(0, 3));
     } else if (score < 85) {
@@ -51,17 +57,21 @@ export function ResumeScore({ score, onScoreChange }: { score: number; onScoreCh
   }, [score]);
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'from-green-500 to-emerald-500';
-    if (score >= 70) return 'from-yellow-500 to-orange-500';
-    return 'from-red-500 to-pink-500';
+    if (score >= 85) return "from-green-500 to-emerald-500";
+    if (score >= 70) return "from-yellow-500 to-orange-500";
+    return "from-red-500 to-pink-500";
   };
 
   const getScoreLevel = (score: number) => {
-    if (score >= 90) return { level: 'Exceptional', icon: Crown, color: 'text-yellow-500' };
-    if (score >= 85) return { level: 'Excellent', icon: Trophy, color: 'text-green-500' };
-    if (score >= 70) return { level: 'Good', icon: Star, color: 'text-blue-500' };
-    if (score >= 55) return { level: 'Fair', icon: Target, color: 'text-orange-500' };
-    return { level: 'Needs Work', icon: AlertCircle, color: 'text-red-500' };
+    if (score >= 90)
+      return { level: "Exceptional", icon: Crown, color: "text-yellow-500" };
+    if (score >= 85)
+      return { level: "Excellent", icon: Trophy, color: "text-green-500" };
+    if (score >= 70)
+      return { level: "Good", icon: Star, color: "text-blue-500" };
+    if (score >= 55)
+      return { level: "Fair", icon: Target, color: "text-orange-500" };
+    return { level: "Needs Work", icon: AlertCircle, color: "text-red-500" };
   };
 
   const { level, icon: LevelIcon, color } = getScoreLevel(score);
@@ -75,7 +85,9 @@ export function ResumeScore({ score, onScoreChange }: { score: number; onScoreCh
       <div className="text-center">
         <div className="flex items-center justify-center mb-4">
           <LevelIcon className={`w-6 h-6 mr-2 ${color}`} />
-          <h3 className="text-xl font-bold text-jobequal-text dark:text-white">Resume Score</h3>
+          <h3 className="text-xl font-bold text-jobequal-text dark:text-white">
+            Resume Score
+          </h3>
         </div>
 
         {/* Circular Progress */}
@@ -103,8 +115,26 @@ export function ResumeScore({ score, onScoreChange }: { score: number; onScoreCh
             />
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor={score >= 85 ? '#10b981' : score >= 70 ? '#f59e0b' : '#ef4444'} />
-                <stop offset="100%" stopColor={score >= 85 ? '#059669' : score >= 70 ? '#d97706' : '#dc2626'} />
+                <stop
+                  offset="0%"
+                  stopColor={
+                    score >= 85
+                      ? "#10b981"
+                      : score >= 70
+                        ? "#f59e0b"
+                        : "#ef4444"
+                  }
+                />
+                <stop
+                  offset="100%"
+                  stopColor={
+                    score >= 85
+                      ? "#059669"
+                      : score >= 70
+                        ? "#d97706"
+                        : "#dc2626"
+                  }
+                />
               </linearGradient>
             </defs>
           </svg>
@@ -118,16 +148,16 @@ export function ResumeScore({ score, onScoreChange }: { score: number; onScoreCh
               >
                 {Math.round(animatedScore)}
               </motion.div>
-              <div className={`text-sm font-medium ${color}`}>
-                {level}
-              </div>
+              <div className={`text-sm font-medium ${color}`}>{level}</div>
             </div>
           </div>
         </div>
 
         {/* Improvements */}
         <div className="space-y-2">
-          <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">Quick Improvements:</h4>
+          <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">
+            Quick Improvements:
+          </h4>
           {improvements.map((improvement, index) => (
             <motion.div
               key={improvement}
@@ -160,41 +190,41 @@ interface Badge {
 
 const achievements: Badge[] = [
   {
-    id: 'first_application',
-    title: 'First Step',
-    description: 'Applied to your first job',
+    id: "first_application",
+    title: "First Step",
+    description: "Applied to your first job",
     icon: Rocket,
-    color: 'from-blue-500 to-cyan-500',
-    earned: true
+    color: "from-blue-500 to-cyan-500",
+    earned: true,
   },
   {
-    id: 'profile_complete',
-    title: 'Complete Profile',
-    description: 'Filled out 100% of your profile',
+    id: "profile_complete",
+    title: "Complete Profile",
+    description: "Filled out 100% of your profile",
     icon: CheckCircle,
-    color: 'from-green-500 to-emerald-500',
-    earned: true
+    color: "from-green-500 to-emerald-500",
+    earned: true,
   },
   {
-    id: 'top_candidate',
-    title: 'Top 5% Candidate',
-    description: 'Your profile ranks in the top 5%',
+    id: "top_candidate",
+    title: "Top 5% Candidate",
+    description: "Your profile ranks in the top 5%",
     icon: Crown,
-    color: 'from-yellow-500 to-orange-500',
+    color: "from-yellow-500 to-orange-500",
     earned: false,
     progress: 78,
-    requirement: '22% more to reach top 5%'
+    requirement: "22% more to reach top 5%",
   },
   {
-    id: 'networking_pro',
-    title: 'Networking Pro',
-    description: 'Connected with 10+ professionals',
+    id: "networking_pro",
+    title: "Networking Pro",
+    description: "Connected with 10+ professionals",
     icon: Users,
-    color: 'from-purple-500 to-pink-500',
+    color: "from-purple-500 to-pink-500",
     earned: false,
     progress: 60,
-    requirement: '4 more connections needed'
-  }
+    requirement: "4 more connections needed",
+  },
 ];
 
 export function AchievementBadges() {
@@ -204,7 +234,9 @@ export function AchievementBadges() {
     <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg">
       <div className="flex items-center mb-6">
         <Trophy className="w-6 h-6 mr-2 text-yellow-500" />
-        <h3 className="text-xl font-bold text-jobequal-text dark:text-white">Your Achievements</h3>
+        <h3 className="text-xl font-bold text-jobequal-text dark:text-white">
+          Your Achievements
+        </h3>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -215,15 +247,15 @@ export function AchievementBadges() {
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedBadge(badge)}
             className={`relative p-4 rounded-xl cursor-pointer transition-all duration-200 ${
-              badge.earned 
-                ? 'bg-gradient-to-br ' + badge.color + ' text-white shadow-lg' 
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'
+              badge.earned
+                ? "bg-gradient-to-br " + badge.color + " text-white shadow-lg"
+                : "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600"
             }`}
           >
             <div className="text-center">
               <badge.icon className="w-8 h-8 mx-auto mb-2" />
               <h4 className="font-semibold text-sm mb-1">{badge.title}</h4>
-              
+
               {!badge.earned && badge.progress && (
                 <div className="mt-2">
                   <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1">
@@ -270,10 +302,16 @@ export function AchievementBadges() {
               className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full"
             >
               <div className="text-center">
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
-                  selectedBadge.earned ? 'bg-gradient-to-br ' + selectedBadge.color : 'bg-gray-200 dark:bg-gray-700'
-                }`}>
-                  <selectedBadge.icon className={`w-8 h-8 ${selectedBadge.earned ? 'text-white' : 'text-gray-400'}`} />
+                <div
+                  className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${
+                    selectedBadge.earned
+                      ? "bg-gradient-to-br " + selectedBadge.color
+                      : "bg-gray-200 dark:bg-gray-700"
+                  }`}
+                >
+                  <selectedBadge.icon
+                    className={`w-8 h-8 ${selectedBadge.earned ? "text-white" : "text-gray-400"}`}
+                  />
                 </div>
                 <h3 className="text-xl font-bold text-jobequal-text dark:text-white mb-2">
                   {selectedBadge.title}
@@ -281,7 +319,7 @@ export function AchievementBadges() {
                 <p className="text-jobequal-text-muted dark:text-gray-300 mb-4">
                   {selectedBadge.description}
                 </p>
-                
+
                 {!selectedBadge.earned && selectedBadge.requirement && (
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3">
                     <p className="text-sm text-blue-600 dark:text-blue-400">
@@ -302,7 +340,7 @@ export function AchievementBadges() {
 // Activity Feed Component
 interface Activity {
   id: string;
-  type: 'application' | 'profile_view' | 'skill_match' | 'interview';
+  type: "application" | "profile_view" | "skill_match" | "interview";
   title: string;
   description: string;
   timestamp: Date;
@@ -312,39 +350,41 @@ interface Activity {
 
 const mockActivities: Activity[] = [
   {
-    id: '1',
-    type: 'application',
-    title: 'Application Sent',
-    description: 'Applied to Senior Software Engineer at TechCorp',
+    id: "1",
+    type: "application",
+    title: "Application Sent",
+    description: "Applied to Senior Software Engineer at TechCorp",
     timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
     icon: Rocket,
-    color: 'text-blue-500'
+    color: "text-blue-500",
   },
   {
-    id: '2',
-    type: 'profile_view',
-    title: 'Profile Viewed',
-    description: 'Your profile was viewed by InnovateCH',
+    id: "2",
+    type: "profile_view",
+    title: "Profile Viewed",
+    description: "Your profile was viewed by InnovateCH",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     icon: Eye,
-    color: 'text-green-500'
+    color: "text-green-500",
   },
   {
-    id: '3',
-    type: 'skill_match',
-    title: 'New Skill Match',
-    description: 'Found 3 new jobs matching your React skills',
+    id: "3",
+    type: "skill_match",
+    title: "New Skill Match",
+    description: "Found 3 new jobs matching your React skills",
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
     icon: Zap,
-    color: 'text-yellow-500'
-  }
+    color: "text-yellow-500",
+  },
 ];
 
 export function ActivityFeed() {
   const formatTimeAgo = (date: Date) => {
     const now = new Date();
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-    
+    const diffInMinutes = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60),
+    );
+
     if (diffInMinutes < 60) {
       return `${diffInMinutes}m ago`;
     } else if (diffInMinutes < 1440) {
@@ -358,7 +398,9 @@ export function ActivityFeed() {
     <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg">
       <div className="flex items-center mb-6">
         <Clock className="w-6 h-6 mr-2 text-jobequal-green" />
-        <h3 className="text-xl font-bold text-jobequal-text dark:text-white">Recent Activity</h3>
+        <h3 className="text-xl font-bold text-jobequal-text dark:text-white">
+          Recent Activity
+        </h3>
       </div>
 
       <div className="space-y-4">
@@ -370,7 +412,9 @@ export function ActivityFeed() {
             transition={{ delay: index * 0.1 }}
             className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
           >
-            <div className={`p-2 rounded-full bg-gray-100 dark:bg-gray-700 ${activity.color}`}>
+            <div
+              className={`p-2 rounded-full bg-gray-100 dark:bg-gray-700 ${activity.color}`}
+            >
               <activity.icon className="w-4 h-4" />
             </div>
             <div className="flex-1 min-w-0">

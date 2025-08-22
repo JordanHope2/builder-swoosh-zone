@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { PageHeader } from '../components/ui/page-header';
-import { ProtectedRoute } from '../components/ProtectedRoute';
-import { applicationToast } from '../hooks/use-toast';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { PageHeader } from "../components/ui/page-header";
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { applicationToast } from "../hooks/use-toast";
 import {
   Briefcase,
   MapPin,
@@ -25,16 +25,16 @@ import {
   AlertCircle,
   CheckCircle,
   Calendar,
-  TrendingUp
-} from 'lucide-react';
+  TrendingUp,
+} from "lucide-react";
 
 interface JobFormData {
   title: string;
   company: string;
   location: string;
   remote: boolean;
-  type: 'full-time' | 'part-time' | 'contract' | 'internship';
-  experience: 'entry' | 'mid' | 'senior' | 'executive';
+  type: "full-time" | "part-time" | "contract" | "internship";
+  experience: "entry" | "mid" | "senior" | "executive";
   department: string;
   description: string;
   requirements: string[];
@@ -54,14 +54,14 @@ interface JobFormData {
 }
 
 const initialFormData: JobFormData = {
-  title: '',
-  company: '',
-  location: '',
+  title: "",
+  company: "",
+  location: "",
   remote: false,
-  type: 'full-time',
-  experience: 'mid',
-  department: '',
-  description: '',
+  type: "full-time",
+  experience: "mid",
+  department: "",
+  description: "",
   requirements: [],
   responsibilities: [],
   benefits: [],
@@ -69,105 +69,152 @@ const initialFormData: JobFormData = {
   salary: {
     min: 0,
     max: 0,
-    currency: 'CHF',
-    negotiable: false
+    currency: "CHF",
+    negotiable: false,
   },
-  applicationDeadline: '',
-  startDate: '',
+  applicationDeadline: "",
+  startDate: "",
   featured: false,
-  urgent: false
+  urgent: false,
 };
 
 const jobTypes = [
-  { value: 'full-time', label: 'Full-time' },
-  { value: 'part-time', label: 'Part-time' },
-  { value: 'contract', label: 'Contract' },
-  { value: 'internship', label: 'Internship' }
+  { value: "full-time", label: "Full-time" },
+  { value: "part-time", label: "Part-time" },
+  { value: "contract", label: "Contract" },
+  { value: "internship", label: "Internship" },
 ];
 
 const experienceLevels = [
-  { value: 'entry', label: 'Entry Level (0-2 years)' },
-  { value: 'mid', label: 'Mid Level (3-5 years)' },
-  { value: 'senior', label: 'Senior Level (6+ years)' },
-  { value: 'executive', label: 'Executive Level' }
+  { value: "entry", label: "Entry Level (0-2 years)" },
+  { value: "mid", label: "Mid Level (3-5 years)" },
+  { value: "senior", label: "Senior Level (6+ years)" },
+  { value: "executive", label: "Executive Level" },
 ];
 
 const departments = [
-  'Engineering & Technology',
-  'Product Management',
-  'Design & UX',
-  'Sales & Business Development',
-  'Marketing & Communications',
-  'Operations & Supply Chain',
-  'Finance & Accounting',
-  'Human Resources',
-  'Legal & Compliance',
-  'Customer Success',
-  'Data & Analytics',
-  'Security & IT'
+  "Engineering & Technology",
+  "Product Management",
+  "Design & UX",
+  "Sales & Business Development",
+  "Marketing & Communications",
+  "Operations & Supply Chain",
+  "Finance & Accounting",
+  "Human Resources",
+  "Legal & Compliance",
+  "Customer Success",
+  "Data & Analytics",
+  "Security & IT",
 ];
 
-const currencies = ['CHF', 'EUR', 'USD'];
+const currencies = ["CHF", "EUR", "USD"];
 
 const commonSkills = [
-  'React', 'TypeScript', 'Node.js', 'Python', 'Java', 'AWS', 'Docker', 'Kubernetes',
-  'Product Management', 'Agile', 'Scrum', 'Data Analysis', 'Machine Learning',
-  'Figma', 'Sketch', 'Adobe Creative Suite', 'User Research', 'Prototyping',
-  'Sales', 'CRM', 'Lead Generation', 'Account Management', 'Negotiation',
-  'Digital Marketing', 'SEO', 'SEM', 'Social Media', 'Content Marketing',
-  'Financial Analysis', 'Excel', 'SAP', 'QuickBooks', 'Budgeting'
+  "React",
+  "TypeScript",
+  "Node.js",
+  "Python",
+  "Java",
+  "AWS",
+  "Docker",
+  "Kubernetes",
+  "Product Management",
+  "Agile",
+  "Scrum",
+  "Data Analysis",
+  "Machine Learning",
+  "Figma",
+  "Sketch",
+  "Adobe Creative Suite",
+  "User Research",
+  "Prototyping",
+  "Sales",
+  "CRM",
+  "Lead Generation",
+  "Account Management",
+  "Negotiation",
+  "Digital Marketing",
+  "SEO",
+  "SEM",
+  "Social Media",
+  "Content Marketing",
+  "Financial Analysis",
+  "Excel",
+  "SAP",
+  "QuickBooks",
+  "Budgeting",
 ];
 
 function PostJobPage() {
   const [formData, setFormData] = useState<JobFormData>(initialFormData);
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [newSkill, setNewSkill] = useState('');
-  const [newRequirement, setNewRequirement] = useState('');
-  const [newResponsibility, setNewResponsibility] = useState('');
-  const [newBenefit, setNewBenefit] = useState('');
+  const [newSkill, setNewSkill] = useState("");
+  const [newRequirement, setNewRequirement] = useState("");
+  const [newResponsibility, setNewResponsibility] = useState("");
+  const [newBenefit, setNewBenefit] = useState("");
 
   const totalSteps = 4;
 
   const updateFormData = (field: string, value: any) => {
-    setFormData(prev => {
-      const keys = field.split('.');
+    setFormData((prev) => {
+      const keys = field.split(".");
       const updated = { ...prev };
       let current: any = updated;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         current[keys[i]] = { ...current[keys[i]] };
         current = current[keys[i]];
       }
       current[keys[keys.length - 1]] = value;
-      
+
       return updated;
     });
   };
 
-  const addToArray = (field: keyof JobFormData, value: string, setter: (value: string) => void) => {
+  const addToArray = (
+    field: keyof JobFormData,
+    value: string,
+    setter: (value: string) => void,
+  ) => {
     if (value.trim()) {
       const currentArray = formData[field] as string[];
       if (!currentArray.includes(value.trim())) {
         updateFormData(field, [...currentArray, value.trim()]);
-        setter('');
+        setter("");
       }
     }
   };
 
   const removeFromArray = (field: keyof JobFormData, index: number) => {
     const currentArray = formData[field] as string[];
-    updateFormData(field, currentArray.filter((_, i) => i !== index));
+    updateFormData(
+      field,
+      currentArray.filter((_, i) => i !== index),
+    );
   };
 
   const validateStep = (step: number): boolean => {
     switch (step) {
       case 1:
-        return !!(formData.title && formData.company && formData.location && formData.department);
+        return !!(
+          formData.title &&
+          formData.company &&
+          formData.location &&
+          formData.department
+        );
       case 2:
-        return !!(formData.description && formData.requirements.length > 0 && formData.responsibilities.length > 0);
+        return !!(
+          formData.description &&
+          formData.requirements.length > 0 &&
+          formData.responsibilities.length > 0
+        );
       case 3:
-        return !!(formData.salary.min > 0 && formData.salary.max > 0 && formData.skills.length > 0);
+        return !!(
+          formData.salary.min > 0 &&
+          formData.salary.max > 0 &&
+          formData.skills.length > 0
+        );
       case 4:
         return !!(formData.applicationDeadline && formData.startDate);
       default:
@@ -177,25 +224,25 @@ function PostJobPage() {
 
   const handleSubmit = async () => {
     if (!validateStep(4)) {
-      applicationToast.error('Please fill in all required fields');
+      applicationToast.error("Please fill in all required fields");
       return;
     }
 
     setIsSubmitting(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       applicationToast.success(
-        'Job posted successfully!',
-        'Your job listing is now live and candidates can apply.'
+        "Job posted successfully!",
+        "Your job listing is now live and candidates can apply.",
       );
-      
+
       // Reset form
       setFormData(initialFormData);
       setCurrentStep(1);
     } catch (error) {
-      applicationToast.error('Failed to post job. Please try again.');
+      applicationToast.error("Failed to post job. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -203,53 +250,65 @@ function PostJobPage() {
 
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-bold text-jobequal-text mb-6">Basic Job Information</h3>
-      
+      <h3 className="text-xl font-bold text-jobequal-text mb-6">
+        Basic Job Information
+      </h3>
+
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Job Title *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Job Title *
+          </label>
           <input
             type="text"
             value={formData.title}
-            onChange={(e) => updateFormData('title', e.target.value)}
+            onChange={(e) => updateFormData("title", e.target.value)}
             placeholder="e.g. Senior Software Engineer"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Company *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Company *
+          </label>
           <input
             type="text"
             value={formData.company}
-            onChange={(e) => updateFormData('company', e.target.value)}
+            onChange={(e) => updateFormData("company", e.target.value)}
             placeholder="Your company name"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Location *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Location *
+          </label>
           <input
             type="text"
             value={formData.location}
-            onChange={(e) => updateFormData('location', e.target.value)}
+            onChange={(e) => updateFormData("location", e.target.value)}
             placeholder="e.g. Zurich, Switzerland"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Department *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Department *
+          </label>
           <div className="relative">
             <select
               value={formData.department}
-              onChange={(e) => updateFormData('department', e.target.value)}
+              onChange={(e) => updateFormData("department", e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent appearance-none"
             >
               <option value="">Select department</option>
-              {departments.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
               ))}
             </select>
             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -257,15 +316,19 @@ function PostJobPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Job Type</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Job Type
+          </label>
           <div className="relative">
             <select
               value={formData.type}
-              onChange={(e) => updateFormData('type', e.target.value)}
+              onChange={(e) => updateFormData("type", e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent appearance-none"
             >
-              {jobTypes.map(type => (
-                <option key={type.value} value={type.value}>{type.label}</option>
+              {jobTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
               ))}
             </select>
             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -273,15 +336,19 @@ function PostJobPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Experience Level</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Experience Level
+          </label>
           <div className="relative">
             <select
               value={formData.experience}
-              onChange={(e) => updateFormData('experience', e.target.value)}
+              onChange={(e) => updateFormData("experience", e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent appearance-none"
             >
-              {experienceLevels.map(level => (
-                <option key={level.value} value={level.value}>{level.label}</option>
+              {experienceLevels.map((level) => (
+                <option key={level.value} value={level.value}>
+                  {level.label}
+                </option>
               ))}
             </select>
             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -294,10 +361,12 @@ function PostJobPage() {
           <input
             type="checkbox"
             checked={formData.remote}
-            onChange={(e) => updateFormData('remote', e.target.checked)}
+            onChange={(e) => updateFormData("remote", e.target.checked)}
             className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
           />
-          <span className="text-sm font-medium text-jobequal-text">Remote work available</span>
+          <span className="text-sm font-medium text-jobequal-text">
+            Remote work available
+          </span>
         </label>
       </div>
     </div>
@@ -306,12 +375,14 @@ function PostJobPage() {
   const renderStep2 = () => (
     <div className="space-y-6">
       <h3 className="text-xl font-bold text-jobequal-text mb-6">Job Details</h3>
-      
+
       <div>
-        <label className="block text-sm font-medium text-jobequal-text mb-2">Job Description *</label>
+        <label className="block text-sm font-medium text-jobequal-text mb-2">
+          Job Description *
+        </label>
         <textarea
           value={formData.description}
-          onChange={(e) => updateFormData('description', e.target.value)}
+          onChange={(e) => updateFormData("description", e.target.value)}
           placeholder="Describe the role, company culture, and what makes this opportunity exciting..."
           rows={6}
           className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
@@ -319,7 +390,9 @@ function PostJobPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-jobequal-text mb-2">Requirements *</label>
+        <label className="block text-sm font-medium text-jobequal-text mb-2">
+          Requirements *
+        </label>
         <div className="space-y-3">
           <div className="flex space-x-2">
             <input
@@ -328,11 +401,16 @@ function PostJobPage() {
               onChange={(e) => setNewRequirement(e.target.value)}
               placeholder="Add a requirement"
               className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-              onKeyPress={(e) => e.key === 'Enter' && addToArray('requirements', newRequirement, setNewRequirement)}
+              onKeyPress={(e) =>
+                e.key === "Enter" &&
+                addToArray("requirements", newRequirement, setNewRequirement)
+              }
             />
             <button
               type="button"
-              onClick={() => addToArray('requirements', newRequirement, setNewRequirement)}
+              onClick={() =>
+                addToArray("requirements", newRequirement, setNewRequirement)
+              }
               className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -340,11 +418,14 @@ function PostJobPage() {
           </div>
           <div className="space-y-2">
             {formData.requirements.map((req, index) => (
-              <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
+              >
                 <span className="text-sm">{req}</span>
                 <button
                   type="button"
-                  onClick={() => removeFromArray('requirements', index)}
+                  onClick={() => removeFromArray("requirements", index)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <X className="w-4 h-4" />
@@ -356,7 +437,9 @@ function PostJobPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-jobequal-text mb-2">Responsibilities *</label>
+        <label className="block text-sm font-medium text-jobequal-text mb-2">
+          Responsibilities *
+        </label>
         <div className="space-y-3">
           <div className="flex space-x-2">
             <input
@@ -365,11 +448,24 @@ function PostJobPage() {
               onChange={(e) => setNewResponsibility(e.target.value)}
               placeholder="Add a responsibility"
               className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-              onKeyPress={(e) => e.key === 'Enter' && addToArray('responsibilities', newResponsibility, setNewResponsibility)}
+              onKeyPress={(e) =>
+                e.key === "Enter" &&
+                addToArray(
+                  "responsibilities",
+                  newResponsibility,
+                  setNewResponsibility,
+                )
+              }
             />
             <button
               type="button"
-              onClick={() => addToArray('responsibilities', newResponsibility, setNewResponsibility)}
+              onClick={() =>
+                addToArray(
+                  "responsibilities",
+                  newResponsibility,
+                  setNewResponsibility,
+                )
+              }
               className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -377,11 +473,14 @@ function PostJobPage() {
           </div>
           <div className="space-y-2">
             {formData.responsibilities.map((resp, index) => (
-              <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
+              >
                 <span className="text-sm">{resp}</span>
                 <button
                   type="button"
-                  onClick={() => removeFromArray('responsibilities', index)}
+                  onClick={() => removeFromArray("responsibilities", index)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <X className="w-4 h-4" />
@@ -393,7 +492,9 @@ function PostJobPage() {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-jobequal-text mb-2">Benefits & Perks</label>
+        <label className="block text-sm font-medium text-jobequal-text mb-2">
+          Benefits & Perks
+        </label>
         <div className="space-y-3">
           <div className="flex space-x-2">
             <input
@@ -402,11 +503,14 @@ function PostJobPage() {
               onChange={(e) => setNewBenefit(e.target.value)}
               placeholder="Add a benefit or perk"
               className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-              onKeyPress={(e) => e.key === 'Enter' && addToArray('benefits', newBenefit, setNewBenefit)}
+              onKeyPress={(e) =>
+                e.key === "Enter" &&
+                addToArray("benefits", newBenefit, setNewBenefit)
+              }
             />
             <button
               type="button"
-              onClick={() => addToArray('benefits', newBenefit, setNewBenefit)}
+              onClick={() => addToArray("benefits", newBenefit, setNewBenefit)}
               className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -414,11 +518,14 @@ function PostJobPage() {
           </div>
           <div className="space-y-2">
             {formData.benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg">
+              <div
+                key={index}
+                className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
+              >
                 <span className="text-sm">{benefit}</span>
                 <button
                   type="button"
-                  onClick={() => removeFromArray('benefits', index)}
+                  onClick={() => removeFromArray("benefits", index)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <X className="w-4 h-4" />
@@ -433,19 +540,27 @@ function PostJobPage() {
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-bold text-jobequal-text mb-6">Compensation & Skills</h3>
-      
+      <h3 className="text-xl font-bold text-jobequal-text mb-6">
+        Compensation & Skills
+      </h3>
+
       <div className="grid md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Currency</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Currency
+          </label>
           <div className="relative">
             <select
               value={formData.salary.currency}
-              onChange={(e) => updateFormData('salary.currency', e.target.value)}
+              onChange={(e) =>
+                updateFormData("salary.currency", e.target.value)
+              }
               className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent appearance-none"
             >
-              {currencies.map(currency => (
-                <option key={currency} value={currency}>{currency}</option>
+              {currencies.map((currency) => (
+                <option key={currency} value={currency}>
+                  {currency}
+                </option>
               ))}
             </select>
             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -453,22 +568,30 @@ function PostJobPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Minimum Salary *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Minimum Salary *
+          </label>
           <input
             type="number"
-            value={formData.salary.min || ''}
-            onChange={(e) => updateFormData('salary.min', parseInt(e.target.value) || 0)}
+            value={formData.salary.min || ""}
+            onChange={(e) =>
+              updateFormData("salary.min", parseInt(e.target.value) || 0)
+            }
             placeholder="80000"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Maximum Salary *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Maximum Salary *
+          </label>
           <input
             type="number"
-            value={formData.salary.max || ''}
-            onChange={(e) => updateFormData('salary.max', parseInt(e.target.value) || 0)}
+            value={formData.salary.max || ""}
+            onChange={(e) =>
+              updateFormData("salary.max", parseInt(e.target.value) || 0)
+            }
             placeholder="120000"
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
@@ -480,15 +603,21 @@ function PostJobPage() {
           <input
             type="checkbox"
             checked={formData.salary.negotiable}
-            onChange={(e) => updateFormData('salary.negotiable', e.target.checked)}
+            onChange={(e) =>
+              updateFormData("salary.negotiable", e.target.checked)
+            }
             className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
           />
-          <span className="text-sm font-medium text-jobequal-text">Salary is negotiable</span>
+          <span className="text-sm font-medium text-jobequal-text">
+            Salary is negotiable
+          </span>
         </label>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-jobequal-text mb-2">Required Skills *</label>
+        <label className="block text-sm font-medium text-jobequal-text mb-2">
+          Required Skills *
+        </label>
         <div className="space-y-3">
           <div className="flex space-x-2">
             <input
@@ -497,25 +626,29 @@ function PostJobPage() {
               onChange={(e) => setNewSkill(e.target.value)}
               placeholder="Add a skill"
               className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
-              onKeyPress={(e) => e.key === 'Enter' && addToArray('skills', newSkill, setNewSkill)}
+              onKeyPress={(e) =>
+                e.key === "Enter" && addToArray("skills", newSkill, setNewSkill)
+              }
             />
             <button
               type="button"
-              onClick={() => addToArray('skills', newSkill, setNewSkill)}
+              onClick={() => addToArray("skills", newSkill, setNewSkill)}
               className="px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover transition-colors"
             >
               <Plus className="w-4 h-4" />
             </button>
           </div>
-          
+
           <div>
-            <p className="text-sm text-gray-600 mb-2">Quick add popular skills:</p>
+            <p className="text-sm text-gray-600 mb-2">
+              Quick add popular skills:
+            </p>
             <div className="flex flex-wrap gap-2">
-              {commonSkills.slice(0, 12).map(skill => (
+              {commonSkills.slice(0, 12).map((skill) => (
                 <button
                   key={skill}
                   type="button"
-                  onClick={() => addToArray('skills', skill, setNewSkill)}
+                  onClick={() => addToArray("skills", skill, setNewSkill)}
                   className="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-jobequal-green-light hover:text-jobequal-green transition-colors"
                 >
                   {skill}
@@ -526,11 +659,16 @@ function PostJobPage() {
 
           <div className="space-y-2">
             {formData.skills.map((skill, index) => (
-              <div key={index} className="flex items-center justify-between bg-jobequal-green-light px-3 py-2 rounded-lg">
-                <span className="text-sm text-jobequal-green font-medium">{skill}</span>
+              <div
+                key={index}
+                className="flex items-center justify-between bg-jobequal-green-light px-3 py-2 rounded-lg"
+              >
+                <span className="text-sm text-jobequal-green font-medium">
+                  {skill}
+                </span>
                 <button
                   type="button"
-                  onClick={() => removeFromArray('skills', index)}
+                  onClick={() => removeFromArray("skills", index)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <X className="w-4 h-4" />
@@ -545,25 +683,33 @@ function PostJobPage() {
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h3 className="text-xl font-bold text-jobequal-text mb-6">Timeline & Options</h3>
-      
+      <h3 className="text-xl font-bold text-jobequal-text mb-6">
+        Timeline & Options
+      </h3>
+
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Application Deadline *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Application Deadline *
+          </label>
           <input
             type="date"
             value={formData.applicationDeadline}
-            onChange={(e) => updateFormData('applicationDeadline', e.target.value)}
+            onChange={(e) =>
+              updateFormData("applicationDeadline", e.target.value)
+            }
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-jobequal-text mb-2">Start Date *</label>
+          <label className="block text-sm font-medium text-jobequal-text mb-2">
+            Start Date *
+          </label>
           <input
             type="date"
             value={formData.startDate}
-            onChange={(e) => updateFormData('startDate', e.target.value)}
+            onChange={(e) => updateFormData("startDate", e.target.value)}
             className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
           />
         </div>
@@ -575,12 +721,16 @@ function PostJobPage() {
             <input
               type="checkbox"
               checked={formData.featured}
-              onChange={(e) => updateFormData('featured', e.target.checked)}
+              onChange={(e) => updateFormData("featured", e.target.checked)}
               className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
             />
-            <span className="text-sm font-medium text-jobequal-text">Featured listing (+CHF 100)</span>
+            <span className="text-sm font-medium text-jobequal-text">
+              Featured listing (+CHF 100)
+            </span>
           </label>
-          <p className="text-xs text-gray-600 ml-7">Get 3x more visibility with highlighted placement</p>
+          <p className="text-xs text-gray-600 ml-7">
+            Get 3x more visibility with highlighted placement
+          </p>
         </div>
 
         <div>
@@ -588,18 +738,24 @@ function PostJobPage() {
             <input
               type="checkbox"
               checked={formData.urgent}
-              onChange={(e) => updateFormData('urgent', e.target.checked)}
+              onChange={(e) => updateFormData("urgent", e.target.checked)}
               className="w-4 h-4 text-jobequal-green border-gray-300 rounded focus:ring-jobequal-green"
             />
-            <span className="text-sm font-medium text-jobequal-text">Urgent hiring (+CHF 50)</span>
+            <span className="text-sm font-medium text-jobequal-text">
+              Urgent hiring (+CHF 50)
+            </span>
           </label>
-          <p className="text-xs text-gray-600 ml-7">Mark as urgent to attract immediate attention</p>
+          <p className="text-xs text-gray-600 ml-7">
+            Mark as urgent to attract immediate attention
+          </p>
         </div>
       </div>
 
       {/* Summary */}
       <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-        <h4 className="font-semibold text-jobequal-text mb-4">Job Posting Summary</h4>
+        <h4 className="font-semibold text-jobequal-text mb-4">
+          Job Posting Summary
+        </h4>
         <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div>
             <span className="font-medium">Position:</span> {formData.title}
@@ -608,10 +764,13 @@ function PostJobPage() {
             <span className="font-medium">Location:</span> {formData.location}
           </div>
           <div>
-            <span className="font-medium">Salary:</span> {formData.salary.currency} {formData.salary.min?.toLocaleString()} - {formData.salary.max?.toLocaleString()}
+            <span className="font-medium">Salary:</span>{" "}
+            {formData.salary.currency} {formData.salary.min?.toLocaleString()} -{" "}
+            {formData.salary.max?.toLocaleString()}
           </div>
           <div>
-            <span className="font-medium">Skills:</span> {formData.skills.length} required
+            <span className="font-medium">Skills:</span>{" "}
+            {formData.skills.length} required
           </div>
         </div>
       </div>
@@ -621,7 +780,7 @@ function PostJobPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue">
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -637,16 +796,20 @@ function PostJobPage() {
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            {[1, 2, 3, 4].map(step => (
+            {[1, 2, 3, 4].map((step) => (
               <div
                 key={step}
                 className={`flex items-center justify-center w-10 h-10 rounded-full ${
                   step <= currentStep
-                    ? 'bg-jobequal-green text-white'
-                    : 'bg-gray-200 text-gray-500'
+                    ? "bg-jobequal-green text-white"
+                    : "bg-gray-200 text-gray-500"
                 }`}
               >
-                {step < currentStep ? <CheckCircle className="w-5 h-5" /> : step}
+                {step < currentStep ? (
+                  <CheckCircle className="w-5 h-5" />
+                ) : (
+                  step
+                )}
               </div>
             ))}
           </div>

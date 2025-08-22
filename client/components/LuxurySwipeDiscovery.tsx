@@ -1,6 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  PanInfo,
+} from "framer-motion";
 import {
   Heart,
   X,
@@ -25,14 +31,14 @@ import {
   Diamond,
   Crown,
   Target,
-  Briefcase
-} from 'lucide-react';
-import { useJobs } from '../contexts/JobsContext';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useAppData } from '../hooks/useAppData';
-import { applicationToast } from '../hooks/use-toast';
-import { AIMatchReportModal } from './ui/ai-match-report';
-import { CityEventsModal } from './ui/city-events-modal';
+  Briefcase,
+} from "lucide-react";
+import { useJobs } from "../contexts/JobsContext";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useAppData } from "../hooks/useAppData";
+import { applicationToast } from "../hooks/use-toast";
+import { AIMatchReportModal } from "./ui/ai-match-report";
+import { CityEventsModal } from "./ui/city-events-modal";
 
 interface LuxuryJob {
   id: string;
@@ -53,8 +59,8 @@ interface LuxuryJob {
   companySize: string;
   industry: string;
   companyRating: number;
-  jobLevel: 'Entry' | 'Mid' | 'Senior' | 'Lead' | 'Executive';
-  urgency: 'Low' | 'Medium' | 'High' | 'Urgent';
+  jobLevel: "Entry" | "Mid" | "Senior" | "Lead" | "Executive";
+  urgency: "Low" | "Medium" | "High" | "Urgent";
   postedTime: string;
   applicants: number;
   culture: string[];
@@ -67,95 +73,155 @@ interface LuxuryJob {
 
 const luxuryJobs: LuxuryJob[] = [
   {
-    id: '1',
-    title: 'Senior Software Architect',
-    company: 'Credit Suisse',
-    companyLogo: '🏦',
-    location: 'Zurich Financial District',
-    salary: 'CHF 150,000 - 200,000',
+    id: "1",
+    title: "Senior Software Architect",
+    company: "Credit Suisse",
+    companyLogo: "🏦",
+    location: "Zurich Financial District",
+    salary: "CHF 150,000 - 200,000",
     salaryRange: { min: 150000, max: 200000 },
-    type: 'Full-time',
-    description: 'Lead the architectural evolution of our next-generation trading platform serving global markets. Work with cutting-edge technologies in a fast-paced, high-impact environment.',
+    type: "Full-time",
+    description:
+      "Lead the architectural evolution of our next-generation trading platform serving global markets. Work with cutting-edge technologies in a fast-paced, high-impact environment.",
     matchScore: 96,
-    tags: ['Architecture', 'TypeScript', 'React', 'Node.js', 'AWS', 'Microservices'],
-    benefits: ['Stock Options', 'Health Insurance', 'Pension Plan', 'Flexible Hours'],
+    tags: [
+      "Architecture",
+      "TypeScript",
+      "React",
+      "Node.js",
+      "AWS",
+      "Microservices",
+    ],
+    benefits: [
+      "Stock Options",
+      "Health Insurance",
+      "Pension Plan",
+      "Flexible Hours",
+    ],
     remote: true,
     featured: true,
     premium: true,
-    companySize: '10,000+ employees',
-    industry: 'Financial Services',
+    companySize: "10,000+ employees",
+    industry: "Financial Services",
     companyRating: 4.6,
-    jobLevel: 'Senior',
-    urgency: 'High',
-    postedTime: '2 hours ago',
+    jobLevel: "Senior",
+    urgency: "High",
+    postedTime: "2 hours ago",
     applicants: 23,
-    culture: ['Innovation', 'Excellence', 'Collaboration', 'Growth'],
-    perks: ['Premium Office', 'Team Events', 'Learning Budget', 'Sabbatical'],
+    culture: ["Innovation", "Excellence", "Collaboration", "Growth"],
+    perks: ["Premium Office", "Team Events", "Learning Budget", "Sabbatical"],
     growthOpportunity: 95,
     workLifeBalance: 85,
-    techStack: ['React', 'TypeScript', 'Node.js', 'AWS', 'Kubernetes', 'GraphQL'],
-    teamSize: 12
+    techStack: [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "AWS",
+      "Kubernetes",
+      "GraphQL",
+    ],
+    teamSize: 12,
   },
   {
-    id: '2',
-    title: 'Lead Product Designer',
-    company: 'Google Switzerland',
-    companyLogo: '🎨',
-    location: 'Zurich Tech Hub',
-    salary: 'CHF 130,000 - 170,000',
+    id: "2",
+    title: "Lead Product Designer",
+    company: "Google Switzerland",
+    companyLogo: "🎨",
+    location: "Zurich Tech Hub",
+    salary: "CHF 130,000 - 170,000",
     salaryRange: { min: 130000, max: 170000 },
-    type: 'Full-time',
-    description: 'Shape the future of digital experiences for millions of users worldwide. Lead design initiatives that combine beautiful aesthetics with intuitive functionality.',
+    type: "Full-time",
+    description:
+      "Shape the future of digital experiences for millions of users worldwide. Lead design initiatives that combine beautiful aesthetics with intuitive functionality.",
     matchScore: 89,
-    tags: ['Product Design', 'Figma', 'User Research', 'Prototyping', 'Design Systems'],
-    benefits: ['Stock Options', 'Health Insurance', 'Flexible Work', 'Learning Budget'],
+    tags: [
+      "Product Design",
+      "Figma",
+      "User Research",
+      "Prototyping",
+      "Design Systems",
+    ],
+    benefits: [
+      "Stock Options",
+      "Health Insurance",
+      "Flexible Work",
+      "Learning Budget",
+    ],
     remote: true,
     featured: true,
     premium: false,
-    companySize: '1,000+ employees',
-    industry: 'Technology',
+    companySize: "1,000+ employees",
+    industry: "Technology",
     companyRating: 4.8,
-    jobLevel: 'Lead',
-    urgency: 'Medium',
-    postedTime: '1 day ago',
+    jobLevel: "Lead",
+    urgency: "Medium",
+    postedTime: "1 day ago",
     applicants: 45,
-    culture: ['Innovation', 'Creativity', 'Impact', 'Diversity'],
-    perks: ['Free Meals', 'Gym Membership', 'Travel Budget', 'Conference Attendance'],
+    culture: ["Innovation", "Creativity", "Impact", "Diversity"],
+    perks: [
+      "Free Meals",
+      "Gym Membership",
+      "Travel Budget",
+      "Conference Attendance",
+    ],
     growthOpportunity: 92,
     workLifeBalance: 90,
-    techStack: ['Figma', 'Sketch', 'Principle', 'Adobe Creative Suite', 'Miro'],
-    teamSize: 8
+    techStack: ["Figma", "Sketch", "Principle", "Adobe Creative Suite", "Miro"],
+    teamSize: 8,
   },
   {
-    id: '3',
-    title: 'Principal Data Scientist',
-    company: 'Roche',
-    companyLogo: '🧬',
-    location: 'Basel Pharma Campus',
-    salary: 'CHF 140,000 - 180,000',
+    id: "3",
+    title: "Principal Data Scientist",
+    company: "Roche",
+    companyLogo: "🧬",
+    location: "Basel Pharma Campus",
+    salary: "CHF 140,000 - 180,000",
     salaryRange: { min: 140000, max: 180000 },
-    type: 'Full-time',
-    description: 'Drive breakthrough discoveries in personalized medicine using advanced machine learning and AI. Transform healthcare through data-driven innovation.',
+    type: "Full-time",
+    description:
+      "Drive breakthrough discoveries in personalized medicine using advanced machine learning and AI. Transform healthcare through data-driven innovation.",
     matchScore: 92,
-    tags: ['Machine Learning', 'Python', 'R', 'TensorFlow', 'Healthcare', 'Research'],
-    benefits: ['Research Time', 'Publications Support', 'Health Benefits', 'Flexible Schedule'],
+    tags: [
+      "Machine Learning",
+      "Python",
+      "R",
+      "TensorFlow",
+      "Healthcare",
+      "Research",
+    ],
+    benefits: [
+      "Research Time",
+      "Publications Support",
+      "Health Benefits",
+      "Flexible Schedule",
+    ],
     remote: false,
     featured: true,
     premium: true,
-    companySize: '100,000+ employees',
-    industry: 'Pharmaceuticals',
+    companySize: "100,000+ employees",
+    industry: "Pharmaceuticals",
     companyRating: 4.5,
-    jobLevel: 'Senior',
-    urgency: 'Medium',
-    postedTime: '3 days ago',
+    jobLevel: "Senior",
+    urgency: "Medium",
+    postedTime: "3 days ago",
     applicants: 18,
-    culture: ['Scientific Excellence', 'Patient Focus', 'Innovation', 'Integrity'],
-    perks: ['Research Sabbatical', 'Publication Bonus', 'Conference Speaking', 'Patent Rewards'],
+    culture: [
+      "Scientific Excellence",
+      "Patient Focus",
+      "Innovation",
+      "Integrity",
+    ],
+    perks: [
+      "Research Sabbatical",
+      "Publication Bonus",
+      "Conference Speaking",
+      "Patent Rewards",
+    ],
     growthOpportunity: 88,
     workLifeBalance: 82,
-    techStack: ['Python', 'R', 'TensorFlow', 'PyTorch', 'SQL', 'Spark'],
-    teamSize: 15
-  }
+    techStack: ["Python", "R", "TensorFlow", "PyTorch", "SQL", "Spark"],
+    teamSize: 15,
+  },
 ];
 
 const LuxurySwipeDiscovery: React.FC = () => {
@@ -166,13 +232,13 @@ const LuxurySwipeDiscovery: React.FC = () => {
   const [swipeStats, setSwipeStats] = useState({
     liked: 0,
     passed: 0,
-    superLiked: 0
+    superLiked: 0,
   });
   const [showJobDetails, setShowJobDetails] = useState(false);
   const [isAIMatchModalOpen, setIsAIMatchModalOpen] = useState(false);
   const [isCityEventsModalOpen, setIsCityEventsModalOpen] = useState(false);
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  
+  const [selectedCity, setSelectedCity] = useState<string>("");
+
   const { addToFavorites } = useFavorites();
   const { auth } = useAppData();
   const constraintsRef = useRef(null);
@@ -188,12 +254,12 @@ const LuxurySwipeDiscovery: React.FC = () => {
       setIsCityEventsModalOpen(true);
     };
 
-    window.addEventListener('openAIMatchReport', handleAIMatchReport);
-    window.addEventListener('openCityEvents', handleCityEvents);
+    window.addEventListener("openAIMatchReport", handleAIMatchReport);
+    window.addEventListener("openCityEvents", handleCityEvents);
 
     return () => {
-      window.removeEventListener('openAIMatchReport', handleAIMatchReport);
-      window.removeEventListener('openCityEvents', handleCityEvents);
+      window.removeEventListener("openAIMatchReport", handleAIMatchReport);
+      window.removeEventListener("openCityEvents", handleCityEvents);
     };
   }, []);
 
@@ -207,38 +273,41 @@ const LuxurySwipeDiscovery: React.FC = () => {
     requirements: job.tags || [],
     location: job.location,
     salaryRange: job.salaryRange,
-    techStack: job.techStack || []
+    techStack: job.techStack || [],
   });
 
   const generateCandidateProfile = () => ({
-    skills: ['React', 'TypeScript', 'Node.js', 'Python', 'AWS'],
+    skills: ["React", "TypeScript", "Node.js", "Python", "AWS"],
     experience: {
       years: 5,
       positions: [
         {
-          title: 'Senior Software Engineer',
-          company: 'Tech Solutions AG',
-          duration: '2021-Present',
-          technologies: ['React', 'TypeScript', 'AWS']
+          title: "Senior Software Engineer",
+          company: "Tech Solutions AG",
+          duration: "2021-Present",
+          technologies: ["React", "TypeScript", "AWS"],
         },
         {
-          title: 'Software Engineer',
-          company: 'Innovation Labs',
-          duration: '2019-2021',
-          technologies: ['JavaScript', 'Node.js', 'PostgreSQL']
-        }
-      ]
+          title: "Software Engineer",
+          company: "Innovation Labs",
+          duration: "2019-2021",
+          technologies: ["JavaScript", "Node.js", "PostgreSQL"],
+        },
+      ],
     },
     education: {
-      degree: 'Master of Science',
-      field: 'Computer Science',
-      institution: 'ETH Zurich'
+      degree: "Master of Science",
+      field: "Computer Science",
+      institution: "ETH Zurich",
     },
-    location: 'Zurich, Switzerland',
-    salaryExpectation: { min: 90000, max: 120000 }
+    location: "Zurich, Switzerland",
+    salaryExpectation: { min: 90000, max: 120000 },
   });
 
-  const createApplication = async (job: LuxuryJob, swipeAction: 'like' | 'superlike') => {
+  const createApplication = async (
+    job: LuxuryJob,
+    swipeAction: "like" | "superlike",
+  ) => {
     try {
       // Create application data
       const applicationData = {
@@ -247,47 +316,61 @@ const LuxurySwipeDiscovery: React.FC = () => {
         company: job.company,
         swipeAction,
         timestamp: new Date().toISOString(),
-        userId: auth?.user?.id || 'guest',
-        coverLetter: swipeAction === 'superlike'
-          ? 'I am very interested in this position and would love to discuss how I can contribute to your team.'
-          : 'I believe my skills and experience make me a great fit for this role.',
-        source: 'swipe_discovery'
+        userId: auth?.user?.id || "guest",
+        coverLetter:
+          swipeAction === "superlike"
+            ? "I am very interested in this position and would love to discuss how I can contribute to your team."
+            : "I believe my skills and experience make me a great fit for this role.",
+        source: "swipe_discovery",
       };
 
       // Log application creation (in real app, this would be an API call)
-      console.log('Creating swipe-based application:', applicationData);
+      console.log("Creating swipe-based application:", applicationData);
 
       // Here you would typically make an API call to create the application
       // The API should handle idempotency by job+user combination
       // await applicationService.createApplication(applicationData);
-
     } catch (error) {
-      console.error('Failed to create application:', error);
-      applicationToast.error('Failed to submit application. Please try again.');
+      console.error("Failed to create application:", error);
+      applicationToast.error("Failed to submit application. Please try again.");
     }
   };
 
-  const handleSwipe = (dir: number, action: 'like' | 'pass' | 'superlike' = dir > 0 ? 'like' : 'pass') => {
+  const handleSwipe = (
+    dir: number,
+    action: "like" | "pass" | "superlike" = dir > 0 ? "like" : "pass",
+  ) => {
     if (isAnimating || !currentJob) return;
-    
+
     setIsAnimating(true);
     setDirection(dir);
 
     // Update stats
-    setSwipeStats(prev => ({
+    setSwipeStats((prev) => ({
       ...prev,
-      [action === 'like' ? 'liked' : action === 'pass' ? 'passed' : 'superLiked']: prev[action === 'like' ? 'liked' : action === 'pass' ? 'passed' : 'superLiked'] + 1
+      [action === "like"
+        ? "liked"
+        : action === "pass"
+          ? "passed"
+          : "superLiked"]:
+        prev[
+          action === "like"
+            ? "liked"
+            : action === "pass"
+              ? "passed"
+              : "superLiked"
+        ] + 1,
     }));
 
     // Add to favorites and create application if liked or super liked
-    if ((action === 'like' || action === 'superlike') && currentJob) {
+    if ((action === "like" || action === "superlike") && currentJob) {
       addToFavorites({
         id: currentJob.id,
         title: currentJob.title,
         company: currentJob.company,
         location: currentJob.location,
         salary: currentJob.salary,
-        type: 'job'
+        type: "job",
       });
 
       // Create application (idempotent by job+user)
@@ -299,7 +382,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
 
     // Move to next job
     setTimeout(() => {
-      setCurrentJobIndex(prev => (prev + 1) % jobs.length);
+      setCurrentJobIndex((prev) => (prev + 1) % jobs.length);
       setIsAnimating(false);
     }, 400);
   };
@@ -349,12 +432,16 @@ const LuxurySwipeDiscovery: React.FC = () => {
               <div className="w-8 h-8 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
                 <span className="text-white font-bold text-sm">JE</span>
               </div>
-              <span className="text-white/90 font-medium text-sm group-hover:text-white transition-colors duration-200">JobEqual</span>
+              <span className="text-white/90 font-medium text-sm group-hover:text-white transition-colors duration-200">
+                JobEqual
+              </span>
             </Link>
 
             <div className="flex items-center space-x-2">
               <Diamond className="w-6 h-6 text-yellow-400" />
-              <span className="text-white font-semibold text-lg">Dream Jobs</span>
+              <span className="text-white font-semibold text-lg">
+                Dream Jobs
+              </span>
             </div>
             <div className="flex space-x-4 text-sm">
               <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1">
@@ -367,7 +454,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="text-right">
             <div className="text-white/80 text-sm">
               {currentJobIndex + 1} of {jobs.length}
@@ -376,7 +463,9 @@ const LuxurySwipeDiscovery: React.FC = () => {
               <motion.div
                 className="h-full bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
                 initial={{ width: 0 }}
-                animate={{ width: `${((currentJobIndex + 1) / jobs.length) * 100}%` }}
+                animate={{
+                  width: `${((currentJobIndex + 1) / jobs.length) * 100}%`,
+                }}
                 transition={{ duration: 0.3 }}
               />
             </div>
@@ -385,7 +474,10 @@ const LuxurySwipeDiscovery: React.FC = () => {
 
         {/* Premium Card Stack */}
         <div className="flex-1 relative flex items-center justify-center">
-          <div className="relative w-full max-w-md mx-auto h-[700px]" ref={constraintsRef}>
+          <div
+            className="relative w-full max-w-md mx-auto h-[700px]"
+            ref={constraintsRef}
+          >
             <AnimatePresence initial={false} custom={direction}>
               {/* Current Card */}
               <LuxuryJobCard
@@ -397,7 +489,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
                 onDetailsToggle={() => setShowJobDetails(!showJobDetails)}
                 showDetails={showJobDetails}
               />
-              
+
               {/* Next Card Preview */}
               {jobs[currentJobIndex + 1] && (
                 <motion.div
@@ -407,7 +499,10 @@ const LuxurySwipeDiscovery: React.FC = () => {
                   animate={{ scale: 0.9, opacity: 0.6, y: 20, rotateY: -15 }}
                   style={{ zIndex: -1 }}
                 >
-                  <LuxuryJobCardContent job={jobs[currentJobIndex + 1]} isPreview />
+                  <LuxuryJobCardContent
+                    job={jobs[currentJobIndex + 1]}
+                    isPreview
+                  />
                 </motion.div>
               )}
 
@@ -420,7 +515,10 @@ const LuxurySwipeDiscovery: React.FC = () => {
                   animate={{ scale: 0.8, opacity: 0.3, y: 40, rotateY: -30 }}
                   style={{ zIndex: -2 }}
                 >
-                  <LuxuryJobCardContent job={jobs[currentJobIndex + 2]} isPreview />
+                  <LuxuryJobCardContent
+                    job={jobs[currentJobIndex + 2]}
+                    isPreview
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -439,26 +537,26 @@ const LuxurySwipeDiscovery: React.FC = () => {
             color="from-red-500 to-red-600"
             label="Pass"
             size="md"
-            onClick={() => handleSwipe(-1, 'pass')}
+            onClick={() => handleSwipe(-1, "pass")}
             disabled={isAnimating}
           />
-          
+
           <LuxuryActionButton
             icon={Star}
             color="from-purple-500 to-purple-600"
             label="Super Like"
             size="lg"
             premium
-            onClick={() => handleSwipe(0, 'superlike')}
+            onClick={() => handleSwipe(0, "superlike")}
             disabled={isAnimating}
           />
-          
+
           <LuxuryActionButton
             icon={Heart}
             color="from-green-500 to-green-600"
             label="Like"
             size="md"
-            onClick={() => handleSwipe(1, 'like')}
+            onClick={() => handleSwipe(1, "like")}
             disabled={isAnimating}
           />
         </motion.div>
@@ -468,10 +566,10 @@ const LuxurySwipeDiscovery: React.FC = () => {
       <AIMatchReportModal
         isOpen={isAIMatchModalOpen}
         onClose={() => setIsAIMatchModalOpen(false)}
-        jobId={currentJob?.id || ''}
-        userId={auth?.user?.id || 'guest-user'}
+        jobId={currentJob?.id || ""}
+        userId={auth?.user?.id || "guest-user"}
         initialMatchPercent={currentJob?.matchScore || 75}
-        jobProfile={currentJob ? generateJobProfile(currentJob) : {} as any}
+        jobProfile={currentJob ? generateJobProfile(currentJob) : ({} as any)}
         candidateProfile={generateCandidateProfile()}
       />
 
@@ -488,20 +586,20 @@ const LuxurySwipeDiscovery: React.FC = () => {
 // Luxury Job Card Component
 interface LuxuryJobCardProps {
   job: LuxuryJob;
-  onSwipe: (direction: number, action?: 'like' | 'pass' | 'superlike') => void;
+  onSwipe: (direction: number, action?: "like" | "pass" | "superlike") => void;
   custom: number;
   isAnimating: boolean;
   onDetailsToggle: () => void;
   showDetails: boolean;
 }
 
-const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({ 
-  job, 
-  onSwipe, 
-  custom, 
+const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
+  job,
+  onSwipe,
+  custom,
   isAnimating,
   onDetailsToggle,
-  showDetails 
+  showDetails,
 }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -511,12 +609,12 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
   const handleDragEnd = (event: any, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
-    
+
     if (Math.abs(offset) > 150 || Math.abs(velocity) > 800) {
       if (Math.abs(info.offset.y) > 150 && info.offset.y < 0) {
-        onSwipe(0, 'superlike');
+        onSwipe(0, "superlike");
       } else {
-        onSwipe(offset > 0 ? 1 : -1, offset > 0 ? 'like' : 'pass');
+        onSwipe(offset > 0 ? 1 : -1, offset > 0 ? "like" : "pass");
       }
     }
   };
@@ -526,22 +624,22 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
       scale: 0.8,
-      rotate: direction > 0 ? 45 : -45
+      rotate: direction > 0 ? 45 : -45,
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
       scale: 1,
-      rotate: 0
+      rotate: 0,
     },
     exit: (direction: number) => ({
       zIndex: 0,
       x: direction < 0 ? 1000 : -1000,
       opacity: 0,
       scale: 0.8,
-      rotate: direction < 0 ? 45 : -45
-    })
+      rotate: direction < 0 ? 45 : -45,
+    }),
   };
 
   return (
@@ -559,12 +657,12 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
       style={{ x, y, rotate, opacity }}
       whileTap={{ scale: 0.98 }}
     >
-      <LuxuryJobCardContent 
-        job={job} 
+      <LuxuryJobCardContent
+        job={job}
         showDetails={showDetails}
         onDetailsToggle={onDetailsToggle}
       />
-      
+
       {/* Swipe Indicators */}
       <motion.div
         className="absolute top-16 left-8 bg-green-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-2xl border border-green-400/50"
@@ -572,14 +670,14 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
       >
         ❤️ INTERESTED
       </motion.div>
-      
+
       <motion.div
         className="absolute top-16 right-8 bg-red-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-2xl border border-red-400/50"
         style={{ opacity: useTransform(x, [-200, -50], [1, 0]) }}
       >
         ✖️ PASS
       </motion.div>
-      
+
       <motion.div
         className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-purple-500/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl font-bold text-xl shadow-2xl border border-purple-400/50"
         style={{ opacity: useTransform(y, [-150, -50], [1, 0]) }}
@@ -602,13 +700,15 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
   job,
   isPreview = false,
   showDetails = false,
-  onDetailsToggle
+  onDetailsToggle,
 }) => {
   // Get handlers from parent component
   const handleMatchClick = () => {
     if (!isPreview) {
       // This will be passed down from the parent component
-      const event = new CustomEvent('openAIMatchReport', { detail: { jobId: job.id } });
+      const event = new CustomEvent("openAIMatchReport", {
+        detail: { jobId: job.id },
+      });
       window.dispatchEvent(event);
     }
   };
@@ -616,13 +716,15 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
   const handleLocationClick = () => {
     if (!isPreview) {
       // Extract city name from location
-      const cityName = job.location.split(',')[0].trim();
-      const event = new CustomEvent('openCityEvents', { detail: { cityName } });
+      const cityName = job.location.split(",")[0].trim();
+      const event = new CustomEvent("openCityEvents", { detail: { cityName } });
       window.dispatchEvent(event);
     }
   };
   return (
-    <div className={`w-full h-full bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50 backdrop-blur-xl ${isPreview ? 'opacity-60' : ''}`}>
+    <div
+      className={`w-full h-full bg-gradient-to-br from-white via-gray-50 to-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200/50 backdrop-blur-xl ${isPreview ? "opacity-60" : ""}`}
+    >
       {/* Premium Header */}
       <div className="relative h-56 bg-gradient-to-br from-slate-800 via-slate-900 to-black text-white overflow-hidden">
         {/* Background Pattern */}
@@ -658,7 +760,9 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
               {job.companyLogo}
             </div>
             <div>
-              <div className="text-xs text-white/60 uppercase tracking-wide">{job.industry}</div>
+              <div className="text-xs text-white/60 uppercase tracking-wide">
+                {job.industry}
+              </div>
               <h3 className="text-lg font-bold">{job.company}</h3>
               <div className="flex items-center space-x-2 text-sm text-white/80">
                 <div className="flex items-center">
@@ -694,13 +798,15 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
           </div>
         </div>
       </div>
-      
+
       {/* Job Content */}
       <div className="p-6 h-[calc(100%-14rem)] overflow-y-auto">
         {/* Job Title & Basics */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">{job.title}</h2>
-          
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+            {job.title}
+          </h2>
+
           <div className="flex flex-wrap gap-3 mb-4">
             <button
               onClick={handleLocationClick}
@@ -708,7 +814,9 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
               disabled={isPreview}
             >
               <MapPin className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              <span className="text-sm group-hover:underline">{job.location}</span>
+              <span className="text-sm group-hover:underline">
+                {job.location}
+              </span>
             </button>
             <div className="flex items-center space-x-1 text-gray-600">
               <DollarSign className="w-4 h-4" />
@@ -723,25 +831,31 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
           {/* Key Metrics */}
           <div className="grid grid-cols-3 gap-3 mb-4">
             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-3 rounded-xl text-center">
-              <div className="text-lg font-bold text-emerald-600">{job.growthOpportunity}%</div>
+              <div className="text-lg font-bold text-emerald-600">
+                {job.growthOpportunity}%
+              </div>
               <div className="text-xs text-emerald-600">Growth</div>
             </div>
             <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-3 rounded-xl text-center">
-              <div className="text-lg font-bold text-blue-600">{job.workLifeBalance}%</div>
+              <div className="text-lg font-bold text-blue-600">
+                {job.workLifeBalance}%
+              </div>
               <div className="text-xs text-blue-600">Balance</div>
             </div>
             <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-3 rounded-xl text-center">
-              <div className="text-lg font-bold text-purple-600">{job.applicants}</div>
+              <div className="text-lg font-bold text-purple-600">
+                {job.applicants}
+              </div>
               <div className="text-xs text-purple-600">Applicants</div>
             </div>
           </div>
         </div>
-        
+
         {/* Description */}
         <div className="mb-6">
           <p className="text-gray-700 leading-relaxed">{job.description}</p>
         </div>
-        
+
         {/* Tech Stack */}
         <div className="mb-6">
           <h4 className="font-semibold text-gray-800 mb-3 flex items-center">
@@ -759,7 +873,7 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
             ))}
           </div>
         </div>
-        
+
         {/* Benefits Preview */}
         <div className="mb-4">
           <h4 className="font-semibold text-gray-800 mb-3 flex items-center">
@@ -783,8 +897,10 @@ const LuxuryJobCardContent: React.FC<LuxuryJobCardContentProps> = ({
             className="w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 py-3 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2"
           >
             <Eye className="w-4 h-4" />
-            <span>{showDetails ? 'Show Less' : 'View Details'}</span>
-            <ChevronRight className={`w-4 h-4 transform transition-transform ${showDetails ? 'rotate-90' : ''}`} />
+            <span>{showDetails ? "Show Less" : "View Details"}</span>
+            <ChevronRight
+              className={`w-4 h-4 transform transition-transform ${showDetails ? "rotate-90" : ""}`}
+            />
           </button>
         )}
       </div>
@@ -799,7 +915,7 @@ interface LuxuryActionButtonProps {
   label: string;
   onClick: () => void;
   disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   premium?: boolean;
 }
 
@@ -809,27 +925,27 @@ const LuxuryActionButton: React.FC<LuxuryActionButtonProps> = ({
   label,
   onClick,
   disabled = false,
-  size = 'md',
-  premium = false
+  size = "md",
+  premium = false,
 }) => {
   const sizeClasses = {
-    sm: 'w-14 h-14',
-    md: 'w-16 h-16',
-    lg: 'w-20 h-20'
+    sm: "w-14 h-14",
+    md: "w-16 h-16",
+    lg: "w-20 h-20",
   };
 
   const iconSizes = {
-    sm: 'w-5 h-5',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8'
+    sm: "w-5 h-5",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
   };
 
   return (
     <div className="flex flex-col items-center space-y-3">
       <motion.button
         className={`${sizeClasses[size]} rounded-full bg-gradient-to-r ${color} text-white shadow-2xl flex items-center justify-center transition-all duration-200 ${
-          disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-3xl'
-        } ${premium ? 'ring-2 ring-yellow-400/50 ring-offset-2 ring-offset-transparent' : ''}`}
+          disabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-3xl"
+        } ${premium ? "ring-2 ring-yellow-400/50 ring-offset-2 ring-offset-transparent" : ""}`}
         whileHover={disabled ? {} : { scale: 1.1, y: -2 }}
         whileTap={disabled ? {} : { scale: 0.95 }}
         onClick={onClick}
@@ -870,14 +986,18 @@ const CompletionScreen: React.FC<{ stats: any }> = ({ stats }) => (
       <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
         Excellent Work! 🎉
       </h3>
-      <p className="text-white/80 mb-6">You've explored all premium opportunities</p>
+      <p className="text-white/80 mb-6">
+        You've explored all premium opportunities
+      </p>
       <div className="flex justify-center space-x-6 mb-8">
         <div className="text-center">
           <div className="text-2xl font-bold text-green-400">{stats.liked}</div>
           <div className="text-sm text-white/60">Liked</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-purple-400">{stats.superLiked}</div>
+          <div className="text-2xl font-bold text-purple-400">
+            {stats.superLiked}
+          </div>
           <div className="text-sm text-white/60">Super Liked</div>
         </div>
       </div>

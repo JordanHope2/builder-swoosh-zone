@@ -37,8 +37,7 @@
     "multer": "^2.0.2",
     "openai": "^4.52.7",
     "rss-parser": "^3.13.0",
-    "zod": "^3.25.76",
-    "openai": "^1.10.0"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",

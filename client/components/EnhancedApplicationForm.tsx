@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Send, 
-  FileText, 
-  Link as LinkIcon, 
-  DollarSign, 
-  Calendar, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Send,
+  FileText,
+  Link as LinkIcon,
+  DollarSign,
+  Calendar,
+  CheckCircle,
   AlertCircle,
   Loader,
   User,
@@ -17,11 +17,18 @@ import {
   Award,
   Target,
   Heart,
-  Zap
-} from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { applicationService, ApplicationData } from '../services/applicationService';
-import { AnimatedButton, EnhancedMotion, StaggeredList } from './ui/enhanced-motion';
+  Zap,
+} from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  applicationService,
+  ApplicationData,
+} from "../services/applicationService";
+import {
+  AnimatedButton,
+  EnhancedMotion,
+  StaggeredList,
+} from "./ui/enhanced-motion";
 
 interface EnhancedApplicationFormProps {
   jobId: string;
@@ -47,51 +54,47 @@ interface FormData {
 
 const customQuestions = [
   {
-    id: 'motivation',
-    question: 'What motivates you to apply for this position?',
-    placeholder: 'Share what excites you about this opportunity...',
-    required: true
+    id: "motivation",
+    question: "What motivates you to apply for this position?",
+    placeholder: "Share what excites you about this opportunity...",
+    required: true,
   },
   {
-    id: 'experience',
-    question: 'Describe your most relevant experience for this role.',
-    placeholder: 'Highlight your key achievements and relevant skills...',
-    required: true
+    id: "experience",
+    question: "Describe your most relevant experience for this role.",
+    placeholder: "Highlight your key achievements and relevant skills...",
+    required: true,
   },
   {
-    id: 'goals',
-    question: 'What are your career goals for the next 3 years?',
-    placeholder: 'Tell us about your professional aspirations...',
-    required: false
-  }
+    id: "goals",
+    question: "What are your career goals for the next 3 years?",
+    placeholder: "Tell us about your professional aspirations...",
+    required: false,
+  },
 ];
 
-export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = ({
-  jobId,
-  jobTitle,
-  companyName,
-  onApplicationSubmitted,
-  onClose
-}) => {
+export const EnhancedApplicationForm: React.FC<
+  EnhancedApplicationFormProps
+> = ({ jobId, jobTitle, companyName, onApplicationSubmitted, onClose }) => {
   const [formData, setFormData] = useState<FormData>({
-    coverLetter: '',
-    portfolioUrl: '',
-    expectedSalary: '',
-    availabilityDate: '',
+    coverLetter: "",
+    portfolioUrl: "",
+    expectedSalary: "",
+    availabilityDate: "",
     customAnswers: {},
     personalInfo: {
-      phone: '',
-      linkedinUrl: '',
-      portfolioUrl: '',
-      availability: ''
-    }
+      phone: "",
+      linkedinUrl: "",
+      portfolioUrl: "",
+      availability: "",
+    },
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
-    type: 'success' | 'error' | null;
+    type: "success" | "error" | null;
     message: string;
-  }>({ type: null, message: '' });
+  }>({ type: null, message: "" });
   const [currentStep, setCurrentStep] = useState(1);
   const [userProfile, setUserProfile] = useState<any>(null);
 
@@ -101,37 +104,37 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
     // Load user profile data if available
     if (user) {
       setUserProfile({
-        name: user.user_metadata?.full_name || '',
-        email: user.email || '',
-        phone: user.user_metadata?.phone || '',
-        linkedinUrl: user.user_metadata?.linkedin_url || ''
+        name: user.user_metadata?.full_name || "",
+        email: user.email || "",
+        phone: user.user_metadata?.phone || "",
+        linkedinUrl: user.user_metadata?.linkedin_url || "",
       });
     }
   }, [user]);
 
   const handleInputChange = (field: string, value: string) => {
-    if (field.startsWith('customAnswers.')) {
-      const questionId = field.replace('customAnswers.', '');
-      setFormData(prev => ({
+    if (field.startsWith("customAnswers.")) {
+      const questionId = field.replace("customAnswers.", "");
+      setFormData((prev) => ({
         ...prev,
         customAnswers: {
           ...prev.customAnswers,
-          [questionId]: value
-        }
+          [questionId]: value,
+        },
       }));
-    } else if (field.startsWith('personalInfo.')) {
-      const infoField = field.replace('personalInfo.', '');
-      setFormData(prev => ({
+    } else if (field.startsWith("personalInfo.")) {
+      const infoField = field.replace("personalInfo.", "");
+      setFormData((prev) => ({
         ...prev,
         personalInfo: {
           ...prev.personalInfo,
-          [infoField]: value
-        }
+          [infoField]: value,
+        },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [field]: value
+        [field]: value,
       }));
     }
   };
@@ -139,15 +142,18 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
   const validateForm = (): boolean => {
     // Check required fields
     if (!formData.coverLetter.trim()) {
-      setSubmitStatus({ type: 'error', message: 'Cover letter is required' });
+      setSubmitStatus({ type: "error", message: "Cover letter is required" });
       return false;
     }
 
     // Check required custom questions
-    const requiredQuestions = customQuestions.filter(q => q.required);
+    const requiredQuestions = customQuestions.filter((q) => q.required);
     for (const question of requiredQuestions) {
       if (!formData.customAnswers[question.id]?.trim()) {
-        setSubmitStatus({ type: 'error', message: `Please answer: ${question.question}` });
+        setSubmitStatus({
+          type: "error",
+          message: `Please answer: ${question.question}`,
+        });
         return false;
       }
     }
@@ -159,7 +165,10 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
     e.preventDefault();
 
     if (!user) {
-      setSubmitStatus({ type: 'error', message: 'Please sign in to submit application' });
+      setSubmitStatus({
+        type: "error",
+        message: "Please sign in to submit application",
+      });
       return;
     }
 
@@ -168,44 +177,52 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
     }
 
     setIsSubmitting(true);
-    setSubmitStatus({ type: null, message: '' });
+    setSubmitStatus({ type: null, message: "" });
 
     try {
       const applicationData: ApplicationData = {
         jobId,
         candidateId: user.id,
         coverLetter: formData.coverLetter,
-        portfolioUrl: formData.portfolioUrl || formData.personalInfo.portfolioUrl,
-        expectedSalary: formData.expectedSalary ? parseInt(formData.expectedSalary) : undefined,
+        portfolioUrl:
+          formData.portfolioUrl || formData.personalInfo.portfolioUrl,
+        expectedSalary: formData.expectedSalary
+          ? parseInt(formData.expectedSalary)
+          : undefined,
         availabilityDate: formData.availabilityDate,
-        customAnswers: formData.customAnswers
+        customAnswers: formData.customAnswers,
       };
 
-      const result = await applicationService.submitApplication(applicationData);
+      const result =
+        await applicationService.submitApplication(applicationData);
 
       if (result.success) {
         setSubmitStatus({
-          type: 'success',
-          message: 'Application submitted successfully! You will receive a confirmation email shortly.'
+          type: "success",
+          message:
+            "Application submitted successfully! You will receive a confirmation email shortly.",
         });
-        
+
         onApplicationSubmitted?.(true);
-        
+
         // Auto-close after success
         setTimeout(() => {
           onClose?.();
         }, 3000);
       } else {
         setSubmitStatus({
-          type: 'error',
-          message: result.error || 'Failed to submit application'
+          type: "error",
+          message: result.error || "Failed to submit application",
         });
         onApplicationSubmitted?.(false);
       }
     } catch (error) {
       setSubmitStatus({
-        type: 'error',
-        message: error instanceof Error ? error.message : 'Failed to submit application'
+        type: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to submit application",
       });
       onApplicationSubmitted?.(false);
     } finally {
@@ -215,13 +232,13 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
 
   const nextStep = () => {
     if (currentStep < 3) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
+      setCurrentStep((prev) => prev - 1);
     }
   };
 
@@ -245,7 +262,7 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           <User className="w-5 h-5 mr-2 text-jobequal-green" />
           Personal Information
         </h3>
-        
+
         <div className="grid md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-jobequal-text mb-2">
@@ -256,13 +273,15 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
               <input
                 type="tel"
                 value={formData.personalInfo.phone}
-                onChange={(e) => handleInputChange('personalInfo.phone', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("personalInfo.phone", e.target.value)
+                }
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                 placeholder="+41 79 123 4567"
               />
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-jobequal-text mb-2">
               LinkedIn Profile
@@ -272,7 +291,9 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
               <input
                 type="url"
                 value={formData.personalInfo.linkedinUrl}
-                onChange={(e) => handleInputChange('personalInfo.linkedinUrl', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("personalInfo.linkedinUrl", e.target.value)
+                }
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                 placeholder="https://linkedin.com/in/yourprofile"
               />
@@ -290,7 +311,7 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           <FileText className="w-5 h-5 mr-2 text-jobequal-green" />
           Application Details
         </h3>
-        
+
         {/* Cover Letter */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-jobequal-text mb-2">
@@ -298,7 +319,7 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           </label>
           <textarea
             value={formData.coverLetter}
-            onChange={(e) => handleInputChange('coverLetter', e.target.value)}
+            onChange={(e) => handleInputChange("coverLetter", e.target.value)}
             rows={6}
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
             placeholder={`Dear ${companyName} Team,\n\nI am writing to express my interest in the ${jobTitle} position...`}
@@ -319,7 +340,9 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
             <input
               type="url"
               value={formData.portfolioUrl}
-              onChange={(e) => handleInputChange('portfolioUrl', e.target.value)}
+              onChange={(e) =>
+                handleInputChange("portfolioUrl", e.target.value)
+              }
               className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               placeholder="https://yourportfolio.com"
             />
@@ -337,13 +360,15 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
               <input
                 type="number"
                 value={formData.expectedSalary}
-                onChange={(e) => handleInputChange('expectedSalary', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("expectedSalary", e.target.value)
+                }
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                 placeholder="120000"
               />
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-jobequal-text mb-2">
               Available Start Date
@@ -353,7 +378,9 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
               <input
                 type="date"
                 value={formData.availabilityDate}
-                onChange={(e) => handleInputChange('availabilityDate', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("availabilityDate", e.target.value)
+                }
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
             </div>
@@ -363,15 +390,22 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
 
       {/* Custom Questions */}
       <div>
-        <h4 className="text-lg font-semibold text-jobequal-text mb-4">Additional Questions</h4>
+        <h4 className="text-lg font-semibold text-jobequal-text mb-4">
+          Additional Questions
+        </h4>
         {customQuestions.map((question, index) => (
           <div key={question.id} className="mb-6">
             <label className="block text-sm font-medium text-jobequal-text mb-2">
-              {question.question} {question.required && '*'}
+              {question.question} {question.required && "*"}
             </label>
             <textarea
-              value={formData.customAnswers[question.id] || ''}
-              onChange={(e) => handleInputChange(`customAnswers.${question.id}`, e.target.value)}
+              value={formData.customAnswers[question.id] || ""}
+              onChange={(e) =>
+                handleInputChange(
+                  `customAnswers.${question.id}`,
+                  e.target.value,
+                )
+              }
               rows={3}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
               placeholder={question.placeholder}
@@ -389,10 +423,12 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
         <CheckCircle className="w-5 h-5 mr-2 text-jobequal-green" />
         Review Your Application
       </h3>
-      
+
       <div className="bg-gray-50 rounded-2xl p-6">
-        <h4 className="font-semibold text-jobequal-text mb-4">Application Summary</h4>
-        
+        <h4 className="font-semibold text-jobequal-text mb-4">
+          Application Summary
+        </h4>
+
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Position:</span>
@@ -405,13 +441,15 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Expected Salary:</span>
             <span className="font-medium">
-              {formData.expectedSalary ? `CHF ${parseInt(formData.expectedSalary).toLocaleString()}` : 'Not specified'}
+              {formData.expectedSalary
+                ? `CHF ${parseInt(formData.expectedSalary).toLocaleString()}`
+                : "Not specified"}
             </span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-gray-600">Start Date:</span>
             <span className="font-medium">
-              {formData.availabilityDate || 'Flexible'}
+              {formData.availabilityDate || "Flexible"}
             </span>
           </div>
         </div>
@@ -422,17 +460,23 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className={`p-4 rounded-xl flex items-center space-x-3 ${
-            submitStatus.type === 'success' 
-              ? 'bg-green-50 border border-green-200' 
-              : 'bg-red-50 border border-red-200'
+            submitStatus.type === "success"
+              ? "bg-green-50 border border-green-200"
+              : "bg-red-50 border border-red-200"
           }`}
         >
-          {submitStatus.type === 'success' ? (
+          {submitStatus.type === "success" ? (
             <CheckCircle className="w-5 h-5 text-green-500" />
           ) : (
             <AlertCircle className="w-5 h-5 text-red-500" />
           )}
-          <span className={submitStatus.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+          <span
+            className={
+              submitStatus.type === "success"
+                ? "text-green-700"
+                : "text-red-700"
+            }
+          >
             {submitStatus.message}
           </span>
         </motion.div>
@@ -462,14 +506,16 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
               ✕
             </button>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="mt-6 flex items-center space-x-2">
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex-1">
-                <div className={`h-2 rounded-full ${
-                  step <= currentStep ? 'bg-white' : 'bg-white/30'
-                }`} />
+                <div
+                  className={`h-2 rounded-full ${
+                    step <= currentStep ? "bg-white" : "bg-white/30"
+                  }`}
+                />
               </div>
             ))}
           </div>
@@ -481,7 +527,10 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
         </div>
 
         {/* Content */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto max-h-[60vh]">
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 overflow-y-auto max-h-[60vh]"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -505,20 +554,17 @@ export const EnhancedApplicationForm: React.FC<EnhancedApplicationFormProps> = (
           >
             Back
           </button>
-          
+
           <div className="flex space-x-3">
             {currentStep < 3 ? (
-              <AnimatedButton
-                variant="primary"
-                onClick={nextStep}
-              >
+              <AnimatedButton variant="primary" onClick={nextStep}>
                 Next
               </AnimatedButton>
             ) : (
               <AnimatedButton
                 variant="primary"
                 type="submit"
-                disabled={isSubmitting || submitStatus.type === 'success'}
+                disabled={isSubmitting || submitStatus.type === "success"}
                 loading={isSubmitting}
               >
                 {isSubmitting ? (

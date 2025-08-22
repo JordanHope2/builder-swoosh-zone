@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 // ---------- Skip Link Component ----------
 export function SkipLink({
@@ -27,22 +27,23 @@ export function useFocusTrap(isActive: boolean) {
 
     const container = containerRef.current;
     const focusableSelectors = [
-      'a[href]',
-      'button',
-      'textarea',
+      "a[href]",
+      "button",
+      "textarea",
       'input[type="text"]',
       'input[type="radio"]',
       'input[type="checkbox"]',
-      'select',
+      "select",
       '[tabindex]:not([tabindex="-1"])',
-    ].join(', ');
-    
-    const focusableElements = container.querySelectorAll<HTMLElement>(focusableSelectors);
+    ].join(", ");
+
+    const focusableElements =
+      container.querySelectorAll<HTMLElement>(focusableSelectors);
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -58,19 +59,19 @@ export function useFocusTrap(isActive: boolean) {
     };
 
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        container.dispatchEvent(new CustomEvent('escape-pressed'));
+      if (e.key === "Escape") {
+        container.dispatchEvent(new CustomEvent("escape-pressed"));
       }
     };
 
-    document.addEventListener('keydown', handleTabKey);
-    document.addEventListener('keydown', handleEscapeKey);
+    document.addEventListener("keydown", handleTabKey);
+    document.addEventListener("keydown", handleEscapeKey);
 
     setTimeout(() => firstElement?.focus(), 50);
 
     return () => {
-      document.removeEventListener('keydown', handleTabKey);
-      document.removeEventListener('keydown', handleEscapeKey);
+      document.removeEventListener("keydown", handleTabKey);
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isActive]);
 
@@ -79,11 +80,11 @@ export function useFocusTrap(isActive: boolean) {
 
 // ---------- Screen Reader Announcement Hook ----------
 export function useScreenReaderAnnouncement() {
-  return (message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', priority);
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.className = 'sr-only';
+  return (message: string, priority: "polite" | "assertive" = "polite") => {
+    const announcement = document.createElement("div");
+    announcement.setAttribute("aria-live", priority);
+    announcement.setAttribute("aria-atomic", "true");
+    announcement.className = "sr-only";
     announcement.textContent = message;
 
     document.body.appendChild(announcement);
@@ -96,9 +97,9 @@ export function useScreenReaderAnnouncement() {
 
 // ---------- Reduced Motion Hook ----------
 export function useReducedMotion(): boolean {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
 
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 // ---------- Accessible Button Component ----------
@@ -106,41 +107,41 @@ interface AccessibleButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
   ariaLabel?: string;
   ariaDescribedBy?: string;
   className?: string;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }
 
 export function AccessibleButton({
   children,
   onClick,
   disabled = false,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   ariaLabel,
   ariaDescribedBy,
-  className = '',
-  type = 'button',
+  className = "",
+  type = "button",
 }: AccessibleButtonProps) {
   const baseClasses =
-    'inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    "inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variantClasses: Record<string, string> = {
     primary:
-      'bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal focus:ring-jobequal-green shadow-md hover:shadow-lg transform hover:scale-105',
+      "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal focus:ring-jobequal-green shadow-md hover:shadow-lg transform hover:scale-105",
     secondary:
-      'bg-white text-jobequal-green border-2 border-jobequal-green hover:bg-jobequal-green hover:text-white focus:ring-jobequal-green',
+      "bg-white text-jobequal-green border-2 border-jobequal-green hover:bg-jobequal-green hover:text-white focus:ring-jobequal-green",
     ghost:
-      'text-jobequal-green hover:bg-jobequal-green-light focus:ring-jobequal-green',
+      "text-jobequal-green hover:bg-jobequal-green-light focus:ring-jobequal-green",
   };
 
   const sizeClasses: Record<string, string> = {
-    sm: 'px-3 py-2 text-sm rounded-lg',
-    md: 'px-4 py-2.5 text-base rounded-xl',
-    lg: 'px-6 py-3 text-lg rounded-xl',
+    sm: "px-3 py-2 text-sm rounded-lg",
+    md: "px-4 py-2.5 text-base rounded-xl",
+    lg: "px-6 py-3 text-lg rounded-xl",
   };
 
   return (
@@ -159,35 +160,35 @@ export function AccessibleButton({
 
 // ---------- High Contrast Mode Hook ----------
 export function useHighContrastMode(): boolean {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === "undefined") return false;
 
-  return window.matchMedia('(prefers-contrast: high)').matches;
+  return window.matchMedia("(prefers-contrast: high)").matches;
 }
 
 // ---------- Keyboard Navigation Hook ----------
 export function useKeyboardNavigation(
   onEscape?: (event: KeyboardEvent) => void,
-  onEnter?: (event: KeyboardEvent) => void
+  onEnter?: (event: KeyboardEvent) => void,
 ) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onEscape?.(event);
-      if (event.key === 'Enter') onEnter?.(event);
+      if (event.key === "Escape") onEscape?.(event);
+      if (event.key === "Enter") onEnter?.(event);
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onEscape, onEnter]);
 }
 
 // ---------- Live Region Component ----------
 export function LiveRegion({
   children,
-  politeness = 'polite',
+  politeness = "polite",
   atomic = false,
 }: {
   children: React.ReactNode;
-  politeness?: 'off' | 'polite' | 'assertive';
+  politeness?: "off" | "polite" | "assertive";
   atomic?: boolean;
 }) {
   return (

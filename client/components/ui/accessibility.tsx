@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Eye, 
-  EyeOff, 
-  Volume2, 
-  VolumeX, 
-  Type, 
-  Contrast, 
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Eye,
+  EyeOff,
+  Volume2,
+  VolumeX,
+  Type,
+  Contrast,
   MousePointer,
   Keyboard,
   AlertCircle,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
 // Accessibility preferences context
 interface AccessibilityPreferences {
@@ -29,15 +29,18 @@ const defaultPreferences: AccessibilityPreferences = {
   largeText: false,
   screenReader: false,
   keyboardNavigation: false,
-  autoplay: true
+  autoplay: true,
 };
 
 export const AccessibilityContext = React.createContext<{
   preferences: AccessibilityPreferences;
-  updatePreference: (key: keyof AccessibilityPreferences, value: boolean) => void;
+  updatePreference: (
+    key: keyof AccessibilityPreferences,
+    value: boolean,
+  ) => void;
 }>({
   preferences: defaultPreferences,
-  updatePreference: () => {}
+  updatePreference: () => {},
 });
 
 // Accessibility provider component
@@ -45,38 +48,53 @@ interface AccessibilityProviderProps {
   children: React.ReactNode;
 }
 
-export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ children }) => {
-  const [preferences, setPreferences] = useState<AccessibilityPreferences>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('accessibility-preferences');
-      return stored ? JSON.parse(stored) : defaultPreferences;
-    }
-    return defaultPreferences;
-  });
+export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
+  children,
+}) => {
+  const [preferences, setPreferences] = useState<AccessibilityPreferences>(
+    () => {
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem("accessibility-preferences");
+        return stored ? JSON.parse(stored) : defaultPreferences;
+      }
+      return defaultPreferences;
+    },
+  );
 
-  const updatePreference = (key: keyof AccessibilityPreferences, value: boolean) => {
+  const updatePreference = (
+    key: keyof AccessibilityPreferences,
+    value: boolean,
+  ) => {
     const newPreferences = { ...preferences, [key]: value };
     setPreferences(newPreferences);
-    localStorage.setItem('accessibility-preferences', JSON.stringify(newPreferences));
-    
+    localStorage.setItem(
+      "accessibility-preferences",
+      JSON.stringify(newPreferences),
+    );
+
     // Apply global changes based on preferences
     applyGlobalAccessibilitySettings(newPreferences);
   };
 
-  const applyGlobalAccessibilitySettings = (prefs: AccessibilityPreferences) => {
+  const applyGlobalAccessibilitySettings = (
+    prefs: AccessibilityPreferences,
+  ) => {
     const htmlElement = document.documentElement;
-    
+
     // High contrast
-    htmlElement.classList.toggle('high-contrast', prefs.highContrast);
-    
+    htmlElement.classList.toggle("high-contrast", prefs.highContrast);
+
     // Large text
-    htmlElement.classList.toggle('large-text', prefs.largeText);
-    
+    htmlElement.classList.toggle("large-text", prefs.largeText);
+
     // Reduced motion
-    htmlElement.classList.toggle('reduce-motion', prefs.reducedMotion);
-    
+    htmlElement.classList.toggle("reduce-motion", prefs.reducedMotion);
+
     // Keyboard navigation
-    htmlElement.classList.toggle('keyboard-navigation', prefs.keyboardNavigation);
+    htmlElement.classList.toggle(
+      "keyboard-navigation",
+      prefs.keyboardNavigation,
+    );
   };
 
   useEffect(() => {
@@ -86,23 +104,27 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
   // Detect user preferences
   useEffect(() => {
     const mediaQueries = {
-      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)'),
-      highContrast: window.matchMedia('(prefers-contrast: high)'),
-      largeText: window.matchMedia('(prefers-reduced-transparency: reduce)')
+      reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)"),
+      highContrast: window.matchMedia("(prefers-contrast: high)"),
+      largeText: window.matchMedia("(prefers-reduced-transparency: reduce)"),
     };
 
     const handleMediaChange = () => {
-      setPreferences(prev => ({
+      setPreferences((prev) => ({
         ...prev,
         reducedMotion: mediaQueries.reducedMotion.matches,
-        highContrast: mediaQueries.highContrast.matches
+        highContrast: mediaQueries.highContrast.matches,
       }));
     };
 
-    Object.values(mediaQueries).forEach(mq => mq.addEventListener('change', handleMediaChange));
-    
+    Object.values(mediaQueries).forEach((mq) =>
+      mq.addEventListener("change", handleMediaChange),
+    );
+
     return () => {
-      Object.values(mediaQueries).forEach(mq => mq.removeEventListener('change', handleMediaChange));
+      Object.values(mediaQueries).forEach((mq) =>
+        mq.removeEventListener("change", handleMediaChange),
+      );
     };
   }, []);
 
@@ -116,39 +138,40 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({ ch
 // Accessibility settings panel
 export const AccessibilityPanel: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { preferences, updatePreference } = React.useContext(AccessibilityContext);
+  const { preferences, updatePreference } =
+    React.useContext(AccessibilityContext);
 
   const settings = [
     {
-      key: 'highContrast' as const,
-      label: 'High Contrast',
-      description: 'Increase color contrast for better visibility',
-      icon: Contrast
+      key: "highContrast" as const,
+      label: "High Contrast",
+      description: "Increase color contrast for better visibility",
+      icon: Contrast,
     },
     {
-      key: 'reducedMotion' as const,
-      label: 'Reduce Motion',
-      description: 'Minimize animations and transitions',
-      icon: Eye
+      key: "reducedMotion" as const,
+      label: "Reduce Motion",
+      description: "Minimize animations and transitions",
+      icon: Eye,
     },
     {
-      key: 'largeText' as const,
-      label: 'Large Text',
-      description: 'Increase text size for better readability',
-      icon: Type
+      key: "largeText" as const,
+      label: "Large Text",
+      description: "Increase text size for better readability",
+      icon: Type,
     },
     {
-      key: 'keyboardNavigation' as const,
-      label: 'Keyboard Navigation',
-      description: 'Enhanced keyboard navigation support',
-      icon: Keyboard
+      key: "keyboardNavigation" as const,
+      label: "Keyboard Navigation",
+      description: "Enhanced keyboard navigation support",
+      icon: Keyboard,
     },
     {
-      key: 'autoplay' as const,
-      label: 'Autoplay Media',
-      description: 'Allow videos and animations to play automatically',
-      icon: Volume2
-    }
+      key: "autoplay" as const,
+      label: "Autoplay Media",
+      description: "Allow videos and animations to play automatically",
+      icon: Volume2,
+    },
   ];
 
   return (
@@ -182,7 +205,7 @@ export const AccessibilityPanel: React.FC = () => {
               initial={{ opacity: 0, x: -300 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -300 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed left-4 top-1/2 -translate-y-1/2 w-80 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 max-h-[80vh] overflow-y-auto"
             >
               <div className="p-6">
@@ -210,7 +233,9 @@ export const AccessibilityPanel: React.FC = () => {
                         className="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                       >
                         <div className="flex-shrink-0 mt-1">
-                          <Icon className={`w-5 h-5 ${isEnabled ? 'text-jobequal-green' : 'text-gray-400'}`} />
+                          <Icon
+                            className={`w-5 h-5 ${isEnabled ? "text-jobequal-green" : "text-gray-400"}`}
+                          />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
@@ -218,9 +243,13 @@ export const AccessibilityPanel: React.FC = () => {
                               {setting.label}
                             </h3>
                             <button
-                              onClick={() => updatePreference(setting.key, !isEnabled)}
+                              onClick={() =>
+                                updatePreference(setting.key, !isEnabled)
+                              }
                               className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:ring-offset-2 ${
-                                isEnabled ? 'bg-jobequal-green' : 'bg-gray-200 dark:bg-gray-600'
+                                isEnabled
+                                  ? "bg-jobequal-green"
+                                  : "bg-gray-200 dark:bg-gray-600"
                               }`}
                               role="switch"
                               aria-checked={isEnabled}
@@ -228,7 +257,7 @@ export const AccessibilityPanel: React.FC = () => {
                             >
                               <span
                                 className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                                  isEnabled ? 'translate-x-5' : 'translate-x-0'
+                                  isEnabled ? "translate-x-5" : "translate-x-0"
                                 }`}
                               />
                             </button>
@@ -244,7 +273,8 @@ export const AccessibilityPanel: React.FC = () => {
 
                 <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    These settings are saved in your browser and will persist across sessions.
+                    These settings are saved in your browser and will persist
+                    across sessions.
                   </p>
                 </div>
               </div>
@@ -259,27 +289,22 @@ export const AccessibilityPanel: React.FC = () => {
 // Screen reader announcement component
 interface ScreenReaderAnnouncementProps {
   message: string;
-  priority?: 'polite' | 'assertive';
+  priority?: "polite" | "assertive";
 }
 
-export const ScreenReaderAnnouncement: React.FC<ScreenReaderAnnouncementProps> = ({
-  message,
-  priority = 'polite'
-}) => {
-  const [announcement, setAnnouncement] = useState('');
+export const ScreenReaderAnnouncement: React.FC<
+  ScreenReaderAnnouncementProps
+> = ({ message, priority = "polite" }) => {
+  const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
     setAnnouncement(message);
-    const timer = setTimeout(() => setAnnouncement(''), 1000);
+    const timer = setTimeout(() => setAnnouncement(""), 1000);
     return () => clearTimeout(timer);
   }, [message]);
 
   return (
-    <div
-      aria-live={priority}
-      aria-atomic="true"
-      className="sr-only"
-    >
+    <div aria-live={priority} aria-atomic="true" className="sr-only">
       {announcement}
     </div>
   );
@@ -304,13 +329,15 @@ export const useFocusTrap = (isActive: boolean) => {
 
     const container = containerRef.current;
     const focusableElements = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
     );
     const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    const lastElement = focusableElements[
+      focusableElements.length - 1
+    ] as HTMLElement;
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -326,19 +353,21 @@ export const useFocusTrap = (isActive: boolean) => {
     };
 
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        const closeButton = container.querySelector('[data-close]') as HTMLElement;
+      if (e.key === "Escape") {
+        const closeButton = container.querySelector(
+          "[data-close]",
+        ) as HTMLElement;
         closeButton?.click();
       }
     };
 
-    container.addEventListener('keydown', handleTabKey);
-    container.addEventListener('keydown', handleEscapeKey);
+    container.addEventListener("keydown", handleTabKey);
+    container.addEventListener("keydown", handleEscapeKey);
     firstElement?.focus();
 
     return () => {
-      container.removeEventListener('keydown', handleTabKey);
-      container.removeEventListener('keydown', handleEscapeKey);
+      container.removeEventListener("keydown", handleTabKey);
+      container.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isActive]);
 
@@ -351,7 +380,7 @@ export const useKeyboardNavigation = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Tab') {
+      if (e.key === "Tab") {
         setIsKeyboardUser(true);
       }
     };
@@ -360,12 +389,12 @@ export const useKeyboardNavigation = () => {
       setIsKeyboardUser(false);
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleMouseDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleMouseDown);
     };
   }, []);
 
@@ -374,7 +403,7 @@ export const useKeyboardNavigation = () => {
 
 // Accessible notification component
 interface AccessibleNotificationProps {
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   title: string;
   message: string;
   onClose: () => void;
@@ -388,20 +417,20 @@ export const AccessibleNotification: React.FC<AccessibleNotificationProps> = ({
   message,
   onClose,
   autoClose = true,
-  duration = 5000
+  duration = 5000,
 }) => {
   const icons = {
     success: CheckCircle,
     error: AlertCircle,
     warning: AlertCircle,
-    info: AlertCircle
+    info: AlertCircle,
   };
 
   const colors = {
-    success: 'bg-green-50 border-green-200 text-green-800',
-    error: 'bg-red-50 border-red-200 text-red-800',
-    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-    info: 'bg-blue-50 border-blue-200 text-blue-800'
+    success: "bg-green-50 border-green-200 text-green-800",
+    error: "bg-red-50 border-red-200 text-red-800",
+    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    info: "bg-blue-50 border-blue-200 text-blue-800",
   };
 
   const Icon = icons[type];

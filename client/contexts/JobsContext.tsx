@@ -1,18 +1,24 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getJobs, getJobById, submitApplication, supabase } from '../lib/supabase';
-import { useAuth } from './AuthContext';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  getJobs,
+  getJobById,
+  submitApplication,
+  supabase,
+} from "../lib/supabase";
+import { useAuth } from "./AuthContext";
 
 // Utility function to extract error message from various error types
 const getErrorMessage = (error: unknown): string => {
-  if (typeof error === 'string') return error;
+  if (typeof error === "string") return error;
   if (error instanceof Error) return error.message;
-  if (error && typeof error === 'object') {
+  if (error && typeof error === "object") {
     // Handle Supabase errors
-    if ('message' in error) return String(error.message);
-    if ('error' in error && typeof error.error === 'string') return error.error;
-    if ('details' in error && typeof error.details === 'string') return error.details;
+    if ("message" in error) return String(error.message);
+    if ("error" in error && typeof error.error === "string") return error.error;
+    if ("details" in error && typeof error.details === "string")
+      return error.details;
   }
-  return 'An unexpected error occurred';
+  return "An unexpected error occurred";
 };
 
 interface Job {
@@ -23,8 +29,8 @@ interface Job {
   location: string;
   salary_min?: number;
   salary_max?: number;
-  type: 'full-time' | 'part-time' | 'contract' | 'internship';
-  status: 'draft' | 'published' | 'closed';
+  type: "full-time" | "part-time" | "contract" | "internship";
+  status: "draft" | "published" | "closed";
   created_at: string;
   updated_at: string;
   companies?: {
@@ -72,7 +78,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       const errorMessage = getErrorMessage(err);
       setError(errorMessage);
-      console.error('Error loading jobs:', err);
+      console.error("Error loading jobs:", err);
     } finally {
       setLoading(false);
     }
@@ -97,7 +103,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
 
   const applyToJob = async (jobId: string, applicationData: any) => {
     if (!user) {
-      throw new Error('You must be logged in to apply for jobs');
+      throw new Error("You must be logged in to apply for jobs");
     }
 
     try {
@@ -131,7 +137,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
 export function useJobs() {
   const context = useContext(JobsContext);
   if (context === undefined) {
-    throw new Error('useJobs must be used within a JobsProvider');
+    throw new Error("useJobs must be used within a JobsProvider");
   }
   return context;
 }

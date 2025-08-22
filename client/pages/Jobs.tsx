@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Navigation } from '../components/Navigation';
+import { useState, useEffect } from "react";
+import { Navigation } from "../components/Navigation";
 
 interface Job {
   id: string;
@@ -23,9 +23,9 @@ export default function Jobs() {
     const fetchJobs = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/scrape');
+        const response = await fetch("/api/scrape");
         if (!response.ok) {
-          throw new Error('Failed to fetch jobs');
+          throw new Error("Failed to fetch jobs");
         }
         const data = await response.json();
         setJobs(data.results || []);
@@ -66,10 +66,18 @@ export default function Jobs() {
                   rel="noopener noreferrer"
                   className="block p-6 bg-white dark:bg-gray-800 border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <h2 className="text-xl font-semibold text-foreground">{job.title}</h2>
-                  <p className="text-md text-muted-foreground font-medium">{job.company.display_name}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{job.location.display_name}</p>
-                  <p className="text-sm text-muted-foreground mt-4 line-clamp-2">{job.description}</p>
+                  <h2 className="text-xl font-semibold text-foreground">
+                    {job.title}
+                  </h2>
+                  <p className="text-md text-muted-foreground font-medium">
+                    {job.company.display_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {job.location.display_name}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-4 line-clamp-2">
+                    {job.description}
+                  </p>
                 </a>
               ))
             ) : (

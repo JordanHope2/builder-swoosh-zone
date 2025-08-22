@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Building2, 
-  UserCheck, 
-  Shield, 
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Users,
+  Building2,
+  UserCheck,
+  Shield,
   Briefcase,
   MessageSquare,
   ArrowRight,
-  Crown
-} from 'lucide-react';
-import { Navigation } from '../components/Navigation';
+  Crown,
+} from "lucide-react";
+import { Navigation } from "../components/Navigation";
 
 interface UserRole {
   id: string;
@@ -26,42 +26,66 @@ interface UserRole {
 
 const roles: UserRole[] = [
   {
-    id: 'candidate',
-    title: 'Job Candidate',
-    description: 'Browse jobs, track applications, and manage your career journey',
-    features: ['Job matching', 'Application tracking', 'Resume builder', 'AI career advice'],
+    id: "candidate",
+    title: "Job Candidate",
+    description:
+      "Browse jobs, track applications, and manage your career journey",
+    features: [
+      "Job matching",
+      "Application tracking",
+      "Resume builder",
+      "AI career advice",
+    ],
     icon: UserCheck,
-    color: 'from-blue-500 to-cyan-500',
-    route: '/dashboard'
+    color: "from-blue-500 to-cyan-500",
+    route: "/dashboard",
   },
   {
-    id: 'recruiter',
-    title: 'Recruiter',
-    description: 'Find talent, manage candidates, and streamline your hiring process',
-    features: ['Candidate sourcing', 'Interview scheduling', 'Pipeline management', 'Analytics'],
+    id: "recruiter",
+    title: "Recruiter",
+    description:
+      "Find talent, manage candidates, and streamline your hiring process",
+    features: [
+      "Candidate sourcing",
+      "Interview scheduling",
+      "Pipeline management",
+      "Analytics",
+    ],
     icon: Users,
-    color: 'from-purple-500 to-indigo-500',
-    route: '/enhanced-recruiter-dashboard'
+    color: "from-purple-500 to-indigo-500",
+    route: "/enhanced-recruiter-dashboard",
   },
   {
-    id: 'company',
-    title: 'Company Owner',
-    description: 'Manage job postings, track hiring metrics, and oversee your team',
-    features: ['Job posting', 'Application management', 'Team collaboration', 'Subscription billing'],
+    id: "company",
+    title: "Company Owner",
+    description:
+      "Manage job postings, track hiring metrics, and oversee your team",
+    features: [
+      "Job posting",
+      "Application management",
+      "Team collaboration",
+      "Subscription billing",
+    ],
     icon: Building2,
-    color: 'from-green-500 to-emerald-500',
-    route: '/company-dashboard'
+    color: "from-green-500 to-emerald-500",
+    route: "/company-dashboard",
   },
   {
-    id: 'admin',
-    title: 'Platform Owner',
-    description: 'Monitor platform health, manage users, and access system analytics',
-    features: ['System monitoring', 'User management', 'Revenue tracking', 'Security audits'],
+    id: "admin",
+    title: "Platform Owner",
+    description:
+      "Monitor platform health, manage users, and access system analytics",
+    features: [
+      "System monitoring",
+      "User management",
+      "Revenue tracking",
+      "Security audits",
+    ],
     icon: Shield,
-    color: 'from-red-500 to-rose-500',
-    route: '/owner-admin-dashboard',
-    badge: 'ADMIN'
-  }
+    color: "from-red-500 to-rose-500",
+    route: "/owner-admin-dashboard",
+    badge: "ADMIN",
+  },
 ];
 
 export default function RoleSwitcher() {
@@ -70,7 +94,7 @@ export default function RoleSwitcher() {
 
   const handleRoleSelect = (role: UserRole) => {
     setSelectedRole(role.id);
-    
+
     // Add a small delay for visual feedback
     setTimeout(() => {
       navigate(role.route);
@@ -80,7 +104,7 @@ export default function RoleSwitcher() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <motion.div
@@ -95,7 +119,8 @@ export default function RoleSwitcher() {
             </h1>
           </div>
           <p className="text-xl text-jobequal-text-muted dark:text-gray-300 max-w-3xl mx-auto">
-            Choose your role to explore different dashboards and features. Perfect for testing and demonstrating all platform capabilities.
+            Choose your role to explore different dashboards and features.
+            Perfect for testing and demonstrating all platform capabilities.
           </p>
         </motion.div>
 
@@ -104,7 +129,7 @@ export default function RoleSwitcher() {
           {roles.map((role, index) => {
             const Icon = role.icon;
             const isSelected = selectedRole === role.id;
-            
+
             return (
               <motion.div
                 key={role.id}
@@ -114,15 +139,17 @@ export default function RoleSwitcher() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className={`relative cursor-pointer transition-all duration-300 ${
-                  isSelected ? 'transform scale-105' : ''
+                  isSelected ? "transform scale-105" : ""
                 }`}
                 onClick={() => handleRoleSelect(role)}
               >
-                <div className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
-                  isSelected 
-                    ? 'border-jobequal-green shadow-2xl' 
-                    : 'border-jobequal-neutral-dark dark:border-gray-600 hover:border-jobequal-green-light'
-                }`}>
+                <div
+                  className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border-2 transition-all duration-300 shadow-lg hover:shadow-xl ${
+                    isSelected
+                      ? "border-jobequal-green shadow-2xl"
+                      : "border-jobequal-neutral-dark dark:border-gray-600 hover:border-jobequal-green-light"
+                  }`}
+                >
                   {/* Badge */}
                   {role.badge && (
                     <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
@@ -131,9 +158,11 @@ export default function RoleSwitcher() {
                   )}
 
                   {/* Icon */}
-                  <div className={`w-16 h-16 bg-gradient-to-r ${role.color} rounded-2xl flex items-center justify-center mb-4 mx-auto ${
-                    isSelected ? 'animate-pulse' : ''
-                  }`}>
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-r ${role.color} rounded-2xl flex items-center justify-center mb-4 mx-auto ${
+                      isSelected ? "animate-pulse" : ""
+                    }`}
+                  >
                     <Icon className="w-8 h-8 text-white" />
                   </div>
 
@@ -150,7 +179,10 @@ export default function RoleSwitcher() {
                   {/* Features */}
                   <ul className="space-y-2 mb-6">
                     {role.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-xs text-jobequal-text-muted dark:text-gray-400">
+                      <li
+                        key={featureIndex}
+                        className="flex items-center text-xs text-jobequal-text-muted dark:text-gray-400"
+                      >
                         <div className="w-1.5 h-1.5 bg-jobequal-green rounded-full mr-2 flex-shrink-0"></div>
                         {feature}
                       </li>
@@ -158,12 +190,16 @@ export default function RoleSwitcher() {
                   </ul>
 
                   {/* Button */}
-                  <div className={`flex items-center justify-center space-x-2 py-2 px-4 rounded-xl font-medium transition-all duration-200 ${
-                    isSelected
-                      ? 'bg-jobequal-green text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white hover:bg-jobequal-green hover:text-white'
-                  }`}>
-                    <span>{isSelected ? 'Accessing...' : 'Enter Dashboard'}</span>
+                  <div
+                    className={`flex items-center justify-center space-x-2 py-2 px-4 rounded-xl font-medium transition-all duration-200 ${
+                      isSelected
+                        ? "bg-jobequal-green text-white"
+                        : "bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white hover:bg-jobequal-green hover:text-white"
+                    }`}
+                  >
+                    <span>
+                      {isSelected ? "Accessing..." : "Enter Dashboard"}
+                    </span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -191,10 +227,10 @@ export default function RoleSwitcher() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { name: 'Job Search', icon: Briefcase, route: '/job-search' },
-              { name: 'Swipe Discovery', icon: Users, route: '/swipe' },
-              { name: 'Companies', icon: Building2, route: '/companies' },
-              { name: 'AI Chatbot', icon: MessageSquare, route: '/' }
+              { name: "Job Search", icon: Briefcase, route: "/job-search" },
+              { name: "Swipe Discovery", icon: Users, route: "/swipe" },
+              { name: "Companies", icon: Building2, route: "/companies" },
+              { name: "AI Chatbot", icon: MessageSquare, route: "/" },
             ].map((feature, index) => {
               const FeatureIcon = feature.icon;
               return (

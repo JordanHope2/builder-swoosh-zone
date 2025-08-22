@@ -22,7 +22,7 @@ router.get("/", async (_req, res) => {
     if (error) throw error;
 
     // Add a placeholder matchScore to each job for frontend development
-    const jobsWithMatchScore = (data ?? []).map(job => ({
+    const jobsWithMatchScore = (data ?? []).map((job) => ({
       ...job,
       matchScore: Math.floor(Math.random() * (99 - 50 + 1)) + 50, // Random score between 50-99
     }));

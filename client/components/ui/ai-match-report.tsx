@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   Brain,
@@ -14,11 +14,16 @@ import {
   ArrowRight,
   Lightbulb,
   User,
-  Zap
-} from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { AIMatchReport, aiMatchService, JobProfile, CandidateProfile } from '../../services/aiMatchService';
-import { applicationToast } from '../../hooks/use-toast';
+  Zap,
+} from "lucide-react";
+import { cn } from "../../lib/utils";
+import {
+  AIMatchReport,
+  aiMatchService,
+  JobProfile,
+  CandidateProfile,
+} from "../../services/aiMatchService";
+import { applicationToast } from "../../hooks/use-toast";
 
 interface AIMatchReportModalProps {
   isOpen: boolean;
@@ -31,23 +36,48 @@ interface AIMatchReportModalProps {
 }
 
 const breakdownCategories = [
-  { key: 'skills', label: 'Skills Match', icon: Target, color: 'from-blue-500 to-blue-600' },
-  { key: 'experience', label: 'Experience', icon: TrendingUp, color: 'from-green-500 to-green-600' },
-  { key: 'education', label: 'Education', icon: GraduationCap, color: 'from-purple-500 to-purple-600' },
-  { key: 'location', label: 'Location', icon: MapPin, color: 'from-orange-500 to-orange-600' },
-  { key: 'salary', label: 'Salary', icon: DollarSign, color: 'from-teal-500 to-teal-600' }
+  {
+    key: "skills",
+    label: "Skills Match",
+    icon: Target,
+    color: "from-blue-500 to-blue-600",
+  },
+  {
+    key: "experience",
+    label: "Experience",
+    icon: TrendingUp,
+    color: "from-green-500 to-green-600",
+  },
+  {
+    key: "education",
+    label: "Education",
+    icon: GraduationCap,
+    color: "from-purple-500 to-purple-600",
+  },
+  {
+    key: "location",
+    label: "Location",
+    icon: MapPin,
+    color: "from-orange-500 to-orange-600",
+  },
+  {
+    key: "salary",
+    label: "Salary",
+    icon: DollarSign,
+    color: "from-teal-500 to-teal-600",
+  },
 ];
 
-function CircularProgress({ 
-  percentage, 
-  size = 120, 
-  strokeWidth = 8, 
-  className = '' 
-}: { 
-  percentage: number; 
-  size?: number; 
-  strokeWidth?: number; 
-  className?: string; 
+function CircularProgress({
+  percentage,
+  size = 120,
+  strokeWidth = 8,
+  className = "",
+}: {
+  percentage: number;
+  size?: number;
+  strokeWidth?: number;
+  className?: string;
 }) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -55,18 +85,14 @@ function CircularProgress({
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const getColor = (percent: number) => {
-    if (percent >= 80) return '#10B981'; // green
-    if (percent >= 60) return '#F59E0B'; // yellow
-    return '#EF4444'; // red
+    if (percent >= 80) return "#10B981"; // green
+    if (percent >= 60) return "#F59E0B"; // yellow
+    return "#EF4444"; // red
   };
 
   return (
-    <div className={cn('relative', className)}>
-      <svg
-        className="transform -rotate-90"
-        width={size}
-        height={size}
-      >
+    <div className={cn("relative", className)}>
+      <svg className="transform -rotate-90" width={size} height={size}>
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -103,14 +129,14 @@ function CircularProgress({
   );
 }
 
-function CategoryBar({ 
-  category, 
-  percentage, 
-  index 
-}: { 
-  category: typeof breakdownCategories[0]; 
-  percentage: number; 
-  index: number; 
+function CategoryBar({
+  category,
+  percentage,
+  index,
+}: {
+  category: (typeof breakdownCategories)[0];
+  percentage: number;
+  index: number;
 }) {
   return (
     <motion.div
@@ -154,7 +180,8 @@ function LoadingState() {
         Analyzing Your Match
       </h3>
       <p className="text-gray-600 text-center max-w-sm">
-        Our AI is evaluating your profile against this position to provide detailed insights...
+        Our AI is evaluating your profile against this position to provide
+        detailed insights...
       </p>
     </div>
   );
@@ -167,7 +194,7 @@ export function AIMatchReportModal({
   userId,
   initialMatchPercent,
   jobProfile,
-  candidateProfile
+  candidateProfile,
 }: AIMatchReportModalProps) {
   const [report, setReport] = useState<AIMatchReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -188,12 +215,12 @@ export function AIMatchReportModal({
         jobId,
         userId,
         jobProfile,
-        candidateProfile
+        candidateProfile,
       );
       setReport(matchReport);
     } catch (err) {
-      setError('Failed to load match analysis. Please try again.');
-      console.error('Error loading match report:', err);
+      setError("Failed to load match analysis. Please try again.");
+      console.error("Error loading match report:", err);
     } finally {
       setIsLoading(false);
     }
@@ -202,10 +229,10 @@ export function AIMatchReportModal({
   const handleImproveProfile = () => {
     onClose();
     // Navigate to profile improvement page
-    window.location.href = '/profile-settings';
+    window.location.href = "/profile-settings";
     applicationToast.info(
-      'Profile Improvement',
-      'Complete your profile to increase your match scores!'
+      "Profile Improvement",
+      "Complete your profile to increase your match scores!",
     );
   };
 
@@ -222,10 +249,10 @@ export function AIMatchReportModal({
         }}
       >
         <motion.div
-          initial={{ x: '100%', opacity: 0 }}
+          initial={{ x: "100%", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: '100%', opacity: 0 }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          exit={{ x: "100%", opacity: 0 }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
           className="bg-white rounded-2xl shadow-2xl w-full max-w-lg h-full max-h-[90vh] overflow-hidden flex flex-col"
           role="dialog"
           aria-labelledby="match-report-title"
@@ -238,10 +265,16 @@ export function AIMatchReportModal({
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 id="match-report-title" className="text-xl font-bold text-gray-900">
+                <h2
+                  id="match-report-title"
+                  className="text-xl font-bold text-gray-900"
+                >
                   AI Match Analysis
                 </h2>
-                <p id="match-report-description" className="text-sm text-gray-600">
+                <p
+                  id="match-report-description"
+                  className="text-sm text-gray-600"
+                >
                   Detailed compatibility breakdown
                 </p>
               </div>
@@ -284,8 +317,8 @@ export function AIMatchReportModal({
                     transition={{ delay: 0.2, duration: 0.6 }}
                     className="mb-6"
                   >
-                    <CircularProgress 
-                      percentage={report.matchPercent} 
+                    <CircularProgress
+                      percentage={report.matchPercent}
                       size={140}
                       strokeWidth={10}
                       className="mx-auto"
@@ -321,7 +354,11 @@ export function AIMatchReportModal({
                       <CategoryBar
                         key={category.key}
                         category={category}
-                        percentage={report.breakdown[category.key as keyof typeof report.breakdown]}
+                        percentage={
+                          report.breakdown[
+                            category.key as keyof typeof report.breakdown
+                          ]
+                        }
                         index={index}
                       />
                     ))}

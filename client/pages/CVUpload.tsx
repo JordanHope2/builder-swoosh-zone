@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Navigation } from '../components/Navigation';
-import { EnhancedCVUpload } from '../components/EnhancedCVUpload';
-import { PageTransition } from '../components/ui/enhanced-motion';
-import { CVAnalysisResult } from '../services/aiAnalysisService';
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { Navigation } from "../components/Navigation";
+import { EnhancedCVUpload } from "../components/EnhancedCVUpload";
+import { PageTransition } from "../components/ui/enhanced-motion";
+import { CVAnalysisResult } from "../services/aiAnalysisService";
 
 export default function CVUpload() {
   const [analysisComplete, setAnalysisComplete] = useState(false);
   const location = useLocation();
-  const preloadedResult = location.state?.analysisResult as CVAnalysisResult | undefined;
+  const preloadedResult = location.state?.analysisResult as
+    | CVAnalysisResult
+    | undefined;
 
   useEffect(() => {
     if (preloadedResult) {
@@ -18,7 +20,7 @@ export default function CVUpload() {
 
   const handleAnalysisComplete = (result: CVAnalysisResult) => {
     setAnalysisComplete(true);
-    console.log('CV Analysis completed:', result);
+    console.log("CV Analysis completed:", result);
   };
 
   return (

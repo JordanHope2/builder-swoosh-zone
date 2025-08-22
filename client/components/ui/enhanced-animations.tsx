@@ -1,5 +1,11 @@
-import { motion, Variants, AnimatePresence, TargetAndTransition, Transition } from 'framer-motion';
-import React from 'react';
+import {
+  motion,
+  Variants,
+  AnimatePresence,
+  TargetAndTransition,
+  Transition,
+} from "framer-motion";
+import React from "react";
 
 // Define a structured type for our animation configurations
 interface AnimationConfig {
@@ -18,7 +24,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1 },
       exit: { opacity: 0 },
     },
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
   },
 
   fadeInUp: {
@@ -27,7 +33,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: -10 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   fadeInDown: {
@@ -36,7 +42,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: 10 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   fadeInLeft: {
@@ -45,7 +51,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, x: 0 },
       exit: { opacity: 0, x: 20 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   fadeInRight: {
@@ -54,7 +60,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, x: 0 },
       exit: { opacity: 0, x: -20 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   // Scale animations
@@ -64,7 +70,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, scale: 1 },
       exit: { opacity: 0, scale: 0.95 },
     },
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
   },
 
   scaleInBounce: {
@@ -73,47 +79,47 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, scale: 1 },
       exit: { opacity: 0, scale: 0.9 },
     },
-    transition: { 
-      duration: 0.5, 
+    transition: {
+      duration: 0.5,
       ease: [0.68, -0.55, 0.265, 1.55],
-    }
+    },
   },
 
   // Slide animations
   slideInFromBottom: {
     variants: {
-      initial: { y: '100%', opacity: 0 },
+      initial: { y: "100%", opacity: 0 },
       animate: { y: 0, opacity: 1 },
-      exit: { y: '100%', opacity: 0 },
+      exit: { y: "100%", opacity: 0 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   slideInFromTop: {
     variants: {
-      initial: { y: '-100%', opacity: 0 },
+      initial: { y: "-100%", opacity: 0 },
       animate: { y: 0, opacity: 1 },
-      exit: { y: '-100%', opacity: 0 },
+      exit: { y: "-100%", opacity: 0 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   slideInFromLeft: {
     variants: {
-      initial: { x: '-100%', opacity: 0 },
+      initial: { x: "-100%", opacity: 0 },
       animate: { x: 0, opacity: 1 },
-      exit: { x: '-100%', opacity: 0 },
+      exit: { x: "-100%", opacity: 0 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   slideInFromRight: {
     variants: {
-      initial: { x: '100%', opacity: 0 },
+      initial: { x: "100%", opacity: 0 },
       animate: { x: 0, opacity: 1 },
-      exit: { x: '100%', opacity: 0 },
+      exit: { x: "100%", opacity: 0 },
     },
-    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
   },
 
   // Staggered animations
@@ -125,8 +131,8 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
     },
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
+      delayChildren: 0.1,
+    },
   },
 
   staggerItem: {
@@ -135,36 +141,36 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: -10 },
     },
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
   },
 
   // Hover animations
   hoverScale: {
     variants: {},
-    whileHover: { 
+    whileHover: {
       scale: 1.02,
     },
     transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
-    whileTap: { 
+    whileTap: {
       scale: 0.98,
-      transition: { duration: 0.1 }
-    }
+      transition: { duration: 0.1 },
+    },
   },
 
   hoverFloat: {
     variants: {},
-    whileHover: { 
+    whileHover: {
       y: -2,
     },
-    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
   },
 
   hoverRotate: {
     variants: {},
-    whileHover: { 
+    whileHover: {
       rotate: 5,
     },
-    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
   },
 
   // Loading animations
@@ -178,8 +184,8 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   },
 
   spin: {
@@ -191,8 +197,8 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 1,
       repeat: Infinity,
-      ease: "linear"
-    }
+      ease: "linear",
+    },
   },
 
   bounce: {
@@ -204,8 +210,8 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 0.6,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   },
 
   // Advanced transitions
@@ -215,7 +221,7 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { borderRadius: "50%" },
       exit: { borderRadius: "0%" },
     },
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
   },
 
   flipIn: {
@@ -224,17 +230,17 @@ export const enhancedAnimations: Record<string, AnimationConfig> = {
       animate: { rotateY: 0, opacity: 1 },
       exit: { rotateY: 90, opacity: 0 },
     },
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
+    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
   },
 
   slideInHeight: {
     variants: {
       initial: { height: 0, opacity: 0 },
-      animate: { height: 'auto', opacity: 1 },
+      animate: { height: "auto", opacity: 1 },
       exit: { height: 0, opacity: 0 },
     },
-    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] }
-  }
+    transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+  },
 };
 
 // Enhanced motion components with built-in animations
@@ -248,10 +254,10 @@ interface EnhancedMotionProps {
 
 export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
   children,
-  animation = 'fadeInUp',
+  animation = "fadeInUp",
   delay = 0,
   className,
-  onClick
+  onClick,
 }) => {
   const animConfig = enhancedAnimations[animation];
 
@@ -265,7 +271,7 @@ export const EnhancedMotionDiv: React.FC<EnhancedMotionProps> = ({
       whileTap={animConfig.whileTap}
       transition={{
         ...animConfig.transition,
-        delay
+        delay,
       }}
       className={className}
       onClick={onClick}
@@ -285,7 +291,7 @@ interface StaggeredListProps {
 export const StaggeredList: React.FC<StaggeredListProps> = ({
   children,
   className,
-  itemDelay = 0.1
+  itemDelay = 0.1,
 }) => (
   <motion.div
     className={className}
@@ -297,15 +303,15 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
       animate: {
         transition: {
           staggerChildren: itemDelay,
-          delayChildren: 0.1
-        }
+          delayChildren: 0.1,
+        },
       },
       exit: {
         transition: {
           staggerChildren: itemDelay / 2,
-          staggerDirection: -1
-        }
-      }
+          staggerDirection: -1,
+        },
+      },
     }}
   >
     {children.map((child, index) => (
@@ -330,7 +336,7 @@ interface LoadingSkeletonProps {
 export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
   lines = 3,
   className,
-  avatar = false
+  avatar = false,
 }) => (
   <div className={`animate-pulse ${className}`}>
     {avatar && (
@@ -347,7 +353,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
         <div
           key={index}
           className={`h-4 bg-gray-300 dark:bg-gray-600 rounded ${
-            index === lines - 1 ? 'w-3/4' : 'w-full'
+            index === lines - 1 ? "w-3/4" : "w-full"
           }`}
         />
       ))}
@@ -363,7 +369,7 @@ interface PageTransitionProps {
 
 export const PageTransition: React.FC<PageTransitionProps> = ({
   children,
-  className
+  className,
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -388,20 +394,29 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   children,
   className,
   onClick,
-  disabled = false
+  disabled = false,
 }) => (
   <motion.div
-    className={`${className} ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
-    whileHover={!disabled ? { 
-      scale: 1.02, 
-      y: -2,
-      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-      transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
-    } : undefined}
-    whileTap={!disabled ? { 
-      scale: 0.98,
-      transition: { duration: 0.1 }
-    } : undefined}
+    className={`${className} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+    whileHover={
+      !disabled
+        ? {
+            scale: 1.02,
+            y: -2,
+            boxShadow:
+              "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
+          }
+        : undefined
+    }
+    whileTap={
+      !disabled
+        ? {
+            scale: 0.98,
+            transition: { duration: 0.1 },
+          }
+        : undefined
+    }
     onClick={!disabled ? onClick : undefined}
     layout
   >
@@ -414,19 +429,19 @@ interface FloatingActionButtonProps {
   children: React.ReactNode;
   onClick: () => void;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   children,
   onClick,
   className,
-  size = 'md'
+  size = "md",
 }) => {
   const sizeClasses = {
-    sm: 'w-12 h-12',
-    md: 'w-14 h-14',
-    lg: 'w-16 h-16'
+    sm: "w-12 h-12",
+    md: "w-14 h-14",
+    lg: "w-16 h-16",
   };
 
   return (
@@ -439,14 +454,14 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         flex items-center justify-center
         ${className}
       `}
-      whileHover={{ 
+      whileHover={{
         scale: 1.1,
         rotate: 5,
-        transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] }
+        transition: { duration: 0.2, ease: [0.4, 0, 0.2, 1] },
       }}
-      whileTap={{ 
+      whileTap={{
         scale: 0.9,
-        transition: { duration: 0.1 }
+        transition: { duration: 0.1 },
       }}
       onClick={onClick}
       initial={{ scale: 0, opacity: 0 }}

@@ -1,10 +1,10 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
-import { motion, PanInfo, useAnimation, AnimatePresence } from 'framer-motion';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useLanguage } from '../contexts/LanguageContext';
-import { 
-  Heart, 
-  X, 
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { motion, PanInfo, useAnimation, AnimatePresence } from "framer-motion";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
+  Heart,
+  X,
   RotateCcw,
   CheckCircle,
   Target,
@@ -13,15 +13,15 @@ import {
   Star,
   ChevronUp,
   ChevronDown,
-  Briefcase
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Briefcase,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const getMatchScoreColor = (score: number) => {
-  if (score >= 80) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
-  if (score >= 60) return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30';
-  if (score >= 40) return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30';
-  return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30';
+  if (score >= 80) return "text-green-600 bg-green-100 dark:bg-green-900/30";
+  if (score >= 60) return "text-blue-600 bg-blue-100 dark:bg-blue-900/30";
+  if (score >= 40) return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30";
+  return "text-orange-600 bg-orange-100 dark:bg-orange-900/30";
 };
 
 interface JobFromApi {
@@ -56,9 +56,13 @@ export function EnhancedSwipeJobDiscovery() {
   const [error, setError] = useState<string | null>(null);
 
   const [currentJobIndex, setCurrentJobIndex] = useState(0);
-  const [swipedJobs, setSwipedJobs] = useState<{ job: SwipeJob; action: 'like' | 'pass' }[]>([]);
+  const [swipedJobs, setSwipedJobs] = useState<
+    { job: SwipeJob; action: "like" | "pass" }[]
+  >([]);
   const [showDetails, setShowDetails] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
+    null,
+  );
   const controls = useAnimation();
   const { addToFavorites } = useFavorites();
   const { t } = useLanguage();
@@ -79,16 +83,16 @@ export function EnhancedSwipeJobDiscovery() {
       setIsMatchLoading(true);
       setMatchError(null);
       try {
-        const response = await fetch('/api/match', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/match", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             candidateId: hardcodedCandidateId,
             jobId: currentJob.id,
           }),
         });
         if (!response.ok) {
-          throw new Error('Failed to fetch match score');
+          throw new Error("Failed to fetch match score");
         }
         const data = await response.json();
         setMatchScore(data.match_score);
@@ -106,22 +110,28 @@ export function EnhancedSwipeJobDiscovery() {
     const fetchJobs = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/scrape?limit=20'); // Fetch 20 jobs for swiping
+        const response = await fetch("/api/scrape?limit=20"); // Fetch 20 jobs for swiping
         if (!response.ok) {
-          throw new Error('Failed to fetch jobs for swiping');
+          throw new Error("Failed to fetch jobs for swiping");
         }
         const data = await response.json();
 
         // Map the API data to our simplified SwipeJob interface
-        const formattedJobs: SwipeJob[] = (data.results || []).map((job: JobFromApi) => ({
-          id: job.id,
-          title: job.title,
-          company: job.company.display_name,
-          location: job.location.display_name,
-          description: job.description,
-          redirect_url: job.redirect_url,
-          type: job.contract_time ? job.contract_time.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A',
-        }));
+        const formattedJobs: SwipeJob[] = (data.results || []).map(
+          (job: JobFromApi) => ({
+            id: job.id,
+            title: job.title,
+            company: job.company.display_name,
+            location: job.location.display_name,
+            description: job.description,
+            redirect_url: job.redirect_url,
+            type: job.contract_time
+              ? job.contract_time
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())
+              : "N/A",
+          }),
+        );
 
         setJobs(formattedJobs);
       } catch (err: any) {
@@ -134,70 +144,72 @@ export function EnhancedSwipeJobDiscovery() {
     fetchJobs();
   }, []);
 
-
   const hasMoreJobs = currentJobIndex < jobs.length - 1;
 
-  const handleSwipe = useCallback(async (direction: 'left' | 'right') => {
-    if (!currentJob) return;
+  const handleSwipe = useCallback(
+    async (direction: "left" | "right") => {
+      if (!currentJob) return;
 
-    setSwipeDirection(direction);
-    
-    await controls.start({
-      x: direction === 'right' ? 1000 : -1000,
-      rotate: direction === 'right' ? 30 : -30,
-      opacity: 0,
-      transition: { duration: 0.3 }
-    });
+      setSwipeDirection(direction);
 
-    const action = direction === 'right' ? 'like' : 'pass';
-    setSwipedJobs(prev => [...prev, { job: currentJob, action }]);
-
-    if (direction === 'right') {
-      addToFavorites({
-        id: currentJob.id,
-        title: currentJob.title,
-        company: currentJob.company,
-        location: currentJob.location,
-        salary: 'N/A', // Salary not available from this API in a structured way
-        type: 'job'
-      });
-    }
-
-    if (hasMoreJobs) {
-      setCurrentJobIndex(prev => prev + 1);
-      setShowDetails(false); // Reset details view for the next card
       await controls.start({
-        x: 0,
-        rotate: 0,
-        opacity: 1,
-        transition: { duration: 0.3 }
+        x: direction === "right" ? 1000 : -1000,
+        rotate: direction === "right" ? 30 : -30,
+        opacity: 0,
+        transition: { duration: 0.3 },
       });
-    } else {
-        setCurrentJobIndex(prev => prev + 1); // Go one past the end to trigger the 'finished' screen
-    }
 
-    setSwipeDirection(null);
-  }, [currentJob, hasMoreJobs, controls, addToFavorites]);
+      const action = direction === "right" ? "like" : "pass";
+      setSwipedJobs((prev) => [...prev, { job: currentJob, action }]);
+
+      if (direction === "right") {
+        addToFavorites({
+          id: currentJob.id,
+          title: currentJob.title,
+          company: currentJob.company,
+          location: currentJob.location,
+          salary: "N/A", // Salary not available from this API in a structured way
+          type: "job",
+        });
+      }
+
+      if (hasMoreJobs) {
+        setCurrentJobIndex((prev) => prev + 1);
+        setShowDetails(false); // Reset details view for the next card
+        await controls.start({
+          x: 0,
+          rotate: 0,
+          opacity: 1,
+          transition: { duration: 0.3 },
+        });
+      } else {
+        setCurrentJobIndex((prev) => prev + 1); // Go one past the end to trigger the 'finished' screen
+      }
+
+      setSwipeDirection(null);
+    },
+    [currentJob, hasMoreJobs, controls, addToFavorites],
+  );
 
   const handleDragEnd = useCallback(
     (event: any, info: PanInfo) => {
       const threshold = 150;
       const velocity = Math.abs(info.velocity.x);
-      
+
       if (Math.abs(info.offset.x) > threshold || velocity > 500) {
-        handleSwipe(info.offset.x > 0 ? 'right' : 'left');
+        handleSwipe(info.offset.x > 0 ? "right" : "left");
       } else {
         controls.start({ x: 0, rotate: 0 });
       }
     },
-    [handleSwipe, controls]
+    [handleSwipe, controls],
   );
 
   const handleUndo = useCallback(() => {
     if (swipedJobs.length === 0) return;
-    
-    setSwipedJobs(prev => prev.slice(0, -1));
-    setCurrentJobIndex(prev => Math.max(0, prev - 1));
+
+    setSwipedJobs((prev) => prev.slice(0, -1));
+    setCurrentJobIndex((prev) => Math.max(0, prev - 1));
     controls.set({ x: 0, rotate: 0, opacity: 1 });
   }, [swipedJobs, controls]);
 
@@ -219,23 +231,24 @@ export function EnhancedSwipeJobDiscovery() {
         >
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
           <h3 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4">
-            {t('swipe_job.great_job_exploring')}
+            {t("swipe_job.great_job_exploring")}
           </h3>
           <p className="text-jobequal-text-muted dark:text-gray-400 mb-6">
-            {t('swipe_job.reviewed_all_positions')}
+            {t("swipe_job.reviewed_all_positions")}
           </p>
           <div className="space-y-3">
             <Link
               to="/favorites"
               className="block w-full bg-jobequal-green hover:bg-jobequal-green-hover text-white py-3 px-6 rounded-xl font-semibold transition-colors"
             >
-              {t('swipe_job.view_saved_jobs')} ({swipedJobs.filter(s => s.action === 'like').length})
+              {t("swipe_job.view_saved_jobs")} (
+              {swipedJobs.filter((s) => s.action === "like").length})
             </Link>
             <Link
               to="/job-search"
               className="block w-full border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white py-3 px-6 rounded-xl font-semibold transition-colors"
             >
-              {t('swipe_job.advanced_search')}
+              {t("swipe_job.advanced_search")}
             </Link>
           </div>
         </motion.div>
@@ -243,7 +256,8 @@ export function EnhancedSwipeJobDiscovery() {
     );
   }
 
-  if (!currentJob) return <div className="text-center py-16">No jobs to display.</div>;
+  if (!currentJob)
+    return <div className="text-center py-16">No jobs to display.</div>;
 
   return (
     <div className="relative">
@@ -251,14 +265,19 @@ export function EnhancedSwipeJobDiscovery() {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            {t('swipe_job.job_of').replace('{current}', String(currentJobIndex + 1)).replace('{total}', String(jobs.length))}
+            {t("swipe_job.job_of")
+              .replace("{current}", String(currentJobIndex + 1))
+              .replace("{total}", String(jobs.length))}
           </span>
           <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-            {t('swipe_job.complete').replace('{percent}', String(Math.round(((currentJobIndex + 1) / jobs.length) * 100)))}
+            {t("swipe_job.complete").replace(
+              "{percent}",
+              String(Math.round(((currentJobIndex + 1) / jobs.length) * 100)),
+            )}
           </span>
         </div>
         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-          <div 
+          <div
             className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full transition-all duration-300"
             style={{ width: `${((currentJobIndex + 1) / jobs.length) * 100}%` }}
           />
@@ -283,7 +302,7 @@ export function EnhancedSwipeJobDiscovery() {
         >
           {/* Swipe Indicators */}
           <AnimatePresence>
-            {swipeDirection === 'right' && (
+            {swipeDirection === "right" && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -291,10 +310,10 @@ export function EnhancedSwipeJobDiscovery() {
                 className="absolute top-8 left-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10"
               >
                 <Heart className="w-6 h-6 inline mr-2" />
-                {t('swipe_job.apply')}
+                {t("swipe_job.apply")}
               </motion.div>
             )}
-            {swipeDirection === 'left' && (
+            {swipeDirection === "left" && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -302,7 +321,7 @@ export function EnhancedSwipeJobDiscovery() {
                 className="absolute top-8 right-8 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg z-10"
               >
                 <X className="w-6 h-6 inline mr-2" />
-                {t('swipe_job.pass')}
+                {t("swipe_job.pass")}
               </motion.div>
             )}
           </AnimatePresence>
@@ -310,17 +329,25 @@ export function EnhancedSwipeJobDiscovery() {
           <div className="p-6 h-full flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-               <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <div className="w-6 h-6 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center relative">
                   <span className="text-white font-bold text-xs">J</span>
                 </div>
-                <span className="text-sm font-medium text-jobequal-green">JobEqual</span>
+                <span className="text-sm font-medium text-jobequal-green">
+                  JobEqual
+                </span>
               </div>
               <div>
-                {isMatchLoading && <span className="text-sm text-gray-500">Matching...</span>}
-                {matchError && <span className="text-sm text-red-500">Error</span>}
+                {isMatchLoading && (
+                  <span className="text-sm text-gray-500">Matching...</span>
+                )}
+                {matchError && (
+                  <span className="text-sm text-red-500">Error</span>
+                )}
                 {matchScore !== null && (
-                  <div className={`px-3 py-1 rounded-full text-sm font-semibold ${getMatchScoreColor(matchScore)}`}>
+                  <div
+                    className={`px-3 py-1 rounded-full text-sm font-semibold ${getMatchScoreColor(matchScore)}`}
+                  >
                     {matchScore}% Match
                     <Target className="w-4 h-4 inline ml-1" />
                   </div>
@@ -331,22 +358,26 @@ export function EnhancedSwipeJobDiscovery() {
             {/* Company Info */}
             <div className="flex items-center space-x-4 mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue rounded-2xl flex items-center justify-center text-3xl shadow-md">
-                <Briefcase/>
+                <Briefcase />
               </div>
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-1 line-clamp-2">
                   {currentJob.title}
                 </h2>
-                <p className="text-jobequal-green font-semibold text-lg">{currentJob.company}</p>
+                <p className="text-jobequal-green font-semibold text-lg">
+                  {currentJob.company}
+                </p>
                 <div className="flex items-center space-x-4 text-sm text-jobequal-text-muted dark:text-gray-400 mt-1">
                   <div className="flex items-center">
                     <MapPin className="w-4 h-4 mr-1" />
                     {currentJob.location}
                   </div>
-                   {currentJob.type && <div className="flex items-center">
-                    <Briefcase className="w-4 h-4 mr-1" />
-                    {currentJob.type}
-                  </div>}
+                  {currentJob.type && (
+                    <div className="flex items-center">
+                      <Briefcase className="w-4 h-4 mr-1" />
+                      {currentJob.type}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -354,20 +385,22 @@ export function EnhancedSwipeJobDiscovery() {
             {/* Job Details */}
             <div className="flex-1 space-y-4 overflow-y-auto pr-2">
               <div>
-                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">{t('swipe_job.job_description')}</h3>
+                <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                  {t("swipe_job.job_description")}
+                </h3>
                 <p className="text-sm text-jobequal-text-muted dark:text-gray-400 leading-relaxed">
                   {currentJob.description}
                 </p>
               </div>
             </div>
-             <a
-                href={currentJob.redirect_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-center mt-4 px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover"
-              >
-                View Full Job
-              </a>
+            <a
+              href={currentJob.redirect_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-center mt-4 px-4 py-2 bg-jobequal-green text-white rounded-lg hover:bg-jobequal-green-hover"
+            >
+              View Full Job
+            </a>
           </div>
         </motion.div>
       </div>
@@ -375,7 +408,7 @@ export function EnhancedSwipeJobDiscovery() {
       {/* Action Buttons */}
       <div className="flex items-center justify-center space-x-6 mt-8">
         <motion.button
-          onClick={() => handleSwipe('left')}
+          onClick={() => handleSwipe("left")}
           className="w-16 h-16 bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-full flex items-center justify-center transition-colors shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -395,7 +428,7 @@ export function EnhancedSwipeJobDiscovery() {
         )}
 
         <motion.button
-          onClick={() => handleSwipe('right')}
+          onClick={() => handleSwipe("right")}
           className="w-16 h-16 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50 rounded-full flex items-center justify-center transition-colors shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}

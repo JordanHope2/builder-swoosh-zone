@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useRef, DragEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useCallback, useRef, DragEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload,
   FileText,
@@ -13,11 +13,19 @@ import {
   Eye,
   Zap,
   Award,
-  BarChart3
-} from 'lucide-react';
-import { aiAnalysisService, CVAnalysisResult } from '../services/aiAnalysisService';
-import { useAuth } from '../contexts/AuthContext';
-import { AnimatedButton, EnhancedMotion, StaggeredList, GradientText } from './ui/enhanced-motion';
+  BarChart3,
+} from "lucide-react";
+import {
+  aiAnalysisService,
+  CVAnalysisResult,
+} from "../services/aiAnalysisService";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  AnimatedButton,
+  EnhancedMotion,
+  StaggeredList,
+  GradientText,
+} from "./ui/enhanced-motion";
 
 interface EnhancedCVUploadProps {
   onUploadComplete?: (analysisResult: CVAnalysisResult) => void;
@@ -26,11 +34,13 @@ interface EnhancedCVUploadProps {
 
 export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
   onUploadComplete,
-  className
+  className,
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(
+    null,
+  );
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
@@ -39,71 +49,75 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
 
   const validateFile = (file: File): boolean => {
     const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain'
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      setError('Please upload a PDF, DOC, DOCX, or TXT file');
+      setError("Please upload a PDF, DOC, DOCX, or TXT file");
       return false;
     }
 
-    if (file.size > 10 * 1024 * 1024) { // 10MB
-      setError('File size must be less than 10MB');
+    if (file.size > 10 * 1024 * 1024) {
+      // 10MB
+      setError("File size must be less than 10MB");
       return false;
     }
 
     return true;
   };
 
-  const processFile = useCallback(async (file: File) => {
-    if (!validateFile(file)) return;
+  const processFile = useCallback(
+    async (file: File) => {
+      if (!validateFile(file)) return;
 
-    setError(null);
-    setUploadedFile(file);
-    setUploadProgress(0);
+      setError(null);
+      setUploadedFile(file);
+      setUploadProgress(0);
 
-    // Allow analysis for both authenticated and non-authenticated users
-    // Use a guest user ID if not authenticated
-    const userId = user?.id || 'guest-user';
+      // Allow analysis for both authenticated and non-authenticated users
+      // Use a guest user ID if not authenticated
+      const userId = user?.id || "guest-user";
 
-    // Simulate upload progress
-    const progressInterval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
+      // Simulate upload progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(progressInterval);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 200);
 
-    try {
-      setIsAnalyzing(true);
+      try {
+        setIsAnalyzing(true);
 
-      // Read file content
-      const fileContent = await readFileContent(file);
+        // Read file content
+        const fileContent = await readFileContent(file);
 
-      // Perform AI analysis
-      const analysis = await aiAnalysisService.analyzeCVWithAI({
-        fileName: file.name,
-        fileContent,
-        fileType: file.type,
-        userId: userId
-      });
+        // Perform AI analysis
+        const analysis = await aiAnalysisService.analyzeCVWithAI({
+          fileName: file.name,
+          fileContent,
+          fileType: file.type,
+          userId: userId,
+        });
 
-      setAnalysisResult(analysis);
-      onUploadComplete?.(analysis);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to analyze CV');
-    } finally {
-      setIsAnalyzing(false);
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-    }
-  }, [user, onUploadComplete]);
+        setAnalysisResult(analysis);
+        onUploadComplete?.(analysis);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to analyze CV");
+      } finally {
+        setIsAnalyzing(false);
+        clearInterval(progressInterval);
+        setUploadProgress(100);
+      }
+    },
+    [user, onUploadComplete],
+  );
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -149,25 +163,29 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
-    if (score >= 60) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 80) return "text-green-500";
+    if (score >= 60) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getScoreGradient = (score: number) => {
-    if (score >= 80) return 'from-green-400 to-green-600';
-    if (score >= 60) return 'from-yellow-400 to-yellow-600';
-    return 'from-red-400 to-red-600';
+    if (score >= 80) return "from-green-400 to-green-600";
+    if (score >= 60) return "from-yellow-400 to-yellow-600";
+    return "from-red-400 to-red-600";
   };
 
   return (
     <div className={`max-w-4xl mx-auto ${className}`}>
-      <EnhancedMotion animation="slideInFromBottom" className="text-center mb-8">
+      <EnhancedMotion
+        animation="slideInFromBottom"
+        className="text-center mb-8"
+      >
         <GradientText className="text-4xl font-bold mb-4">
           AI-Powered CV Analysis
         </GradientText>
         <p className="text-jobequal-text-muted text-lg">
-          Upload your CV and get instant AI-powered insights, compatibility scores, and improvement recommendations
+          Upload your CV and get instant AI-powered insights, compatibility
+          scores, and improvement recommendations
         </p>
       </EnhancedMotion>
 
@@ -181,16 +199,17 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             onClick={handleClick}
             className={`
               relative border-2 border-dashed rounded-3xl p-8 sm:p-12 text-center cursor-pointer transition-all duration-300 min-h-[200px] flex flex-col items-center justify-center
-              ${isDragActive
-                ? 'border-jobequal-green bg-jobequal-green-light'
-                : 'border-gray-300 hover:border-jobequal-green hover:bg-gray-50 focus-within:border-jobequal-green focus-within:ring-2 focus-within:ring-jobequal-green focus-within:ring-offset-2'
+              ${
+                isDragActive
+                  ? "border-jobequal-green bg-jobequal-green-light"
+                  : "border-gray-300 hover:border-jobequal-green hover:bg-gray-50 focus-within:border-jobequal-green focus-within:ring-2 focus-within:ring-jobequal-green focus-within:ring-offset-2"
               }
             `}
             role="button"
             tabIndex={0}
             aria-label="Click to upload CV or drag and drop file here"
             onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+              if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 handleClick();
               }
@@ -209,7 +228,7 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             >
               <Upload className="w-16 h-16 mx-auto mb-4 text-jobequal-green" />
               <h3 className="text-xl font-semibold text-jobequal-text mb-2">
-                {isDragActive ? 'Drop your CV here' : 'Upload your CV'}
+                {isDragActive ? "Drop your CV here" : "Upload your CV"}
               </h3>
               <p className="text-jobequal-text-muted mb-4">
                 Drag and drop your CV or click to browse
@@ -229,7 +248,9 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             <div className="flex items-center space-x-4 mb-4">
               <FileText className="w-8 h-8 text-jobequal-green" />
               <div>
-                <h3 className="font-semibold text-jobequal-text">{uploadedFile.name}</h3>
+                <h3 className="font-semibold text-jobequal-text">
+                  {uploadedFile.name}
+                </h3>
                 <p className="text-sm text-jobequal-text-muted">
                   {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
                 </p>
@@ -298,10 +319,18 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20,
+                  delay: 0.5,
+                }}
                 className="relative w-32 h-32 mx-auto mb-6"
               >
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <svg
+                  className="w-full h-full transform -rotate-90"
+                  viewBox="0 0 100 100"
+                >
                   <circle
                     cx="50"
                     cy="50"
@@ -325,7 +354,7 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
                     transition={{ duration: 2, delay: 0.5 }}
                     style={{
                       strokeDasharray: "283",
-                      strokeDashoffset: "283"
+                      strokeDashoffset: "283",
                     }}
                   />
                 </svg>
@@ -348,32 +377,38 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
           <StaggeredList className="grid md:grid-cols-3 gap-6">
             {[
               {
-                title: 'Skills Match',
+                title: "Skills Match",
                 score: analysisResult.skillsMatch.score,
                 icon: Target,
-                description: `${analysisResult.skillsMatch.matched.length} skills matched`
+                description: `${analysisResult.skillsMatch.matched.length} skills matched`,
               },
               {
-                title: 'Experience',
+                title: "Experience",
                 score: analysisResult.experienceAnalysis.score,
                 icon: TrendingUp,
-                description: `${analysisResult.experienceAnalysis.yearsOfExperience} years total`
+                description: `${analysisResult.experienceAnalysis.yearsOfExperience} years total`,
               },
               {
-                title: 'Education',
+                title: "Education",
                 score: analysisResult.educationAnalysis.score,
                 icon: Award,
-                description: analysisResult.educationAnalysis.degree
-              }
+                description: analysisResult.educationAnalysis.degree,
+              },
             ].map((item, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 shadow-lg">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${getScoreGradient(item.score)}`}>
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-r ${getScoreGradient(item.score)}`}
+                  >
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-jobequal-text">{item.title}</h3>
-                    <p className="text-sm text-jobequal-text-muted">{item.description}</p>
+                    <h3 className="font-semibold text-jobequal-text">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-jobequal-text-muted">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
                 <div className="relative">
@@ -385,7 +420,9 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
                       transition={{ duration: 1.5, delay: 0.5 + index * 0.2 }}
                     />
                   </div>
-                  <span className={`text-lg font-bold ${getScoreColor(item.score)} mt-2 block`}>
+                  <span
+                    className={`text-lg font-bold ${getScoreColor(item.score)} mt-2 block`}
+                  >
                     {item.score}%
                   </span>
                 </div>
@@ -402,15 +439,22 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
               </h3>
               <StaggeredList className="space-y-4">
                 {analysisResult.compatibilityWithJobs.map((job, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-gray-50 rounded-xl"
+                  >
                     <div>
-                      <h4 className="font-semibold text-jobequal-text">{job.jobTitle}</h4>
+                      <h4 className="font-semibold text-jobequal-text">
+                        {job.jobTitle}
+                      </h4>
                       <p className="text-sm text-jobequal-text-muted">
-                        {job.reasons.slice(0, 2).join(', ')}
+                        {job.reasons.slice(0, 2).join(", ")}
                       </p>
                     </div>
                     <div className="text-right">
-                      <span className={`text-lg font-bold ${getScoreColor(job.compatibilityScore)}`}>
+                      <span
+                        className={`text-lg font-bold ${getScoreColor(job.compatibilityScore)}`}
+                      >
                         {job.compatibilityScore}%
                       </span>
                       <p className="text-sm text-jobequal-text-muted">Match</p>
@@ -473,7 +517,10 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
             </h3>
             <StaggeredList className="space-y-3">
               {analysisResult.recommendations.map((recommendation, index) => (
-                <div key={index} className="flex items-start space-x-3 p-4 bg-white rounded-xl">
+                <div
+                  key={index}
+                  className="flex items-start space-x-3 p-4 bg-white rounded-xl"
+                >
                   <div className="w-6 h-6 bg-jobequal-green rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0 mt-0.5">
                     {index + 1}
                   </div>
@@ -499,7 +546,7 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
               <Upload className="w-4 h-4 mr-2" />
               Upload Another CV
             </AnimatedButton>
-            
+
             <AnimatedButton
               variant="secondary"
               onClick={() => window.print()}
@@ -509,10 +556,10 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
               <Download className="w-4 h-4 mr-2" />
               Download Report
             </AnimatedButton>
-            
+
             <AnimatedButton
               variant="accent"
-              onClick={() => window.location.href = '/job-search'}
+              onClick={() => (window.location.href = "/job-search")}
               className="min-h-[44px] px-6 py-3"
               aria-label="Browse matching jobs based on your CV"
             >

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  ArrowRight, 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
   ArrowLeft,
   Check,
   Upload,
@@ -15,67 +15,108 @@ import {
   X,
   Sparkles,
   Mountain,
-  Zap
-} from 'lucide-react';
+  Zap,
+} from "lucide-react";
 
 const steps = [
-  { id: 1, title: 'Welcome', description: 'Personal Information' },
-  { id: 2, title: 'Location', description: 'Where do you work?' },
-  { id: 3, title: 'Experience', description: 'Your background' },
-  { id: 4, title: 'Skills', description: 'What are you good at?' },
-  { id: 5, title: 'Goals', description: 'What are you looking for?' },
-  { id: 6, title: 'Complete', description: 'All set!' }
+  { id: 1, title: "Welcome", description: "Personal Information" },
+  { id: 2, title: "Location", description: "Where do you work?" },
+  { id: 3, title: "Experience", description: "Your background" },
+  { id: 4, title: "Skills", description: "What are you good at?" },
+  { id: 5, title: "Goals", description: "What are you looking for?" },
+  { id: 6, title: "Complete", description: "All set!" },
 ];
 
 const experienceLevels = [
-  { id: 'entry', title: 'Entry Level', description: '0-2 years', icon: '🌱' },
-  { id: 'mid', title: 'Mid Level', description: '3-6 years', icon: '🌿' },
-  { id: 'senior', title: 'Senior Level', description: '7-12 years', icon: '🌳' },
-  { id: 'executive', title: 'Executive', description: '12+ years', icon: '🏔️' }
+  { id: "entry", title: "Entry Level", description: "0-2 years", icon: "🌱" },
+  { id: "mid", title: "Mid Level", description: "3-6 years", icon: "🌿" },
+  {
+    id: "senior",
+    title: "Senior Level",
+    description: "7-12 years",
+    icon: "🌳",
+  },
+  { id: "executive", title: "Executive", description: "12+ years", icon: "🏔️" },
 ];
 
 const industries = [
-  'Technology', 'Finance', 'Healthcare', 'Marketing', 'Design', 'Sales',
-  'Education', 'Consulting', 'Manufacturing', 'Legal', 'Real Estate', 'Other'
+  "Technology",
+  "Finance",
+  "Healthcare",
+  "Marketing",
+  "Design",
+  "Sales",
+  "Education",
+  "Consulting",
+  "Manufacturing",
+  "Legal",
+  "Real Estate",
+  "Other",
 ];
 
 const skillCategories = {
-  technical: ['JavaScript', 'Python', 'React', 'Node.js', 'SQL', 'AWS', 'Docker', 'Git'],
-  design: ['Figma', 'Adobe Creative Suite', 'UI/UX Design', 'Prototyping', 'User Research'],
-  marketing: ['Digital Marketing', 'SEO', 'Social Media', 'Content Creation', 'Analytics'],
-  business: ['Project Management', 'Strategic Planning', 'Business Analysis', 'Leadership']
+  technical: [
+    "JavaScript",
+    "Python",
+    "React",
+    "Node.js",
+    "SQL",
+    "AWS",
+    "Docker",
+    "Git",
+  ],
+  design: [
+    "Figma",
+    "Adobe Creative Suite",
+    "UI/UX Design",
+    "Prototyping",
+    "User Research",
+  ],
+  marketing: [
+    "Digital Marketing",
+    "SEO",
+    "Social Media",
+    "Content Creation",
+    "Analytics",
+  ],
+  business: [
+    "Project Management",
+    "Strategic Planning",
+    "Business Analysis",
+    "Leadership",
+  ],
 };
 
 const jobTypes = [
-  { id: 'full-time', title: 'Full-time', icon: '🏢' },
-  { id: 'part-time', title: 'Part-time', icon: '⏰' },
-  { id: 'freelance', title: 'Freelance', icon: '💼' },
-  { id: 'remote', title: 'Remote Only', icon: '🌍' }
+  { id: "full-time", title: "Full-time", icon: "🏢" },
+  { id: "part-time", title: "Part-time", icon: "⏰" },
+  { id: "freelance", title: "Freelance", icon: "💼" },
+  { id: "remote", title: "Remote Only", icon: "🌍" },
 ];
 
 export default function Onboarding() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: Welcome
-    title: '',
-    bio: '',
-    
+    title: "",
+    bio: "",
+
     // Step 2: Location
-    location: '',
+    location: "",
     willingToRelocate: false,
-    
+
     // Step 3: Experience
-    experienceLevel: '',
-    industry: '',
-    currentPosition: '',
-    
+    experienceLevel: "",
+    industry: "",
+    currentPosition: "",
+
     // Step 4: Skills
     skills: [] as string[],
-    
+
     // Step 5: Goals
     desiredJobTypes: [] as string[],
-    salaryRange: '',
-    availability: ''
+    salaryRange: "",
+    availability: "",
   });
 
   const nextStep = () => {
@@ -91,25 +132,31 @@ export default function Onboarding() {
   };
 
   const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const addSkill = (skill: string) => {
     if (!formData.skills.includes(skill)) {
-      handleInputChange('skills', [...formData.skills, skill]);
+      handleInputChange("skills", [...formData.skills, skill]);
     }
   };
 
   const removeSkill = (skill: string) => {
-    handleInputChange('skills', formData.skills.filter(s => s !== skill));
+    handleInputChange(
+      "skills",
+      formData.skills.filter((s) => s !== skill),
+    );
   };
 
   const toggleJobType = (type: string) => {
     const current = formData.desiredJobTypes;
     if (current.includes(type)) {
-      handleInputChange('desiredJobTypes', current.filter(t => t !== type));
+      handleInputChange(
+        "desiredJobTypes",
+        current.filter((t) => t !== type),
+      );
     } else {
-      handleInputChange('desiredJobTypes', [...current, type]);
+      handleInputChange("desiredJobTypes", [...current, type]);
     }
   };
 
@@ -140,7 +187,7 @@ export default function Onboarding() {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
+                onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="e.g., Senior Software Engineer"
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
@@ -152,7 +199,7 @@ export default function Onboarding() {
               </label>
               <textarea
                 value={formData.bio}
-                onChange={(e) => handleInputChange('bio', e.target.value)}
+                onChange={(e) => handleInputChange("bio", e.target.value)}
                 placeholder="Tell us about yourself and your career goals..."
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
@@ -187,7 +234,9 @@ export default function Onboarding() {
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <select
                   value={formData.location}
-                  onChange={(e) => handleInputChange('location', e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("location", e.target.value)
+                  }
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                 >
                   <option value="">Select your location</option>
@@ -207,10 +256,15 @@ export default function Onboarding() {
                 id="relocate"
                 type="checkbox"
                 checked={formData.willingToRelocate}
-                onChange={(e) => handleInputChange('willingToRelocate', e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("willingToRelocate", e.target.checked)
+                }
                 className="h-4 w-4 text-jobequal-green focus:ring-jobequal-green border-gray-300 dark:border-gray-600 rounded"
               />
-              <label htmlFor="relocate" className="ml-3 text-jobequal-text-muted dark:text-gray-300">
+              <label
+                htmlFor="relocate"
+                className="ml-3 text-jobequal-text-muted dark:text-gray-300"
+              >
                 I'm willing to relocate for the right opportunity
               </label>
             </div>
@@ -243,11 +297,13 @@ export default function Onboarding() {
                 {experienceLevels.map((level) => (
                   <button
                     key={level.id}
-                    onClick={() => handleInputChange('experienceLevel', level.id)}
+                    onClick={() =>
+                      handleInputChange("experienceLevel", level.id)
+                    }
                     className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                       formData.experienceLevel === level.id
-                        ? 'border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-jobequal-green'
+                        ? "border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10"
+                        : "border-gray-200 dark:border-gray-700 hover:border-jobequal-green"
                     }`}
                   >
                     <div className="text-2xl mb-2">{level.icon}</div>
@@ -268,7 +324,7 @@ export default function Onboarding() {
               </label>
               <select
                 value={formData.industry}
-                onChange={(e) => handleInputChange('industry', e.target.value)}
+                onChange={(e) => handleInputChange("industry", e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               >
                 <option value="">Select your industry</option>
@@ -287,7 +343,9 @@ export default function Onboarding() {
               <input
                 type="text"
                 value={formData.currentPosition}
-                onChange={(e) => handleInputChange('currentPosition', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("currentPosition", e.target.value)
+                }
                 placeholder="e.g., Software Engineer at TechCorp"
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
@@ -353,8 +411,8 @@ export default function Onboarding() {
                         disabled={formData.skills.includes(skill)}
                         className={`px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
                           formData.skills.includes(skill)
-                            ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
-                            : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-jobequal-text dark:text-white hover:border-jobequal-green hover:bg-jobequal-green-light dark:hover:bg-jobequal-green/10'
+                            ? "bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
+                            : "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-jobequal-text dark:text-white hover:border-jobequal-green hover:bg-jobequal-green-light dark:hover:bg-jobequal-green/10"
                         }`}
                       >
                         {formData.skills.includes(skill) ? (
@@ -401,8 +459,8 @@ export default function Onboarding() {
                     onClick={() => toggleJobType(type.id)}
                     className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                       formData.desiredJobTypes.includes(type.id)
-                        ? 'border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-jobequal-green'
+                        ? "border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10"
+                        : "border-gray-200 dark:border-gray-700 hover:border-jobequal-green"
                     }`}
                   >
                     <div className="text-2xl mb-2">{type.icon}</div>
@@ -420,7 +478,9 @@ export default function Onboarding() {
               </label>
               <select
                 value={formData.salaryRange}
-                onChange={(e) => handleInputChange('salaryRange', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("salaryRange", e.target.value)
+                }
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               >
                 <option value="">Select salary range</option>
@@ -438,7 +498,9 @@ export default function Onboarding() {
               </label>
               <select
                 value={formData.availability}
-                onChange={(e) => handleInputChange('availability', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("availability", e.target.value)
+                }
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               >
                 <option value="">When can you start?</option>
@@ -472,7 +534,8 @@ export default function Onboarding() {
               Welcome to JobEqual! 🎉
             </h2>
             <p className="text-xl text-jobequal-text-muted dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-              Your profile is complete! We're already analyzing opportunities that match your skills and goals.
+              Your profile is complete! We're already analyzing opportunities
+              that match your skills and goals.
             </p>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
@@ -535,11 +598,16 @@ export default function Onboarding() {
       {/* Header */}
       <div className="px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-4xl mx-auto">
-          <Link to="/" className="inline-flex items-center space-x-3 group mb-8">
+          <Link
+            to="/"
+            className="inline-flex items-center space-x-3 group mb-8"
+          >
             <div className="w-10 h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200">
               <span className="text-white font-bold text-lg">J</span>
             </div>
-            <span className="text-2xl font-bold text-jobequal-text dark:text-white tracking-tight">JobEqual</span>
+            <span className="text-2xl font-bold text-jobequal-text dark:text-white tracking-tight">
+              JobEqual
+            </span>
           </Link>
 
           {/* Progress Bar */}
@@ -550,14 +618,17 @@ export default function Onboarding() {
                   Step {currentStep} of {steps.length - 1}
                 </span>
                 <span className="text-sm font-medium text-jobequal-text-muted dark:text-gray-400">
-                  {Math.round((currentStep / (steps.length - 1)) * 100)}% Complete
+                  {Math.round((currentStep / (steps.length - 1)) * 100)}%
+                  Complete
                 </span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <motion.div
                   className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full"
                   initial={{ width: 0 }}
-                  animate={{ width: `${(currentStep / (steps.length - 1)) * 100}%` }}
+                  animate={{
+                    width: `${(currentStep / (steps.length - 1)) * 100}%`,
+                  }}
                   transition={{ duration: 0.5 }}
                 />
               </div>
@@ -569,9 +640,7 @@ export default function Onboarding() {
       {/* Content */}
       <div className="px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-2xl mx-auto">
-          <AnimatePresence mode="wait">
-            {renderStep()}
-          </AnimatePresence>
+          <AnimatePresence mode="wait">{renderStep()}</AnimatePresence>
 
           {/* Navigation */}
           {currentStep < steps.length && (
@@ -589,7 +658,9 @@ export default function Onboarding() {
                 onClick={nextStep}
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
-                {currentStep === steps.length - 1 ? 'Complete Setup' : 'Continue'}
+                {currentStep === steps.length - 1
+                  ? "Complete Setup"
+                  : "Continue"}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </div>

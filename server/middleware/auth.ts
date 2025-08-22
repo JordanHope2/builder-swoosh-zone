@@ -14,7 +14,7 @@ declare global {
 export const authMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const supabase = getSupabase();
   const authHeader = req.header("Authorization");
@@ -26,7 +26,10 @@ export const authMiddleware = async (
   const token = authHeader.replace("Bearer ", "");
 
   try {
-    const { data: { user }, error } = await supabase.auth.getUser(token);
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser(token);
 
     if (error) {
       console.error("Token validation error:", error.message);
@@ -40,6 +43,8 @@ export const authMiddleware = async (
     req.user = user;
     next();
   } catch (e: any) {
-    res.status(500).json({ error: e.message ?? "Unknown authentication error" });
+    res
+      .status(500)
+      .json({ error: e.message ?? "Unknown authentication error" });
   }
 };

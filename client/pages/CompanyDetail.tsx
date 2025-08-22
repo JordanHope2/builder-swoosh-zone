@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { useLanguage } from '../contexts/LanguageContext';
-import { useFavorites } from '../contexts/FavoritesContext';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 import {
   MapPin,
   Users,
@@ -34,8 +34,8 @@ import {
   Camera,
   Video,
   FileText,
-  Download
-} from 'lucide-react';
+  Download,
+} from "lucide-react";
 
 interface CompanyData {
   id: string;
@@ -94,213 +94,242 @@ interface CompanyData {
 
 // Mock company data
 const mockCompanies: { [key: string]: CompanyData } = {
-  '1': {
-    id: '1',
-    name: 'TechCorp Zurich',
-    logo: '🚀',
-    industry: 'Technology',
-    size: '200-500 employees',
+  "1": {
+    id: "1",
+    name: "TechCorp Zurich",
+    logo: "🚀",
+    industry: "Technology",
+    size: "200-500 employees",
     founded: 2015,
-    headquarters: 'Zurich, Switzerland',
-    website: 'https://techcorp.ch',
-    description: 'Leading fintech company revolutionizing digital banking solutions across Europe. We combine Swiss precision with cutting-edge technology to create financial products that empower businesses and individuals.',
-    mission: 'To democratize financial services through innovative technology and Swiss-quality engineering.',
-    values: ['Innovation', 'Transparency', 'Customer-Centric', 'Sustainability', 'Swiss Quality'],
-    benefits: ['Health Insurance', 'Remote Work', 'Stock Options', 'Learning Budget', '25 Days Vacation', 'Gym Membership'],
+    headquarters: "Zurich, Switzerland",
+    website: "https://techcorp.ch",
+    description:
+      "Leading fintech company revolutionizing digital banking solutions across Europe. We combine Swiss precision with cutting-edge technology to create financial products that empower businesses and individuals.",
+    mission:
+      "To democratize financial services through innovative technology and Swiss-quality engineering.",
+    values: [
+      "Innovation",
+      "Transparency",
+      "Customer-Centric",
+      "Sustainability",
+      "Swiss Quality",
+    ],
+    benefits: [
+      "Health Insurance",
+      "Remote Work",
+      "Stock Options",
+      "Learning Budget",
+      "25 Days Vacation",
+      "Gym Membership",
+    ],
     culture: {
       workLifeBalance: 4.2,
       diversity: 4.5,
       careerGrowth: 4.3,
       compensation: 4.1,
       management: 4.0,
-      overall: 4.2
+      overall: 4.2,
     },
     openPositions: [
       {
-        id: '1',
-        title: 'Senior Software Engineer',
-        department: 'Engineering',
-        location: 'Zurich',
-        type: 'Full-time',
-        salary: 'CHF 120,000 - 140,000',
-        postedDate: '2024-01-15',
+        id: "1",
+        title: "Senior Software Engineer",
+        department: "Engineering",
+        location: "Zurich",
+        type: "Full-time",
+        salary: "CHF 120,000 - 140,000",
+        postedDate: "2024-01-15",
         applications: 45,
-        urgent: true
+        urgent: true,
       },
       {
-        id: '2',
-        title: 'Product Manager',
-        department: 'Product',
-        location: 'Zurich',
-        type: 'Full-time',
-        salary: 'CHF 110,000 - 130,000',
-        postedDate: '2024-01-10',
-        applications: 28
+        id: "2",
+        title: "Product Manager",
+        department: "Product",
+        location: "Zurich",
+        type: "Full-time",
+        salary: "CHF 110,000 - 130,000",
+        postedDate: "2024-01-10",
+        applications: 28,
       },
       {
-        id: '3',
-        title: 'DevOps Engineer',
-        department: 'Engineering',
-        location: 'Remote',
-        type: 'Full-time',
-        salary: 'CHF 100,000 - 120,000',
-        postedDate: '2024-01-08',
-        applications: 67
-      }
+        id: "3",
+        title: "DevOps Engineer",
+        department: "Engineering",
+        location: "Remote",
+        type: "Full-time",
+        salary: "CHF 100,000 - 120,000",
+        postedDate: "2024-01-08",
+        applications: 67,
+      },
     ],
     reviews: [
       {
-        id: '1',
+        id: "1",
         rating: 5,
-        title: 'Amazing company culture and growth opportunities',
-        review: 'I\'ve been with TechCorp for 2 years and it\'s been an incredible journey. The company truly values work-life balance and provides excellent opportunities for professional development.',
-        pros: 'Great benefits, flexible work arrangements, innovative projects, supportive management',
-        cons: 'Fast-paced environment might not suit everyone, occasional tight deadlines',
-        position: 'Software Engineer',
-        employmentStatus: 'Current Employee',
-        date: '2024-01-10',
+        title: "Amazing company culture and growth opportunities",
+        review:
+          "I've been with TechCorp for 2 years and it's been an incredible journey. The company truly values work-life balance and provides excellent opportunities for professional development.",
+        pros: "Great benefits, flexible work arrangements, innovative projects, supportive management",
+        cons: "Fast-paced environment might not suit everyone, occasional tight deadlines",
+        position: "Software Engineer",
+        employmentStatus: "Current Employee",
+        date: "2024-01-10",
         helpful: 24,
-        anonymous: false
+        anonymous: false,
       },
       {
-        id: '2',
+        id: "2",
         rating: 4,
-        title: 'Solid fintech company with room to grow',
-        review: 'TechCorp offers competitive compensation and interesting challenges. The team is talented and collaborative.',
-        pros: 'Good compensation, smart colleagues, cutting-edge technology, learning opportunities',
-        cons: 'Limited career paths in some departments, office space could be better',
-        position: 'Product Manager',
-        employmentStatus: 'Former Employee',
-        date: '2024-01-05',
+        title: "Solid fintech company with room to grow",
+        review:
+          "TechCorp offers competitive compensation and interesting challenges. The team is talented and collaborative.",
+        pros: "Good compensation, smart colleagues, cutting-edge technology, learning opportunities",
+        cons: "Limited career paths in some departments, office space could be better",
+        position: "Product Manager",
+        employmentStatus: "Former Employee",
+        date: "2024-01-05",
         helpful: 18,
-        anonymous: true
+        anonymous: true,
       },
       {
-        id: '3',
+        id: "3",
         rating: 4,
-        title: 'Great place for tech enthusiasts',
-        review: 'Working at TechCorp has been rewarding. The company is innovative and the work is challenging in a good way.',
-        pros: 'Innovation focus, good team dynamics, modern tech stack, flexible hours',
-        cons: 'Can be demanding during product launches, limited social events',
-        position: 'DevOps Engineer',
-        employmentStatus: 'Current Employee',
-        date: '2023-12-28',
+        title: "Great place for tech enthusiasts",
+        review:
+          "Working at TechCorp has been rewarding. The company is innovative and the work is challenging in a good way.",
+        pros: "Innovation focus, good team dynamics, modern tech stack, flexible hours",
+        cons: "Can be demanding during product launches, limited social events",
+        position: "DevOps Engineer",
+        employmentStatus: "Current Employee",
+        date: "2023-12-28",
         helpful: 31,
-        anonymous: false
-      }
+        anonymous: false,
+      },
     ],
-    photos: ['🏢', '💻', '☕', '🎯', '🌟', '👥'],
+    photos: ["🏢", "💻", "☕", "🎯", "🌟", "👥"],
     stats: {
       totalEmployees: 320,
-      averageTenure: '2.3 years',
+      averageTenure: "2.3 years",
       diversityScore: 85,
       glassdoorRating: 4.2,
-      totalReviews: 156
-    }
+      totalReviews: 156,
+    },
   },
-  '2': {
-    id: '2',
-    name: 'SwissFinance Solutions',
-    logo: '🏦',
-    industry: 'Financial Services',
-    size: '500-1000 employees',
+  "2": {
+    id: "2",
+    name: "SwissFinance Solutions",
+    logo: "🏦",
+    industry: "Financial Services",
+    size: "500-1000 employees",
     founded: 2008,
-    headquarters: 'Geneva, Switzerland',
-    website: 'https://swissfinance.ch',
-    description: 'Premier financial services company providing wealth management, investment banking, and digital financial solutions to clients across Switzerland and Europe.',
-    mission: 'To provide world-class financial services with Swiss precision and innovation.',
-    values: ['Trust', 'Excellence', 'Innovation', 'Client Focus', 'Integrity'],
-    benefits: ['Premium Health Insurance', 'Pension Plan', 'Flexible Work', 'Professional Development', '30 Days Vacation', 'Executive Dining'],
+    headquarters: "Geneva, Switzerland",
+    website: "https://swissfinance.ch",
+    description:
+      "Premier financial services company providing wealth management, investment banking, and digital financial solutions to clients across Switzerland and Europe.",
+    mission:
+      "To provide world-class financial services with Swiss precision and innovation.",
+    values: ["Trust", "Excellence", "Innovation", "Client Focus", "Integrity"],
+    benefits: [
+      "Premium Health Insurance",
+      "Pension Plan",
+      "Flexible Work",
+      "Professional Development",
+      "30 Days Vacation",
+      "Executive Dining",
+    ],
     culture: {
       workLifeBalance: 3.8,
       diversity: 4.1,
       careerGrowth: 4.4,
       compensation: 4.6,
       management: 4.2,
-      overall: 4.2
+      overall: 4.2,
     },
     openPositions: [
       {
-        id: '4',
-        title: 'Investment Analyst',
-        department: 'Investment Banking',
-        location: 'Geneva',
-        type: 'Full-time',
-        salary: 'CHF 95,000 - 115,000',
-        postedDate: '2024-01-12',
+        id: "4",
+        title: "Investment Analyst",
+        department: "Investment Banking",
+        location: "Geneva",
+        type: "Full-time",
+        salary: "CHF 95,000 - 115,000",
+        postedDate: "2024-01-12",
         applications: 89,
-        urgent: true
+        urgent: true,
       },
       {
-        id: '5',
-        title: 'Risk Manager',
-        department: 'Risk Management',
-        location: 'Geneva',
-        type: 'Full-time',
-        salary: 'CHF 130,000 - 150,000',
-        postedDate: '2024-01-09',
-        applications: 34
+        id: "5",
+        title: "Risk Manager",
+        department: "Risk Management",
+        location: "Geneva",
+        type: "Full-time",
+        salary: "CHF 130,000 - 150,000",
+        postedDate: "2024-01-09",
+        applications: 34,
       },
       {
-        id: '6',
-        title: 'Digital Banking Lead',
-        department: 'Digital',
-        location: 'Hybrid',
-        type: 'Full-time',
-        salary: 'CHF 140,000 - 160,000',
-        postedDate: '2024-01-07',
-        applications: 52
-      }
+        id: "6",
+        title: "Digital Banking Lead",
+        department: "Digital",
+        location: "Hybrid",
+        type: "Full-time",
+        salary: "CHF 140,000 - 160,000",
+        postedDate: "2024-01-07",
+        applications: 52,
+      },
     ],
     reviews: [
       {
-        id: '4',
+        id: "4",
         rating: 4,
-        title: 'Excellent compensation and prestige',
-        review: 'SwissFinance is a well-respected firm with excellent compensation packages. The work is challenging and the clients are high-profile.',
-        pros: 'High compensation, prestigious clients, excellent benefits, professional development',
-        cons: 'Long hours, high pressure environment, limited work-life balance',
-        position: 'Investment Analyst',
-        employmentStatus: 'Current Employee',
-        date: '2024-01-08',
+        title: "Excellent compensation and prestige",
+        review:
+          "SwissFinance is a well-respected firm with excellent compensation packages. The work is challenging and the clients are high-profile.",
+        pros: "High compensation, prestigious clients, excellent benefits, professional development",
+        cons: "Long hours, high pressure environment, limited work-life balance",
+        position: "Investment Analyst",
+        employmentStatus: "Current Employee",
+        date: "2024-01-08",
         helpful: 42,
-        anonymous: true
+        anonymous: true,
       },
       {
-        id: '5',
+        id: "5",
         rating: 5,
-        title: 'Outstanding career development opportunities',
-        review: 'The mentorship program here is exceptional. Senior leadership is very invested in developing junior talent.',
-        pros: 'Career development, mentorship, international exposure, learning opportunities',
-        cons: 'Demanding schedule, travel requirements, competitive internal environment',
-        position: 'Portfolio Manager',
-        employmentStatus: 'Current Employee',
-        date: '2024-01-03',
+        title: "Outstanding career development opportunities",
+        review:
+          "The mentorship program here is exceptional. Senior leadership is very invested in developing junior talent.",
+        pros: "Career development, mentorship, international exposure, learning opportunities",
+        cons: "Demanding schedule, travel requirements, competitive internal environment",
+        position: "Portfolio Manager",
+        employmentStatus: "Current Employee",
+        date: "2024-01-03",
         helpful: 36,
-        anonymous: false
-      }
+        anonymous: false,
+      },
     ],
-    photos: ['🏢', '📊', '💼', '🤝', '🌍', '📈'],
+    photos: ["🏢", "📊", "💼", "🤝", "🌍", "📈"],
     stats: {
       totalEmployees: 750,
-      averageTenure: '4.1 years',
+      averageTenure: "4.1 years",
       diversityScore: 78,
       glassdoorRating: 4.2,
-      totalReviews: 203
-    }
-  }
+      totalReviews: 203,
+    },
+  },
 };
 
 export default function CompanyDetail() {
   const { id } = useParams<{ id: string }>();
   const { t } = useLanguage();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [isFollowing, setIsFollowing] = useState(false);
-  const [reviewFilter, setReviewFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [reviewFilter, setReviewFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const company = mockCompanies[id || '1'];
+  const company = mockCompanies[id || "1"];
 
   useEffect(() => {
     if (company) {
@@ -314,9 +343,16 @@ export default function CompanyDetail() {
         <Navigation />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-jobequal-text dark:text-white mb-4">Company Not Found</h1>
-            <p className="text-jobequal-text-muted dark:text-gray-400 mb-8">The company you're looking for doesn't exist.</p>
-            <Link to="/companies" className="bg-jobequal-green text-white px-6 py-3 rounded-xl font-semibold hover:bg-jobequal-green-hover transition-colors">
+            <h1 className="text-3xl font-bold text-jobequal-text dark:text-white mb-4">
+              Company Not Found
+            </h1>
+            <p className="text-jobequal-text-muted dark:text-gray-400 mb-8">
+              The company you're looking for doesn't exist.
+            </p>
+            <Link
+              to="/companies"
+              className="bg-jobequal-green text-white px-6 py-3 rounded-xl font-semibold hover:bg-jobequal-green-hover transition-colors"
+            >
               Browse Companies
             </Link>
           </div>
@@ -335,31 +371,35 @@ export default function CompanyDetail() {
         company: company.industry,
         location: company.headquarters,
         salary: `${company.stats.totalEmployees} employees`,
-        type: 'profile'
+        type: "profile",
       });
     }
     setIsFollowing(!isFollowing);
   };
 
-  const filteredReviews = company.reviews.filter(review => {
-    const matchesFilter = reviewFilter === 'all' || 
-      (reviewFilter === 'current' && review.employmentStatus === 'Current Employee') ||
-      (reviewFilter === 'former' && review.employmentStatus === 'Former Employee');
-    
-    const matchesSearch = searchTerm === '' || 
+  const filteredReviews = company.reviews.filter((review) => {
+    const matchesFilter =
+      reviewFilter === "all" ||
+      (reviewFilter === "current" &&
+        review.employmentStatus === "Current Employee") ||
+      (reviewFilter === "former" &&
+        review.employmentStatus === "Former Employee");
+
+    const matchesSearch =
+      searchTerm === "" ||
       review.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       review.review.toLowerCase().includes(searchTerm.toLowerCase()) ||
       review.position.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesFilter && matchesSearch;
   });
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: Building },
-    { id: 'culture', label: 'Culture & Values', icon: Heart },
-    { id: 'jobs', label: 'Open Positions', icon: Briefcase },
-    { id: 'reviews', label: 'Reviews', icon: MessageCircle },
-    { id: 'photos', label: 'Photos', icon: Camera }
+    { id: "overview", label: "Overview", icon: Building },
+    { id: "culture", label: "Culture & Values", icon: Heart },
+    { id: "jobs", label: "Open Positions", icon: Briefcase },
+    { id: "reviews", label: "Reviews", icon: MessageCircle },
+    { id: "photos", label: "Photos", icon: Camera },
   ];
 
   const renderStars = (rating: number) => {
@@ -367,11 +407,11 @@ export default function CompanyDetail() {
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < Math.floor(rating) 
-            ? 'text-yellow-400 fill-current' 
-            : i < rating 
-            ? 'text-yellow-400 fill-current opacity-50' 
-            : 'text-gray-300'
+          i < Math.floor(rating)
+            ? "text-yellow-400 fill-current"
+            : i < rating
+              ? "text-yellow-400 fill-current opacity-50"
+              : "text-gray-300"
         }`}
       />
     ));
@@ -380,11 +420,13 @@ export default function CompanyDetail() {
   const renderCultureScore = (label: string, score: number) => (
     <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-jobequal-neutral-dark dark:border-gray-600">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium text-jobequal-text dark:text-white">{label}</span>
+        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+          {label}
+        </span>
         <span className="text-sm font-bold text-jobequal-green">{score}/5</span>
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-        <div 
+        <div
           className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-2 rounded-full transition-all duration-300"
           style={{ width: `${(score / 5) * 100}%` }}
         />
@@ -395,7 +437,7 @@ export default function CompanyDetail() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <motion.div
@@ -434,7 +476,8 @@ export default function CompanyDetail() {
                   <div className="flex items-center">
                     {renderStars(company.culture.overall)}
                     <span className="ml-2 text-sm font-medium text-jobequal-text dark:text-white">
-                      {company.culture.overall}/5 ({company.stats.totalReviews} reviews)
+                      {company.culture.overall}/5 ({company.stats.totalReviews}{" "}
+                      reviews)
                     </span>
                   </div>
                   <a
@@ -450,7 +493,7 @@ export default function CompanyDetail() {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row gap-3">
               <motion.button
                 onClick={handleFollow}
@@ -458,12 +501,14 @@ export default function CompanyDetail() {
                 whileTap={{ scale: 0.95 }}
                 className={`flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
                   isFollowing
-                    ? 'bg-jobequal-green text-white hover:bg-jobequal-green-hover'
-                    : 'border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white'
+                    ? "bg-jobequal-green text-white hover:bg-jobequal-green-hover"
+                    : "border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white"
                 }`}
               >
-                <Heart className={`w-4 h-4 mr-2 ${isFollowing ? 'fill-current' : ''}`} />
-                {isFollowing ? 'Following' : 'Follow Company'}
+                <Heart
+                  className={`w-4 h-4 mr-2 ${isFollowing ? "fill-current" : ""}`}
+                />
+                {isFollowing ? "Following" : "Follow Company"}
               </motion.button>
               <button className="flex items-center px-6 py-3 border border-jobequal-neutral-dark dark:border-gray-600 text-jobequal-text dark:text-white rounded-xl font-semibold hover:bg-jobequal-neutral dark:hover:bg-gray-700 transition-colors">
                 <Share2 className="w-4 h-4 mr-2" />
@@ -481,20 +526,36 @@ export default function CompanyDetail() {
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6 text-center">
-            <div className="text-2xl font-bold text-jobequal-green mb-1">{company.stats.totalEmployees}</div>
-            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Total Employees</div>
+            <div className="text-2xl font-bold text-jobequal-green mb-1">
+              {company.stats.totalEmployees}
+            </div>
+            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+              Total Employees
+            </div>
           </div>
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6 text-center">
-            <div className="text-2xl font-bold text-jobequal-green mb-1">{company.stats.averageTenure}</div>
-            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Avg. Tenure</div>
+            <div className="text-2xl font-bold text-jobequal-green mb-1">
+              {company.stats.averageTenure}
+            </div>
+            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+              Avg. Tenure
+            </div>
           </div>
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6 text-center">
-            <div className="text-2xl font-bold text-jobequal-green mb-1">{company.stats.diversityScore}%</div>
-            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Diversity Score</div>
+            <div className="text-2xl font-bold text-jobequal-green mb-1">
+              {company.stats.diversityScore}%
+            </div>
+            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+              Diversity Score
+            </div>
           </div>
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl border border-jobequal-neutral-dark dark:border-gray-600 p-6 text-center">
-            <div className="text-2xl font-bold text-jobequal-green mb-1">{company.openPositions.length}</div>
-            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Open Positions</div>
+            <div className="text-2xl font-bold text-jobequal-green mb-1">
+              {company.openPositions.length}
+            </div>
+            <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+              Open Positions
+            </div>
           </div>
         </motion.div>
 
@@ -512,8 +573,8 @@ export default function CompanyDetail() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-jobequal-green text-white shadow-md'
-                    : 'text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700'
+                    ? "bg-jobequal-green text-white shadow-md"
+                    : "text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:bg-jobequal-neutral dark:hover:bg-gray-700"
                 }`}
               >
                 <tab.icon className="w-4 h-4 mr-2" />
@@ -532,7 +593,7 @@ export default function CompanyDetail() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {activeTab === 'overview' && (
+            {activeTab === "overview" && (
               <div className="space-y-8">
                 {/* About Section */}
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
@@ -544,7 +605,9 @@ export default function CompanyDetail() {
                     {company.description}
                   </p>
                   <div className="border-t border-jobequal-neutral-dark dark:border-gray-600 pt-6">
-                    <h3 className="text-lg font-semibold text-jobequal-text dark:text-white mb-4">Mission</h3>
+                    <h3 className="text-lg font-semibold text-jobequal-text dark:text-white mb-4">
+                      Mission
+                    </h3>
                     <p className="text-jobequal-text-muted dark:text-gray-400 italic">
                       "{company.mission}"
                     </p>
@@ -559,9 +622,14 @@ export default function CompanyDetail() {
                   </h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {company.benefits.map((benefit, index) => (
-                      <div key={index} className="flex items-center p-4 bg-jobequal-green-light dark:bg-jobequal-green/20 rounded-xl">
+                      <div
+                        key={index}
+                        className="flex items-center p-4 bg-jobequal-green-light dark:bg-jobequal-green/20 rounded-xl"
+                      >
                         <CheckCircle className="w-5 h-5 text-jobequal-green mr-3 flex-shrink-0" />
-                        <span className="text-jobequal-text dark:text-white font-medium">{benefit}</span>
+                        <span className="text-jobequal-text dark:text-white font-medium">
+                          {benefit}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -569,7 +637,7 @@ export default function CompanyDetail() {
               </div>
             )}
 
-            {activeTab === 'culture' && (
+            {activeTab === "culture" && (
               <div className="space-y-8">
                 {/* Culture Scores */}
                 <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
@@ -578,12 +646,30 @@ export default function CompanyDetail() {
                     Culture Ratings
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {renderCultureScore('Work-Life Balance', company.culture.workLifeBalance)}
-                    {renderCultureScore('Diversity & Inclusion', company.culture.diversity)}
-                    {renderCultureScore('Career Growth', company.culture.careerGrowth)}
-                    {renderCultureScore('Compensation', company.culture.compensation)}
-                    {renderCultureScore('Management', company.culture.management)}
-                    {renderCultureScore('Overall Rating', company.culture.overall)}
+                    {renderCultureScore(
+                      "Work-Life Balance",
+                      company.culture.workLifeBalance,
+                    )}
+                    {renderCultureScore(
+                      "Diversity & Inclusion",
+                      company.culture.diversity,
+                    )}
+                    {renderCultureScore(
+                      "Career Growth",
+                      company.culture.careerGrowth,
+                    )}
+                    {renderCultureScore(
+                      "Compensation",
+                      company.culture.compensation,
+                    )}
+                    {renderCultureScore(
+                      "Management",
+                      company.culture.management,
+                    )}
+                    {renderCultureScore(
+                      "Overall Rating",
+                      company.culture.overall,
+                    )}
                   </div>
                 </div>
 
@@ -595,9 +681,14 @@ export default function CompanyDetail() {
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {company.values.map((value, index) => (
-                      <div key={index} className="flex items-center p-6 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue/20 rounded-xl border border-jobequal-green/20">
+                      <div
+                        key={index}
+                        className="flex items-center p-6 bg-gradient-to-br from-jobequal-green-light to-jobequal-blue/20 rounded-xl border border-jobequal-green/20"
+                      >
                         <Award className="w-8 h-8 text-jobequal-green mr-4" />
-                        <span className="text-lg font-semibold text-jobequal-text dark:text-white">{value}</span>
+                        <span className="text-lg font-semibold text-jobequal-text dark:text-white">
+                          {value}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -605,7 +696,7 @@ export default function CompanyDetail() {
               </div>
             )}
 
-            {activeTab === 'jobs' && (
+            {activeTab === "jobs" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0 flex items-center">
@@ -620,7 +711,7 @@ export default function CompanyDetail() {
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
                 </div>
-                
+
                 <div className="space-y-4">
                   {company.openPositions.map((position) => (
                     <motion.div
@@ -655,7 +746,10 @@ export default function CompanyDetail() {
                             </span>
                             <span className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1" />
-                              Posted {new Date(position.postedDate).toLocaleDateString()}
+                              Posted{" "}
+                              {new Date(
+                                position.postedDate,
+                              ).toLocaleDateString()}
                             </span>
                           </div>
                           <div className="flex items-center space-x-4">
@@ -688,7 +782,7 @@ export default function CompanyDetail() {
               </div>
             )}
 
-            {activeTab === 'reviews' && (
+            {activeTab === "reviews" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
                   <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-4 sm:mb-0 flex items-center">
@@ -742,7 +836,9 @@ export default function CompanyDetail() {
                             <span className="mx-2">•</span>
                             <span>{review.employmentStatus}</span>
                             <span className="mx-2">•</span>
-                            <span>{new Date(review.date).toLocaleDateString()}</span>
+                            <span>
+                              {new Date(review.date).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
                         <button className="flex items-center text-jobequal-text-muted dark:text-gray-400 hover:text-jobequal-green transition-colors">
@@ -750,20 +846,24 @@ export default function CompanyDetail() {
                           {review.helpful}
                         </button>
                       </div>
-                      
+
                       <p className="text-jobequal-text-muted dark:text-gray-400 mb-4 leading-relaxed">
                         {review.review}
                       </p>
-                      
+
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="font-semibold text-green-600 dark:text-green-400 mb-2">Pros</h4>
+                          <h4 className="font-semibold text-green-600 dark:text-green-400 mb-2">
+                            Pros
+                          </h4>
                           <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                             {review.pros}
                           </p>
                         </div>
                         <div>
-                          <h4 className="font-semibold text-orange-600 dark:text-orange-400 mb-2">Cons</h4>
+                          <h4 className="font-semibold text-orange-600 dark:text-orange-400 mb-2">
+                            Cons
+                          </h4>
                           <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                             {review.cons}
                           </p>
@@ -775,7 +875,7 @@ export default function CompanyDetail() {
               </div>
             )}
 
-            {activeTab === 'photos' && (
+            {activeTab === "photos" && (
               <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
                 <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-8 flex items-center">
                   <Camera className="w-6 h-6 mr-3 text-jobequal-green" />

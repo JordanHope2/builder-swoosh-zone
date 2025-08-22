@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   Toast,
   ToastClose,
@@ -7,15 +7,22 @@ import {
   ToastTitle,
   ToastViewport,
   getToastIcon,
-} from "./toast"
-import { useToast } from "../../hooks/use-toast"
+} from "./toast";
+import { useToast } from "../../hooks/use-toast";
 
 export function Toaster() {
-  const { toasts } = useToast()
+  const { toasts } = useToast();
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, variant, ...props }) {
+      {toasts.map(function ({
+        id,
+        title,
+        description,
+        action,
+        variant,
+        ...props
+      }) {
         return (
           <Toast key={id} variant={variant} {...props} aria-live="polite">
             <div className="flex items-start space-x-3">
@@ -30,9 +37,9 @@ export function Toaster() {
             {action && React.isValidElement(action) ? action : null}
             <ToastClose />
           </Toast>
-        )
+        );
       })}
       <ToastViewport />
     </ToastProvider>
-  )
+  );
 }

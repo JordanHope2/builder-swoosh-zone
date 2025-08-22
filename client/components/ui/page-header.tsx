@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { cn } from '../../lib/utils';
+import React from "react";
+import { motion } from "framer-motion";
+import { cn } from "../../lib/utils";
 
 interface PageHeaderProps {
   title: string;
@@ -11,13 +11,13 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-export function PageHeader({ 
-  title, 
-  subtitle, 
-  description, 
-  className = '',
+export function PageHeader({
+  title,
+  subtitle,
+  description,
+  className = "",
   centerAlign = true,
-  children 
+  children,
 }: PageHeaderProps) {
   return (
     <motion.div
@@ -27,7 +27,7 @@ export function PageHeader({
       className={cn(
         "mb-8 sm:mb-12 lg:mb-16",
         centerAlign ? "text-center" : "",
-        className
+        className,
       )}
     >
       {subtitle && (
@@ -42,7 +42,7 @@ export function PageHeader({
           </span>
         </motion.div>
       )}
-      
+
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ export function PageHeader({
       >
         {title}
       </motion.h1>
-      
+
       {description && (
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -62,7 +62,7 @@ export function PageHeader({
           {description}
         </motion.p>
       )}
-      
+
       {children && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -78,9 +78,14 @@ export function PageHeader({
 }
 
 // Specialized components for common use cases
-export function DashboardHeader({ title, subtitle, description, children }: Omit<PageHeaderProps, 'centerAlign'>) {
+export function DashboardHeader({
+  title,
+  subtitle,
+  description,
+  children,
+}: Omit<PageHeaderProps, "centerAlign">) {
   return (
-    <PageHeader 
+    <PageHeader
       title={title}
       subtitle={subtitle}
       description={description}
@@ -92,7 +97,12 @@ export function DashboardHeader({ title, subtitle, description, children }: Omit
   );
 }
 
-export function SectionHeader({ title, subtitle, description, className }: PageHeaderProps) {
+export function SectionHeader({
+  title,
+  subtitle,
+  description,
+  className,
+}: PageHeaderProps) {
   return (
     <div className={cn("mb-6 sm:mb-8 text-center", className)}>
       {subtitle && (

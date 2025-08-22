@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Share2, 
-  Copy, 
-  Check, 
-  X, 
-  MessageCircle, 
-  Mail, 
-  Linkedin, 
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Share2,
+  Copy,
+  Check,
+  X,
+  MessageCircle,
+  Mail,
+  Linkedin,
   Twitter,
-  ExternalLink
-} from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { applicationToast } from '../../hooks/use-toast';
+  ExternalLink,
+} from "lucide-react";
+import { cn } from "../../lib/utils";
+import { applicationToast } from "../../hooks/use-toast";
 
 interface ShareData {
   title: string;
@@ -23,68 +23,81 @@ interface ShareData {
 interface ShareButtonProps {
   shareData: ShareData;
   className?: string;
-  variant?: 'default' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "default" | "outline" | "ghost";
+  size?: "sm" | "md" | "lg";
 }
 
 const socialPlatforms = [
   {
-    name: 'LinkedIn',
+    name: "LinkedIn",
     icon: Linkedin,
-    color: 'bg-blue-600 hover:bg-blue-700',
-    getUrl: (data: ShareData) => 
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(data.url)}`
+    color: "bg-blue-600 hover:bg-blue-700",
+    getUrl: (data: ShareData) =>
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(data.url)}`,
   },
   {
-    name: 'WhatsApp',
+    name: "WhatsApp",
     icon: MessageCircle,
-    color: 'bg-green-600 hover:bg-green-700',
-    getUrl: (data: ShareData) => 
-      `https://wa.me/?text=${encodeURIComponent(`${data.title} ${data.url}`)}`
+    color: "bg-green-600 hover:bg-green-700",
+    getUrl: (data: ShareData) =>
+      `https://wa.me/?text=${encodeURIComponent(`${data.title} ${data.url}`)}`,
   },
   {
-    name: 'Email',
+    name: "Email",
     icon: Mail,
-    color: 'bg-gray-600 hover:bg-gray-700',
-    getUrl: (data: ShareData) => 
-      `mailto:?subject=${encodeURIComponent(data.title)}&body=${encodeURIComponent(`${data.text || ''}\n\n${data.url}`)}`
+    color: "bg-gray-600 hover:bg-gray-700",
+    getUrl: (data: ShareData) =>
+      `mailto:?subject=${encodeURIComponent(data.title)}&body=${encodeURIComponent(`${data.text || ""}\n\n${data.url}`)}`,
   },
   {
-    name: 'Twitter',
+    name: "Twitter",
     icon: Twitter,
-    color: 'bg-black hover:bg-gray-800',
-    getUrl: (data: ShareData) => 
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.title)}&url=${encodeURIComponent(data.url)}`
-  }
+    color: "bg-black hover:bg-gray-800",
+    getUrl: (data: ShareData) =>
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(data.title)}&url=${encodeURIComponent(data.url)}`,
+  },
 ];
 
-export function ShareButton({ shareData, className, variant = 'default', size = 'md' }: ShareButtonProps) {
+export function ShareButton({
+  shareData,
+  className,
+  variant = "default",
+  size = "md",
+}: ShareButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   const sizeClasses = {
-    sm: 'px-3 py-2 text-sm',
-    md: 'px-4 py-2',
-    lg: 'px-6 py-3 text-lg'
+    sm: "px-3 py-2 text-sm",
+    md: "px-4 py-2",
+    lg: "px-6 py-3 text-lg",
   };
 
   const variantClasses = {
-    default: 'bg-jobequal-green text-white hover:bg-jobequal-green-hover',
-    outline: 'border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white',
-    ghost: 'text-jobequal-green hover:bg-jobequal-green-light'
+    default: "bg-jobequal-green text-white hover:bg-jobequal-green-hover",
+    outline:
+      "border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white",
+    ghost: "text-jobequal-green hover:bg-jobequal-green-light",
   };
 
   const handleShare = async () => {
     // Check if Web Share API is supported
-    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    if (
+      navigator.share &&
+      navigator.canShare &&
+      navigator.canShare(shareData)
+    ) {
       try {
         await navigator.share(shareData);
-        applicationToast.info('Shared successfully', 'Content shared via native sharing');
+        applicationToast.info(
+          "Shared successfully",
+          "Content shared via native sharing",
+        );
         return;
       } catch (error) {
         // User cancelled or error occurred, fall back to modal
-        if ((error as Error).name !== 'AbortError') {
-          console.warn('Web Share API failed:', error);
+        if ((error as Error).name !== "AbortError") {
+          console.warn("Web Share API failed:", error);
         }
       }
     }
@@ -97,22 +110,25 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
     try {
       await navigator.clipboard.writeText(shareData.url);
       setIsCopied(true);
-      applicationToast.info('Link copied', 'URL copied to clipboard');
-      
+      applicationToast.info("Link copied", "URL copied to clipboard");
+
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
     } catch (error) {
-      console.error('Failed to copy to clipboard:', error);
-      applicationToast.error('Failed to copy link');
+      console.error("Failed to copy to clipboard:", error);
+      applicationToast.error("Failed to copy link");
     }
   };
 
-  const handleSocialShare = (platform: typeof socialPlatforms[0]) => {
+  const handleSocialShare = (platform: (typeof socialPlatforms)[0]) => {
     const url = platform.getUrl(shareData);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
     setIsModalOpen(false);
-    applicationToast.info('Opening share window', `Sharing via ${platform.name}`);
+    applicationToast.info(
+      "Opening share window",
+      `Sharing via ${platform.name}`,
+    );
   };
 
   return (
@@ -120,10 +136,10 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
       <button
         onClick={handleShare}
         className={cn(
-          'inline-flex items-center space-x-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:ring-offset-2',
+          "inline-flex items-center space-x-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:ring-offset-2",
           sizeClasses[size],
           variantClasses[variant],
-          className
+          className,
         )}
         aria-label={`Share ${shareData.title}`}
       >
@@ -145,7 +161,10 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
               aria-describedby="share-modal-description"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 id="share-modal-title" className="text-xl font-bold text-gray-900 dark:text-white">
+                <h3
+                  id="share-modal-title"
+                  className="text-xl font-bold text-gray-900 dark:text-white"
+                >
                   Share this job
                 </h3>
                 <button
@@ -157,7 +176,10 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
                 </button>
               </div>
 
-              <p id="share-modal-description" className="text-gray-600 dark:text-gray-300 mb-6">
+              <p
+                id="share-modal-description"
+                className="text-gray-600 dark:text-gray-300 mb-6"
+              >
                 {shareData.title}
               </p>
 
@@ -176,12 +198,12 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
                   <button
                     onClick={copyToClipboard}
                     className={cn(
-                      'px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm',
+                      "px-3 py-2 rounded-lg font-medium transition-all duration-200 text-sm",
                       isCopied
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                        : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300'
+                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                        : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300",
                     )}
-                    aria-label={isCopied ? 'Link copied' : 'Copy link'}
+                    aria-label={isCopied ? "Link copied" : "Copy link"}
                   >
                     {isCopied ? (
                       <Check className="w-4 h-4" />
@@ -203,8 +225,8 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
                       key={platform.name}
                       onClick={() => handleSocialShare(platform)}
                       className={cn(
-                        'flex items-center space-x-3 px-4 py-3 rounded-lg text-white font-medium transition-all duration-200 hover:scale-105',
-                        platform.color
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg text-white font-medium transition-all duration-200 hover:scale-105",
+                        platform.color,
                       )}
                     >
                       <platform.icon className="w-5 h-5" />
@@ -223,35 +245,37 @@ export function ShareButton({ shareData, className, variant = 'default', size = 
 }
 
 // Specialized share buttons for common use cases
-export function JobShareButton({ job }: { job: { id: string; title: string; company: string } }) {
+export function JobShareButton({
+  job,
+}: {
+  job: { id: string; title: string; company: string };
+}) {
   const shareData: ShareData = {
     title: `${job.title} at ${job.company}`,
     text: `Check out this amazing job opportunity!`,
-    url: `${window.location.origin}/job/${job.id}`
+    url: `${window.location.origin}/job/${job.id}`,
   };
 
   return (
-    <ShareButton 
-      shareData={shareData} 
-      variant="ghost" 
+    <ShareButton
+      shareData={shareData}
+      variant="ghost"
       size="sm"
       className="text-gray-600 hover:text-jobequal-green"
     />
   );
 }
 
-export function CompanyShareButton({ company }: { company: { id: string; name: string } }) {
+export function CompanyShareButton({
+  company,
+}: {
+  company: { id: string; name: string };
+}) {
   const shareData: ShareData = {
     title: `${company.name} - Company Profile`,
     text: `Discover career opportunities at ${company.name}`,
-    url: `${window.location.origin}/company/${company.id}`
+    url: `${window.location.origin}/company/${company.id}`,
   };
 
-  return (
-    <ShareButton 
-      shareData={shareData} 
-      variant="outline" 
-      size="md"
-    />
-  );
+  return <ShareButton shareData={shareData} variant="outline" size="md" />;
 }

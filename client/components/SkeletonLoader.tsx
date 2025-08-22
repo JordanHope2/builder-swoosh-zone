@@ -4,11 +4,15 @@ interface SkeletonProps {
   circle?: boolean;
 }
 
-function Skeleton({ className = '', rounded = false, circle = false }: SkeletonProps) {
+function Skeleton({
+  className = "",
+  rounded = false,
+  circle = false,
+}: SkeletonProps) {
   return (
-    <div 
+    <div
       className={`animate-shimmer bg-gradient-to-r from-jobequal-neutral via-jobequal-neutral-dark to-jobequal-neutral bg-[length:1000px_100%] ${
-        circle ? 'rounded-full' : rounded ? 'rounded-lg' : 'rounded'
+        circle ? "rounded-full" : rounded ? "rounded-lg" : "rounded"
       } ${className}`}
     />
   );
@@ -21,7 +25,10 @@ export function JobCardSkeleton() {
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3 sm:space-x-4 flex-1">
-            <Skeleton circle className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16" />
+            <Skeleton
+              circle
+              className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16"
+            />
             <div className="flex-1 space-y-2">
               <Skeleton className="h-4 w-24 sm:w-32" />
               <Skeleton className="h-6 w-full max-w-xs" />
@@ -86,9 +93,15 @@ export function HeroSkeletonLoader() {
         {/* Cards skeleton */}
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
           {[1, 2].map((i) => (
-            <div key={i} className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 xl:p-14 shadow-2xl border border-jobequal-neutral-dark">
+            <div
+              key={i}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 xl:p-14 shadow-2xl border border-jobequal-neutral-dark"
+            >
               <div className="text-center space-y-6">
-                <Skeleton circle className="w-16 h-16 sm:w-20 sm:h-20 mx-auto" />
+                <Skeleton
+                  circle
+                  className="w-16 h-16 sm:w-20 sm:h-20 mx-auto"
+                />
                 <Skeleton className="h-8 sm:h-10 w-48 mx-auto" />
                 <Skeleton className="h-6 w-full" />
                 <div className="space-y-4">

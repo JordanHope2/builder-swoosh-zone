@@ -1,67 +1,71 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  User, 
-  ArrowRight, 
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
   Sparkles,
   Users,
   Briefcase,
   CheckCircle,
-  X
-} from 'lucide-react';
-import { ThemeToggle } from '../components/ThemeProvider';
-import { signUpWithEmail } from '../lib/supabase';
-import { useToast } from '../hooks/use-toast';
+  X,
+} from "lucide-react";
+import { ThemeToggle } from "../components/ThemeProvider";
+import { signUpWithEmail } from "../lib/supabase";
+import { useToast } from "../hooks/use-toast";
 
 const userTypes = [
   {
-    id: 'candidate',
-    title: 'Job Seeker',
-    description: 'Find your dream job',
+    id: "candidate",
+    title: "Job Seeker",
+    description: "Find your dream job",
     icon: User,
-    gradient: 'from-blue-500 to-cyan-500'
+    gradient: "from-blue-500 to-cyan-500",
   },
   {
-    id: 'recruiter',
-    title: 'Recruiter',
-    description: 'Find top talent',
+    id: "recruiter",
+    title: "Recruiter",
+    description: "Find top talent",
     icon: Users,
-    gradient: 'from-purple-500 to-pink-500'
+    gradient: "from-purple-500 to-pink-500",
   },
   {
-    id: 'company',
-    title: 'Company',
-    description: 'Post jobs & hire',
+    id: "company",
+    title: "Company",
+    description: "Post jobs & hire",
     icon: Briefcase,
-    gradient: 'from-green-500 to-emerald-500'
-  }
+    gradient: "from-green-500 to-emerald-500",
+  },
 ];
 
 const passwordRequirements = [
-  { id: 'length', text: 'At least 8 characters', regex: /.{8,}/ },
-  { id: 'uppercase', text: 'One uppercase letter', regex: /[A-Z]/ },
-  { id: 'lowercase', text: 'One lowercase letter', regex: /[a-z]/ },
-  { id: 'number', text: 'One number', regex: /\d/ },
-  { id: 'special', text: 'One special character', regex: /[!@#$%^&*(),.?":{}|<>]/ }
+  { id: "length", text: "At least 8 characters", regex: /.{8,}/ },
+  { id: "uppercase", text: "One uppercase letter", regex: /[A-Z]/ },
+  { id: "lowercase", text: "One lowercase letter", regex: /[a-z]/ },
+  { id: "number", text: "One number", regex: /\d/ },
+  {
+    id: "special",
+    text: "One special character",
+    regex: /[!@#$%^&*(),.?":{}|<>]/,
+  },
 ];
 
 export default function SignUp() {
   const [step, setStep] = useState(1);
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState("");
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    company: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    company: "",
     agreeToTerms: false,
-    agreeToMarketing: false
+    agreeToMarketing: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -82,17 +86,18 @@ export default function SignUp() {
 
       toast({
         title: "Account created!",
-        description: "Please check your email to verify your account and complete registration.",
+        description:
+          "Please check your email to verify your account and complete registration.",
         variant: "default",
       });
       // Don't redirect immediately, wait for email confirmation.
       // Or redirect to a "please check your email" page.
       // For now, we just show the toast and reset the loading state.
-
     } catch (error: any) {
       toast({
         title: "Registration Error",
-        description: error.message || "An unexpected error occurred. Please try again.",
+        description:
+          error.message || "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -102,29 +107,36 @@ export default function SignUp() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const getPasswordStrength = () => {
-    const passed = passwordRequirements.filter(req => req.regex.test(formData.password));
+    const passed = passwordRequirements.filter((req) =>
+      req.regex.test(formData.password),
+    );
     return passed.length;
   };
 
-  const isPasswordValid = () => getPasswordStrength() === passwordRequirements.length;
-  const doPasswordsMatch = () => formData.password === formData.confirmPassword && formData.confirmPassword !== '';
+  const isPasswordValid = () =>
+    getPasswordStrength() === passwordRequirements.length;
+  const doPasswordsMatch = () =>
+    formData.password === formData.confirmPassword &&
+    formData.confirmPassword !== "";
 
-  const canProceedToStep2 = () => userType !== '';
+  const canProceedToStep2 = () => userType !== "";
   const canSubmit = () => {
-    return formData.firstName && 
-           formData.lastName && 
-           formData.email && 
-           isPasswordValid() && 
-           doPasswordsMatch() && 
-           formData.agreeToTerms &&
-           (userType !== 'company' || formData.company);
+    return (
+      formData.firstName &&
+      formData.lastName &&
+      formData.email &&
+      isPasswordValid() &&
+      doPasswordsMatch() &&
+      formData.agreeToTerms &&
+      (userType !== "company" || formData.company)
+    );
   };
 
   if (step === 1) {
@@ -137,11 +149,16 @@ export default function SignUp() {
         >
           {/* Header */}
           <div className="text-center mb-12">
-            <Link to="/" className="inline-flex items-center space-x-3 group mb-8">
+            <Link
+              to="/"
+              className="inline-flex items-center space-x-3 group mb-8"
+            >
               <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
                 <span className="text-white font-bold text-xl">J</span>
               </div>
-              <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">JobEqual</span>
+              <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">
+                JobEqual
+              </span>
             </Link>
 
             <div className="flex items-center justify-center mb-6">
@@ -159,7 +176,8 @@ export default function SignUp() {
               </span>
             </h1>
             <p className="text-xl text-jobequal-text-muted dark:text-gray-300 max-w-2xl mx-auto">
-              Choose your path and start your journey with Switzerland's premier job platform
+              Choose your path and start your journey with Switzerland's premier
+              job platform
             </p>
           </div>
 
@@ -176,11 +194,13 @@ export default function SignUp() {
                 onClick={() => setUserType(type.id)}
                 className={`relative p-8 rounded-2xl border-2 cursor-pointer transition-all duration-200 ${
                   userType === type.id
-                    ? 'border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10 shadow-lg'
-                    : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-jobequal-green hover:shadow-md'
+                    ? "border-jobequal-green bg-jobequal-green-light dark:bg-jobequal-green/10 shadow-lg"
+                    : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-jobequal-green hover:shadow-md"
                 }`}
               >
-                <div className={`w-16 h-16 bg-gradient-to-r ${type.gradient} rounded-xl flex items-center justify-center mb-6 mx-auto`}>
+                <div
+                  className={`w-16 h-16 bg-gradient-to-r ${type.gradient} rounded-xl flex items-center justify-center mb-6 mx-auto`}
+                >
                   <type.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-jobequal-text dark:text-white text-center mb-2">
@@ -189,7 +209,7 @@ export default function SignUp() {
                 <p className="text-jobequal-text-muted dark:text-gray-300 text-center">
                   {type.description}
                 </p>
-                
+
                 {userType === type.id && (
                   <motion.div
                     initial={{ scale: 0 }}
@@ -218,8 +238,11 @@ export default function SignUp() {
           {/* Sign In Link */}
           <div className="text-center mt-8">
             <p className="text-jobequal-text-muted dark:text-gray-400">
-              Already have an account?{' '}
-              <Link to="/signin" className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors">
+              Already have an account?{" "}
+              <Link
+                to="/signin"
+                className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors"
+              >
                 Sign in →
               </Link>
             </p>
@@ -257,7 +280,7 @@ export default function SignUp() {
               Create your account
             </h2>
             <p className="text-jobequal-text-muted dark:text-gray-300">
-              As a {userTypes.find(t => t.id === userType)?.title}
+              As a {userTypes.find((t) => t.id === userType)?.title}
             </p>
           </div>
 
@@ -296,7 +319,7 @@ export default function SignUp() {
             </div>
 
             {/* Company Field (for recruiters/companies) */}
-            {(userType === 'recruiter' || userType === 'company') && (
+            {(userType === "recruiter" || userType === "company") && (
               <div>
                 <label className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
                   Company name
@@ -345,7 +368,7 @@ export default function SignUp() {
                 </div>
                 <input
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   required
                   value={formData.password}
                   onChange={handleChange}
@@ -377,7 +400,13 @@ export default function SignUp() {
                         ) : (
                           <X className="w-4 h-4 text-gray-400 mr-2" />
                         )}
-                        <span className={isValid ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}>
+                        <span
+                          className={
+                            isValid
+                              ? "text-green-600 dark:text-green-400"
+                              : "text-gray-500 dark:text-gray-400"
+                          }
+                        >
                           {req.text}
                         </span>
                       </div>
@@ -398,14 +427,14 @@ export default function SignUp() {
                 </div>
                 <input
                   name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`block w-full pl-10 pr-12 py-3 border rounded-xl bg-white dark:bg-gray-800 text-jobequal-text dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:border-transparent transition-all duration-200 ${
                     formData.confirmPassword && !doPasswordsMatch()
-                      ? 'border-red-300 dark:border-red-600'
-                      : 'border-gray-300 dark:border-gray-600'
+                      ? "border-red-300 dark:border-red-600"
+                      : "border-gray-300 dark:border-gray-600"
                   }`}
                   placeholder="Confirm password"
                 />
@@ -422,7 +451,9 @@ export default function SignUp() {
                 </button>
               </div>
               {formData.confirmPassword && !doPasswordsMatch() && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">Passwords don't match</p>
+                <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                  Passwords don't match
+                </p>
               )}
             </div>
 
@@ -438,13 +469,22 @@ export default function SignUp() {
                   onChange={handleChange}
                   className="h-4 w-4 text-jobequal-green focus:ring-jobequal-green border-gray-300 dark:border-gray-600 rounded mt-1"
                 />
-                <label htmlFor="agreeToTerms" className="ml-3 block text-sm text-jobequal-text-muted dark:text-gray-300">
-                  I agree to the{' '}
-                  <Link to="/terms" className="text-jobequal-green hover:text-jobequal-green-hover">
+                <label
+                  htmlFor="agreeToTerms"
+                  className="ml-3 block text-sm text-jobequal-text-muted dark:text-gray-300"
+                >
+                  I agree to the{" "}
+                  <Link
+                    to="/terms"
+                    className="text-jobequal-green hover:text-jobequal-green-hover"
+                  >
                     Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/privacy" className="text-jobequal-green hover:text-jobequal-green-hover">
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    to="/privacy"
+                    className="text-jobequal-green hover:text-jobequal-green-hover"
+                  >
                     Privacy Policy
                   </Link>
                 </label>
@@ -459,7 +499,10 @@ export default function SignUp() {
                   onChange={handleChange}
                   className="h-4 w-4 text-jobequal-green focus:ring-jobequal-green border-gray-300 dark:border-gray-600 rounded mt-1"
                 />
-                <label htmlFor="agreeToMarketing" className="ml-3 block text-sm text-jobequal-text-muted dark:text-gray-300">
+                <label
+                  htmlFor="agreeToMarketing"
+                  className="ml-3 block text-sm text-jobequal-text-muted dark:text-gray-300"
+                >
                   Send me job alerts and career tips (optional)
                 </label>
               </div>
@@ -492,7 +535,10 @@ export default function SignUp() {
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-10 dark:opacity-5">
           <div className="absolute top-20 left-20 w-32 h-32 bg-jobequal-green rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
 
         <div className="relative z-10 text-center px-12">
@@ -509,7 +555,8 @@ export default function SignUp() {
               </span>
             </h3>
             <p className="text-lg text-jobequal-text-muted dark:text-gray-300 mb-8 leading-relaxed">
-              Experience premium job matching with Swiss precision, security, and quality.
+              Experience premium job matching with Swiss precision, security,
+              and quality.
             </p>
             <div className="text-6xl mb-4">🏔️</div>
             <p className="text-sm text-jobequal-text-muted dark:text-gray-400 italic">

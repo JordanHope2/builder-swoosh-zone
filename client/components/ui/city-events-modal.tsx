@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   MapPin,
@@ -14,11 +14,15 @@ import {
   Star,
   Clock,
   Navigation,
-  AlertCircle
-} from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { CityEventsData, CityEvent, cityEventsService } from '../../services/cityEventsService';
-import { applicationToast } from '../../hooks/use-toast';
+  AlertCircle,
+} from "lucide-react";
+import { cn } from "../../lib/utils";
+import {
+  CityEventsData,
+  CityEvent,
+  cityEventsService,
+} from "../../services/cityEventsService";
+import { applicationToast } from "../../hooks/use-toast";
 
 interface CityEventsModalProps {
   isOpen: boolean;
@@ -33,26 +37,26 @@ const categoryIcons = {
   music: Music,
   arts: Palette,
   festival: Star,
-  other: Calendar
+  other: Calendar,
 };
 
 const categoryColors = {
-  cultural: 'from-purple-500 to-purple-600',
-  sports: 'from-green-500 to-green-600',
-  business: 'from-blue-500 to-blue-600',
-  music: 'from-pink-500 to-pink-600',
-  arts: 'from-orange-500 to-orange-600',
-  festival: 'from-yellow-500 to-yellow-600',
-  other: 'from-gray-500 to-gray-600'
+  cultural: "from-purple-500 to-purple-600",
+  sports: "from-green-500 to-green-600",
+  business: "from-blue-500 to-blue-600",
+  music: "from-pink-500 to-pink-600",
+  arts: "from-orange-500 to-orange-600",
+  festival: "from-yellow-500 to-yellow-600",
+  other: "from-gray-500 to-gray-600",
 };
 
 function EventCard({ event, index }: { event: CityEvent; index: number }) {
   const IconComponent = categoryIcons[event.category] || Calendar;
   const colorClass = categoryColors[event.category] || categoryColors.other;
-  
+
   const eventDate = new Date(event.date);
   const isUpcoming = eventDate > new Date();
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -61,7 +65,9 @@ function EventCard({ event, index }: { event: CityEvent; index: number }) {
       className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-200 hover:border-gray-300"
     >
       <div className="flex items-start space-x-3">
-        <div className={`p-2 rounded-lg bg-gradient-to-r ${colorClass} flex-shrink-0`}>
+        <div
+          className={`p-2 rounded-lg bg-gradient-to-r ${colorClass} flex-shrink-0`}
+        >
           <IconComponent className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
@@ -75,7 +81,7 @@ function EventCard({ event, index }: { event: CityEvent; index: number }) {
               </span>
             )}
           </div>
-          
+
           <div className="flex items-center space-x-4 text-xs text-gray-500 mb-2">
             <div className="flex items-center space-x-1">
               <Clock className="w-3 h-3" />
@@ -88,11 +94,11 @@ function EventCard({ event, index }: { event: CityEvent; index: number }) {
               </div>
             )}
           </div>
-          
+
           <p className="text-gray-600 text-sm leading-relaxed mb-3">
             {event.description}
           </p>
-          
+
           {event.url && (
             <a
               href={event.url}
@@ -110,7 +116,11 @@ function EventCard({ event, index }: { event: CityEvent; index: number }) {
   );
 }
 
-function CityOverviewCard({ overview }: { overview: CityEventsData['overview'] }) {
+function CityOverviewCard({
+  overview,
+}: {
+  overview: CityEventsData["overview"];
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -126,18 +136,18 @@ function CityOverviewCard({ overview }: { overview: CityEventsData['overview'] }
           <h3 className="text-xl font-bold text-gray-900 mb-2">
             {overview.name}, {overview.country}
           </h3>
-          
+
           <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
             <div className="flex items-center space-x-1">
               <Users className="w-4 h-4" />
               <span>{overview.population.toLocaleString()} residents</span>
             </div>
           </div>
-          
+
           <p className="text-gray-700 mb-4 leading-relaxed">
             {overview.description}
           </p>
-          
+
           <div>
             <h4 className="font-semibold text-gray-900 mb-2">Highlights:</h4>
             <div className="grid grid-cols-2 gap-2">
@@ -161,11 +171,17 @@ function CityOverviewCard({ overview }: { overview: CityEventsData['overview'] }
   );
 }
 
-function QuickLinksCard({ quickLinks, cityName }: { quickLinks: CityEventsData['quickLinks']; cityName: string }) {
+function QuickLinksCard({
+  quickLinks,
+  cityName,
+}: {
+  quickLinks: CityEventsData["quickLinks"];
+  cityName: string;
+}) {
   const links = [
-    { label: 'Tourism Office', url: quickLinks.tourism, icon: Globe },
-    { label: 'Events & Activities', url: quickLinks.events, icon: Calendar },
-    { label: 'Official Website', url: quickLinks.official, icon: ExternalLink }
+    { label: "Tourism Office", url: quickLinks.tourism, icon: Globe },
+    { label: "Events & Activities", url: quickLinks.events, icon: Calendar },
+    { label: "Official Website", url: quickLinks.official, icon: ExternalLink },
   ];
 
   return (
@@ -221,7 +237,11 @@ function LoadingState() {
   );
 }
 
-export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalProps) {
+export function CityEventsModal({
+  isOpen,
+  onClose,
+  cityName,
+}: CityEventsModalProps) {
   const [cityData, setCityData] = useState<CityEventsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -240,8 +260,8 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
       const data = await cityEventsService.getCityEvents(cityName);
       setCityData(data);
     } catch (err) {
-      setError('Failed to load city information. Please try again.');
-      console.error('Error loading city data:', err);
+      setError("Failed to load city information. Please try again.");
+      console.error("Error loading city data:", err);
     } finally {
       setIsLoading(false);
     }
@@ -262,10 +282,10 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
     <AnimatePresence>
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-end p-4">
         <motion.div
-          initial={{ x: '100%', opacity: 0 }}
+          initial={{ x: "100%", opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: '100%', opacity: 0 }}
-          transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+          exit={{ x: "100%", opacity: 0 }}
+          transition={{ type: "spring", damping: 30, stiffness: 300 }}
           className="bg-white rounded-2xl shadow-2xl w-full max-w-lg h-full max-h-[90vh] overflow-hidden flex flex-col"
           role="dialog"
           aria-labelledby="city-events-title"
@@ -278,10 +298,16 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
                 <MapPin className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 id="city-events-title" className="text-xl font-bold text-gray-900">
+                <h2
+                  id="city-events-title"
+                  className="text-xl font-bold text-gray-900"
+                >
                   {cityName}
                 </h2>
-                <p id="city-events-description" className="text-sm text-gray-600">
+                <p
+                  id="city-events-description"
+                  className="text-sm text-gray-600"
+                >
                   City overview & upcoming events
                 </p>
               </div>
@@ -319,7 +345,10 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
                 <CityOverviewCard overview={cityData.overview} />
 
                 {/* Quick Links */}
-                <QuickLinksCard quickLinks={cityData.quickLinks} cityName={cityName} />
+                <QuickLinksCard
+                  quickLinks={cityData.quickLinks}
+                  cityName={cityName}
+                />
 
                 {/* Upcoming Events */}
                 <div>
@@ -332,7 +361,7 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
                     <Calendar className="w-5 h-5 mr-2 text-blue-500" />
                     Upcoming Events
                   </motion.h3>
-                  
+
                   {cityData.events.length > 0 ? (
                     <div className="space-y-4">
                       {cityData.events.map((event, index) => (
@@ -363,7 +392,8 @@ export function CityEventsModal({ isOpen, onClose, cityName }: CityEventsModalPr
                     <MapPin className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                     <p className="text-sm text-gray-600 mb-2">Location</p>
                     <p className="text-xs text-gray-500">
-                      {cityData.overview.coordinates.lat.toFixed(4)}, {cityData.overview.coordinates.lng.toFixed(4)}
+                      {cityData.overview.coordinates.lat.toFixed(4)},{" "}
+                      {cityData.overview.coordinates.lng.toFixed(4)}
                     </p>
                     <a
                       href={`https://maps.google.com/?q=${cityData.overview.coordinates.lat},${cityData.overview.coordinates.lng}`}

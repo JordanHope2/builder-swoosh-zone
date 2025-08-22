@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { useLanguage } from '../contexts/LanguageContext';
-import { 
-  Shield, 
-  Lock, 
-  Eye, 
-  Users, 
-  Globe, 
-  FileText, 
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
+  Shield,
+  Lock,
+  Eye,
+  Users,
+  Globe,
+  FileText,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -16,8 +16,8 @@ import {
   Phone,
   MapPin,
   ChevronDown,
-  ChevronRight
-} from 'lucide-react';
+  ChevronRight,
+} from "lucide-react";
 
 export default function PrivacyPolicy() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -29,239 +29,239 @@ export default function PrivacyPolicy() {
 
   const sections = [
     {
-      id: 'data-collection',
-      title: 'Data Collection and Processing',
+      id: "data-collection",
+      title: "Data Collection and Processing",
       icon: FileText,
       content: [
         {
-          subtitle: 'Personal Information We Collect',
+          subtitle: "Personal Information We Collect",
           details: [
-            'Name, email address, phone number, and professional title',
-            'CV/Resume content including work experience, education, and skills',
-            'LinkedIn profile information (when connected)',
-            'Location and salary expectations',
-            'Communication preferences and language settings'
-          ]
+            "Name, email address, phone number, and professional title",
+            "CV/Resume content including work experience, education, and skills",
+            "LinkedIn profile information (when connected)",
+            "Location and salary expectations",
+            "Communication preferences and language settings",
+          ],
         },
         {
-          subtitle: 'Technical Information',
+          subtitle: "Technical Information",
           details: [
-            'IP address, browser type, and device information',
-            'Usage patterns and interaction data on our platform',
-            'Cookies and tracking technologies (see Cookie Policy)',
-            'Search queries and job application history'
-          ]
+            "IP address, browser type, and device information",
+            "Usage patterns and interaction data on our platform",
+            "Cookies and tracking technologies (see Cookie Policy)",
+            "Search queries and job application history",
+          ],
         },
         {
-          subtitle: 'Legal Basis for Processing (GDPR Article 6)',
+          subtitle: "Legal Basis for Processing (GDPR Article 6)",
           details: [
-            'Consent: Job applications, newsletter subscriptions, marketing communications',
-            'Contract Performance: Account management, job matching services',
-            'Legitimate Interest: Platform improvement, fraud prevention, analytics',
-            'Legal Obligation: Tax reporting, regulatory compliance'
-          ]
-        }
-      ]
+            "Consent: Job applications, newsletter subscriptions, marketing communications",
+            "Contract Performance: Account management, job matching services",
+            "Legitimate Interest: Platform improvement, fraud prevention, analytics",
+            "Legal Obligation: Tax reporting, regulatory compliance",
+          ],
+        },
+      ],
     },
     {
-      id: 'data-usage',
-      title: 'How We Use Your Data',
+      id: "data-usage",
+      title: "How We Use Your Data",
       icon: Users,
       content: [
         {
-          subtitle: 'Primary Services',
+          subtitle: "Primary Services",
           details: [
-            'AI-powered job matching and recommendations',
-            'CV analysis and skill assessment',
-            'Communication with potential employers',
-            'Account management and customer support',
-            'Platform personalization and user experience optimization'
-          ]
+            "AI-powered job matching and recommendations",
+            "CV analysis and skill assessment",
+            "Communication with potential employers",
+            "Account management and customer support",
+            "Platform personalization and user experience optimization",
+          ],
         },
         {
-          subtitle: 'Secondary Uses',
+          subtitle: "Secondary Uses",
           details: [
-            'Market research and salary benchmarking (anonymized)',
-            'Platform analytics and performance monitoring',
-            'Fraud prevention and security measures',
-            'Compliance with Swiss and EU legal requirements'
-          ]
-        }
-      ]
+            "Market research and salary benchmarking (anonymized)",
+            "Platform analytics and performance monitoring",
+            "Fraud prevention and security measures",
+            "Compliance with Swiss and EU legal requirements",
+          ],
+        },
+      ],
     },
     {
-      id: 'data-sharing',
-      title: 'Data Sharing and Disclosure',
+      id: "data-sharing",
+      title: "Data Sharing and Disclosure",
       icon: Globe,
       content: [
         {
-          subtitle: 'Employers and Recruiters',
+          subtitle: "Employers and Recruiters",
           details: [
-            'Profile information shared only with explicit consent',
-            'CV sharing requires direct job application action',
-            'Contact details shared only for interview coordination',
-            'Right to withdraw consent at any time'
-          ]
+            "Profile information shared only with explicit consent",
+            "CV sharing requires direct job application action",
+            "Contact details shared only for interview coordination",
+            "Right to withdraw consent at any time",
+          ],
         },
         {
-          subtitle: 'Service Providers',
+          subtitle: "Service Providers",
           details: [
-            'Cloud hosting services (AWS/Azure in EU regions)',
-            'Email service providers for communications',
-            'Analytics tools for platform improvement',
-            'AI processing services for matching algorithms',
-            'All providers bound by strict data processing agreements'
-          ]
+            "Cloud hosting services (AWS/Azure in EU regions)",
+            "Email service providers for communications",
+            "Analytics tools for platform improvement",
+            "AI processing services for matching algorithms",
+            "All providers bound by strict data processing agreements",
+          ],
         },
         {
-          subtitle: 'Legal Requirements',
+          subtitle: "Legal Requirements",
           details: [
-            'Swiss Federal Data Protection Act (nFADP) compliance',
-            'EU GDPR compliance for EU residents',
-            'Court orders or legal process requirements',
-            'Tax and regulatory reporting obligations'
-          ]
-        }
-      ]
+            "Swiss Federal Data Protection Act (nFADP) compliance",
+            "EU GDPR compliance for EU residents",
+            "Court orders or legal process requirements",
+            "Tax and regulatory reporting obligations",
+          ],
+        },
+      ],
     },
     {
-      id: 'data-security',
-      title: 'Data Security and Protection',
+      id: "data-security",
+      title: "Data Security and Protection",
       icon: Lock,
       content: [
         {
-          subtitle: 'Technical Safeguards',
+          subtitle: "Technical Safeguards",
           details: [
-            'End-to-end encryption for data transmission (TLS 1.3)',
-            'AES-256 encryption for data at rest',
-            'Multi-factor authentication for admin access',
-            'Regular security audits and penetration testing',
-            'ISO 27001 compliant data centers in Switzerland'
-          ]
+            "End-to-end encryption for data transmission (TLS 1.3)",
+            "AES-256 encryption for data at rest",
+            "Multi-factor authentication for admin access",
+            "Regular security audits and penetration testing",
+            "ISO 27001 compliant data centers in Switzerland",
+          ],
         },
         {
-          subtitle: 'Organizational Measures',
+          subtitle: "Organizational Measures",
           details: [
-            'Employee data protection training and certification',
-            'Principle of least privilege access controls',
-            'Regular backup and disaster recovery procedures',
-            'Incident response plan with 72-hour breach notification',
-            'Data Protection Officer (DPO) oversight'
-          ]
-        }
-      ]
+            "Employee data protection training and certification",
+            "Principle of least privilege access controls",
+            "Regular backup and disaster recovery procedures",
+            "Incident response plan with 72-hour breach notification",
+            "Data Protection Officer (DPO) oversight",
+          ],
+        },
+      ],
     },
     {
-      id: 'user-rights',
-      title: 'Your Rights and Controls',
+      id: "user-rights",
+      title: "Your Rights and Controls",
       icon: Shield,
       content: [
         {
-          subtitle: 'GDPR and Swiss Data Protection Rights',
+          subtitle: "GDPR and Swiss Data Protection Rights",
           details: [
-            'Right to Access: Request a copy of your personal data',
-            'Right to Rectification: Correct inaccurate information',
-            'Right to Erasure: Delete your account and data',
-            'Right to Portability: Export your data in machine-readable format',
-            'Right to Restrict Processing: Limit how we use your data',
-            'Right to Object: Opt-out of marketing and profiling'
-          ]
+            "Right to Access: Request a copy of your personal data",
+            "Right to Rectification: Correct inaccurate information",
+            "Right to Erasure: Delete your account and data",
+            "Right to Portability: Export your data in machine-readable format",
+            "Right to Restrict Processing: Limit how we use your data",
+            "Right to Object: Opt-out of marketing and profiling",
+          ],
         },
         {
-          subtitle: 'How to Exercise Your Rights',
+          subtitle: "How to Exercise Your Rights",
           details: [
-            'Account settings for most privacy controls',
-            'Email privacy@jobequal.ch for formal requests',
-            'Response within 30 days (GDPR requirement)',
-            'Identity verification required for security',
-            'No cost for reasonable requests'
-          ]
-        }
-      ]
+            "Account settings for most privacy controls",
+            "Email privacy@jobequal.ch for formal requests",
+            "Response within 30 days (GDPR requirement)",
+            "Identity verification required for security",
+            "No cost for reasonable requests",
+          ],
+        },
+      ],
     },
     {
-      id: 'retention',
-      title: 'Data Retention and Deletion',
+      id: "retention",
+      title: "Data Retention and Deletion",
       icon: Clock,
       content: [
         {
-          subtitle: 'Retention Periods',
+          subtitle: "Retention Periods",
           details: [
-            'Active accounts: Data retained while account is active',
-            'Inactive accounts: Automatic deletion after 3 years of inactivity',
-            'Job applications: Retained for 2 years unless withdrawn',
-            'Communication records: 7 years for legal compliance',
-            'Technical logs: 1 year for security and debugging'
-          ]
+            "Active accounts: Data retained while account is active",
+            "Inactive accounts: Automatic deletion after 3 years of inactivity",
+            "Job applications: Retained for 2 years unless withdrawn",
+            "Communication records: 7 years for legal compliance",
+            "Technical logs: 1 year for security and debugging",
+          ],
         },
         {
-          subtitle: 'Deletion Process',
+          subtitle: "Deletion Process",
           details: [
-            'Immediate removal from production systems',
-            'Backup deletion within 90 days',
-            'Legal holds may delay deletion',
-            'Anonymization for research purposes',
-            'Confirmation provided upon completion'
-          ]
-        }
-      ]
+            "Immediate removal from production systems",
+            "Backup deletion within 90 days",
+            "Legal holds may delay deletion",
+            "Anonymization for research purposes",
+            "Confirmation provided upon completion",
+          ],
+        },
+      ],
     },
     {
-      id: 'international',
-      title: 'International Data Transfers',
+      id: "international",
+      title: "International Data Transfers",
       icon: Globe,
       content: [
         {
-          subtitle: 'Data Localization',
+          subtitle: "Data Localization",
           details: [
-            'Primary data storage in Swiss and EU data centers',
-            'AI processing may occur in adequacy countries',
-            'No transfer to countries without adequate protection',
-            'Standard Contractual Clauses (SCCs) where required'
-          ]
+            "Primary data storage in Swiss and EU data centers",
+            "AI processing may occur in adequacy countries",
+            "No transfer to countries without adequate protection",
+            "Standard Contractual Clauses (SCCs) where required",
+          ],
         },
         {
-          subtitle: 'Cross-Border Job Applications',
+          subtitle: "Cross-Border Job Applications",
           details: [
-            'Explicit consent required for international employers',
-            'Clear notification of destination country',
-            'Additional protections for sensitive destinations',
-            'Right to withdraw consent affecting transfer'
-          ]
-        }
-      ]
+            "Explicit consent required for international employers",
+            "Clear notification of destination country",
+            "Additional protections for sensitive destinations",
+            "Right to withdraw consent affecting transfer",
+          ],
+        },
+      ],
     },
     {
-      id: 'cookies',
-      title: 'Cookies and Tracking',
+      id: "cookies",
+      title: "Cookies and Tracking",
       icon: Eye,
       content: [
         {
-          subtitle: 'Cookie Categories',
+          subtitle: "Cookie Categories",
           details: [
-            'Essential: Required for platform functionality',
-            'Analytics: Usage statistics and performance monitoring',
-            'Personalization: Job recommendations and user preferences',
-            'Marketing: Advertising and conversion tracking (opt-in only)'
-          ]
+            "Essential: Required for platform functionality",
+            "Analytics: Usage statistics and performance monitoring",
+            "Personalization: Job recommendations and user preferences",
+            "Marketing: Advertising and conversion tracking (opt-in only)",
+          ],
         },
         {
-          subtitle: 'Your Cookie Choices',
+          subtitle: "Your Cookie Choices",
           details: [
-            'Cookie consent banner on first visit',
-            'Granular controls in privacy settings',
-            'Browser settings to block cookies',
-            'Third-party opt-out tools and services'
-          ]
-        }
-      ]
-    }
+            "Cookie consent banner on first visit",
+            "Granular controls in privacy settings",
+            "Browser settings to block cookies",
+            "Third-party opt-out tools and services",
+          ],
+        },
+      ],
+    },
   ];
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -276,7 +276,9 @@ export default function PrivacyPolicy() {
             </h1>
           </div>
           <p className="text-xl text-jobequal-text-muted dark:text-gray-300 max-w-3xl mx-auto">
-            Your privacy is our priority. This policy explains how JobEqual collects, uses, and protects your personal information in compliance with Swiss and EU data protection laws.
+            Your privacy is our priority. This policy explains how JobEqual
+            collects, uses, and protects your personal information in compliance
+            with Swiss and EU data protection laws.
           </p>
           <div className="mt-6 flex items-center justify-center space-x-6 text-sm text-jobequal-text-muted dark:text-gray-400">
             <div className="flex items-center">
@@ -307,28 +309,36 @@ export default function PrivacyPolicy() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
               <Shield className="w-8 h-8 text-jobequal-green mx-auto mb-3" />
-              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Data Protection</h3>
+              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                Data Protection
+              </h3>
               <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                 Enterprise-grade security with Swiss banking standards
               </p>
             </div>
             <div className="text-center">
               <Users className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Your Control</h3>
+              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                Your Control
+              </h3>
               <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                 Full control over what data is shared with whom
               </p>
             </div>
             <div className="text-center">
               <Globe className="w-8 h-8 text-purple-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Swiss Storage</h3>
+              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                Swiss Storage
+              </h3>
               <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                 Data stored in Swiss and EU data centers only
               </p>
             </div>
             <div className="text-center">
               <Eye className="w-8 h-8 text-orange-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">Transparency</h3>
+              <h3 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                Transparency
+              </h3>
               <p className="text-sm text-jobequal-text-muted dark:text-gray-400">
                 Clear visibility into how your data is used
               </p>
@@ -370,19 +380,25 @@ export default function PrivacyPolicy() {
               {expandedSection === section.id && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   className="px-6 pb-6"
                 >
                   <div className="space-y-6">
                     {section.content.map((item, itemIndex) => (
-                      <div key={itemIndex} className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                      <div
+                        key={itemIndex}
+                        className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4"
+                      >
                         <h3 className="font-semibold text-jobequal-text dark:text-white mb-3">
                           {item.subtitle}
                         </h3>
                         <ul className="space-y-2">
                           {item.details.map((detail, detailIndex) => (
-                            <li key={detailIndex} className="flex items-start text-sm text-jobequal-text-muted dark:text-gray-400">
+                            <li
+                              key={detailIndex}
+                              className="flex items-start text-sm text-jobequal-text-muted dark:text-gray-400"
+                            >
                               <CheckCircle className="w-4 h-4 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
                               {detail}
                             </li>
@@ -407,7 +423,7 @@ export default function PrivacyPolicy() {
           <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6">
             Contact Our Data Protection Officer
           </h2>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-jobequal-text dark:text-white mb-4">
@@ -416,13 +432,18 @@ export default function PrivacyPolicy() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-jobequal-green" />
-                  <a href="mailto:privacy@jobequal.ch" className="text-jobequal-green hover:text-jobequal-green-hover">
+                  <a
+                    href="mailto:privacy@jobequal.ch"
+                    className="text-jobequal-green hover:text-jobequal-green-hover"
+                  >
                     privacy@jobequal.ch
                   </a>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-jobequal-green" />
-                  <span className="text-jobequal-text dark:text-white">+41 44 123 45 67</span>
+                  <span className="text-jobequal-text dark:text-white">
+                    +41 44 123 45 67
+                  </span>
                 </div>
                 <div className="flex items-start space-x-3">
                   <MapPin className="w-5 h-5 text-jobequal-green mt-1" />
@@ -442,21 +463,22 @@ export default function PrivacyPolicy() {
               </h3>
               <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
                 <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
-                  Swiss Federal Data Protection and Information Commissioner (FDPIC)
+                  Swiss Federal Data Protection and Information Commissioner
+                  (FDPIC)
                 </h4>
                 <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
                   For residents of Switzerland
                 </p>
-                <a 
-                  href="https://www.edoeb.admin.ch" 
-                  target="_blank" 
+                <a
+                  href="https://www.edoeb.admin.ch"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800 text-sm"
                 >
                   www.edoeb.admin.ch
                 </a>
               </div>
-              
+
               <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 mt-4">
                 <h4 className="font-medium text-green-800 dark:text-green-200 mb-2">
                   EU Data Protection Authorities
@@ -464,9 +486,9 @@ export default function PrivacyPolicy() {
                 <p className="text-sm text-green-700 dark:text-green-300 mb-2">
                   For EU residents
                 </p>
-                <a 
-                  href="https://edpb.europa.eu" 
-                  target="_blank" 
+                <a
+                  href="https://edpb.europa.eu"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-green-600 hover:text-green-800 text-sm"
                 >
@@ -491,9 +513,11 @@ export default function PrivacyPolicy() {
                 Policy Updates
               </h3>
               <p className="text-yellow-700 dark:text-yellow-300 text-sm">
-                We may update this privacy policy to reflect changes in our practices or legal requirements. 
-                Material changes will be communicated via email and prominently displayed on our platform. 
-                Your continued use of JobEqual after such changes indicates acceptance of the updated policy.
+                We may update this privacy policy to reflect changes in our
+                practices or legal requirements. Material changes will be
+                communicated via email and prominently displayed on our
+                platform. Your continued use of JobEqual after such changes
+                indicates acceptance of the updated policy.
               </p>
             </div>
           </div>
