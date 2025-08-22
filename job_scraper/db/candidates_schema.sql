@@ -71,3 +71,16 @@ CREATE TRIGGER "on_candidates_update_set_updated_at"
 BEFORE UPDATE ON "public"."candidates"
 FOR EACH ROW
 EXECUTE PROCEDURE "public"."handle_updated_at"();
+
+-- Enable Row Level Security for the new tables
+ALTER TABLE public.candidates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.candidate_skills ENABLE ROW LEVEL SECURITY;
+
+-- Add policies to restrict access to the service_role
+CREATE POLICY "Allow full access to service role" ON public.candidates FOR ALL
+USING (auth.role() = 'service_role')
+WITH CHECK (auth.role() = 'service_role');
+
+CREATE POLICY "Allow full access to service role" ON public.candidate_skills FOR ALL
+USING (auth.role() = 'service_role')
+WITH CHECK (auth.role() = 'service_role');
