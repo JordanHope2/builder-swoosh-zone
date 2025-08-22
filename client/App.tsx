@@ -29,7 +29,6 @@ import Companies from "./pages/Companies";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import SwipeDiscovery from "./pages/SwipeDiscovery";
-import EnhancedDashboard from "./pages/EnhancedDashboard";
 import Onboarding from "./pages/Onboarding";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 import CVReviewBooking from "./pages/CVReviewBooking";
@@ -44,8 +43,6 @@ import Pricing from "./pages/Pricing";
 import CompanyDetail from "./pages/CompanyDetail";
 import Favorites from "./pages/Favorites";
 import CompanyDashboard from "./pages/CompanyDashboard";
-import EnhancedRecruiterDashboard from "./pages/EnhancedRecruiterDashboard";
-import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import RoleSwitcher from "./pages/RoleSwitcher";
 import SubscriptionBilling from "./pages/SubscriptionBilling";
 import Messages from "./pages/Messages";
@@ -107,25 +104,13 @@ const App = () => (
                     {/* Protected Dashboards */}
                     <Route
                       path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedDashboard />
-                        </ProtectedRoute>
-                      }
+                      element={<Navigate to="/candidate-dashboard" replace />}
                     />
                     <Route
                       path="/candidate-dashboard"
                       element={
                         <ProtectedRoute>
                           <CandidateDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/enhanced-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedDashboard />
                         </ProtectedRoute>
                       }
                     />
@@ -158,22 +143,6 @@ const App = () => (
                       element={
                         <ProtectedRoute>
                           <CompanyDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/enhanced-recruiter-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedRecruiterDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/owner-admin-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <OwnerAdminDashboard />
                         </ProtectedRoute>
                       }
                     />
