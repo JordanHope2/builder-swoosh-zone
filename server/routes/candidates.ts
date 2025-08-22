@@ -1,14 +1,17 @@
 import { Router } from "express";
 import { getSupabaseAdmin } from "../supabase";
+import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+// This endpoint is now protected and requires authentication.
+// Further role-based authorization could be added in the future.
+router.get("/", authMiddleware, async (req, res) => {
   const supabase = getSupabaseAdmin();
   try {
-    // Note: The table name is `scraped_candidates` as per the schema files.
+    // Corrected table name from `scraped_candidates` to `candidates`
     const { data, error } = await supabase
-      .from("scraped_candidates")
+      .from("candidates")
       .select("*")
       .order("created_at", { ascending: false });
 
