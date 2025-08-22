@@ -12,6 +12,7 @@ import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { JobsProvider } from "./contexts/JobsContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { SharedLayout } from "./components/SharedLayout";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
@@ -66,9 +67,10 @@ const App = () => (
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
-                  <Routes>
-                    {/* Home & jobs */}
-                    <Route path="/" element={<Index />} />
+                  <SharedLayout>
+                    <Routes>
+                      {/* Home & jobs */}
+                      <Route path="/" element={<Index />} />
                     <Route path="/jobs" element={<JobSearch />} />
                     <Route path="/job-search" element={<JobSearch />} />
                     <Route
@@ -281,8 +283,8 @@ const App = () => (
 
                     {/* Catch-all 404 */}
                     <Route path="*" element={<NotFound />} />
-                  </Routes>
-
+                    </Routes>
+                  </SharedLayout>
                   <EnhancedAIChatbot />
                 </BrowserRouter>
               </TooltipProvider>
