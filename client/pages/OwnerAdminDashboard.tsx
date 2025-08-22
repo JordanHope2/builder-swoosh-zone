@@ -198,7 +198,82 @@ const JobManagementTab = () => {
         </div>
       </div>
     );
-  };
+};
+
+// --- Revenue Management Tab ---
+const RevenueManagementTab = () => {
+    const { session } = useAuth();
+    const token = session?.access_token;
+    const queryClient = useQueryClient();
+
+    const { data: subscriptions, isLoading, error } = useQuery({
+        queryKey: ["adminSubscriptions"],
+        queryFn: () => fetchFromApi("/api/admin/subscriptions", token),
+        enabled: !!token,
+    });
+
+    const cancelSubscriptionMutation = useMutation({
+        mutationFn: (subscriptionId: string) =>
+            fetchFromApi(`/api/admin/subscriptions/${subscriptionId}`, token, {
+                method: "POST",
+                body: JSON.stringify({ action: "cancel" }),
+            }),
+        onSuccess: () => {
+            alert("Subscription cancelled. The change will be reflected shortly after the webhook is processed.");
+            queryClient.invalidateQueries({ queryKey: ["adminSubscriptions"] });
+        },
+        onError: (err: any) => {
+            alert(`Failed to cancel subscription: ${err.message}`);
+        }
+    });
+
+    const handleCancelSubscription = (subscriptionId: string) => {
+        if (confirm("Are you sure you want to cancel this subscription immediately? This action cannot be undone.")) {
+            cancelSubscriptionMutation.mutate(subscriptionId);
+        }
+    };
+
+    if (isLoading) return <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    if (error) return <div className="p-8 text-red-500 flex items-center space-x-2"><AlertCircle /> <span>Error loading subscriptions: {error.message}</span></div>;
+
+    return (
+        <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 p-8">
+            <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-6">
+                Subscription Management ({subscriptions?.length || 0})
+            </h2>
+            <div className="overflow-x-auto">
+                <table className="w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">User</th>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Plan ID</th>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                            <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {subscriptions?.map((sub: any) => (
+                            <tr key={sub.id}>
+                                <td className="px-6 py-4">{sub.profile?.full_name || sub.user_id}</td>
+                                <td className="px-6 py-4">{sub.stripe_price_id}</td>
+                                <td className="px-6 py-4">
+                                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${sub.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                        {sub.status}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <button onClick={() => handleCancelSubscription(sub.stripe_subscription_id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
+                                        Cancel Now
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
 
 
 // --- Main Dashboard Component ---
@@ -210,7 +285,6 @@ export default function OwnerAdminDashboard() {
     { id: "overview", label: "Platform Overview", icon: BarChart3 },
     { id: "users", label: "User Management", icon: Users },
     { id: "jobs", label: "Job Management", icon: Briefcase },
-    { id: "companies", label: "Companies", icon: Building },
     { id: "revenue", label: "Revenue & Analytics", icon: DollarSign },
     { id: "system", label: "System Health", icon: Server },
     { id: "security", label: "Security & Logs", icon: Shield },
@@ -223,6 +297,8 @@ export default function OwnerAdminDashboard() {
         return <UserManagementTab />;
       case "jobs":
         return <JobManagementTab />;
+      case "revenue":
+        return <RevenueManagementTab />;
       default:
         return (
           <div className="p-8 bg-white/90 rounded-2xl border text-center">

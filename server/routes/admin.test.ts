@@ -131,4 +131,32 @@ describe("/api/admin", () => {
         expect(deleteFrom.eq).toHaveBeenCalledWith("id", "job-to-delete");
     });
   });
+
+  // --- Subscription Management Tests ---
+
+  describe("GET /subscriptions", () => {
+    it("should return a list of all subscriptions for an admin", async () => {
+        const mockSubs = [{ id: "sub-1", status: "active" }];
+        const adminCheckFrom = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { role: "admin" }, error: null }) };
+        const subsListFrom = { select: vi.fn().mockReturnThis(), order: vi.fn().mockResolvedValue({ data: mockSubs, error: null }) };
+        mockSupabaseClient.from
+            .mockReturnValueOnce(adminCheckFrom)
+            .mockReturnValueOnce(subsListFrom);
+
+        const response = await request(app).get("/api/admin/subscriptions");
+
+        expect(response.status).toBe(200);
+        expect(response.body).toEqual(mockSubs);
+    });
+  });
+
+  describe("POST /subscriptions/:id", () => {
+    it("should return 403 if a non-admin tries to cancel a subscription", async () => {
+        const adminCheckFrom = { select: vi.fn().mockReturnThis(), eq: vi.fn().mockReturnThis(), single: vi.fn().mockResolvedValue({ data: { role: "free" }, error: null }) };
+        mockSupabaseClient.from.mockReturnValueOnce(adminCheckFrom);
+
+        const response = await request(app).post("/api/admin/subscriptions/sub-123").send({ action: 'cancel' });
+        expect(response.status).toBe(403);
+    });
+  });
 });

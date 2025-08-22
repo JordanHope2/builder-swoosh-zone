@@ -170,4 +170,50 @@ router.delete("/jobs/:id", protectedAdminRoute, async (req, res) => {
 });
 
 
+// --- Subscription Management ---
+
+// GET /api/admin/subscriptions - List all subscriptions
+router.get("/subscriptions", protectedAdminRoute, async (req, res) => {
+    try {
+        const supabase = getSupabaseAdmin();
+        const { data, error } = await supabase
+            .from("subscriptions")
+            .select(`
+                *,
+                profile:profiles(full_name, email)
+            `)
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        res.json(data);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// POST /api/admin/subscriptions/:id - Cancel a subscription
+router.post("/subscriptions/:id", protectedAdminRoute, async (req, res) => {
+    const { id: subscriptionId } = req.params;
+    const { action } = req.body;
+
+    if (action !== 'cancel') {
+        return res.status(400).json({ error: "Invalid action." });
+    }
+
+    try {
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: "2024-06-20" });
+
+        // We don't need to update our local DB here, because the `customer.subscription.deleted`
+        // or `customer.subscription.updated` webhook will handle that automatically.
+        const deletedSubscription = await stripe.subscriptions.cancel(subscriptionId);
+
+        res.json(deletedSubscription);
+    } catch (error: any) {
+        console.error("Error cancelling Stripe subscription:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 export default router;
