@@ -33,7 +33,7 @@ import Onboarding from "./pages/Onboarding";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 import CVReviewBooking from "./pages/CVReviewBooking";
 import AIScore from "./pages/AIScore";
-import AdminPanel from "./pages/AdminPanel";
+import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import ProfileSettings from "./pages/ProfileSettings";
 import SalaryGuide from "./pages/SalaryGuide";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -161,7 +161,7 @@ const App = () => (
                       path="/admin"
                       element={
                         <ProtectedRoute>
-                          <AdminPanel />
+                          <OwnerAdminDashboard />
                         </ProtectedRoute>
                       }
                     />
