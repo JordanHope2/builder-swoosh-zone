@@ -12,6 +12,7 @@ import matchRouter from "./routes/match";
 import recommendationsRouter from "./routes/recommendations";
 import billingRouter from "./routes/billing";
 import dashboardRouter from "./routes/dashboard";
+import adminRouter from "./routes/admin";
 import { getSupabaseAdmin } from "./supabase";
 import { getEmbedding } from "./services/aiService";
 import { Stripe } from "stripe";
@@ -166,6 +167,7 @@ export function createServer() {
   app.use("/api/recommendations", recommendationsRouter);
   app.use("/api/billing", billingRouter);
   app.use("/api/dashboard", dashboardRouter);
+  app.use("/api/admin", adminRouter);
 
   // Temporary test route for recommendations
   app.get("/api/test-recommendations/:userId", async (req, res) => {

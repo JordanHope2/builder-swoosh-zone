@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Navigation } from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
+import { DashboardLayout } from "../components/DashboardLayout";
 import {
   Users,
   Briefcase,
-  TrendingUp,
-  Eye,
   Plus,
   MoreVertical,
   MapPin,
@@ -39,7 +37,6 @@ const DashboardStats = ({ stats }: { stats: any }) => (
   >
     <StatCard title="Active Jobs" value={stats.activeJobs} icon={Briefcase} />
     <StatCard title="Total Applicants" value={stats.totalApplicants} icon={Users} />
-    {/* Add more stats as the API provides them */}
   </motion.div>
 );
 
@@ -116,7 +113,6 @@ const ActiveJobsList = ({ jobs }: { jobs: any[] }) => (
   </div>
 );
 
-
 // --- Main Component ---
 
 export default function RecruiterDashboard() {
@@ -153,38 +149,25 @@ export default function RecruiterDashboard() {
         <HiringPipeline pipeline={data.pipeline} />
         <div className="grid lg:grid-cols-3 gap-8">
           <ActiveJobsList jobs={data.jobs} />
-          {/* Placeholder for other components like Candidate Details or Quick Actions */}
         </div>
       </>
     );
   };
 
+  const actions = (
+    <button className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-6 py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200 flex items-center space-x-2">
+      <Plus className="w-5 h-5" />
+      <span>Post New Job</span>
+    </button>
+  );
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Navigation />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8"
-        >
-          <div>
-            <h1 className="text-3xl font-bold text-jobequal-text dark:text-white mb-2">Recruiter Dashboard</h1>
-            <p className="text-jobequal-text-muted dark:text-gray-300">
-              Manage your job postings and track candidate pipeline
-            </p>
-          </div>
-          <div className="flex space-x-4">
-            <button className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-6 py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200 flex items-center space-x-2">
-              <Plus className="w-5 h-5" />
-              <span>Post New Job</span>
-            </button>
-          </div>
-        </motion.div>
-
-        {renderContent()}
-
-      </div>
-    </main>
+    <DashboardLayout
+      title="Recruiter Dashboard"
+      subtitle="Manage your job postings and track candidate pipeline"
+      actions={actions}
+    >
+      {renderContent()}
+    </DashboardLayout>
   );
 }

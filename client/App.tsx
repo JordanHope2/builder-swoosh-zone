@@ -12,6 +12,7 @@ import { FavoritesProvider } from "./contexts/FavoritesContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { JobsProvider } from "./contexts/JobsContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { SharedLayout } from "./components/SharedLayout";
 import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
@@ -29,12 +30,11 @@ import Companies from "./pages/Companies";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import SwipeDiscovery from "./pages/SwipeDiscovery";
-import EnhancedDashboard from "./pages/EnhancedDashboard";
 import Onboarding from "./pages/Onboarding";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 import CVReviewBooking from "./pages/CVReviewBooking";
 import AIScore from "./pages/AIScore";
-import AdminPanel from "./pages/AdminPanel";
+import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import ProfileSettings from "./pages/ProfileSettings";
 import SalaryGuide from "./pages/SalaryGuide";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -44,8 +44,6 @@ import Pricing from "./pages/Pricing";
 import CompanyDetail from "./pages/CompanyDetail";
 import Favorites from "./pages/Favorites";
 import CompanyDashboard from "./pages/CompanyDashboard";
-import EnhancedRecruiterDashboard from "./pages/EnhancedRecruiterDashboard";
-import OwnerAdminDashboard from "./pages/OwnerAdminDashboard";
 import RoleSwitcher from "./pages/RoleSwitcher";
 import SubscriptionBilling from "./pages/SubscriptionBilling";
 import Messages from "./pages/Messages";
@@ -69,9 +67,10 @@ const App = () => (
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
-                  <Routes>
-                    {/* Home & jobs */}
-                    <Route path="/" element={<Index />} />
+                  <SharedLayout>
+                    <Routes>
+                      {/* Home & jobs */}
+                      <Route path="/" element={<Index />} />
                     <Route path="/jobs" element={<JobSearch />} />
                     <Route path="/job-search" element={<JobSearch />} />
                     <Route
@@ -107,25 +106,13 @@ const App = () => (
                     {/* Protected Dashboards */}
                     <Route
                       path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedDashboard />
-                        </ProtectedRoute>
-                      }
+                      element={<Navigate to="/candidate-dashboard" replace />}
                     />
                     <Route
                       path="/candidate-dashboard"
                       element={
                         <ProtectedRoute>
                           <CandidateDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/enhanced-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedDashboard />
                         </ProtectedRoute>
                       }
                     />
@@ -161,22 +148,6 @@ const App = () => (
                         </ProtectedRoute>
                       }
                     />
-                    <Route
-                      path="/enhanced-recruiter-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <EnhancedRecruiterDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/owner-admin-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <OwnerAdminDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
 
                     {/* Companies */}
                     <Route path="/companies" element={<Companies />} />
@@ -192,7 +163,7 @@ const App = () => (
                       path="/admin"
                       element={
                         <ProtectedRoute>
-                          <AdminPanel />
+                          <OwnerAdminDashboard />
                         </ProtectedRoute>
                       }
                     />
@@ -312,8 +283,8 @@ const App = () => (
 
                     {/* Catch-all 404 */}
                     <Route path="*" element={<NotFound />} />
-                  </Routes>
-
+                    </Routes>
+                  </SharedLayout>
                   <EnhancedAIChatbot />
                 </BrowserRouter>
               </TooltipProvider>
