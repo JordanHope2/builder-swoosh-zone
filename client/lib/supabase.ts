@@ -7,9 +7,11 @@ let _client: SupabaseClient<Database> | null = null;
 
 function makeBrowserClient(): SupabaseClient<Database> {
   const supabaseUrl =
-    import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_PUBLIC_SUPABASE_URL;
+    import.meta.env.VITE_SUPABASE_URL ||
+    import.meta.env.VITE_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey =
-    import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY;
+    import.meta.env.VITE_SUPABASE_ANON_KEY ||
+    import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
     // Don't log secrets; just indicate presence
@@ -58,7 +60,7 @@ export const signInWithEmail = async (email: string, password: string) => {
 export const signUpWithEmail = async (
   email: string,
   password: string,
-  userData?: any
+  userData?: any,
 ) => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -139,12 +141,12 @@ export const getJobs = async (filters?: any) => {
     let filtered = [...mockJobs];
     if (filters?.location) {
       filtered = filtered.filter((j) =>
-        j.location.toLowerCase().includes(filters.location.toLowerCase())
+        j.location.toLowerCase().includes(filters.location.toLowerCase()),
       );
     }
     if (filters?.title) {
       filtered = filtered.filter((j) =>
-        j.title.toLowerCase().includes(filters.title.toLowerCase())
+        j.title.toLowerCase().includes(filters.title.toLowerCase()),
       );
     }
     return filtered;
@@ -177,7 +179,7 @@ export const getJobById = async (id: string) => {
 export const submitApplication = async (
   jobId: string,
   candidateId: string,
-  data: any
+  data: any,
 ) => {
   const { data: application, error } = await supabase
     .from("applications")
@@ -192,7 +194,7 @@ export const submitApplication = async (
 // ===== Realtime subscriptions (fixed template strings) =====
 export const subscribeToMessages = (
   conversationId: string,
-  callback: (payload: any) => void
+  callback: (payload: any) => void,
 ) => {
   return supabase
     .channel(`messages:${conversationId}`)
@@ -204,14 +206,14 @@ export const subscribeToMessages = (
         table: "messages",
         filter: `conversation_id=eq.${conversationId}`,
       },
-      callback
+      callback,
     )
     .subscribe();
 };
 
 export const subscribeToNotifications = (
   userId: string,
-  callback: (payload: any) => void
+  callback: (payload: any) => void,
 ) => {
   return supabase
     .channel(`notifications:${userId}`)
@@ -223,7 +225,7 @@ export const subscribeToNotifications = (
         table: "notifications",
         filter: `user_id=eq.${userId}`,
       },
-      callback
+      callback,
     )
     .subscribe();
 };

@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { 
-  Zap, 
-  Target, 
-  TrendingUp, 
-  ChevronRight, 
-  Star, 
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import {
+  Zap,
+  Target,
+  TrendingUp,
+  ChevronRight,
+  Star,
   Award,
   Brain,
   BarChart3,
@@ -27,9 +27,9 @@ import {
   Clock,
   Briefcase,
   GraduationCap,
-  Globe
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Globe,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface JobMatch {
   id: string;
@@ -56,90 +56,150 @@ interface SkillAnalysis {
     userLevel: number;
     marketDemand: number;
     salaryImpact: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
   }[];
 }
 
 const mockJobMatch: JobMatch = {
-  id: '1',
-  title: 'Senior Software Engineer',
-  company: 'TechCorp Zurich',
-  logo: '🚀',
-  location: 'Zurich',
-  salary: 'CHF 120,000 - 140,000',
+  id: "1",
+  title: "Senior Software Engineer",
+  company: "TechCorp Zurich",
+  logo: "🚀",
+  location: "Zurich",
+  salary: "CHF 120,000 - 140,000",
   matchScore: 95,
   strengths: [
-    'Perfect JavaScript & React experience match',
-    'Leadership skills align with team lead requirements',
-    'Swiss location preference matches',
-    'Salary expectations within range'
+    "Perfect JavaScript & React experience match",
+    "Leadership skills align with team lead requirements",
+    "Swiss location preference matches",
+    "Salary expectations within range",
   ],
   improvements: [
-    'Consider getting AWS certification',
-    'Docker experience could be strengthened',
-    'Add more project management experience'
+    "Consider getting AWS certification",
+    "Docker experience could be strengthened",
+    "Add more project management experience",
   ],
   requirements: [
-    { skill: 'JavaScript', userLevel: 95, requiredLevel: 90, match: true },
-    { skill: 'React', userLevel: 90, requiredLevel: 85, match: true },
-    { skill: 'Node.js', userLevel: 85, requiredLevel: 80, match: true },
-    { skill: 'TypeScript', userLevel: 80, requiredLevel: 75, match: true },
-    { skill: 'AWS', userLevel: 60, requiredLevel: 70, match: false },
-    { skill: 'Docker', userLevel: 55, requiredLevel: 65, match: false },
-    { skill: 'Leadership', userLevel: 85, requiredLevel: 70, match: true },
-    { skill: 'Communication', userLevel: 90, requiredLevel: 80, match: true }
-  ]
+    { skill: "JavaScript", userLevel: 95, requiredLevel: 90, match: true },
+    { skill: "React", userLevel: 90, requiredLevel: 85, match: true },
+    { skill: "Node.js", userLevel: 85, requiredLevel: 80, match: true },
+    { skill: "TypeScript", userLevel: 80, requiredLevel: 75, match: true },
+    { skill: "AWS", userLevel: 60, requiredLevel: 70, match: false },
+    { skill: "Docker", userLevel: 55, requiredLevel: 65, match: false },
+    { skill: "Leadership", userLevel: 85, requiredLevel: 70, match: true },
+    { skill: "Communication", userLevel: 90, requiredLevel: 80, match: true },
+  ],
 };
 
 const skillAnalysis: SkillAnalysis[] = [
   {
-    category: 'Technical Skills',
+    category: "Technical Skills",
     skills: [
-      { name: 'JavaScript', userLevel: 95, marketDemand: 98, salaryImpact: 85, trend: 'stable' },
-      { name: 'React', userLevel: 90, marketDemand: 95, salaryImpact: 88, trend: 'up' },
-      { name: 'Node.js', userLevel: 85, marketDemand: 85, salaryImpact: 82, trend: 'up' },
-      { name: 'TypeScript', userLevel: 80, marketDemand: 92, salaryImpact: 90, trend: 'up' },
-      { name: 'Python', userLevel: 75, marketDemand: 88, salaryImpact: 85, trend: 'up' },
-      { name: 'AWS', userLevel: 60, marketDemand: 95, salaryImpact: 95, trend: 'up' }
-    ]
+      {
+        name: "JavaScript",
+        userLevel: 95,
+        marketDemand: 98,
+        salaryImpact: 85,
+        trend: "stable",
+      },
+      {
+        name: "React",
+        userLevel: 90,
+        marketDemand: 95,
+        salaryImpact: 88,
+        trend: "up",
+      },
+      {
+        name: "Node.js",
+        userLevel: 85,
+        marketDemand: 85,
+        salaryImpact: 82,
+        trend: "up",
+      },
+      {
+        name: "TypeScript",
+        userLevel: 80,
+        marketDemand: 92,
+        salaryImpact: 90,
+        trend: "up",
+      },
+      {
+        name: "Python",
+        userLevel: 75,
+        marketDemand: 88,
+        salaryImpact: 85,
+        trend: "up",
+      },
+      {
+        name: "AWS",
+        userLevel: 60,
+        marketDemand: 95,
+        salaryImpact: 95,
+        trend: "up",
+      },
+    ],
   },
   {
-    category: 'Soft Skills',
+    category: "Soft Skills",
     skills: [
-      { name: 'Leadership', userLevel: 85, marketDemand: 90, salaryImpact: 92, trend: 'stable' },
-      { name: 'Communication', userLevel: 90, marketDemand: 95, salaryImpact: 88, trend: 'stable' },
-      { name: 'Problem Solving', userLevel: 88, marketDemand: 92, salaryImpact: 85, trend: 'stable' },
-      { name: 'Team Management', userLevel: 80, marketDemand: 85, salaryImpact: 90, trend: 'up' }
-    ]
-  }
+      {
+        name: "Leadership",
+        userLevel: 85,
+        marketDemand: 90,
+        salaryImpact: 92,
+        trend: "stable",
+      },
+      {
+        name: "Communication",
+        userLevel: 90,
+        marketDemand: 95,
+        salaryImpact: 88,
+        trend: "stable",
+      },
+      {
+        name: "Problem Solving",
+        userLevel: 88,
+        marketDemand: 92,
+        salaryImpact: 85,
+        trend: "stable",
+      },
+      {
+        name: "Team Management",
+        userLevel: 80,
+        marketDemand: 85,
+        salaryImpact: 90,
+        trend: "up",
+      },
+    ],
+  },
 ];
 
 const marketInsights = [
   {
-    title: 'High Demand Skills',
-    description: 'Skills with 90%+ market demand in Switzerland',
-    skills: ['AWS', 'TypeScript', 'React', 'Communication'],
+    title: "High Demand Skills",
+    description: "Skills with 90%+ market demand in Switzerland",
+    skills: ["AWS", "TypeScript", "React", "Communication"],
     icon: TrendingUp,
-    color: 'text-green-600 bg-green-100 dark:bg-green-900/30'
+    color: "text-green-600 bg-green-100 dark:bg-green-900/30",
   },
   {
-    title: 'Salary Boosters',
-    description: 'Skills that significantly impact compensation',
-    skills: ['AWS', 'Leadership', 'TypeScript', 'Team Management'],
+    title: "Salary Boosters",
+    description: "Skills that significantly impact compensation",
+    skills: ["AWS", "Leadership", "TypeScript", "Team Management"],
     icon: DollarSign,
-    color: 'text-blue-600 bg-blue-100 dark:bg-blue-900/30'
+    color: "text-blue-600 bg-blue-100 dark:bg-blue-900/30",
   },
   {
-    title: 'Trending Up',
-    description: 'Skills gaining popularity in Swiss market',
-    skills: ['React', 'Node.js', 'TypeScript', 'Team Management'],
+    title: "Trending Up",
+    description: "Skills gaining popularity in Swiss market",
+    skills: ["React", "Node.js", "TypeScript", "Team Management"],
     icon: ArrowUp,
-    color: 'text-purple-600 bg-purple-100 dark:bg-purple-900/30'
-  }
+    color: "text-purple-600 bg-purple-100 dark:bg-purple-900/30",
+  },
 ];
 
 export default function AIScore() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedJob, setSelectedJob] = useState<JobMatch>(mockJobMatch);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
 
@@ -149,16 +209,21 @@ export default function AIScore() {
   }, []);
 
   const getSkillColor = (userLevel: number, requiredLevel: number) => {
-    if (userLevel >= requiredLevel) return 'text-green-600 bg-green-100 dark:bg-green-900/30';
-    if (userLevel >= requiredLevel * 0.8) return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30';
-    return 'text-red-600 bg-red-100 dark:bg-red-900/30';
+    if (userLevel >= requiredLevel)
+      return "text-green-600 bg-green-100 dark:bg-green-900/30";
+    if (userLevel >= requiredLevel * 0.8)
+      return "text-yellow-600 bg-yellow-100 dark:bg-yellow-900/30";
+    return "text-red-600 bg-red-100 dark:bg-red-900/30";
   };
 
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+  const getTrendIcon = (trend: "up" | "down" | "stable") => {
     switch (trend) {
-      case 'up': return <ArrowUp className="w-4 h-4 text-green-600" />;
-      case 'down': return <ArrowDown className="w-4 h-4 text-red-600" />;
-      default: return <Activity className="w-4 h-4 text-blue-600" />;
+      case "up":
+        return <ArrowUp className="w-4 h-4 text-green-600" />;
+      case "down":
+        return <ArrowDown className="w-4 h-4 text-red-600" />;
+      default:
+        return <Activity className="w-4 h-4 text-blue-600" />;
     }
   };
 
@@ -213,7 +278,7 @@ export default function AIScore() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -228,7 +293,8 @@ export default function AIScore() {
             </h1>
           </div>
           <p className="text-lg text-jobequal-text-muted dark:text-gray-300 max-w-3xl mx-auto">
-            Deep dive into your profile compatibility with detailed skill analysis and market insights
+            Deep dive into your profile compatibility with detailed skill
+            analysis and market insights
           </p>
         </motion.div>
 
@@ -241,24 +307,44 @@ export default function AIScore() {
         >
           <div className="grid md:grid-cols-4 gap-6 text-center">
             <div className="p-4">
-              <div className="text-4xl font-bold text-jobequal-green mb-2">{selectedJob.matchScore}%</div>
-              <div className="text-sm font-medium text-jobequal-text dark:text-white">Overall Match</div>
-              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">Excellent fit</div>
+              <div className="text-4xl font-bold text-jobequal-green mb-2">
+                {selectedJob.matchScore}%
+              </div>
+              <div className="text-sm font-medium text-jobequal-text dark:text-white">
+                Overall Match
+              </div>
+              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">
+                Excellent fit
+              </div>
             </div>
             <div className="p-4">
               <div className="text-4xl font-bold text-blue-600 mb-2">8/10</div>
-              <div className="text-sm font-medium text-jobequal-text dark:text-white">Skill Match</div>
-              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">Strong alignment</div>
+              <div className="text-sm font-medium text-jobequal-text dark:text-white">
+                Skill Match
+              </div>
+              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">
+                Strong alignment
+              </div>
             </div>
             <div className="p-4">
               <div className="text-4xl font-bold text-purple-600 mb-2">95%</div>
-              <div className="text-sm font-medium text-jobequal-text dark:text-white">Market Fit</div>
-              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">Top percentile</div>
+              <div className="text-sm font-medium text-jobequal-text dark:text-white">
+                Market Fit
+              </div>
+              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">
+                Top percentile
+              </div>
             </div>
             <div className="p-4">
-              <div className="text-4xl font-bold text-orange-600 mb-2">+15%</div>
-              <div className="text-sm font-medium text-jobequal-text dark:text-white">Salary Potential</div>
-              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">Above average</div>
+              <div className="text-4xl font-bold text-orange-600 mb-2">
+                +15%
+              </div>
+              <div className="text-sm font-medium text-jobequal-text dark:text-white">
+                Salary Potential
+              </div>
+              <div className="text-xs text-jobequal-text-muted dark:text-gray-400 mt-1">
+                Above average
+              </div>
             </div>
           </div>
         </motion.div>
@@ -267,18 +353,22 @@ export default function AIScore() {
         <div className="mb-8">
           <nav className="flex space-x-8 border-b border-gray-200 dark:border-gray-700">
             {[
-              { id: 'overview', label: 'Match Overview', icon: Eye },
-              { id: 'skills', label: 'Skill Analysis', icon: Zap },
-              { id: 'market', label: 'Market Insights', icon: BarChart3 },
-              { id: 'recommendations', label: 'Recommendations', icon: Lightbulb }
+              { id: "overview", label: "Match Overview", icon: Eye },
+              { id: "skills", label: "Skill Analysis", icon: Zap },
+              { id: "market", label: "Market Insights", icon: BarChart3 },
+              {
+                id: "recommendations",
+                label: "Recommendations",
+                icon: Lightbulb,
+              },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
                   activeTab === tab.id
-                    ? 'border-jobequal-green text-jobequal-green'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:border-gray-300'
+                    ? "border-jobequal-green text-jobequal-green"
+                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-jobequal-text dark:hover:text-white hover:border-gray-300"
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -290,7 +380,7 @@ export default function AIScore() {
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
-          {activeTab === 'overview' && (
+          {activeTab === "overview" && (
             <motion.div
               key="overview"
               initial={{ opacity: 0, y: 20 }}
@@ -310,7 +400,9 @@ export default function AIScore() {
                         <h3 className="text-2xl font-bold text-jobequal-text dark:text-white mb-1">
                           {selectedJob.title}
                         </h3>
-                        <p className="text-jobequal-green font-medium text-lg mb-2">{selectedJob.company}</p>
+                        <p className="text-jobequal-green font-medium text-lg mb-2">
+                          {selectedJob.company}
+                        </p>
                         <div className="flex items-center space-x-4 text-sm text-jobequal-text-muted dark:text-gray-400">
                           <div className="flex items-center">
                             <MapPin className="w-4 h-4 mr-1" />
@@ -324,30 +416,51 @@ export default function AIScore() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-bold text-jobequal-green mb-1">{selectedJob.matchScore}%</div>
-                      <div className="text-sm text-jobequal-text-muted dark:text-gray-400">Match Score</div>
+                      <div className="text-3xl font-bold text-jobequal-green mb-1">
+                        {selectedJob.matchScore}%
+                      </div>
+                      <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                        Match Score
+                      </div>
                     </div>
                   </div>
 
                   {/* Skill Requirements */}
                   <div className="mb-6">
-                    <h4 className="font-semibold text-jobequal-text dark:text-white mb-4">Skill Requirements</h4>
+                    <h4 className="font-semibold text-jobequal-text dark:text-white mb-4">
+                      Skill Requirements
+                    </h4>
                     <div className="space-y-3">
                       {selectedJob.requirements.map((req, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                        >
                           <div className="flex items-center space-x-3">
-                            <div className={`w-3 h-3 rounded-full ${req.match ? 'bg-green-500' : 'bg-red-500'}`} />
-                            <span className="font-medium text-jobequal-text dark:text-white">{req.skill}</span>
+                            <div
+                              className={`w-3 h-3 rounded-full ${req.match ? "bg-green-500" : "bg-red-500"}`}
+                            />
+                            <span className="font-medium text-jobequal-text dark:text-white">
+                              {req.skill}
+                            </span>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
-                              Your level: <span className="font-medium">{req.userLevel}%</span>
+                              Your level:{" "}
+                              <span className="font-medium">
+                                {req.userLevel}%
+                              </span>
                             </div>
                             <div className="text-sm text-jobequal-text-muted dark:text-gray-400">
-                              Required: <span className="font-medium">{req.requiredLevel}%</span>
+                              Required:{" "}
+                              <span className="font-medium">
+                                {req.requiredLevel}%
+                              </span>
                             </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${getSkillColor(req.userLevel, req.requiredLevel)}`}>
-                              {req.match ? 'Match' : 'Gap'}
+                            <div
+                              className={`px-3 py-1 rounded-full text-xs font-medium ${getSkillColor(req.userLevel, req.requiredLevel)}`}
+                            >
+                              {req.match ? "Match" : "Gap"}
                             </div>
                           </div>
                         </div>
@@ -380,7 +493,10 @@ export default function AIScore() {
                   </h4>
                   <ul className="space-y-2">
                     {selectedJob.strengths.map((strength, index) => (
-                      <li key={index} className="text-sm text-green-700 dark:text-green-300 flex items-start">
+                      <li
+                        key={index}
+                        className="text-sm text-green-700 dark:text-green-300 flex items-start"
+                      >
                         <Star className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                         {strength}
                       </li>
@@ -396,7 +512,10 @@ export default function AIScore() {
                   </h4>
                   <ul className="space-y-2">
                     {selectedJob.improvements.map((improvement, index) => (
-                      <li key={index} className="text-sm text-blue-700 dark:text-blue-300 flex items-start">
+                      <li
+                        key={index}
+                        className="text-sm text-blue-700 dark:text-blue-300 flex items-start"
+                      >
                         <ArrowUp className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                         {improvement}
                       </li>
@@ -410,7 +529,7 @@ export default function AIScore() {
             </motion.div>
           )}
 
-          {activeTab === 'skills' && (
+          {activeTab === "skills" && (
             <motion.div
               key="skills"
               initial={{ opacity: 0, y: 20 }}
@@ -419,24 +538,38 @@ export default function AIScore() {
               className="space-y-8"
             >
               {skillAnalysis.map((category, categoryIndex) => (
-                <div key={categoryIndex} className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg">
-                  <h3 className="text-xl font-bold text-jobequal-text dark:text-white mb-6">{category.category}</h3>
+                <div
+                  key={categoryIndex}
+                  className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg"
+                >
+                  <h3 className="text-xl font-bold text-jobequal-text dark:text-white mb-6">
+                    {category.category}
+                  </h3>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {category.skills.map((skill, index) => (
-                      <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                      <div
+                        key={index}
+                        className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl"
+                      >
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-jobequal-text dark:text-white">{skill.name}</h4>
+                          <h4 className="font-semibold text-jobequal-text dark:text-white">
+                            {skill.name}
+                          </h4>
                           {getTrendIcon(skill.trend)}
                         </div>
-                        
+
                         <div className="space-y-3">
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-jobequal-text-muted dark:text-gray-400">Your Level</span>
-                              <span className="font-medium">{skill.userLevel}%</span>
+                              <span className="text-jobequal-text-muted dark:text-gray-400">
+                                Your Level
+                              </span>
+                              <span className="font-medium">
+                                {skill.userLevel}%
+                              </span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                              <div 
+                              <div
                                 className="bg-jobequal-green h-2 rounded-full transition-all duration-500"
                                 style={{ width: `${skill.userLevel}%` }}
                               />
@@ -445,11 +578,15 @@ export default function AIScore() {
 
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-jobequal-text-muted dark:text-gray-400">Market Demand</span>
-                              <span className="font-medium">{skill.marketDemand}%</span>
+                              <span className="text-jobequal-text-muted dark:text-gray-400">
+                                Market Demand
+                              </span>
+                              <span className="font-medium">
+                                {skill.marketDemand}%
+                              </span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                              <div 
+                              <div
                                 className="bg-blue-500 h-2 rounded-full transition-all duration-500"
                                 style={{ width: `${skill.marketDemand}%` }}
                               />
@@ -458,11 +595,15 @@ export default function AIScore() {
 
                           <div>
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-jobequal-text-muted dark:text-gray-400">Salary Impact</span>
-                              <span className="font-medium">{skill.salaryImpact}%</span>
+                              <span className="text-jobequal-text-muted dark:text-gray-400">
+                                Salary Impact
+                              </span>
+                              <span className="font-medium">
+                                {skill.salaryImpact}%
+                              </span>
                             </div>
                             <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                              <div 
+                              <div
                                 className="bg-purple-500 h-2 rounded-full transition-all duration-500"
                                 style={{ width: `${skill.salaryImpact}%` }}
                               />
@@ -477,7 +618,7 @@ export default function AIScore() {
             </motion.div>
           )}
 
-          {activeTab === 'market' && (
+          {activeTab === "market" && (
             <motion.div
               key="market"
               initial={{ opacity: 0, y: 20 }}
@@ -486,16 +627,30 @@ export default function AIScore() {
               className="grid md:grid-cols-3 gap-6"
             >
               {marketInsights.map((insight, index) => (
-                <div key={index} className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${insight.color}`}>
+                <div
+                  key={index}
+                  className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg"
+                >
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${insight.color}`}
+                  >
                     <insight.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-2">{insight.title}</h3>
-                  <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-4">{insight.description}</p>
+                  <h3 className="text-lg font-bold text-jobequal-text dark:text-white mb-2">
+                    {insight.title}
+                  </h3>
+                  <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-4">
+                    {insight.description}
+                  </p>
                   <div className="space-y-2">
                     {insight.skills.map((skill, skillIndex) => (
-                      <div key={skillIndex} className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                        <span className="text-sm font-medium text-jobequal-text dark:text-white">{skill}</span>
+                      <div
+                        key={skillIndex}
+                        className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      >
+                        <span className="text-sm font-medium text-jobequal-text dark:text-white">
+                          {skill}
+                        </span>
                         <ChevronRight className="w-4 h-4 text-jobequal-text-muted dark:text-gray-400" />
                       </div>
                     ))}
@@ -505,7 +660,7 @@ export default function AIScore() {
             </motion.div>
           )}
 
-          {activeTab === 'recommendations' && (
+          {activeTab === "recommendations" && (
             <motion.div
               key="recommendations"
               initial={{ opacity: 0, y: 20 }}
@@ -521,15 +676,33 @@ export default function AIScore() {
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-jobequal-text dark:text-white">Priority Skills</h4>
-                    {['AWS Certification', 'Docker Fundamentals', 'Advanced TypeScript'].map((course, index) => (
-                      <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <h4 className="font-semibold text-jobequal-text dark:text-white">
+                      Priority Skills
+                    </h4>
+                    {[
+                      "AWS Certification",
+                      "Docker Fundamentals",
+                      "Advanced TypeScript",
+                    ].map((course, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                      >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-jobequal-text dark:text-white">{course}</span>
-                          <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-2 py-1 rounded-full">High Impact</span>
+                          <span className="font-medium text-jobequal-text dark:text-white">
+                            {course}
+                          </span>
+                          <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 px-2 py-1 rounded-full">
+                            High Impact
+                          </span>
                         </div>
                         <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
-                          Estimated time: {index === 0 ? '40 hours' : index === 1 ? '20 hours' : '30 hours'}
+                          Estimated time:{" "}
+                          {index === 0
+                            ? "40 hours"
+                            : index === 1
+                              ? "20 hours"
+                              : "30 hours"}
                         </p>
                         <button className="w-full bg-jobequal-green hover:bg-jobequal-green-hover text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                           Start Learning
@@ -538,21 +711,37 @@ export default function AIScore() {
                     ))}
                   </div>
                   <div className="space-y-4">
-                    <h4 className="font-semibold text-jobequal-text dark:text-white">Bonus Skills</h4>
-                    {['Kubernetes Basics', 'GraphQL', 'System Design'].map((course, index) => (
-                      <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium text-jobequal-text dark:text-white">{course}</span>
-                          <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">Nice to Have</span>
+                    <h4 className="font-semibold text-jobequal-text dark:text-white">
+                      Bonus Skills
+                    </h4>
+                    {["Kubernetes Basics", "GraphQL", "System Design"].map(
+                      (course, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium text-jobequal-text dark:text-white">
+                              {course}
+                            </span>
+                            <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
+                              Nice to Have
+                            </span>
+                          </div>
+                          <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
+                            Estimated time:{" "}
+                            {index === 0
+                              ? "25 hours"
+                              : index === 1
+                                ? "15 hours"
+                                : "35 hours"}
+                          </p>
+                          <button className="w-full border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                            Explore
+                          </button>
                         </div>
-                        <p className="text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
-                          Estimated time: {index === 0 ? '25 hours' : index === 1 ? '15 hours' : '35 hours'}
-                        </p>
-                        <button className="w-full border border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                          Explore
-                        </button>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -565,19 +754,39 @@ export default function AIScore() {
                 </h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   {[
-                    { role: 'Tech Lead', timeline: '6-12 months', requirements: ['Leadership', 'Architecture'] },
-                    { role: 'Staff Engineer', timeline: '1-2 years', requirements: ['System Design', 'Mentoring'] },
-                    { role: 'Engineering Manager', timeline: '1-3 years', requirements: ['People Management', 'Strategy'] }
+                    {
+                      role: "Tech Lead",
+                      timeline: "6-12 months",
+                      requirements: ["Leadership", "Architecture"],
+                    },
+                    {
+                      role: "Staff Engineer",
+                      timeline: "1-2 years",
+                      requirements: ["System Design", "Mentoring"],
+                    },
+                    {
+                      role: "Engineering Manager",
+                      timeline: "1-3 years",
+                      requirements: ["People Management", "Strategy"],
+                    },
                   ].map((path, index) => (
-                    <div key={index} className="p-4 bg-gradient-to-br from-jobequal-green/10 to-jobequal-teal/10 rounded-xl border border-jobequal-green/20">
-                      <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">{path.role}</h4>
+                    <div
+                      key={index}
+                      className="p-4 bg-gradient-to-br from-jobequal-green/10 to-jobequal-teal/10 rounded-xl border border-jobequal-green/20"
+                    >
+                      <h4 className="font-semibold text-jobequal-text dark:text-white mb-2">
+                        {path.role}
+                      </h4>
                       <div className="flex items-center text-sm text-jobequal-text-muted dark:text-gray-400 mb-3">
                         <Calendar className="w-4 h-4 mr-1" />
                         {path.timeline}
                       </div>
                       <div className="space-y-1 mb-4">
                         {path.requirements.map((req, reqIndex) => (
-                          <div key={reqIndex} className="text-xs bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green px-2 py-1 rounded-full inline-block mr-1">
+                          <div
+                            key={reqIndex}
+                            className="text-xs bg-jobequal-green-light dark:bg-jobequal-green/20 text-jobequal-green-dark dark:text-jobequal-green px-2 py-1 rounded-full inline-block mr-1"
+                          >
                             {req}
                           </div>
                         ))}

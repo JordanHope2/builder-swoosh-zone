@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useLanguage } from '../contexts/LanguageContext';
-import { 
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
   Heart,
   Briefcase,
   User,
@@ -16,41 +16,44 @@ import {
   Filter,
   SortAsc,
   SortDesc,
-  X
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  X,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Favorites() {
-  const { favorites, removeFromFavorites, clearFavorites, getFavoritesByType } = useFavorites();
+  const { favorites, removeFromFavorites, clearFavorites, getFavoritesByType } =
+    useFavorites();
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'jobs' | 'profiles'>('jobs');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'date' | 'title' | 'company'>('date');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [activeTab, setActiveTab] = useState<"jobs" | "profiles">("jobs");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"date" | "title" | "company">("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const favoriteJobs = getFavoritesByType('job');
-  const favoriteProfiles = getFavoritesByType('profile');
-  const currentFavorites = activeTab === 'jobs' ? favoriteJobs : favoriteProfiles;
+  const favoriteJobs = getFavoritesByType("job");
+  const favoriteProfiles = getFavoritesByType("profile");
+  const currentFavorites =
+    activeTab === "jobs" ? favoriteJobs : favoriteProfiles;
 
   const filteredFavorites = currentFavorites
-    .filter(item => 
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.location.toLowerCase().includes(searchQuery.toLowerCase())
+    .filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.location.toLowerCase().includes(searchQuery.toLowerCase()),
     )
     .sort((a, b) => {
       let aValue: any, bValue: any;
-      
+
       switch (sortBy) {
-        case 'date':
+        case "date":
           aValue = a.dateAdded.getTime();
           bValue = b.dateAdded.getTime();
           break;
-        case 'title':
+        case "title":
           aValue = a.title.toLowerCase();
           bValue = b.title.toLowerCase();
           break;
-        case 'company':
+        case "company":
           aValue = a.company.toLowerCase();
           bValue = b.company.toLowerCase();
           break;
@@ -58,7 +61,7 @@ export default function Favorites() {
           return 0;
       }
 
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -66,10 +69,10 @@ export default function Favorites() {
     });
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     }).format(date);
   };
 
@@ -79,19 +82,19 @@ export default function Favorites() {
     removeFromFavorites(id);
   };
 
-  const toggleSort = (field: 'date' | 'title' | 'company') => {
+  const toggleSort = (field: "date" | "title" | "company") => {
     if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortBy(field);
-      setSortOrder('desc');
+      setSortOrder("desc");
     }
   };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <Navigation />
-      
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -119,22 +122,22 @@ export default function Favorites() {
         >
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-2 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg">
             <button
-              onClick={() => setActiveTab('jobs')}
+              onClick={() => setActiveTab("jobs")}
               className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                activeTab === 'jobs'
-                  ? 'bg-jobequal-green text-white shadow-lg'
-                  : 'text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
+                activeTab === "jobs"
+                  ? "bg-jobequal-green text-white shadow-lg"
+                  : "text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               <Briefcase className="w-5 h-5" />
               <span>Jobs ({favoriteJobs.length})</span>
             </button>
             <button
-              onClick={() => setActiveTab('profiles')}
+              onClick={() => setActiveTab("profiles")}
               className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                activeTab === 'profiles'
-                  ? 'bg-jobequal-green text-white shadow-lg'
-                  : 'text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700'
+                activeTab === "profiles"
+                  ? "bg-jobequal-green text-white shadow-lg"
+                  : "text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
               <User className="w-5 h-5" />
@@ -164,7 +167,7 @@ export default function Favorites() {
                   />
                   {searchQuery && (
                     <button
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => setSearchQuery("")}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
                       <X className="w-4 h-4" />
@@ -172,36 +175,59 @@ export default function Favorites() {
                   )}
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-jobequal-text-muted dark:text-gray-400">Sort by:</span>
+                <span className="text-sm text-jobequal-text-muted dark:text-gray-400">
+                  Sort by:
+                </span>
                 <button
-                  onClick={() => toggleSort('date')}
+                  onClick={() => toggleSort("date")}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                    sortBy === 'date' ? 'bg-jobequal-green text-white' : 'bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white'
+                    sortBy === "date"
+                      ? "bg-jobequal-green text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white"
                   }`}
                 >
                   <Calendar className="w-4 h-4" />
                   <span>Date</span>
-                  {sortBy === 'date' && (sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />)}
+                  {sortBy === "date" &&
+                    (sortOrder === "asc" ? (
+                      <SortAsc className="w-4 h-4" />
+                    ) : (
+                      <SortDesc className="w-4 h-4" />
+                    ))}
                 </button>
                 <button
-                  onClick={() => toggleSort('title')}
+                  onClick={() => toggleSort("title")}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                    sortBy === 'title' ? 'bg-jobequal-green text-white' : 'bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white'
+                    sortBy === "title"
+                      ? "bg-jobequal-green text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white"
                   }`}
                 >
                   <span>Title</span>
-                  {sortBy === 'title' && (sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />)}
+                  {sortBy === "title" &&
+                    (sortOrder === "asc" ? (
+                      <SortAsc className="w-4 h-4" />
+                    ) : (
+                      <SortDesc className="w-4 h-4" />
+                    ))}
                 </button>
                 <button
-                  onClick={() => toggleSort('company')}
+                  onClick={() => toggleSort("company")}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                    sortBy === 'company' ? 'bg-jobequal-green text-white' : 'bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white'
+                    sortBy === "company"
+                      ? "bg-jobequal-green text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-jobequal-text dark:text-white"
                   }`}
                 >
                   <span>Company</span>
-                  {sortBy === 'company' && (sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />)}
+                  {sortBy === "company" &&
+                    (sortOrder === "asc" ? (
+                      <SortAsc className="w-4 h-4" />
+                    ) : (
+                      <SortDesc className="w-4 h-4" />
+                    ))}
                 </button>
               </div>
 
@@ -228,20 +254,23 @@ export default function Favorites() {
             >
               <Heart className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-jobequal-text dark:text-white mb-2">
-                {searchQuery ? 'No matching favorites found' : `No ${activeTab} saved yet`}
+                {searchQuery
+                  ? "No matching favorites found"
+                  : `No ${activeTab} saved yet`}
               </h3>
               <p className="text-jobequal-text-muted dark:text-gray-400 mb-6">
-                {searchQuery 
-                  ? 'Try adjusting your search terms'
-                  : `Start browsing and click the heart icon to save ${activeTab} you're interested in`
-                }
+                {searchQuery
+                  ? "Try adjusting your search terms"
+                  : `Start browsing and click the heart icon to save ${activeTab} you're interested in`}
               </p>
               {!searchQuery && (
                 <Link
-                  to={activeTab === 'jobs' ? '/job-search' : '/companies'}
+                  to={activeTab === "jobs" ? "/job-search" : "/companies"}
                   className="inline-flex items-center space-x-2 bg-jobequal-green hover:bg-jobequal-green-hover text-white px-6 py-3 rounded-xl font-medium transition-colors"
                 >
-                  <span>Browse {activeTab === 'jobs' ? 'Jobs' : 'Profiles'}</span>
+                  <span>
+                    Browse {activeTab === "jobs" ? "Jobs" : "Profiles"}
+                  </span>
                   <ExternalLink className="w-4 h-4" />
                 </Link>
               )}
@@ -275,7 +304,7 @@ export default function Favorites() {
                           <Heart className="w-5 h-5 fill-current" />
                         </button>
                       </div>
-                      
+
                       <div className="flex flex-wrap items-center gap-4 text-sm text-jobequal-text-muted dark:text-gray-400 mb-4">
                         <div className="flex items-center">
                           <MapPin className="w-4 h-4 mr-1" />
@@ -295,7 +324,11 @@ export default function Favorites() {
 
                       <div className="flex items-center space-x-4">
                         <Link
-                          to={favorite.type === 'job' ? `/job/${favorite.id}` : `/company/${favorite.id}`}
+                          to={
+                            favorite.type === "job"
+                              ? `/job/${favorite.id}`
+                              : `/company/${favorite.id}`
+                          }
                           className="flex items-center space-x-2 bg-jobequal-green hover:bg-jobequal-green-hover text-white px-4 py-2 rounded-lg font-medium transition-colors"
                         >
                           <span>View Details</span>

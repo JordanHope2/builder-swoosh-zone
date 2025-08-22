@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+import { supabase } from "../lib/supabase";
 
 export interface CVAnalysisResult {
   overallScore: number;
@@ -36,7 +36,9 @@ export interface CVData {
 }
 
 class AIAnalysisService {
-  private readonly OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY || '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';
+  private readonly OPENAI_API_KEY =
+    import.meta.env.VITE_OPENAI_API_KEY ||
+    "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";
 
   async analyzeCVWithAI(cvData: CVData): Promise<CVAnalysisResult> {
     try {
@@ -47,14 +49,17 @@ class AIAnalysisService {
       let jobs: any[] = [];
       try {
         const { data: jobsData } = await supabase
-          .from('jobs')
-          .select('id, title, description, requirements')
-          .eq('status', 'published')
+          .from("jobs")
+          .select("id, title, description, requirements")
+          .eq("status", "published")
           .limit(10);
 
         jobs = jobsData || [];
       } catch (dbError) {
-        console.warn('Could not fetch jobs for compatibility analysis:', dbError);
+        console.warn(
+          "Could not fetch jobs for compatibility analysis:",
+          dbError,
+        );
         jobs = [];
       }
 
@@ -65,13 +70,13 @@ class AIAnalysisService {
       try {
         await this.saveAnalysisResults(cvData.userId, analysis);
       } catch (saveError) {
-        console.warn('Could not save analysis results:', saveError);
+        console.warn("Could not save analysis results:", saveError);
         // Continue without saving - don't fail the entire operation
       }
 
       return analysis;
     } catch (error) {
-      console.warn('CV Analysis Error, using fallback:', error);
+      console.warn("CV Analysis Error, using fallback:", error);
 
       // Return fallback analysis if everything fails
       return this.generateFallbackAnalysis(cvData);
@@ -80,11 +85,11 @@ class AIAnalysisService {
 
   private async extractTextFromCV(cvData: CVData): Promise<string> {
     try {
-      if (cvData.fileType === 'application/pdf') {
+      if (cvData.fileType === "application/pdf") {
         // For production, you would use a PDF parsing library
         // For now, return a simulated extraction
         return this.simulatePDFExtraction(cvData.fileName);
-      } else if (cvData.fileType.includes('word')) {
+      } else if (cvData.fileType.includes("word")) {
         // Handle Word documents
         return this.simulateWordExtraction(cvData.fileName);
       } else {
@@ -92,7 +97,7 @@ class AIAnalysisService {
         return cvData.fileContent;
       }
     } catch (error) {
-      console.error('Text extraction error:', error);
+      console.error("Text extraction error:", error);
       return cvData.fileName; // Fallback to filename analysis
     }
   }
@@ -143,49 +148,59 @@ class AIAnalysisService {
     return this.simulatePDFExtraction(fileName);
   }
 
-  private async performAIAnalysis(cvText: string, jobs: any[]): Promise<CVAnalysisResult> {
+  private async performAIAnalysis(
+    cvText: string,
+    jobs: any[],
+  ): Promise<CVAnalysisResult> {
     try {
       // Check if API key is available
-      if (!this.OPENAI_API_KEY || this.OPENAI_API_KEY === 'your-openai-api-key-here') {
-        console.warn('OpenAI API key not configured, using fallback analysis');
+      if (
+        !this.OPENAI_API_KEY ||
+        this.OPENAI_API_KEY === "your-openai-api-key-here"
+      ) {
+        console.warn("OpenAI API key not configured, using fallback analysis");
         return this.generateSmartFallbackAnalysis(cvText, jobs);
       }
 
       const prompt = this.createAnalysisPrompt(cvText, jobs);
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.OPENAI_API_KEY}`,
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.OPENAI_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini", // Using more affordable model
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are an expert HR analyst and career advisor. Analyze CVs and provide detailed, actionable feedback.",
+              },
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            temperature: 0.3,
+            max_tokens: 2000,
+          }),
         },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini', // Using more affordable model
-          messages: [
-            {
-              role: 'system',
-              content: 'You are an expert HR analyst and career advisor. Analyze CVs and provide detailed, actionable feedback.'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: 0.3,
-          max_tokens: 2000
-        })
-      });
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.warn('OpenAI API request failed:', response.status, errorText);
+        console.warn("OpenAI API request failed:", response.status, errorText);
         return this.generateSmartFallbackAnalysis(cvText, jobs);
       }
 
       const result = await response.json();
 
       if (!result.choices || !result.choices[0] || !result.choices[0].message) {
-        console.warn('Invalid OpenAI API response structure');
+        console.warn("Invalid OpenAI API response structure");
         return this.generateSmartFallbackAnalysis(cvText, jobs);
       }
 
@@ -193,14 +208,16 @@ class AIAnalysisService {
 
       return this.parseAIResponse(analysisText, jobs);
     } catch (error) {
-      console.warn('AI Analysis Error, using fallback:', error);
+      console.warn("AI Analysis Error, using fallback:", error);
       return this.generateSmartFallbackAnalysis(cvText, jobs);
     }
   }
 
   private createAnalysisPrompt(cvText: string, jobs: any[]): string {
-    const jobsText = jobs.map(job => `Job ${job.id}: ${job.title} - ${job.description}`).join('\n');
-    
+    const jobsText = jobs
+      .map((job) => `Job ${job.id}: ${job.title} - ${job.description}`)
+      .join("\n");
+
     return `
       Analyze this CV and provide a comprehensive assessment:
       
@@ -252,65 +269,74 @@ class AIAnalysisService {
         return parsed;
       }
     } catch (error) {
-      console.error('Failed to parse AI response:', error);
+      console.error("Failed to parse AI response:", error);
     }
-    
+
     // Fallback parsing if JSON fails
     return this.generateSmartFallbackAnalysis(analysisText, jobs);
   }
 
-  private generateSmartFallbackAnalysis(cvText: string, jobs: any[]): CVAnalysisResult {
+  private generateSmartFallbackAnalysis(
+    cvText: string,
+    jobs: any[],
+  ): CVAnalysisResult {
     // Extract actual information from CV text for better fallback analysis
     const extractedSkills = this.extractSkills(cvText);
     const estimatedExperience = this.estimateExperience(cvText);
     const education = this.extractEducation(cvText);
 
-    const matchedSkills = extractedSkills.slice(0, Math.min(extractedSkills.length, 5));
-    const overallScore = Math.min(Math.max(40 + (matchedSkills.length * 8) + (estimatedExperience * 2), 50), 95);
+    const matchedSkills = extractedSkills.slice(
+      0,
+      Math.min(extractedSkills.length, 5),
+    );
+    const overallScore = Math.min(
+      Math.max(40 + matchedSkills.length * 8 + estimatedExperience * 2, 50),
+      95,
+    );
 
     return {
       overallScore,
       skillsMatch: {
         matched: matchedSkills,
-        missing: ['AI/ML', 'Cloud Architecture', 'DevOps'],
-        score: Math.min(60 + (matchedSkills.length * 8), 90)
+        missing: ["AI/ML", "Cloud Architecture", "DevOps"],
+        score: Math.min(60 + matchedSkills.length * 8, 90),
       },
       experienceAnalysis: {
         yearsOfExperience: estimatedExperience,
         relevantExperience: Math.max(1, Math.floor(estimatedExperience * 0.7)),
-        score: Math.min(50 + (estimatedExperience * 5), 90)
+        score: Math.min(50 + estimatedExperience * 5, 90),
       },
       educationAnalysis: {
         degree: education,
         relevance: 85,
-        score: 80
+        score: 80,
       },
       recommendations: [
-        'Consider highlighting more specific technical achievements',
-        'Add quantifiable results to your experience',
-        'Include relevant certifications or training',
-        'Customize your CV for Swiss market standards'
+        "Consider highlighting more specific technical achievements",
+        "Add quantifiable results to your experience",
+        "Include relevant certifications or training",
+        "Customize your CV for Swiss market standards",
       ],
       improvementAreas: [
-        'Add more specific project outcomes',
-        'Include technology stack details',
-        'Highlight leadership experience'
+        "Add more specific project outcomes",
+        "Include technology stack details",
+        "Highlight leadership experience",
       ],
       strengths: [
-        'Solid technical background',
-        'Professional experience in relevant field',
-        'Good educational foundation'
+        "Solid technical background",
+        "Professional experience in relevant field",
+        "Good educational foundation",
       ],
       compatibilityWithJobs: jobs.slice(0, 3).map((job, index) => ({
         jobId: job.id,
         jobTitle: job.title,
-        compatibilityScore: Math.max(60 - (index * 8), 45),
+        compatibilityScore: Math.max(60 - index * 8, 45),
         reasons: [
-          'Skills alignment with requirements',
-          'Experience level matches expectations',
-          'Background fits company culture'
-        ]
-      }))
+          "Skills alignment with requirements",
+          "Experience level matches expectations",
+          "Background fits company culture",
+        ],
+      })),
     };
   }
 
@@ -318,53 +344,66 @@ class AIAnalysisService {
     return {
       overallScore: 70,
       skillsMatch: {
-        matched: ['JavaScript', 'React', 'Node.js'],
-        missing: ['Python', 'Machine Learning'],
-        score: 65
+        matched: ["JavaScript", "React", "Node.js"],
+        missing: ["Python", "Machine Learning"],
+        score: 65,
       },
       experienceAnalysis: {
         yearsOfExperience: 5,
         relevantExperience: 3,
-        score: 70
+        score: 70,
       },
       educationAnalysis: {
-        degree: 'Computer Science',
+        degree: "Computer Science",
         relevance: 90,
-        score: 85
+        score: 85,
       },
       recommendations: [
-        'Upload your CV for detailed AI analysis',
-        'Consider adding more technical projects',
-        'Highlight specific achievements with metrics'
+        "Upload your CV for detailed AI analysis",
+        "Consider adding more technical projects",
+        "Highlight specific achievements with metrics",
       ],
       improvementAreas: [
-        'Technical skills could be more comprehensive',
-        'Add more project details'
+        "Technical skills could be more comprehensive",
+        "Add more project details",
       ],
-      strengths: [
-        'Good technical foundation',
-        'Relevant experience'
-      ],
-      compatibilityWithJobs: []
+      strengths: ["Good technical foundation", "Relevant experience"],
+      compatibilityWithJobs: [],
     };
   }
 
   private extractSkills(text: string): string[] {
     const skillKeywords = [
-      'JavaScript', 'React', 'Node.js', 'Python', 'Java', 'TypeScript',
-      'Angular', 'Vue.js', 'Docker', 'Kubernetes', 'AWS', 'Azure',
-      'PostgreSQL', 'MongoDB', 'Git', 'Agile', 'Scrum'
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Python",
+      "Java",
+      "TypeScript",
+      "Angular",
+      "Vue.js",
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "Azure",
+      "PostgreSQL",
+      "MongoDB",
+      "Git",
+      "Agile",
+      "Scrum",
     ];
-    
-    return skillKeywords.filter(skill => 
-      text.toLowerCase().includes(skill.toLowerCase())
+
+    return skillKeywords.filter((skill) =>
+      text.toLowerCase().includes(skill.toLowerCase()),
     );
   }
 
   private estimateExperience(text: string): number {
     const yearMatches = text.match(/(\d{4})/g);
     if (yearMatches) {
-      const years = yearMatches.map(y => parseInt(y)).filter(y => y > 2000 && y <= new Date().getFullYear());
+      const years = yearMatches
+        .map((y) => parseInt(y))
+        .filter((y) => y > 2000 && y <= new Date().getFullYear());
       const minYear = Math.min(...years);
       const currentYear = new Date().getFullYear();
       return Math.max(currentYear - minYear, 0);
@@ -373,9 +412,14 @@ class AIAnalysisService {
   }
 
   private extractEducation(text: string): string {
-    const degrees = ['PhD', 'Master', 'Bachelor', 'Associate'];
-    const fields = ['Computer Science', 'Engineering', 'Mathematics', 'Business'];
-    
+    const degrees = ["PhD", "Master", "Bachelor", "Associate"];
+    const fields = [
+      "Computer Science",
+      "Engineering",
+      "Mathematics",
+      "Business",
+    ];
+
     for (const degree of degrees) {
       if (text.includes(degree)) {
         for (const field of fields) {
@@ -386,36 +430,40 @@ class AIAnalysisService {
         return degree;
       }
     }
-    return 'Professional Background';
+    return "Professional Background";
   }
 
-  private async saveAnalysisResults(userId: string, analysis: CVAnalysisResult) {
+  private async saveAnalysisResults(
+    userId: string,
+    analysis: CVAnalysisResult,
+  ) {
     try {
-      await supabase
-        .from('cv_analyses')
-        .insert({
-          user_id: userId,
-          analysis_data: analysis,
-          created_at: new Date().toISOString()
-        });
+      await supabase.from("cv_analyses").insert({
+        user_id: userId,
+        analysis_data: analysis,
+        created_at: new Date().toISOString(),
+      });
     } catch (error) {
-      console.error('Failed to save analysis results:', error);
+      console.error("Failed to save analysis results:", error);
     }
   }
 
   async getAnalysisHistory(userId: string) {
     try {
       const { data, error } = await supabase
-        .from('cv_analyses')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false });
+        .from("cv_analyses")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
       if (error) throw error;
       return { success: true, analyses: data };
     } catch (error) {
-      console.error('Failed to get analysis history:', error);
-      return { success: false, error: error instanceof Error ? error.message : 'Failed to get history' };
+      console.error("Failed to get analysis history:", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to get history",
+      };
     }
   }
 }

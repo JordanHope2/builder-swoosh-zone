@@ -1,13 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from 'framer-motion';
-import { 
-  Heart, 
-  X, 
-  RotateCcw, 
-  Star, 
-  MapPin, 
-  Clock, 
-  Building, 
+import React, { useState, useRef, useEffect } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useTransform,
+  PanInfo,
+} from "framer-motion";
+import {
+  Heart,
+  X,
+  RotateCcw,
+  Star,
+  MapPin,
+  Clock,
+  Building,
   DollarSign,
   Zap,
   Target,
@@ -15,11 +21,11 @@ import {
   ArrowUp,
   ArrowDown,
   Sparkles,
-  TrendingUp
-} from 'lucide-react';
-import { useJobs } from '../contexts/JobsContext';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useAppData } from '../hooks/useAppData';
+  TrendingUp,
+} from "lucide-react";
+import { useJobs } from "../contexts/JobsContext";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useAppData } from "../hooks/useAppData";
 
 interface SwipeableJob {
   id: string;
@@ -39,50 +45,58 @@ interface SwipeableJob {
 
 const mockSwipeJobs: SwipeableJob[] = [
   {
-    id: '1',
-    title: 'Senior React Developer',
-    company: 'TechCorp Zurich',
-    location: 'Zurich, Switzerland',
-    salary: 'CHF 120,000 - 140,000',
-    type: 'Full-time',
-    description: 'Join our innovative team building next-generation financial technology solutions using React, TypeScript, and modern cloud technologies.',
-    logo: '🚀',
+    id: "1",
+    title: "Senior React Developer",
+    company: "TechCorp Zurich",
+    location: "Zurich, Switzerland",
+    salary: "CHF 120,000 - 140,000",
+    type: "Full-time",
+    description:
+      "Join our innovative team building next-generation financial technology solutions using React, TypeScript, and modern cloud technologies.",
+    logo: "🚀",
     matchScore: 95,
-    tags: ['React', 'TypeScript', 'Node.js', 'AWS'],
-    benefits: ['Remote Work', 'Health Insurance', 'Stock Options', '30 Days Vacation'],
+    tags: ["React", "TypeScript", "Node.js", "AWS"],
+    benefits: [
+      "Remote Work",
+      "Health Insurance",
+      "Stock Options",
+      "30 Days Vacation",
+    ],
     remote: true,
-    featured: true
+    featured: true,
   },
   {
-    id: '2',
-    title: 'UX/UI Designer',
-    company: 'DesignHub Geneva',
-    location: 'Geneva, Switzerland',
-    salary: 'CHF 90,000 - 110,000',
-    type: 'Full-time',
-    description: 'Create beautiful and intuitive user experiences for web and mobile applications in our creative team.',
-    logo: '🎨',
+    id: "2",
+    title: "UX/UI Designer",
+    company: "DesignHub Geneva",
+    location: "Geneva, Switzerland",
+    salary: "CHF 90,000 - 110,000",
+    type: "Full-time",
+    description:
+      "Create beautiful and intuitive user experiences for web and mobile applications in our creative team.",
+    logo: "🎨",
     matchScore: 87,
-    tags: ['Figma', 'UI Design', 'Prototyping', 'User Research'],
-    benefits: ['Flexible Hours', 'Design Budget', 'Conferences', 'Mentorship'],
+    tags: ["Figma", "UI Design", "Prototyping", "User Research"],
+    benefits: ["Flexible Hours", "Design Budget", "Conferences", "Mentorship"],
     remote: false,
-    featured: false
+    featured: false,
   },
   {
-    id: '3',
-    title: 'Data Scientist',
-    company: 'DataDriven Bern',
-    location: 'Bern, Switzerland',
-    salary: 'CHF 100,000 - 120,000',
-    type: 'Full-time',
-    description: 'Analyze complex datasets to drive business insights and growth using machine learning and statistical methods.',
-    logo: '📊',
+    id: "3",
+    title: "Data Scientist",
+    company: "DataDriven Bern",
+    location: "Bern, Switzerland",
+    salary: "CHF 100,000 - 120,000",
+    type: "Full-time",
+    description:
+      "Analyze complex datasets to drive business insights and growth using machine learning and statistical methods.",
+    logo: "📊",
     matchScore: 82,
-    tags: ['Python', 'Machine Learning', 'SQL', 'Statistics'],
-    benefits: ['Research Time', 'Conferences', 'GPU Access', 'Publications'],
+    tags: ["Python", "Machine Learning", "SQL", "Statistics"],
+    benefits: ["Research Time", "Conferences", "GPU Access", "Publications"],
     remote: true,
-    featured: true
-  }
+    featured: true,
+  },
 ];
 
 const EnhancedSwipeDiscovery: React.FC = () => {
@@ -90,44 +104,49 @@ const EnhancedSwipeDiscovery: React.FC = () => {
   const [jobs] = useState<SwipeableJob[]>(mockSwipeJobs);
   const [direction, setDirection] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [actions, setActions] = useState<{ type: 'like' | 'dislike' | 'super', count: number }[]>([
-    { type: 'like', count: 0 },
-    { type: 'dislike', count: 0 },
-    { type: 'super', count: 0 }
+  const [actions, setActions] = useState<
+    { type: "like" | "dislike" | "super"; count: number }[]
+  >([
+    { type: "like", count: 0 },
+    { type: "dislike", count: 0 },
+    { type: "super", count: 0 },
   ]);
-  
+
   const { addToFavorites } = useFavorites();
   const { auth } = useAppData();
   const constraintsRef = useRef(null);
 
   const currentJob = jobs[currentJobIndex];
 
-  const handleSwipe = (dir: number, action: 'like' | 'dislike' | 'super' = dir > 0 ? 'like' : 'dislike') => {
+  const handleSwipe = (
+    dir: number,
+    action: "like" | "dislike" | "super" = dir > 0 ? "like" : "dislike",
+  ) => {
     if (isAnimating) return;
-    
+
     setIsAnimating(true);
     setDirection(dir);
 
     // Update action counts
-    setActions(prev => prev.map(a => 
-      a.type === action ? { ...a, count: a.count + 1 } : a
-    ));
+    setActions((prev) =>
+      prev.map((a) => (a.type === action ? { ...a, count: a.count + 1 } : a)),
+    );
 
     // Add to favorites if liked or super liked
-    if ((action === 'like' || action === 'super') && currentJob) {
+    if ((action === "like" || action === "super") && currentJob) {
       addToFavorites({
         id: currentJob.id,
         title: currentJob.title,
         company: currentJob.company,
         location: currentJob.location,
         salary: currentJob.salary,
-        type: 'job'
+        type: "job",
       });
     }
 
     // Move to next job after animation
     setTimeout(() => {
-      setCurrentJobIndex(prev => (prev + 1) % jobs.length);
+      setCurrentJobIndex((prev) => (prev + 1) % jobs.length);
       setIsAnimating(false);
     }, 300);
   };
@@ -137,22 +156,22 @@ const EnhancedSwipeDiscovery: React.FC = () => {
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
       scale: 0.8,
-      rotate: direction > 0 ? 30 : -30
+      rotate: direction > 0 ? 30 : -30,
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
       scale: 1,
-      rotate: 0
+      rotate: 0,
     },
     exit: (direction: number) => ({
       zIndex: 0,
       x: direction < 0 ? 1000 : -1000,
       opacity: 0,
       scale: 0.8,
-      rotate: direction < 0 ? 30 : -30
-    })
+      rotate: direction < 0 ? 30 : -30,
+    }),
   };
 
   const swipeVariants = {
@@ -160,20 +179,20 @@ const EnhancedSwipeDiscovery: React.FC = () => {
       x: 1000,
       rotate: 30,
       opacity: 0,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
     dislike: {
       x: -1000,
       rotate: -30,
       opacity: 0,
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
     super: {
       y: -1000,
       scale: 1.2,
       opacity: 0,
-      transition: { duration: 0.4 }
-    }
+      transition: { duration: 0.4 },
+    },
   };
 
   if (!currentJob) {
@@ -185,8 +204,12 @@ const EnhancedSwipeDiscovery: React.FC = () => {
           className="text-center"
         >
           <Sparkles className="w-16 h-16 mx-auto mb-4 text-jobequal-green" />
-          <h3 className="text-2xl font-bold text-jobequal-text mb-2">All Done! 🎉</h3>
-          <p className="text-jobequal-text-muted">You've reviewed all available jobs</p>
+          <h3 className="text-2xl font-bold text-jobequal-text mb-2">
+            All Done! 🎉
+          </h3>
+          <p className="text-jobequal-text-muted">
+            You've reviewed all available jobs
+          </p>
         </motion.div>
       </div>
     );
@@ -205,7 +228,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
         <motion.div
@@ -217,7 +240,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
           transition={{
             duration: 6,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
         <motion.div
@@ -229,7 +252,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
           transition={{
             duration: 7,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       </div>
@@ -248,16 +271,26 @@ const EnhancedSwipeDiscovery: React.FC = () => {
                 className="flex items-center space-x-2"
                 whileHover={{ scale: 1.05 }}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  action.type === 'like' ? 'bg-green-100 text-green-600' :
-                  action.type === 'dislike' ? 'bg-red-100 text-red-600' :
-                  'bg-purple-100 text-purple-600'
-                }`}>
-                  {action.type === 'like' ? <Heart className="w-4 h-4" /> :
-                   action.type === 'dislike' ? <X className="w-4 h-4" /> :
-                   <Star className="w-4 h-4" />}
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    action.type === "like"
+                      ? "bg-green-100 text-green-600"
+                      : action.type === "dislike"
+                        ? "bg-red-100 text-red-600"
+                        : "bg-purple-100 text-purple-600"
+                  }`}
+                >
+                  {action.type === "like" ? (
+                    <Heart className="w-4 h-4" />
+                  ) : action.type === "dislike" ? (
+                    <X className="w-4 h-4" />
+                  ) : (
+                    <Star className="w-4 h-4" />
+                  )}
                 </div>
-                <span className="font-semibold text-gray-700">{action.count}</span>
+                <span className="font-semibold text-gray-700">
+                  {action.count}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -270,7 +303,10 @@ const EnhancedSwipeDiscovery: React.FC = () => {
 
         {/* Card Stack */}
         <div className="flex-1 relative flex items-center justify-center">
-          <div className="relative w-full max-w-sm mx-auto h-[600px]" ref={constraintsRef}>
+          <div
+            className="relative w-full max-w-sm mx-auto h-[600px]"
+            ref={constraintsRef}
+          >
             <AnimatePresence initial={false} custom={direction}>
               {/* Current Card */}
               <SwipeCard
@@ -281,7 +317,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
                 custom={direction}
                 isAnimating={isAnimating}
               />
-              
+
               {/* Next Card (Preview) */}
               {jobs[currentJobIndex + 1] && (
                 <motion.div
@@ -307,7 +343,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
             icon={X}
             color="red"
             label="Pass"
-            onClick={() => handleSwipe(-1, 'dislike')}
+            onClick={() => handleSwipe(-1, "dislike")}
             disabled={isAnimating}
           />
           <ActionButton
@@ -316,7 +352,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
             label="Undo"
             onClick={() => {
               if (currentJobIndex > 0) {
-                setCurrentJobIndex(prev => prev - 1);
+                setCurrentJobIndex((prev) => prev - 1);
               }
             }}
             disabled={isAnimating || currentJobIndex === 0}
@@ -325,7 +361,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
             icon={Star}
             color="purple"
             label="Super Like"
-            onClick={() => handleSwipe(0, 'super')}
+            onClick={() => handleSwipe(0, "super")}
             disabled={isAnimating}
             size="lg"
           />
@@ -333,7 +369,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
             icon={Heart}
             color="green"
             label="Like"
-            onClick={() => handleSwipe(1, 'like')}
+            onClick={() => handleSwipe(1, "like")}
             disabled={isAnimating}
           />
         </motion.div>
@@ -345,13 +381,19 @@ const EnhancedSwipeDiscovery: React.FC = () => {
 // Swipe Card Component
 interface SwipeCardProps {
   job: SwipeableJob;
-  onSwipe: (direction: number, action?: 'like' | 'dislike' | 'super') => void;
+  onSwipe: (direction: number, action?: "like" | "dislike" | "super") => void;
   variants: any;
   custom: number;
   isAnimating: boolean;
 }
 
-const SwipeCard: React.FC<SwipeCardProps> = ({ job, onSwipe, variants, custom, isAnimating }) => {
+const SwipeCard: React.FC<SwipeCardProps> = ({
+  job,
+  onSwipe,
+  variants,
+  custom,
+  isAnimating,
+}) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-30, 30]);
@@ -360,11 +402,11 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ job, onSwipe, variants, custom, i
   const handleDragEnd = (event: any, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
-    
+
     if (Math.abs(offset) > 100 || Math.abs(velocity) > 500) {
       if (Math.abs(info.offset.y) > 100 && info.offset.y < 0) {
         // Super like (swipe up)
-        onSwipe(0, 'super');
+        onSwipe(0, "super");
       } else {
         // Like or dislike
         onSwipe(offset > 0 ? 1 : -1);
@@ -387,30 +429,30 @@ const SwipeCard: React.FC<SwipeCardProps> = ({ job, onSwipe, variants, custom, i
       whileTap={{ scale: 0.95 }}
     >
       <JobCardContent job={job} />
-      
+
       {/* Swipe Indicators */}
       <motion.div
         className="absolute top-8 left-8 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-lg"
         style={{
-          opacity: useTransform(x, [50, 150], [0, 1])
+          opacity: useTransform(x, [50, 150], [0, 1]),
         }}
       >
         LIKE
       </motion.div>
-      
+
       <motion.div
         className="absolute top-8 right-8 bg-red-500 text-white px-4 py-2 rounded-full font-bold text-lg"
         style={{
-          opacity: useTransform(x, [-150, -50], [1, 0])
+          opacity: useTransform(x, [-150, -50], [1, 0]),
         }}
       >
         PASS
       </motion.div>
-      
+
       <motion.div
         className="absolute top-8 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white px-4 py-2 rounded-full font-bold text-lg"
         style={{
-          opacity: useTransform(y, [-100, -50], [1, 0])
+          opacity: useTransform(y, [-100, -50], [1, 0]),
         }}
       >
         SUPER LIKE
@@ -425,9 +467,14 @@ interface JobCardContentProps {
   isPreview?: boolean;
 }
 
-const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false }) => {
+const JobCardContent: React.FC<JobCardContentProps> = ({
+  job,
+  isPreview = false,
+}) => {
   return (
-    <div className={`w-full h-full bg-white rounded-3xl shadow-2xl overflow-hidden ${isPreview ? 'opacity-70' : ''}`}>
+    <div
+      className={`w-full h-full bg-white rounded-3xl shadow-2xl overflow-hidden ${isPreview ? "opacity-70" : ""}`}
+    >
       {/* Header */}
       <div className="relative h-48 bg-gradient-to-br from-jobequal-green to-jobequal-teal p-6 text-white">
         <div className="absolute top-4 right-4 flex space-x-2">
@@ -442,7 +489,7 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
             </div>
           )}
         </div>
-        
+
         <div className="flex items-center space-x-4 mb-4">
           <div className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl">
             {job.logo}
@@ -452,7 +499,7 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
             <p className="text-white/90">{job.company}</p>
           </div>
         </div>
-        
+
         {/* Match Score */}
         <div className="absolute bottom-4 right-4">
           <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-2">
@@ -461,7 +508,7 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
           </div>
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="p-6 h-[calc(100%-12rem)] overflow-y-auto">
         {/* Job Details */}
@@ -479,10 +526,10 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
             <span className="text-sm">{job.type}</span>
           </div>
         </div>
-        
+
         {/* Description */}
         <p className="text-gray-700 mb-6 leading-relaxed">{job.description}</p>
-        
+
         {/* Skills */}
         <div className="mb-6">
           <h4 className="font-semibold text-gray-800 mb-3">Required Skills</h4>
@@ -497,7 +544,7 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
             ))}
           </div>
         </div>
-        
+
         {/* Benefits */}
         <div>
           <h4 className="font-semibold text-gray-800 mb-3">Benefits</h4>
@@ -518,11 +565,11 @@ const JobCardContent: React.FC<JobCardContentProps> = ({ job, isPreview = false 
 // Action Button Component
 interface ActionButtonProps {
   icon: React.ComponentType<any>;
-  color: 'red' | 'green' | 'purple' | 'gray';
+  color: "red" | "green" | "purple" | "gray";
   label: string;
   onClick: () => void;
   disabled?: boolean;
-  size?: 'md' | 'lg';
+  size?: "md" | "lg";
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -531,30 +578,30 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   label,
   onClick,
   disabled = false,
-  size = 'md'
+  size = "md",
 }) => {
   const colorClasses = {
-    red: 'bg-red-500 hover:bg-red-600 text-white',
-    green: 'bg-green-500 hover:bg-green-600 text-white',
-    purple: 'bg-purple-500 hover:bg-purple-600 text-white',
-    gray: 'bg-gray-300 hover:bg-gray-400 text-gray-700'
+    red: "bg-red-500 hover:bg-red-600 text-white",
+    green: "bg-green-500 hover:bg-green-600 text-white",
+    purple: "bg-purple-500 hover:bg-purple-600 text-white",
+    gray: "bg-gray-300 hover:bg-gray-400 text-gray-700",
   };
-  
+
   const sizeClasses = {
-    md: 'w-14 h-14',
-    lg: 'w-16 h-16'
+    md: "w-14 h-14",
+    lg: "w-16 h-16",
   };
 
   return (
     <div className="flex flex-col items-center space-y-2">
       <motion.button
-        className={`${sizeClasses[size]} rounded-full ${colorClasses[color]} shadow-lg flex items-center justify-center transition-colors duration-200 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`${sizeClasses[size]} rounded-full ${colorClasses[color]} shadow-lg flex items-center justify-center transition-colors duration-200 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
         whileHover={disabled ? {} : { scale: 1.1 }}
         whileTap={disabled ? {} : { scale: 0.9 }}
         onClick={onClick}
         disabled={disabled}
       >
-        <Icon className={size === 'lg' ? 'w-8 h-8' : 'w-6 h-6'} />
+        <Icon className={size === "lg" ? "w-8 h-8" : "w-6 h-6"} />
       </motion.button>
       <span className="text-xs font-medium text-gray-600">{label}</span>
     </div>

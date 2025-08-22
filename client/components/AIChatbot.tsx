@@ -1,19 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MessageCircle, 
-  X, 
-  Send, 
-  Bot, 
-  User, 
-  Sparkles, 
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  User,
+  Sparkles,
   Briefcase,
   MapPin,
   Search,
   TrendingUp,
-  Zap
-} from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+  Zap,
+} from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface Message {
   id: string;
@@ -31,36 +31,48 @@ const quickActions = [
 ];
 
 const mockResponses = {
-  search_jobs: "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
-  jobs_zurich: "Great choice! Zurich has amazing opportunities. I found 47 jobs in Zurich matching your profile. The top matches include:\n\n🚀 Senior Software Engineer at TechCorp (95% match)\n💡 Product Manager at InnovateCH (89% match)\n📊 Data Scientist at Analytics Pro (87% match)\n\nWould you like to see more details?",
-  remote_jobs: "I found 23 remote positions that match your profile! Remote work is very popular in Switzerland. Here are the top matches:\n\n☁️ DevOps Engineer at CloudTech (92% match)\n🎨 UX Designer at DesignStudio (85% match)\n📈 Digital Marketing Lead at GrowthCo (81% match)",
-  salary_info: "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?",
-  default: "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?"
+  search_jobs:
+    "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
+  jobs_zurich:
+    "Great choice! Zurich has amazing opportunities. I found 47 jobs in Zurich matching your profile. The top matches include:\n\n🚀 Senior Software Engineer at TechCorp (95% match)\n💡 Product Manager at InnovateCH (89% match)\n📊 Data Scientist at Analytics Pro (87% match)\n\nWould you like to see more details?",
+  remote_jobs:
+    "I found 23 remote positions that match your profile! Remote work is very popular in Switzerland. Here are the top matches:\n\n☁️ DevOps Engineer at CloudTech (92% match)\n🎨 UX Designer at DesignStudio (85% match)\n📈 Digital Marketing Lead at GrowthCo (81% match)",
+  salary_info:
+    "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?",
+  default:
+    "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?",
 };
 
 export function AIChatbot() {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize with welcome message
   useEffect(() => {
     if (messages.length === 0) {
-      setMessages([{
-        id: '1',
-        text: t('ai.welcome'),
-        isBot: true,
-        timestamp: new Date(),
-        suggestions: [t('ai.find_jobs_for_me'), t('ai.jobs_in_zurich'), t('ai.remote_positions'), t('ai.salary_insights')]
-      }]);
+      setMessages([
+        {
+          id: "1",
+          text: t("ai.welcome"),
+          isBot: true,
+          timestamp: new Date(),
+          suggestions: [
+            t("ai.find_jobs_for_me"),
+            t("ai.jobs_in_zurich"),
+            t("ai.remote_positions"),
+            t("ai.salary_insights"),
+          ],
+        },
+      ]);
     }
   }, [t, messages.length]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -78,46 +90,52 @@ export function AIChatbot() {
       id: Date.now().toString(),
       text,
       isBot: false,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputText("");
     setIsTyping(true);
 
     // Simulate AI thinking time
-    setTimeout(() => {
-      const responseKey = action || 'default';
-      let response;
+    setTimeout(
+      () => {
+        const responseKey = action || "default";
+        let response;
 
-      switch(responseKey) {
-        case 'search_jobs':
-          response = t('ai.find_jobs_response');
-          break;
-        case 'jobs_zurich':
-          response = t('ai.zurich_jobs_response');
-          break;
-        case 'remote_jobs':
-          response = t('ai.remote_jobs_response');
-          break;
-        case 'salary_info':
-          response = "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?";
-          break;
-        default:
-          response = t('ai.help_find_job');
-      }
+        switch (responseKey) {
+          case "search_jobs":
+            response = t("ai.find_jobs_response");
+            break;
+          case "jobs_zurich":
+            response = t("ai.zurich_jobs_response");
+            break;
+          case "remote_jobs":
+            response = t("ai.remote_jobs_response");
+            break;
+          case "salary_info":
+            response =
+              "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?";
+            break;
+          default:
+            response = t("ai.help_find_job");
+        }
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: response,
-        isBot: true,
-        timestamp: new Date(),
-        suggestions: action ? [] : ["Tell me more", "Show me jobs", "Update my profile"]
-      };
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: response,
+          isBot: true,
+          timestamp: new Date(),
+          suggestions: action
+            ? []
+            : ["Tell me more", "Show me jobs", "Update my profile"],
+        };
 
-      setMessages(prev => [...prev, botMessage]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 1000);
+        setMessages((prev) => [...prev, botMessage]);
+        setIsTyping(false);
+      },
+      1000 + Math.random() * 1000,
+    );
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -130,7 +148,7 @@ export function AIChatbot() {
       {/* Chat Toggle Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${isOpen ? 'hidden' : 'flex'} items-center justify-center group`}
+        className={`fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${isOpen ? "hidden" : "flex"} items-center justify-center group`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, y: 100 }}
@@ -139,10 +157,10 @@ export function AIChatbot() {
       >
         <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
         <div className="absolute -top-2 -right-2 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-        
+
         {/* Tooltip */}
         <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          {t('ai.ask_anything')}
+          {t("ai.ask_anything")}
         </div>
       </motion.button>
 
@@ -184,18 +202,26 @@ export function AIChatbot() {
                   key={message.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
+                  className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
                 >
-                  <div className={`max-w-[80%] ${message.isBot ? 'order-2' : 'order-1'}`}>
-                    <div className={`p-3 rounded-2xl ${
-                      message.isBot 
-                        ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md' 
-                        : 'bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-br-md'
-                    }`}>
-                      {message.isBot && <Sparkles className="w-4 h-4 inline mr-2 opacity-70" />}
-                      <span className="text-sm whitespace-pre-line">{message.text}</span>
+                  <div
+                    className={`max-w-[80%] ${message.isBot ? "order-2" : "order-1"}`}
+                  >
+                    <div
+                      className={`p-3 rounded-2xl ${
+                        message.isBot
+                          ? "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md"
+                          : "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-br-md"
+                      }`}
+                    >
+                      {message.isBot && (
+                        <Sparkles className="w-4 h-4 inline mr-2 opacity-70" />
+                      )}
+                      <span className="text-sm whitespace-pre-line">
+                        {message.text}
+                      </span>
                     </div>
-                    
+
                     {/* Suggestions */}
                     {message.suggestions && message.suggestions.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-2">
@@ -211,7 +237,7 @@ export function AIChatbot() {
                       </div>
                     )}
                   </div>
-                  
+
                   {message.isBot && (
                     <div className="w-6 h-6 bg-gradient-to-r from-jobequal-green to-jobequal-teal rounded-full flex items-center justify-center mr-2 order-1 flex-shrink-0">
                       <Bot className="w-3 h-3 text-white" />
@@ -219,7 +245,7 @@ export function AIChatbot() {
                   )}
                 </motion.div>
               ))}
-              
+
               {/* Typing Indicator */}
               {isTyping && (
                 <motion.div
@@ -234,14 +260,20 @@ export function AIChatbot() {
                     <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-2xl rounded-bl-md">
                       <div className="flex space-x-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        />
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        />
                       </div>
                     </div>
                   </div>
                 </motion.div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
 
@@ -250,16 +282,26 @@ export function AIChatbot() {
               <div className="grid grid-cols-2 gap-2 mb-3">
                 {quickActions.map((action, index) => {
                   let translatedText = action.text;
-                  switch(action.action) {
-                    case 'search_jobs': translatedText = t('ai.find_jobs_for_me'); break;
-                    case 'jobs_zurich': translatedText = t('ai.jobs_in_zurich'); break;
-                    case 'remote_jobs': translatedText = t('ai.remote_positions'); break;
-                    case 'salary_info': translatedText = t('ai.salary_insights'); break;
+                  switch (action.action) {
+                    case "search_jobs":
+                      translatedText = t("ai.find_jobs_for_me");
+                      break;
+                    case "jobs_zurich":
+                      translatedText = t("ai.jobs_in_zurich");
+                      break;
+                    case "remote_jobs":
+                      translatedText = t("ai.remote_positions");
+                      break;
+                    case "salary_info":
+                      translatedText = t("ai.salary_insights");
+                      break;
                   }
                   return (
                     <button
                       key={index}
-                      onClick={() => handleQuickAction(action.action, translatedText)}
+                      onClick={() =>
+                        handleQuickAction(action.action, translatedText)
+                      }
                       className="flex items-center space-x-2 p-2 bg-jobequal-green-light dark:bg-gray-700 text-jobequal-green-dark dark:text-gray-300 rounded-lg hover:bg-jobequal-green hover:text-white dark:hover:bg-jobequal-green transition-colors text-xs"
                     >
                       <action.icon className="w-3 h-3" />
@@ -271,13 +313,16 @@ export function AIChatbot() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200 dark:border-gray-600">
+            <form
+              onSubmit={handleSubmit}
+              className="p-4 border-t border-gray-200 dark:border-gray-600"
+            >
               <div className="flex items-center space-x-2">
                 <input
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder={t('ai.ask_placeholder')}
+                  placeholder={t("ai.ask_placeholder")}
                   className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-jobequal-green focus:border-transparent text-sm"
                 />
                 <button

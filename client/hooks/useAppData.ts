@@ -1,7 +1,7 @@
-import { useAuth } from '../contexts/AuthContext';
-import { useJobs } from '../contexts/JobsContext';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from "../contexts/AuthContext";
+import { useJobs } from "../contexts/JobsContext";
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 // Combined hook for easy access to all app data
 export function useAppData() {
@@ -19,7 +19,8 @@ export function useAppData() {
     isAuthenticated: !!auth.user,
     isLoading: auth.loading || jobs.loading,
     hasJobs: jobs.jobs.length > 0,
-    favoriteJobsCount: favorites.favorites.filter(f => f.type === 'job').length,
+    favoriteJobsCount: favorites.favorites.filter((f) => f.type === "job")
+      .length,
   };
 }
 
@@ -27,7 +28,10 @@ export function useAppData() {
 export function useAuthenticatedActions() {
   const { auth, jobs } = useAppData();
 
-  const requireAuth = (action: () => void | Promise<void>, redirectTo = '/signin') => {
+  const requireAuth = (
+    action: () => void | Promise<void>,
+    redirectTo = "/signin",
+  ) => {
     if (!auth.user) {
       window.location.href = redirectTo;
       return;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { PageHeader, SectionHeader } from '../components/ui/page-header';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { PageHeader, SectionHeader } from "../components/ui/page-header";
 import {
   TrendingUp,
   BookOpen,
@@ -24,9 +24,9 @@ import {
   Filter,
   Eye,
   Heart,
-  Share2
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  Share2,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Article {
   id: string;
@@ -44,21 +44,22 @@ interface Article {
 }
 
 const categories = [
-  { id: 'all', label: 'All Tips', icon: BookOpen },
-  { id: 'cv-resume', label: 'CV & Resume', icon: FileText },
-  { id: 'interview', label: 'Interview Prep', icon: MessageCircle },
-  { id: 'job-search', label: 'Job Search', icon: Search },
-  { id: 'networking', label: 'Networking', icon: Users },
-  { id: 'salary', label: 'Salary Negotiation', icon: TrendingUp },
-  { id: 'career-growth', label: 'Career Growth', icon: Target },
-  { id: 'swiss-market', label: 'Swiss Market', icon: Shield }
+  { id: "all", label: "All Tips", icon: BookOpen },
+  { id: "cv-resume", label: "CV & Resume", icon: FileText },
+  { id: "interview", label: "Interview Prep", icon: MessageCircle },
+  { id: "job-search", label: "Job Search", icon: Search },
+  { id: "networking", label: "Networking", icon: Users },
+  { id: "salary", label: "Salary Negotiation", icon: TrendingUp },
+  { id: "career-growth", label: "Career Growth", icon: Target },
+  { id: "swiss-market", label: "Swiss Market", icon: Shield },
 ];
 
 const articles: Article[] = [
   {
-    id: '1',
-    title: 'Crafting the Perfect Swiss CV: A Complete Guide for 2024',
-    excerpt: 'Master the art of Swiss CV writing with insider tips from local recruiters. Learn what makes Swiss employers take notice.',
+    id: "1",
+    title: "Crafting the Perfect Swiss CV: A Complete Guide for 2024",
+    excerpt:
+      "Master the art of Swiss CV writing with insider tips from local recruiters. Learn what makes Swiss employers take notice.",
     content: `Creating a standout CV for the Swiss job market requires understanding local expectations and cultural nuances. Here's your comprehensive guide:
 
 **Essential Elements:**
@@ -91,19 +92,20 @@ const articles: Article[] = [
 • Using creative layouts (Swiss prefer traditional)
 • Listing irrelevant work experience
 • Poor German/French translations`,
-    author: 'Sarah Miller, HR Expert',
-    publishDate: '2024-01-15',
+    author: "Sarah Miller, HR Expert",
+    publishDate: "2024-01-15",
     readTime: 8,
-    category: 'cv-resume',
-    tags: ['CV Writing', 'Swiss Market', 'Job Applications'],
+    category: "cv-resume",
+    tags: ["CV Writing", "Swiss Market", "Job Applications"],
     featured: true,
     views: 15420,
-    likes: 342
+    likes: 342,
   },
   {
-    id: '2',
-    title: 'Acing Swiss Job Interviews: Cultural Do\'s and Don\'ts',
-    excerpt: 'Navigate Swiss interview culture with confidence. Learn the unspoken rules that can make or break your job prospects.',
+    id: "2",
+    title: "Acing Swiss Job Interviews: Cultural Do's and Don'ts",
+    excerpt:
+      "Navigate Swiss interview culture with confidence. Learn the unspoken rules that can make or break your job prospects.",
     content: `Swiss job interviews have unique cultural elements. Here's how to excel:
 
 **Before the Interview:**
@@ -139,19 +141,20 @@ const articles: Article[] = [
 • Reiterate your interest and key qualifications
 • Be patient - Swiss hiring process takes time
 • Don't call repeatedly for updates`,
-    author: 'Marcus Weber, Swiss Recruiter',
-    publishDate: '2024-01-12',
+    author: "Marcus Weber, Swiss Recruiter",
+    publishDate: "2024-01-12",
     readTime: 6,
-    category: 'interview',
-    tags: ['Interview Skills', 'Swiss Culture', 'Job Search'],
+    category: "interview",
+    tags: ["Interview Skills", "Swiss Culture", "Job Search"],
     featured: true,
     views: 12350,
-    likes: 289
+    likes: 289,
   },
   {
-    id: '3',
-    title: 'Salary Negotiation in Switzerland: Get What You\'re Worth',
-    excerpt: 'Master the art of salary negotiation in the Swiss market. Learn market rates, timing, and negotiation strategies.',
+    id: "3",
+    title: "Salary Negotiation in Switzerland: Get What You're Worth",
+    excerpt:
+      "Master the art of salary negotiation in the Swiss market. Learn market rates, timing, and negotiation strategies.",
     content: `Salary negotiation in Switzerland requires preparation and cultural awareness:
 
 **Research Market Rates:**
@@ -190,19 +193,20 @@ const articles: Article[] = [
 • Patience with decision timelines
 • Professional tone throughout
 • Written follow-up of agreements`,
-    author: 'Dr. Anna Schmidt, Compensation Specialist',
-    publishDate: '2024-01-10',
+    author: "Dr. Anna Schmidt, Compensation Specialist",
+    publishDate: "2024-01-10",
     readTime: 7,
-    category: 'salary',
-    tags: ['Salary Negotiation', 'Swiss Salaries', 'Career Advancement'],
+    category: "salary",
+    tags: ["Salary Negotiation", "Swiss Salaries", "Career Advancement"],
     featured: false,
     views: 9870,
-    likes: 198
+    likes: 198,
   },
   {
-    id: '4',
-    title: 'Building Your Professional Network in Switzerland',
-    excerpt: 'Expand your professional circle the Swiss way. From LinkedIn to local events, build meaningful connections.',
+    id: "4",
+    title: "Building Your Professional Network in Switzerland",
+    excerpt:
+      "Expand your professional circle the Swiss way. From LinkedIn to local events, build meaningful connections.",
     content: `Networking in Switzerland is relationship-based and built on trust:
 
 **Swiss Networking Culture:**
@@ -243,19 +247,20 @@ const articles: Article[] = [
 • Offer expertise and assistance
 • Remember personal details in conversations
 • Follow through on commitments`,
-    author: 'Thomas Müller, Business Development',
-    publishDate: '2024-01-08',
+    author: "Thomas Müller, Business Development",
+    publishDate: "2024-01-08",
     readTime: 5,
-    category: 'networking',
-    tags: ['Networking', 'Professional Growth', 'Swiss Business'],
+    category: "networking",
+    tags: ["Networking", "Professional Growth", "Swiss Business"],
     featured: false,
     views: 7520,
-    likes: 156
+    likes: 156,
   },
   {
-    id: '5',
-    title: 'Job Search Strategies That Work in Switzerland',
-    excerpt: 'Navigate the Swiss job market like a pro. From hidden job markets to application timing, maximize your chances.',
+    id: "5",
+    title: "Job Search Strategies That Work in Switzerland",
+    excerpt:
+      "Navigate the Swiss job market like a pro. From hidden job markets to application timing, maximize your chances.",
     content: `The Swiss job market has unique characteristics requiring targeted strategies:
 
 **Understanding the Swiss Job Market:**
@@ -295,15 +300,15 @@ const articles: Article[] = [
 • Include relevant work permit information
 • Professional photo essential
 • Follow exact application instructions`,
-    author: 'Lisa Rodriguez, Career Coach',
-    publishDate: '2024-01-05',
+    author: "Lisa Rodriguez, Career Coach",
+    publishDate: "2024-01-05",
     readTime: 6,
-    category: 'job-search',
-    tags: ['Job Search', 'Career Strategy', 'Swiss Employment'],
+    category: "job-search",
+    tags: ["Job Search", "Career Strategy", "Swiss Employment"],
     featured: false,
     views: 8910,
-    likes: 203
-  }
+    likes: 203,
+  },
 ];
 
 function ArticleCard({ article }: { article: Article }) {
@@ -318,11 +323,9 @@ function ArticleCard({ article }: { article: Article }) {
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
             <span className="px-2 py-1 bg-jobequal-green-light text-jobequal-green text-xs font-medium rounded-full">
-              {categories.find(cat => cat.id === article.category)?.label}
+              {categories.find((cat) => cat.id === article.category)?.label}
             </span>
-            {article.featured && (
-              <Star className="w-4 h-4 text-yellow-500" />
-            )}
+            {article.featured && <Star className="w-4 h-4 text-yellow-500" />}
           </div>
           <h3 className="text-xl font-bold text-jobequal-text mb-2 leading-tight">
             {article.title}
@@ -352,7 +355,9 @@ function ArticleCard({ article }: { article: Article }) {
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-sm text-jobequal-text-muted">By {article.author}</span>
+        <span className="text-sm text-jobequal-text-muted">
+          By {article.author}
+        </span>
         <Link
           to={`/career-tips/${article.id}`}
           className="inline-flex items-center space-x-1 text-jobequal-green hover:text-jobequal-green-hover font-medium transition-colors"
@@ -366,23 +371,27 @@ function ArticleCard({ article }: { article: Article }) {
 }
 
 export default function CareerTips() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredArticles = articles.filter(article => {
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
-    const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredArticles = articles.filter((article) => {
+    const matchesCategory =
+      selectedCategory === "all" || article.category === selectedCategory;
+    const matchesSearch =
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
     return matchesCategory && matchesSearch;
   });
 
-  const featuredArticles = articles.filter(article => article.featured);
+  const featuredArticles = articles.filter((article) => article.featured);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue">
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -394,11 +403,15 @@ export default function CareerTips() {
             <div className="flex items-center justify-center space-x-4 mt-6">
               <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
                 <BookOpen className="w-4 h-4 text-jobequal-green" />
-                <span className="text-sm font-medium text-jobequal-text">{articles.length} Articles</span>
+                <span className="text-sm font-medium text-jobequal-text">
+                  {articles.length} Articles
+                </span>
               </div>
               <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
                 <Star className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm font-medium text-jobequal-text">Expert Guidance</span>
+                <span className="text-sm font-medium text-jobequal-text">
+                  Expert Guidance
+                </span>
               </div>
             </div>
           </PageHeader>
@@ -433,8 +446,8 @@ export default function CareerTips() {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
                     selectedCategory === category.id
-                      ? 'bg-jobequal-green text-white'
-                      : 'bg-white text-jobequal-text-muted hover:bg-jobequal-green-light hover:text-jobequal-green'
+                      ? "bg-jobequal-green text-white"
+                      : "bg-white text-jobequal-text-muted hover:bg-jobequal-green-light hover:text-jobequal-green"
                   }`}
                 >
                   <IconComponent className="w-4 h-4" />
@@ -446,7 +459,7 @@ export default function CareerTips() {
         </div>
 
         {/* Featured Articles */}
-        {selectedCategory === 'all' && !searchQuery && (
+        {selectedCategory === "all" && !searchQuery && (
           <section className="mb-16">
             <SectionHeader
               title="Featured Articles"
@@ -471,10 +484,13 @@ export default function CareerTips() {
         <section>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-jobequal-text">
-              {selectedCategory === 'all' ? 'All Career Tips' : categories.find(cat => cat.id === selectedCategory)?.label}
+              {selectedCategory === "all"
+                ? "All Career Tips"
+                : categories.find((cat) => cat.id === selectedCategory)?.label}
             </h2>
             <span className="text-jobequal-text-muted">
-              {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}
+              {filteredArticles.length} article
+              {filteredArticles.length !== 1 ? "s" : ""}
             </span>
           </div>
 
@@ -498,8 +514,12 @@ export default function CareerTips() {
               className="text-center py-16"
             >
               <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-jobequal-text mb-2">No articles found</h3>
-              <p className="text-jobequal-text-muted">Try adjusting your search or category filter</p>
+              <h3 className="text-xl font-semibold text-jobequal-text mb-2">
+                No articles found
+              </h3>
+              <p className="text-jobequal-text-muted">
+                Try adjusting your search or category filter
+              </p>
             </motion.div>
           )}
         </section>

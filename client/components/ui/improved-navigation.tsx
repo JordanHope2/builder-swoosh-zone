@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Bell, Settings, User, LogOut, Shield } from 'lucide-react';
-import { LanguageSwitcher } from '../LanguageSwitcher';
-import { ThemeToggle } from '../ThemeProvider';
-import { NotificationsOverlay } from '../NotificationsOverlay';
-import { useLanguage } from '../../contexts/LanguageContext';
-import SecurityUtils from '../../lib/security';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Bell, Settings, User, LogOut, Shield } from "lucide-react";
+import { LanguageSwitcher } from "../LanguageSwitcher";
+import { ThemeToggle } from "../ThemeProvider";
+import { NotificationsOverlay } from "../NotificationsOverlay";
+import { useLanguage } from "../../contexts/LanguageContext";
+import SecurityUtils from "../../lib/security";
 
 interface UserProfile {
   id: string;
   name: string;
   email: string;
-  role: 'candidate' | 'recruiter' | 'company' | 'admin';
+  role: "candidate" | "recruiter" | "company" | "admin";
   avatar?: string;
 }
 
@@ -21,7 +21,10 @@ interface ImprovedNavigationProps {
   onLogout?: () => void;
 }
 
-export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) {
+export function ImprovedNavigation({
+  user,
+  onLogout,
+}: ImprovedNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,9 +43,9 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
         ticking = true;
       }
     };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Close menus on route change
@@ -54,76 +57,81 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { to: '/job-search', label: t('nav.browse_jobs'), public: true },
-    { to: '/swipe', label: t('nav.swipe_discovery'), public: true },
-    { to: '/cv-upload', label: t('nav.upload_cv'), public: true },
-    { to: '/companies', label: t('nav.companies'), public: true },
-    { to: '/about', label: t('nav.about'), public: true },
-    { to: '/contact', label: t('nav.contact'), public: true },
+    { to: "/job-search", label: t("nav.browse_jobs"), public: true },
+    { to: "/swipe", label: t("nav.swipe_discovery"), public: true },
+    { to: "/cv-upload", label: t("nav.upload_cv"), public: true },
+    { to: "/companies", label: t("nav.companies"), public: true },
+    { to: "/about", label: t("nav.about"), public: true },
+    { to: "/contact", label: t("nav.contact"), public: true },
   ];
 
   const dashboardLinks = {
-    candidate: '/dashboard',
-    recruiter: '/enhanced-recruiter-dashboard',
-    company: '/company-dashboard',
-    admin: '/owner-admin-dashboard'
+    candidate: "/dashboard",
+    recruiter: "/enhanced-recruiter-dashboard",
+    company: "/company-dashboard",
+    admin: "/owner-admin-dashboard",
   };
 
   const isActiveLink = (path: string) => location.pathname === path;
 
   const handleSecureLogout = () => {
     // Clear any stored tokens/session data
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem("auth_token");
     sessionStorage.clear();
-    
+
     // Call logout handler
     onLogout?.();
-    
+
     // Redirect to home
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   const getRoleDisplayName = (role: string) => {
     const roleNames = {
-      candidate: 'Job Seeker',
-      recruiter: 'Recruiter',
-      company: 'Company',
-      admin: 'Administrator'
+      candidate: "Job Seeker",
+      recruiter: "Recruiter",
+      company: "Company",
+      admin: "Administrator",
     };
     return roleNames[role as keyof typeof roleNames] || role;
   };
 
   return (
     <>
-      <motion.nav 
+      <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`w-full sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/98 backdrop-blur-md shadow-lg border-b border-jobequal-neutral-dark' 
-            : 'bg-white/95 backdrop-blur-sm border-b border-jobequal-neutral-dark'
+          isScrolled
+            ? "bg-white/98 backdrop-blur-md shadow-lg border-b border-jobequal-neutral-dark"
+            : "bg-white/95 backdrop-blur-sm border-b border-jobequal-neutral-dark"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
             {/* Logo */}
-            <motion.div 
+            <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.02 }}
             >
-              <Link to="/" className="flex items-center space-x-2 lg:space-x-3 group">
+              <Link
+                to="/"
+                className="flex items-center space-x-2 lg:space-x-3 group"
+              >
                 <div className="relative w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105">
-                  <span className="text-white font-bold text-lg lg:text-xl">J</span>
+                  <span className="text-white font-bold text-lg lg:text-xl">
+                    J
+                  </span>
                   <div className="absolute -top-1 -right-1 w-3 h-3 lg:w-4 lg:h-4 bg-red-600 rounded-full flex items-center justify-center border border-white shadow-sm">
                     <span className="text-white text-xs font-bold">+</span>
                   </div>
@@ -143,8 +151,8 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                       to={link.to}
                       className={`relative text-sm xl:text-base font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-jobequal-green after:transition-all after:duration-300 ${
                         isActiveLink(link.to)
-                          ? 'text-jobequal-green after:w-full'
-                          : 'text-jobequal-text-muted hover:text-jobequal-text after:w-0 hover:after:w-full'
+                          ? "text-jobequal-green after:w-full"
+                          : "text-jobequal-text-muted hover:text-jobequal-text after:w-0 hover:after:w-full"
                       }`}
                     >
                       {link.label}
@@ -159,7 +167,7 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
               <NotificationsOverlay />
               <ThemeToggle />
               <LanguageSwitcher />
-              
+
               {/* Role Switcher */}
               <motion.div whileHover={{ scale: 1.02 }}>
                 <Link
@@ -181,7 +189,9 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                   >
                     <div className="w-8 h-8 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-lg flex items-center justify-center">
                       <span className="text-white font-medium text-sm">
-                        {SecurityUtils.sanitizeText(user.name.charAt(0).toUpperCase())}
+                        {SecurityUtils.sanitizeText(
+                          user.name.charAt(0).toUpperCase(),
+                        )}
                       </span>
                     </div>
                     <div className="text-left">
@@ -210,7 +220,7 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                             {SecurityUtils.sanitizeText(user.email)}
                           </div>
                         </div>
-                        
+
                         <div className="py-1">
                           <Link
                             to={dashboardLinks[user.role]}
@@ -226,7 +236,7 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                             <Settings className="w-4 h-4 mr-3" />
                             Settings
                           </Link>
-                          {user.role === 'admin' && (
+                          {user.role === "admin" && (
                             <Link
                               to="/admin"
                               className="flex items-center px-4 py-2 text-sm text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -236,7 +246,7 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                             </Link>
                           )}
                         </div>
-                        
+
                         <div className="border-t border-gray-200 dark:border-gray-700 py-1">
                           <button
                             onClick={handleSecureLogout}
@@ -257,14 +267,17 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                     to="/signin"
                     className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
                   >
-                    {t('nav.sign_in')}
+                    {t("nav.sign_in")}
                   </Link>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <Link
                       to="/signup"
                       className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 text-sm xl:text-base"
                     >
-                      {t('nav.sign_up')}
+                      {t("nav.sign_up")}
                     </Link>
                   </motion.div>
                 </div>
@@ -321,20 +334,20 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
             className="lg:hidden fixed inset-0 z-40"
           >
             {/* Backdrop */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/50 backdrop-blur-sm"
               onClick={() => setIsMobileMenuOpen(false)}
             />
-            
+
             {/* Mobile Menu Panel */}
             <motion.div
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="absolute top-16 right-0 bottom-0 w-80 max-w-[90vw] bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
             >
               <div className="p-6 space-y-6">
@@ -348,7 +361,9 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                     <div className="flex items-center space-x-3 mb-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center">
                         <span className="text-white font-bold text-lg">
-                          {SecurityUtils.sanitizeText(user.name.charAt(0).toUpperCase())}
+                          {SecurityUtils.sanitizeText(
+                            user.name.charAt(0).toUpperCase(),
+                          )}
                         </span>
                       </div>
                       <div>
@@ -382,8 +397,8 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                         to={link.to}
                         className={`block py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
                           isActiveLink(link.to)
-                            ? 'bg-jobequal-green-light text-jobequal-green border-l-4 border-jobequal-green'
-                            : 'text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral dark:hover:bg-gray-700'
+                            ? "bg-jobequal-green-light text-jobequal-green border-l-4 border-jobequal-green"
+                            : "text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral dark:hover:bg-gray-700"
                         }`}
                       >
                         {link.label}
@@ -400,7 +415,7 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                   >
                     🔄 Role Switcher
                   </Link>
-                  
+
                   {user ? (
                     <button
                       onClick={handleSecureLogout}
@@ -414,13 +429,13 @@ export function ImprovedNavigation({ user, onLogout }: ImprovedNavigationProps) 
                         to="/signin"
                         className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral dark:hover:bg-gray-700 transition-all duration-200"
                       >
-                        {t('nav.sign_in')}
+                        {t("nav.sign_in")}
                       </Link>
                       <Link
                         to="/signup"
                         className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200"
                       >
-                        {t('nav.sign_up')}
+                        {t("nav.sign_up")}
                       </Link>
                     </>
                   )}

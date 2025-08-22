@@ -1,8 +1,14 @@
-import React from 'react';
-import { motion, AnimatePresence, useInView, useAnimation, Variants } from 'framer-motion';
-import { useRef, useEffect } from 'react';
+import React from "react";
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useAnimation,
+  Variants,
+} from "framer-motion";
+import { useRef, useEffect } from "react";
 
-import { TargetAndTransition, Transition } from 'framer-motion';
+import { TargetAndTransition, Transition } from "framer-motion";
 
 // Define a structured type for our animation configurations
 interface AnimationConfig {
@@ -10,7 +16,7 @@ interface AnimationConfig {
   transition?: Transition;
   whileHover?: TargetAndTransition;
   whileTap?: TargetAndTransition;
-  drag?: 'x' | 'y' | boolean;
+  drag?: "x" | "y" | boolean;
   dragConstraints?: object;
 }
 
@@ -23,12 +29,12 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       animate: { y: 0, opacity: 1 },
       exit: { y: 100, opacity: 0 },
     },
-    transition: { 
+    transition: {
       type: "spring",
       stiffness: 100,
       damping: 20,
-      mass: 1
-    }
+      mass: 1,
+    },
   },
 
   slideInFromLeft: {
@@ -37,11 +43,11 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       animate: { x: 0, opacity: 1 },
       exit: { x: -100, opacity: 0 },
     },
-    transition: { 
+    transition: {
       type: "spring",
       stiffness: 120,
-      damping: 20
-    }
+      damping: 20,
+    },
   },
 
   slideInFromRight: {
@@ -50,11 +56,11 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       animate: { x: 0, opacity: 1 },
       exit: { x: 100, opacity: 0 },
     },
-    transition: { 
+    transition: {
       type: "spring",
       stiffness: 120,
-      damping: 20
-    }
+      damping: 20,
+    },
   },
 
   // Modern scale animations
@@ -68,16 +74,16 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       type: "spring",
       stiffness: 200,
       damping: 10,
-      mass: 0.8
+      mass: 0.8,
     },
-    whileHover: { 
+    whileHover: {
       scale: 1.05,
-      transition: { duration: 0.2 }
+      transition: { duration: 0.2 },
     },
-    whileTap: { 
+    whileTap: {
       scale: 0.95,
-      transition: { duration: 0.1 }
-    }
+      transition: { duration: 0.1 },
+    },
   },
 
   // Morphing animations
@@ -87,7 +93,7 @@ export const modernAnimations: Record<string, AnimationConfig> = {
         scale: 0.8,
         opacity: 0,
         rotateX: -90,
-        transformPerspective: 1000
+        transformPerspective: 1000,
       },
       animate: {
         scale: 1,
@@ -97,15 +103,15 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       exit: {
         scale: 0.8,
         opacity: 0,
-        rotateX: 90
-      }
+        rotateX: 90,
+      },
     },
     transition: {
       type: "spring",
       stiffness: 200,
       damping: 20,
-      staggerChildren: 0.1
-    }
+      staggerChildren: 0.1,
+    },
   },
 
   // Floating animations
@@ -118,14 +124,14 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 6,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut",
     },
     whileHover: {
       y: -10,
       scale: 1.02,
       boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   },
 
   // Stagger container
@@ -136,8 +142,8 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     },
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
+      delayChildren: 0.2,
+    },
   },
 
   // Stagger items
@@ -149,8 +155,8 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       type: "spring",
       stiffness: 100,
-      damping: 15
-    }
+      damping: 15,
+    },
   },
 
   // Gradient text animation
@@ -163,8 +169,8 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "linear"
-    }
+      ease: "linear",
+    },
   },
 
   // Page transitions
@@ -176,8 +182,8 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     },
     transition: {
       duration: 0.6,
-      ease: [0.6, -0.05, 0.01, 0.99]
-    }
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
   },
 
   // Button interactions
@@ -190,12 +196,12 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 20
+      damping: 20,
     },
     whileTap: {
       scale: 0.95,
-      transition: { duration: 0.1 }
-    }
+      transition: { duration: 0.1 },
+    },
   },
 
   // Card interactions
@@ -209,8 +215,8 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       type: "spring",
       stiffness: 300,
-      damping: 30
-    }
+      damping: 30,
+    },
   },
 
   // Loading animations
@@ -224,15 +230,15 @@ export const modernAnimations: Record<string, AnimationConfig> = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   },
 
   // Swipe animations
   swipeCard: {
     variants: {
       initial: { scale: 0.9, opacity: 0, y: 50 },
-      animate: { scale: 1, opacity: 1, y: 0, },
+      animate: { scale: 1, opacity: 1, y: 0 },
       exit: (direction: number) => ({
         x: direction * 1000,
         opacity: 0,
@@ -244,11 +250,11 @@ export const modernAnimations: Record<string, AnimationConfig> = {
       type: "spring",
       stiffness: 200,
       damping: 20,
-      duration: 0.3
+      duration: 0.3,
     },
     drag: "x",
-    dragConstraints: { left: 0, right: 0 }
-  }
+    dragConstraints: { left: 0, right: 0 },
+  },
 };
 
 // Enhanced Motion Components
@@ -263,14 +269,14 @@ interface EnhancedMotionProps {
 
 export const EnhancedMotion: React.FC<EnhancedMotionProps> = ({
   children,
-  animation = 'slideInFromBottom',
+  animation = "slideInFromBottom",
   delay = 0,
   className,
   onClick,
-  custom
+  custom,
 }) => {
   const animConfig = modernAnimations[animation];
-  
+
   return (
     <motion.div
       variants={animConfig.variants}
@@ -281,7 +287,7 @@ export const EnhancedMotion: React.FC<EnhancedMotionProps> = ({
       whileTap={animConfig.whileTap}
       transition={{
         ...animConfig.transition,
-        delay
+        delay,
       }}
       className={className}
       onClick={onClick}
@@ -295,9 +301,9 @@ export const EnhancedMotion: React.FC<EnhancedMotionProps> = ({
 // Scroll-triggered animations
 export const ScrollTriggeredMotion: React.FC<EnhancedMotionProps> = ({
   children,
-  animation = 'slideInFromBottom',
+  animation = "slideInFromBottom",
   className,
-  onClick
+  onClick,
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -338,7 +344,7 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   children,
   className,
   itemClassName,
-  staggerDelay = 0.1
+  staggerDelay = 0.1,
 }) => {
   return (
     <motion.div
@@ -347,9 +353,9 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
         animate: {
           transition: {
             staggerChildren: staggerDelay,
-            delayChildren: 0.1
-          }
-        }
+            delayChildren: 0.1,
+          },
+        },
       }}
       initial="initial"
       animate="animate"
@@ -369,7 +375,9 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
 };
 
 // Page transition wrapper
-export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PageTransition: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const animConfig = modernAnimations.pageTransition;
   return (
     <motion.div
@@ -388,46 +396,50 @@ export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ childr
 interface AnimatedButtonProps {
   children: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  variant?: 'primary' | 'secondary' | 'accent';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "accent";
+  size?: "sm" | "md" | "lg";
   className?: string;
   disabled?: boolean;
   loading?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }
 
 export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   children,
   onClick,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   className,
   disabled = false,
   loading = false,
-  type = 'button'
+  type = "button",
 }) => {
-  const baseClasses = "relative overflow-hidden font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
-  
+  const baseClasses =
+    "relative overflow-hidden font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2";
+
   const variants = {
-    primary: "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg focus:ring-jobequal-green",
-    secondary: "bg-white border-2 border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white shadow-md focus:ring-jobequal-green",
-    accent: "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg focus:ring-purple-500"
+    primary:
+      "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-lg focus:ring-jobequal-green",
+    secondary:
+      "bg-white border-2 border-jobequal-green text-jobequal-green hover:bg-jobequal-green hover:text-white shadow-md focus:ring-jobequal-green",
+    accent:
+      "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg focus:ring-purple-500",
   };
 
   const sizes = {
     sm: "px-4 py-2 text-sm",
     md: "px-6 py-3 text-base",
-    lg: "px-8 py-4 text-lg"
+    lg: "px-8 py-4 text-lg",
   };
 
   return (
     <motion.button
       whileHover={{
         scale: 1.05,
-        boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+        boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
       }}
       whileTap={{ scale: 0.95 }}
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
+      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${disabled ? "opacity-50 cursor-not-allowed" : ""} ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
@@ -446,13 +458,13 @@ export const AnimatedButton: React.FC<AnimatedButtonProps> = ({
         )}
         <span>{children}</span>
       </motion.div>
-      
+
       {/* Ripple effect */}
       <motion.div
         className="absolute inset-0 bg-white opacity-0"
         whileTap={{
           opacity: [0, 0.3, 0],
-          scale: [0, 1]
+          scale: [0, 1],
         }}
         transition={{ duration: 0.3 }}
       />
@@ -470,7 +482,7 @@ export const AnimatedCard: React.FC<{
   const animConfig = hoverable ? modernAnimations.cardHover : null;
   return (
     <motion.div
-      className={`bg-white rounded-2xl shadow-lg ${hoverable ? 'cursor-pointer' : ''} ${className}`}
+      className={`bg-white rounded-2xl shadow-lg ${hoverable ? "cursor-pointer" : ""} ${className}`}
       variants={animConfig?.variants}
       whileHover={animConfig?.whileHover}
       transition={animConfig?.transition}
@@ -494,7 +506,7 @@ export const GradientText: React.FC<{
       animate="animate"
       transition={animConfig.transition}
       style={{
-        backgroundSize: "300% 300%"
+        backgroundSize: "300% 300%",
       }}
     >
       {children}
@@ -510,5 +522,5 @@ export default {
   AnimatedButton,
   AnimatedCard,
   GradientText,
-  modernAnimations
+  modernAnimations,
 };

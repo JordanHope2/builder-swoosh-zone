@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Navigation } from '../components/Navigation';
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  FileText, 
-  Plus, 
-  Edit3, 
+import { useState } from "react";
+import { Navigation } from "../components/Navigation";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  FileText,
+  Plus,
+  Edit3,
   Trash2,
   Save,
   Upload,
@@ -23,8 +23,8 @@ import {
   Code,
   Star,
   Target,
-  CheckCircle
-} from 'lucide-react';
+  CheckCircle,
+} from "lucide-react";
 
 interface Experience {
   id: string;
@@ -51,78 +51,83 @@ interface Education {
 interface Skill {
   id: string;
   name: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
-  category: 'Technical' | 'Soft' | 'Language';
+  level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+  category: "Technical" | "Soft" | "Language";
 }
 
 const mockProfile = {
   personalInfo: {
-    firstName: 'Alex',
-    lastName: 'Johnson',
-    email: 'alex.johnson@email.com',
-    phone: '+41 79 123 45 67',
-    location: 'Zurich, Switzerland',
-    dateOfBirth: '1990-05-15',
-    website: 'https://alexjohnson.dev',
-    linkedin: 'https://linkedin.com/in/alexjohnson',
-    github: 'https://github.com/alexjohnson',
-    summary: 'Passionate Senior Software Engineer with 8+ years of experience building scalable web applications. Expertise in React, TypeScript, and cloud technologies. Proven track record of leading teams and delivering high-quality products.'
+    firstName: "Alex",
+    lastName: "Johnson",
+    email: "alex.johnson@email.com",
+    phone: "+41 79 123 45 67",
+    location: "Zurich, Switzerland",
+    dateOfBirth: "1990-05-15",
+    website: "https://alexjohnson.dev",
+    linkedin: "https://linkedin.com/in/alexjohnson",
+    github: "https://github.com/alexjohnson",
+    summary:
+      "Passionate Senior Software Engineer with 8+ years of experience building scalable web applications. Expertise in React, TypeScript, and cloud technologies. Proven track record of leading teams and delivering high-quality products.",
   },
   experience: [
     {
-      id: '1',
-      title: 'Senior Software Engineer',
-      company: 'TechCorp AG',
-      location: 'Zurich, Switzerland',
-      startDate: '2021-03',
-      endDate: '',
+      id: "1",
+      title: "Senior Software Engineer",
+      company: "TechCorp AG",
+      location: "Zurich, Switzerland",
+      startDate: "2021-03",
+      endDate: "",
       current: true,
-      description: 'Lead development of microservices architecture serving 2M+ users. Built React applications with TypeScript, implemented CI/CD pipelines, and mentored junior developers.'
+      description:
+        "Lead development of microservices architecture serving 2M+ users. Built React applications with TypeScript, implemented CI/CD pipelines, and mentored junior developers.",
     },
     {
-      id: '2',
-      title: 'Software Engineer',
-      company: 'InnovateCH',
-      location: 'Geneva, Switzerland',
-      startDate: '2019-06',
-      endDate: '2021-02',
+      id: "2",
+      title: "Software Engineer",
+      company: "InnovateCH",
+      location: "Geneva, Switzerland",
+      startDate: "2019-06",
+      endDate: "2021-02",
       current: false,
-      description: 'Developed full-stack applications using React, Node.js, and PostgreSQL. Improved application performance by 40% and reduced deployment time by 60%.'
-    }
+      description:
+        "Developed full-stack applications using React, Node.js, and PostgreSQL. Improved application performance by 40% and reduced deployment time by 60%.",
+    },
   ] as Experience[],
   education: [
     {
-      id: '1',
-      degree: 'Master of Science in Computer Science',
-      school: 'ETH Zurich',
-      location: 'Zurich, Switzerland',
-      startDate: '2013-09',
-      endDate: '2016-07',
-      gpa: '5.8/6.0',
-      description: 'Specialized in Machine Learning and Distributed Systems. Thesis on "Scalable Web Applications in the Cloud".'
+      id: "1",
+      degree: "Master of Science in Computer Science",
+      school: "ETH Zurich",
+      location: "Zurich, Switzerland",
+      startDate: "2013-09",
+      endDate: "2016-07",
+      gpa: "5.8/6.0",
+      description:
+        'Specialized in Machine Learning and Distributed Systems. Thesis on "Scalable Web Applications in the Cloud".',
     },
     {
-      id: '2',
-      degree: 'Bachelor of Science in Computer Science',
-      school: 'University of Zurich',
-      location: 'Zurich, Switzerland',
-      startDate: '2010-09',
-      endDate: '2013-07',
-      gpa: '5.5/6.0',
-      description: 'Strong foundation in computer science fundamentals, algorithms, and software engineering.'
-    }
+      id: "2",
+      degree: "Bachelor of Science in Computer Science",
+      school: "University of Zurich",
+      location: "Zurich, Switzerland",
+      startDate: "2010-09",
+      endDate: "2013-07",
+      gpa: "5.5/6.0",
+      description:
+        "Strong foundation in computer science fundamentals, algorithms, and software engineering.",
+    },
   ] as Education[],
   skills: [
-    { id: '1', name: 'React', level: 'Expert', category: 'Technical' },
-    { id: '2', name: 'TypeScript', level: 'Expert', category: 'Technical' },
-    { id: '3', name: 'Node.js', level: 'Advanced', category: 'Technical' },
-    { id: '4', name: 'Python', level: 'Advanced', category: 'Technical' },
-    { id: '5', name: 'AWS', level: 'Intermediate', category: 'Technical' },
-    { id: '6', name: 'Team Leadership', level: 'Advanced', category: 'Soft' },
-    { id: '7', name: 'German', level: 'Expert', category: 'Language' },
-    { id: '8', name: 'English', level: 'Expert', category: 'Language' },
-    { id: '9', name: 'French', level: 'Intermediate', category: 'Language' }
-  ] as Skill[]
+    { id: "1", name: "React", level: "Expert", category: "Technical" },
+    { id: "2", name: "TypeScript", level: "Expert", category: "Technical" },
+    { id: "3", name: "Node.js", level: "Advanced", category: "Technical" },
+    { id: "4", name: "Python", level: "Advanced", category: "Technical" },
+    { id: "5", name: "AWS", level: "Intermediate", category: "Technical" },
+    { id: "6", name: "Team Leadership", level: "Advanced", category: "Soft" },
+    { id: "7", name: "German", level: "Expert", category: "Language" },
+    { id: "8", name: "English", level: "Expert", category: "Language" },
+    { id: "9", name: "French", level: "Intermediate", category: "Language" },
+  ] as Skill[],
 };
 
 function PersonalInfoSection() {
@@ -141,7 +146,7 @@ function PersonalInfoSection() {
           className="flex items-center space-x-2 text-jobequal-green hover:text-jobequal-green-dark transition-colors"
         >
           <Edit3 className="w-4 h-4" />
-          <span>{editing ? 'Cancel' : 'Edit'}</span>
+          <span>{editing ? "Cancel" : "Edit"}</span>
         </button>
       </div>
 
@@ -149,20 +154,28 @@ function PersonalInfoSection() {
         <form className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-jobequal-text font-semibold mb-2">First Name</label>
+              <label className="block text-jobequal-text font-semibold mb-2">
+                First Name
+              </label>
               <input
                 type="text"
                 value={formData.firstName}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, firstName: e.target.value })
+                }
                 className="w-full p-3 rounded-xl border border-jobequal-neutral-dark focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-jobequal-text font-semibold mb-2">Last Name</label>
+              <label className="block text-jobequal-text font-semibold mb-2">
+                Last Name
+              </label>
               <input
                 type="text"
                 value={formData.lastName}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, lastName: e.target.value })
+                }
                 className="w-full p-3 rounded-xl border border-jobequal-neutral-dark focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
             </div>
@@ -170,30 +183,42 @@ function PersonalInfoSection() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-jobequal-text font-semibold mb-2">Email</label>
+              <label className="block text-jobequal-text font-semibold mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="w-full p-3 rounded-xl border border-jobequal-neutral-dark focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
             </div>
             <div>
-              <label className="block text-jobequal-text font-semibold mb-2">Phone</label>
+              <label className="block text-jobequal-text font-semibold mb-2">
+                Phone
+              </label>
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, phone: e.target.value })
+                }
                 className="w-full p-3 rounded-xl border border-jobequal-neutral-dark focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-jobequal-text font-semibold mb-2">Professional Summary</label>
+            <label className="block text-jobequal-text font-semibold mb-2">
+              Professional Summary
+            </label>
             <textarea
               value={formData.summary}
-              onChange={(e) => setFormData({...formData, summary: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, summary: e.target.value })
+              }
               rows={4}
               className="w-full p-3 rounded-xl border border-jobequal-neutral-dark focus:ring-2 focus:ring-jobequal-green focus:border-transparent resize-none"
             />
@@ -226,7 +251,9 @@ function PersonalInfoSection() {
               </div>
             </div>
             <div>
-              <div className="text-sm text-jobequal-text-muted mb-1">Location</div>
+              <div className="text-sm text-jobequal-text-muted mb-1">
+                Location
+              </div>
               <div className="text-lg text-jobequal-text flex items-center">
                 <MapPin className="w-4 h-4 mr-2 text-jobequal-green" />
                 {formData.location}
@@ -252,8 +279,12 @@ function PersonalInfoSection() {
           </div>
 
           <div>
-            <div className="text-sm text-jobequal-text-muted mb-3">Professional Summary</div>
-            <p className="text-jobequal-text leading-relaxed">{formData.summary}</p>
+            <div className="text-sm text-jobequal-text-muted mb-3">
+              Professional Summary
+            </div>
+            <p className="text-jobequal-text leading-relaxed">
+              {formData.summary}
+            </p>
           </div>
 
           <div className="flex space-x-4">
@@ -318,18 +349,25 @@ function ExperienceSection() {
 
       <div className="space-y-6">
         {experiences.map((exp) => (
-          <div key={exp.id} className="border border-jobequal-neutral-dark rounded-2xl p-6">
+          <div
+            key={exp.id}
+            className="border border-jobequal-neutral-dark rounded-2xl p-6"
+          >
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className="text-xl font-bold text-jobequal-text">{exp.title}</h3>
-                <p className="text-lg text-jobequal-green font-semibold">{exp.company}</p>
+                <h3 className="text-xl font-bold text-jobequal-text">
+                  {exp.title}
+                </h3>
+                <p className="text-lg text-jobequal-green font-semibold">
+                  {exp.company}
+                </p>
                 <p className="text-jobequal-text-muted flex items-center mt-1">
                   <MapPin className="w-4 h-4 mr-1" />
                   {exp.location}
                 </p>
                 <p className="text-sm text-jobequal-text-muted flex items-center mt-1">
                   <Calendar className="w-4 h-4 mr-1" />
-                  {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
+                  {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                   {exp.current && (
                     <span className="ml-2 bg-jobequal-green text-white text-xs px-2 py-1 rounded-full">
                       Current
@@ -346,7 +384,9 @@ function ExperienceSection() {
                 </button>
               </div>
             </div>
-            <p className="text-jobequal-text-muted leading-relaxed">{exp.description}</p>
+            <p className="text-jobequal-text-muted leading-relaxed">
+              {exp.description}
+            </p>
           </div>
         ))}
       </div>
@@ -357,18 +397,25 @@ function ExperienceSection() {
 function SkillsSection() {
   const [skills] = useState(mockProfile.skills);
 
-  const skillsByCategory = skills.reduce((acc, skill) => {
-    if (!acc[skill.category]) acc[skill.category] = [];
-    acc[skill.category].push(skill);
-    return acc;
-  }, {} as Record<string, Skill[]>);
+  const skillsByCategory = skills.reduce(
+    (acc, skill) => {
+      if (!acc[skill.category]) acc[skill.category] = [];
+      acc[skill.category].push(skill);
+      return acc;
+    },
+    {} as Record<string, Skill[]>,
+  );
 
   const getSkillColor = (level: string) => {
     switch (level) {
-      case 'Expert': return 'bg-jobequal-green text-white';
-      case 'Advanced': return 'bg-jobequal-blue-dark text-white';
-      case 'Intermediate': return 'bg-yellow-500 text-white';
-      default: return 'bg-jobequal-neutral text-jobequal-text';
+      case "Expert":
+        return "bg-jobequal-green text-white";
+      case "Advanced":
+        return "bg-jobequal-blue-dark text-white";
+      case "Intermediate":
+        return "bg-yellow-500 text-white";
+      default:
+        return "bg-jobequal-neutral text-jobequal-text";
     }
   };
 
@@ -388,14 +435,18 @@ function SkillsSection() {
       <div className="space-y-8">
         {Object.entries(skillsByCategory).map(([category, categorySkills]) => (
           <div key={category}>
-            <h3 className="text-lg font-semibold text-jobequal-text mb-4">{category} Skills</h3>
+            <h3 className="text-lg font-semibold text-jobequal-text mb-4">
+              {category} Skills
+            </h3>
             <div className="flex flex-wrap gap-3">
               {categorySkills.map((skill) => (
                 <div key={skill.id} className="flex items-center space-x-2">
                   <span className="bg-jobequal-green-light text-jobequal-green-dark px-3 py-2 rounded-xl font-medium">
                     {skill.name}
                   </span>
-                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getSkillColor(skill.level)}`}>
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full font-medium ${getSkillColor(skill.level)}`}
+                  >
                     {skill.level}
                   </span>
                 </div>
@@ -412,7 +463,7 @@ export default function CandidateProfile() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
       <Navigation />
-      
+
       <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -454,11 +505,15 @@ export default function CandidateProfile() {
               </button>
             </div>
           </div>
-          
+
           <div className="bg-jobequal-green-light rounded-2xl p-6 text-center">
             <FileText className="w-12 h-12 text-jobequal-green mx-auto mb-4" />
-            <h3 className="font-semibold text-jobequal-green-dark mb-2">alex_johnson_cv.pdf</h3>
-            <p className="text-sm text-jobequal-text-muted">Last updated: January 15, 2024</p>
+            <h3 className="font-semibold text-jobequal-green-dark mb-2">
+              alex_johnson_cv.pdf
+            </h3>
+            <p className="text-sm text-jobequal-text-muted">
+              Last updated: January 15, 2024
+            </p>
           </div>
         </div>
 
@@ -482,11 +537,18 @@ export default function CandidateProfile() {
 
           <div className="space-y-6">
             {mockProfile.education.map((edu) => (
-              <div key={edu.id} className="border border-jobequal-neutral-dark rounded-2xl p-6">
+              <div
+                key={edu.id}
+                className="border border-jobequal-neutral-dark rounded-2xl p-6"
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-jobequal-text">{edu.degree}</h3>
-                    <p className="text-lg text-jobequal-green font-semibold">{edu.school}</p>
+                    <h3 className="text-xl font-bold text-jobequal-text">
+                      {edu.degree}
+                    </h3>
+                    <p className="text-lg text-jobequal-green font-semibold">
+                      {edu.school}
+                    </p>
                     <p className="text-jobequal-text-muted flex items-center mt-1">
                       <MapPin className="w-4 h-4 mr-1" />
                       {edu.location}
@@ -510,7 +572,9 @@ export default function CandidateProfile() {
                     </button>
                   </div>
                 </div>
-                <p className="text-jobequal-text-muted leading-relaxed">{edu.description}</p>
+                <p className="text-jobequal-text-muted leading-relaxed">
+                  {edu.description}
+                </p>
               </div>
             ))}
           </div>

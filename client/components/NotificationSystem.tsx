@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
   BellOff,
@@ -37,22 +37,30 @@ import {
   Globe,
   Mail,
   Phone,
-  Share2
-} from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
-import SecurityUtils from '../lib/security';
-import { ActionButton } from './ui/unified-dashboard';
+  Share2,
+} from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
+import SecurityUtils from "../lib/security";
+import { ActionButton } from "./ui/unified-dashboard";
 
 interface Notification {
   id: string;
-  type: 'info' | 'success' | 'warning' | 'error' | 'message' | 'system' | 'billing' | 'security';
+  type:
+    | "info"
+    | "success"
+    | "warning"
+    | "error"
+    | "message"
+    | "system"
+    | "billing"
+    | "security";
   title: string;
   message: string;
   timestamp: string;
   read: boolean;
   starred: boolean;
   archived: boolean;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: "low" | "medium" | "high" | "urgent";
   category: string;
   actionUrl?: string;
   actionLabel?: string;
@@ -69,172 +77,192 @@ interface Notification {
 
 const mockNotifications: Notification[] = [
   {
-    id: 'notif-1',
-    type: 'message',
-    title: 'New message from Sarah Johnson',
-    message: 'Hi! I\'d like to discuss the Senior Software Engineer position. Are you available for a quick call this afternoon?',
-    timestamp: '2024-01-16T14:30:00Z',
+    id: "notif-1",
+    type: "message",
+    title: "New message from Sarah Johnson",
+    message:
+      "Hi! I'd like to discuss the Senior Software Engineer position. Are you available for a quick call this afternoon?",
+    timestamp: "2024-01-16T14:30:00Z",
     read: false,
     starred: false,
     archived: false,
-    priority: 'high',
-    category: 'Messages',
-    actionUrl: '/messages',
-    actionLabel: 'Reply',
+    priority: "high",
+    category: "Messages",
+    actionUrl: "/messages",
+    actionLabel: "Reply",
     sender: {
-      id: 'user-1',
-      name: 'Sarah Johnson',
-      avatar: '/avatars/sarah.jpg',
-      role: 'Recruiter'
-    }
+      id: "user-1",
+      name: "Sarah Johnson",
+      avatar: "/avatars/sarah.jpg",
+      role: "Recruiter",
+    },
   },
   {
-    id: 'notif-2',
-    type: 'success',
-    title: 'Application submitted successfully',
-    message: 'Your application for Senior Frontend Developer at TechCorp has been submitted and is under review.',
-    timestamp: '2024-01-16T13:45:00Z',
+    id: "notif-2",
+    type: "success",
+    title: "Application submitted successfully",
+    message:
+      "Your application for Senior Frontend Developer at TechCorp has been submitted and is under review.",
+    timestamp: "2024-01-16T13:45:00Z",
     read: false,
     starred: true,
     archived: false,
-    priority: 'medium',
-    category: 'Applications',
-    actionUrl: '/applications',
-    actionLabel: 'View Application'
+    priority: "medium",
+    category: "Applications",
+    actionUrl: "/applications",
+    actionLabel: "View Application",
   },
   {
-    id: 'notif-3',
-    type: 'billing',
-    title: 'Payment successful',
-    message: 'Your subscription payment of CHF 299.00 has been processed successfully. Next billing date: February 16, 2024.',
-    timestamp: '2024-01-16T12:00:00Z',
+    id: "notif-3",
+    type: "billing",
+    title: "Payment successful",
+    message:
+      "Your subscription payment of CHF 299.00 has been processed successfully. Next billing date: February 16, 2024.",
+    timestamp: "2024-01-16T12:00:00Z",
     read: true,
     starred: false,
     archived: false,
-    priority: 'low',
-    category: 'Billing',
-    actionUrl: '/billing',
-    actionLabel: 'View Invoice'
+    priority: "low",
+    category: "Billing",
+    actionUrl: "/billing",
+    actionLabel: "View Invoice",
   },
   {
-    id: 'notif-4',
-    type: 'security',
-    title: 'Security alert: New login detected',
-    message: 'A new login was detected from Zurich, Switzerland on Chrome browser. If this wasn\'t you, please secure your account.',
-    timestamp: '2024-01-16T11:15:00Z',
+    id: "notif-4",
+    type: "security",
+    title: "Security alert: New login detected",
+    message:
+      "A new login was detected from Zurich, Switzerland on Chrome browser. If this wasn't you, please secure your account.",
+    timestamp: "2024-01-16T11:15:00Z",
     read: true,
     starred: false,
     archived: false,
-    priority: 'urgent',
-    category: 'Security',
-    actionUrl: '/settings/security',
-    actionLabel: 'Review Login'
+    priority: "urgent",
+    category: "Security",
+    actionUrl: "/settings/security",
+    actionLabel: "Review Login",
   },
   {
-    id: 'notif-5',
-    type: 'info',
-    title: 'Profile views increased',
-    message: 'Your profile has been viewed 23 times this week, 45% more than last week. Consider updating your skills to attract more opportunities.',
-    timestamp: '2024-01-16T10:30:00Z',
+    id: "notif-5",
+    type: "info",
+    title: "Profile views increased",
+    message:
+      "Your profile has been viewed 23 times this week, 45% more than last week. Consider updating your skills to attract more opportunities.",
+    timestamp: "2024-01-16T10:30:00Z",
     read: true,
     starred: false,
     archived: false,
-    priority: 'low',
-    category: 'Profile',
-    actionUrl: '/profile',
-    actionLabel: 'Update Profile'
+    priority: "low",
+    category: "Profile",
+    actionUrl: "/profile",
+    actionLabel: "Update Profile",
   },
   {
-    id: 'notif-6',
-    type: 'system',
-    title: 'Platform maintenance scheduled',
-    message: 'We\'ll be performing system maintenance on January 20th from 2:00 AM to 4:00 AM CET. The platform may be temporarily unavailable.',
-    timestamp: '2024-01-16T09:00:00Z',
+    id: "notif-6",
+    type: "system",
+    title: "Platform maintenance scheduled",
+    message:
+      "We'll be performing system maintenance on January 20th from 2:00 AM to 4:00 AM CET. The platform may be temporarily unavailable.",
+    timestamp: "2024-01-16T09:00:00Z",
     read: true,
     starred: false,
     archived: false,
-    priority: 'medium',
-    category: 'System',
-    actionUrl: '/system-status',
-    actionLabel: 'Learn More'
+    priority: "medium",
+    category: "System",
+    actionUrl: "/system-status",
+    actionLabel: "Learn More",
   },
   {
-    id: 'notif-7',
-    type: 'warning',
-    title: 'Subscription expiring soon',
-    message: 'Your Premium subscription will expire on January 31st. Renew now to continue enjoying all features.',
-    timestamp: '2024-01-16T08:00:00Z',
+    id: "notif-7",
+    type: "warning",
+    title: "Subscription expiring soon",
+    message:
+      "Your Premium subscription will expire on January 31st. Renew now to continue enjoying all features.",
+    timestamp: "2024-01-16T08:00:00Z",
     read: true,
     starred: true,
     archived: false,
-    priority: 'high',
-    category: 'Billing',
-    actionUrl: '/subscription',
-    actionLabel: 'Renew Now'
-  }
+    priority: "high",
+    category: "Billing",
+    actionUrl: "/subscription",
+    actionLabel: "Renew Now",
+  },
 ];
 
 export const NotificationSystem: React.FC = () => {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
-  const [filter, setFilter] = useState<'all' | 'unread' | 'starred' | 'archived'>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [notifications, setNotifications] =
+    useState<Notification[]>(mockNotifications);
+  const [filter, setFilter] = useState<
+    "all" | "unread" | "starred" | "archived"
+  >("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter(n => !n.read && !n.archived).length;
-  const categories = ['all', ...Array.from(new Set(notifications.map(n => n.category)))];
+  const unreadCount = notifications.filter(
+    (n) => !n.read && !n.archived,
+  ).length;
+  const categories = [
+    "all",
+    ...Array.from(new Set(notifications.map((n) => n.category))),
+  ];
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
     );
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(n => ({ ...n, read: true }))
-    );
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
   const toggleStar = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, starred: !n.starred } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, starred: !n.starred } : n)),
     );
   };
 
   const archiveNotification = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, archived: true } : n)
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, archived: true } : n)),
     );
   };
 
   const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
-  const filteredNotifications = notifications.filter(notification => {
+  const filteredNotifications = notifications.filter((notification) => {
     // Filter by read status
-    if (filter === 'unread' && notification.read) return false;
-    if (filter === 'starred' && !notification.starred) return false;
-    if (filter === 'archived' && !notification.archived) return false;
-    if (filter === 'all' && notification.archived) return false;
+    if (filter === "unread" && notification.read) return false;
+    if (filter === "starred" && !notification.starred) return false;
+    if (filter === "archived" && !notification.archived) return false;
+    if (filter === "all" && notification.archived) return false;
 
     // Filter by category
-    if (selectedCategory !== 'all' && notification.category !== selectedCategory) return false;
+    if (
+      selectedCategory !== "all" &&
+      notification.category !== selectedCategory
+    )
+      return false;
 
     // Filter by search term
     if (searchTerm) {
@@ -251,42 +279,62 @@ export const NotificationSystem: React.FC = () => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'message': return MessageCircle;
-      case 'success': return CheckCircle;
-      case 'warning': return AlertTriangle;
-      case 'error': return XCircle;
-      case 'billing': return CreditCard;
-      case 'security': return Shield;
-      case 'system': return Settings;
-      default: return Info;
+      case "message":
+        return MessageCircle;
+      case "success":
+        return CheckCircle;
+      case "warning":
+        return AlertTriangle;
+      case "error":
+        return XCircle;
+      case "billing":
+        return CreditCard;
+      case "security":
+        return Shield;
+      case "system":
+        return Settings;
+      default:
+        return Info;
     }
   };
 
   const getNotificationColor = (type: string, priority: string) => {
-    if (priority === 'urgent') return 'text-red-500 bg-red-50 dark:bg-red-900/20';
-    
+    if (priority === "urgent")
+      return "text-red-500 bg-red-50 dark:bg-red-900/20";
+
     switch (type) {
-      case 'message': return 'text-blue-500 bg-blue-50 dark:bg-blue-900/20';
-      case 'success': return 'text-green-500 bg-green-50 dark:bg-green-900/20';
-      case 'warning': return 'text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20';
-      case 'error': return 'text-red-500 bg-red-50 dark:bg-red-900/20';
-      case 'billing': return 'text-purple-500 bg-purple-50 dark:bg-purple-900/20';
-      case 'security': return 'text-orange-500 bg-orange-50 dark:bg-orange-900/20';
-      case 'system': return 'text-gray-500 bg-gray-50 dark:bg-gray-900/20';
-      default: return 'text-blue-500 bg-blue-50 dark:bg-blue-900/20';
+      case "message":
+        return "text-blue-500 bg-blue-50 dark:bg-blue-900/20";
+      case "success":
+        return "text-green-500 bg-green-50 dark:bg-green-900/20";
+      case "warning":
+        return "text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20";
+      case "error":
+        return "text-red-500 bg-red-50 dark:bg-red-900/20";
+      case "billing":
+        return "text-purple-500 bg-purple-50 dark:bg-purple-900/20";
+      case "security":
+        return "text-orange-500 bg-orange-50 dark:bg-orange-900/20";
+      case "system":
+        return "text-gray-500 bg-gray-50 dark:bg-gray-900/20";
+      default:
+        return "text-blue-500 bg-blue-50 dark:bg-blue-900/20";
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     const colors = {
-      low: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400',
-      medium: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-      high: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
-      urgent: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400'
+      low: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+      medium:
+        "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+      high: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
+      urgent: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
     };
-    
+
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority as keyof typeof colors]}`}>
+      <span
+        className={`px-2 py-1 rounded-full text-xs font-medium ${colors[priority as keyof typeof colors]}`}
+      >
         {priority.toUpperCase()}
       </span>
     );
@@ -296,16 +344,21 @@ export const NotificationSystem: React.FC = () => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 1) {
       const diffInMinutes = Math.floor(diffInHours * 60);
       return `${diffInMinutes} min ago`;
     } else if (diffInHours < 24) {
       return `${Math.floor(diffInHours)} hours ago`;
-    } else if (diffInHours < 168) { // 7 days
+    } else if (diffInHours < 168) {
+      // 7 days
       return `${Math.floor(diffInHours / 24)} days ago`;
     } else {
-      return date.toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: '2-digit' });
+      return date.toLocaleDateString("de-CH", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      });
     }
   };
 
@@ -325,7 +378,7 @@ export const NotificationSystem: React.FC = () => {
             animate={{ scale: 1 }}
             className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center"
           >
-            {unreadCount > 99 ? '99+' : unreadCount}
+            {unreadCount > 99 ? "99+" : unreadCount}
           </motion.span>
         )}
       </motion.button>
@@ -372,26 +425,30 @@ export const NotificationSystem: React.FC = () => {
                   type="text"
                   placeholder="Search notifications..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(SecurityUtils.sanitizeText(e.target.value))}
+                  onChange={(e) =>
+                    setSearchTerm(SecurityUtils.sanitizeText(e.target.value))
+                  }
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                 />
               </div>
 
               {/* Filters */}
               <div className="flex items-center space-x-2 mb-2">
-                {(['all', 'unread', 'starred', 'archived'] as const).map((filterType) => (
-                  <button
-                    key={filterType}
-                    onClick={() => setFilter(filterType)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                      filter === filterType
-                        ? 'bg-jobequal-green text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
-                    }`}
-                  >
-                    {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
-                  </button>
-                ))}
+                {(["all", "unread", "starred", "archived"] as const).map(
+                  (filterType) => (
+                    <button
+                      key={filterType}
+                      onClick={() => setFilter(filterType)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                        filter === filterType
+                          ? "bg-jobequal-green text-white"
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+                    </button>
+                  ),
+                )}
               </div>
 
               {/* Categories */}
@@ -402,8 +459,8 @@ export const NotificationSystem: React.FC = () => {
                     onClick={() => setSelectedCategory(category)}
                     className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                       selectedCategory === category
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600'
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
                     }`}
                   >
                     {category}
@@ -417,26 +474,35 @@ export const NotificationSystem: React.FC = () => {
               {filteredNotifications.length === 0 ? (
                 <div className="p-8 text-center">
                   <Bell className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">No notifications found</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    No notifications found
+                  </p>
                 </div>
               ) : (
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredNotifications.map((notification) => {
                     const Icon = getNotificationIcon(notification.type);
-                    const colorClass = getNotificationColor(notification.type, notification.priority);
-                    
+                    const colorClass = getNotificationColor(
+                      notification.type,
+                      notification.priority,
+                    );
+
                     return (
                       <motion.div
                         key={notification.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                          !notification.read ? 'bg-blue-50 dark:bg-blue-900/10' : ''
+                          !notification.read
+                            ? "bg-blue-50 dark:bg-blue-900/10"
+                            : ""
                         }`}
                       >
                         <div className="flex items-start space-x-3">
                           {/* Icon */}
-                          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${colorClass}`}>
+                          <div
+                            className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${colorClass}`}
+                          >
                             <Icon className="w-4 h-4" />
                           </div>
 
@@ -444,16 +510,24 @@ export const NotificationSystem: React.FC = () => {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between">
                               <div className="flex-1 min-w-0">
-                                <h4 className={`text-sm font-medium ${
-                                  !notification.read 
-                                    ? 'text-gray-900 dark:text-white' 
-                                    : 'text-gray-700 dark:text-gray-300'
-                                }`}>
-                                  {SecurityUtils.sanitizeText(notification.title)}
+                                <h4
+                                  className={`text-sm font-medium ${
+                                    !notification.read
+                                      ? "text-gray-900 dark:text-white"
+                                      : "text-gray-700 dark:text-gray-300"
+                                  }`}
+                                >
+                                  {SecurityUtils.sanitizeText(
+                                    notification.title,
+                                  )}
                                 </h4>
                                 {notification.sender && (
                                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                    From: {SecurityUtils.sanitizeText(notification.sender.name)} ({notification.sender.role})
+                                    From:{" "}
+                                    {SecurityUtils.sanitizeText(
+                                      notification.sender.name,
+                                    )}{" "}
+                                    ({notification.sender.role})
                                   </p>
                                 )}
                               </div>
@@ -464,20 +538,26 @@ export const NotificationSystem: React.FC = () => {
                                     onClick={() => toggleStar(notification.id)}
                                     className={`p-1 rounded transition-colors ${
                                       notification.starred
-                                        ? 'text-yellow-500 hover:text-yellow-600'
-                                        : 'text-gray-400 hover:text-yellow-500'
+                                        ? "text-yellow-500 hover:text-yellow-600"
+                                        : "text-gray-400 hover:text-yellow-500"
                                     }`}
                                   >
-                                    <Star className={`w-3 h-3 ${notification.starred ? 'fill-current' : ''}`} />
+                                    <Star
+                                      className={`w-3 h-3 ${notification.starred ? "fill-current" : ""}`}
+                                    />
                                   </button>
                                   <button
-                                    onClick={() => archiveNotification(notification.id)}
+                                    onClick={() =>
+                                      archiveNotification(notification.id)
+                                    }
                                     className="p-1 rounded text-gray-400 hover:text-gray-600 transition-colors"
                                   >
                                     <Archive className="w-3 h-3" />
                                   </button>
                                   <button
-                                    onClick={() => deleteNotification(notification.id)}
+                                    onClick={() =>
+                                      deleteNotification(notification.id)
+                                    }
                                     className="p-1 rounded text-gray-400 hover:text-red-500 transition-colors"
                                   >
                                     <X className="w-3 h-3" />
@@ -485,16 +565,16 @@ export const NotificationSystem: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                               {SecurityUtils.sanitizeText(notification.message)}
                             </p>
-                            
+
                             <div className="flex items-center justify-between mt-2">
                               <span className="text-xs text-gray-500 dark:text-gray-400">
                                 {formatTime(notification.timestamp)}
                               </span>
-                              
+
                               <div className="flex items-center space-x-2">
                                 {!notification.read && (
                                   <button
@@ -510,7 +590,7 @@ export const NotificationSystem: React.FC = () => {
                                     onClick={() => setIsOpen(false)}
                                     className="text-xs bg-jobequal-green text-white px-2 py-1 rounded font-medium hover:bg-jobequal-green-hover transition-colors"
                                   >
-                                    {notification.actionLabel || 'View'}
+                                    {notification.actionLabel || "View"}
                                   </a>
                                 )}
                               </div>
@@ -551,10 +631,10 @@ interface NotificationToastProps {
 export const NotificationToast: React.FC<NotificationToastProps> = ({
   notification,
   onClose,
-  onAction
+  onAction,
 }) => {
   const Icon = getNotificationIcon(notification.type);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -572,12 +652,15 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
     >
       <div className="p-4">
         <div className="flex items-start space-x-3">
-          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
-            getNotificationColor(notification.type, notification.priority)
-          }`}>
+          <div
+            className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${getNotificationColor(
+              notification.type,
+              notification.priority,
+            )}`}
+          >
             <Icon className="w-4 h-4" />
           </div>
-          
+
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-medium text-gray-900 dark:text-white">
               {SecurityUtils.sanitizeText(notification.title)}
@@ -585,7 +668,7 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {SecurityUtils.sanitizeText(notification.message)}
             </p>
-            
+
             <div className="flex items-center space-x-2 mt-3">
               {notification.actionLabel && onAction && (
                 <button
@@ -603,7 +686,7 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
               </button>
             </div>
           </div>
-          
+
           <button
             onClick={onClose}
             className="flex-shrink-0 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -618,29 +701,45 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
 
 function getNotificationIcon(type: string) {
   switch (type) {
-    case 'message': return MessageCircle;
-    case 'success': return CheckCircle;
-    case 'warning': return AlertTriangle;
-    case 'error': return XCircle;
-    case 'billing': return CreditCard;
-    case 'security': return Shield;
-    case 'system': return Settings;
-    default: return Info;
+    case "message":
+      return MessageCircle;
+    case "success":
+      return CheckCircle;
+    case "warning":
+      return AlertTriangle;
+    case "error":
+      return XCircle;
+    case "billing":
+      return CreditCard;
+    case "security":
+      return Shield;
+    case "system":
+      return Settings;
+    default:
+      return Info;
   }
 }
 
 function getNotificationColor(type: string, priority: string) {
-  if (priority === 'urgent') return 'text-red-500 bg-red-50 dark:bg-red-900/20';
-  
+  if (priority === "urgent") return "text-red-500 bg-red-50 dark:bg-red-900/20";
+
   switch (type) {
-    case 'message': return 'text-blue-500 bg-blue-50 dark:bg-blue-900/20';
-    case 'success': return 'text-green-500 bg-green-50 dark:bg-green-900/20';
-    case 'warning': return 'text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20';
-    case 'error': return 'text-red-500 bg-red-50 dark:bg-red-900/20';
-    case 'billing': return 'text-purple-500 bg-purple-50 dark:bg-purple-900/20';
-    case 'security': return 'text-orange-500 bg-orange-50 dark:bg-orange-900/20';
-    case 'system': return 'text-gray-500 bg-gray-50 dark:bg-gray-900/20';
-    default: return 'text-blue-500 bg-blue-50 dark:bg-blue-900/20';
+    case "message":
+      return "text-blue-500 bg-blue-50 dark:bg-blue-900/20";
+    case "success":
+      return "text-green-500 bg-green-50 dark:bg-green-900/20";
+    case "warning":
+      return "text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20";
+    case "error":
+      return "text-red-500 bg-red-50 dark:bg-red-900/20";
+    case "billing":
+      return "text-purple-500 bg-purple-50 dark:bg-purple-900/20";
+    case "security":
+      return "text-orange-500 bg-orange-50 dark:bg-orange-900/20";
+    case "system":
+      return "text-gray-500 bg-gray-50 dark:bg-gray-900/20";
+    default:
+      return "text-blue-500 bg-blue-50 dark:bg-blue-900/20";
   }
 }
 

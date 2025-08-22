@@ -1,45 +1,45 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { EnhancedSignIn } from '../components/EnhancedSignIn';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  ArrowRight, 
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { EnhancedSignIn } from "../components/EnhancedSignIn";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  ArrowRight,
   Sparkles,
   Shield,
   Mountain,
-  CheckCircle
-} from 'lucide-react';
-import { ThemeToggle } from '../components/ThemeProvider';
-import { signInWithEmail } from '../lib/supabase';
-import { useToast } from '../hooks/use-toast';
+  CheckCircle,
+} from "lucide-react";
+import { ThemeToggle } from "../components/ThemeProvider";
+import { signInWithEmail } from "../lib/supabase";
+import { useToast } from "../hooks/use-toast";
 
 const benefits = [
   {
     icon: Shield,
-    title: 'Swiss Privacy',
-    description: 'Your data protected with Swiss banking-level security'
+    title: "Swiss Privacy",
+    description: "Your data protected with Swiss banking-level security",
   },
   {
     icon: Mountain,
-    title: 'Premium Quality',
-    description: 'Curated opportunities from Switzerland\'s finest companies'
+    title: "Premium Quality",
+    description: "Curated opportunities from Switzerland's finest companies",
   },
   {
     icon: CheckCircle,
-    title: 'AI Matching',
-    description: 'Advanced algorithms find your perfect career match'
-  }
+    title: "AI Matching",
+    description: "Advanced algorithms find your perfect career match",
+  },
 ];
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
+    email: "",
+    password: "",
+    rememberMe: false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,11 +55,12 @@ export default function SignIn() {
         description: "Redirecting you to your dashboard...",
       });
       // Redirect to dashboard on success
-      window.location.href = '/dashboard';
+      window.location.href = "/dashboard";
     } catch (error: any) {
       toast({
         title: "Sign-in Error",
-        description: error.message || "Invalid email or password. Please try again.",
+        description:
+          error.message || "Invalid email or password. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -69,9 +70,9 @@ export default function SignIn() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -95,7 +96,9 @@ export default function SignIn() {
                 <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200 group-hover:scale-105">
                   <span className="text-white font-bold text-xl">J</span>
                 </div>
-                <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">JobEqual</span>
+                <span className="text-3xl font-bold text-jobequal-text dark:text-white tracking-tight">
+                  JobEqual
+                </span>
               </Link>
             </motion.div>
 
@@ -123,7 +126,10 @@ export default function SignIn() {
           >
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-jobequal-text dark:text-white mb-2"
+              >
                 Email address
               </label>
               <div className="relative">
@@ -146,7 +152,10 @@ export default function SignIn() {
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-jobequal-text dark:text-white mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-jobequal-text dark:text-white mb-2"
+              >
                 Password
               </label>
               <div className="relative">
@@ -156,7 +165,7 @@ export default function SignIn() {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
                   value={formData.password}
@@ -189,13 +198,19 @@ export default function SignIn() {
                   onChange={handleChange}
                   className="h-4 w-4 text-jobequal-green focus:ring-jobequal-green border-gray-300 dark:border-gray-600 rounded"
                 />
-                <label htmlFor="rememberMe" className="ml-2 block text-sm text-jobequal-text-muted dark:text-gray-300">
+                <label
+                  htmlFor="rememberMe"
+                  className="ml-2 block text-sm text-jobequal-text-muted dark:text-gray-300"
+                >
                   Remember me
                 </label>
               </div>
 
               <div className="text-sm">
-                <Link to="/forgot-password" className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors">
+                <Link
+                  to="/forgot-password"
+                  className="font-medium text-jobequal-green hover:text-jobequal-green-hover transition-colors"
+                >
                   Forgot your password?
                 </Link>
               </div>
@@ -250,7 +265,10 @@ export default function SignIn() {
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10 dark:opacity-5">
           <div className="absolute top-20 left-20 w-32 h-32 bg-jobequal-green rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="absolute bottom-20 right-20 w-40 h-40 bg-jobequal-teal rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
 
         <div className="relative z-10 flex flex-col justify-center px-12 py-20">
@@ -274,7 +292,8 @@ export default function SignIn() {
               </span>
             </h3>
             <p className="text-lg text-jobequal-text-muted dark:text-gray-300 leading-relaxed">
-              Join thousands of professionals who found their dream careers through our Swiss-quality platform.
+              Join thousands of professionals who found their dream careers
+              through our Swiss-quality platform.
             </p>
           </motion.div>
 

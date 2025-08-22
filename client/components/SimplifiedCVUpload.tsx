@@ -1,23 +1,31 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Upload, 
-  FileText, 
-  CheckCircle, 
-  AlertCircle, 
-  Brain, 
-  Target, 
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Upload,
+  FileText,
+  CheckCircle,
+  AlertCircle,
+  Brain,
+  Target,
   TrendingUp,
   Star,
   Download,
   Eye,
   Zap,
   Award,
-  BarChart3
-} from 'lucide-react';
-import { aiAnalysisService, CVAnalysisResult } from '../services/aiAnalysisService';
-import { useAuth } from '../contexts/AuthContext';
-import { AnimatedButton, EnhancedMotion, StaggeredList, GradientText } from './ui/enhanced-motion';
+  BarChart3,
+} from "lucide-react";
+import {
+  aiAnalysisService,
+  CVAnalysisResult,
+} from "../services/aiAnalysisService";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  AnimatedButton,
+  EnhancedMotion,
+  StaggeredList,
+  GradientText,
+} from "./ui/enhanced-motion";
 
 interface SimplifiedCVUploadProps {
   onUploadComplete?: (analysisResult: CVAnalysisResult) => void;
@@ -26,11 +34,13 @@ interface SimplifiedCVUploadProps {
 
 export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
   onUploadComplete,
-  className
+  className,
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(
+    null,
+  );
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
@@ -42,20 +52,20 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
 
     // Validate file type
     const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain'
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "text/plain",
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      setError('Please upload a PDF, DOC, DOCX, or TXT file.');
+      setError("Please upload a PDF, DOC, DOCX, or TXT file.");
       return;
     }
 
     // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      setError('File size must be less than 10MB.');
+      setError("File size must be less than 10MB.");
       return;
     }
 
@@ -64,13 +74,13 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
     setUploadProgress(0);
 
     if (!user) {
-      setError('Please sign in to upload and analyze your CV');
+      setError("Please sign in to upload and analyze your CV");
       return;
     }
 
     // Simulate upload progress
     const progressInterval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
@@ -81,22 +91,22 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
 
     try {
       setIsAnalyzing(true);
-      
+
       // Read file content
       const fileContent = await readFileContent(file);
-      
+
       // Perform AI analysis
       const analysis = await aiAnalysisService.analyzeCVWithAI({
         fileName: file.name,
         fileContent,
         fileType: file.type,
-        userId: user.id
+        userId: user.id,
       });
 
       setAnalysisResult(analysis);
       onUploadComplete?.(analysis);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to analyze CV');
+      setError(err instanceof Error ? err.message : "Failed to analyze CV");
     } finally {
       setIsAnalyzing(false);
       clearInterval(progressInterval);
@@ -126,7 +136,7 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
       handleFileSelect(files[0]);
@@ -141,25 +151,29 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
-    if (score >= 60) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 80) return "text-green-500";
+    if (score >= 60) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getScoreGradient = (score: number) => {
-    if (score >= 80) return 'from-green-400 to-green-600';
-    if (score >= 60) return 'from-yellow-400 to-yellow-600';
-    return 'from-red-400 to-red-600';
+    if (score >= 80) return "from-green-400 to-green-600";
+    if (score >= 60) return "from-yellow-400 to-yellow-600";
+    return "from-red-400 to-red-600";
   };
 
   return (
     <div className={`max-w-4xl mx-auto ${className}`}>
-      <EnhancedMotion animation="slideInFromBottom" className="text-center mb-8">
+      <EnhancedMotion
+        animation="slideInFromBottom"
+        className="text-center mb-8"
+      >
         <GradientText className="text-4xl font-bold mb-4">
           AI-Powered CV Analysis
         </GradientText>
         <p className="text-jobequal-text-muted text-lg">
-          Upload your CV and get instant AI-powered insights, compatibility scores, and improvement recommendations
+          Upload your CV and get instant AI-powered insights, compatibility
+          scores, and improvement recommendations
         </p>
       </EnhancedMotion>
 
@@ -173,9 +187,10 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
             onClick={() => fileInputRef.current?.click()}
             className={`
               relative border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300
-              ${isDragOver 
-                ? 'border-jobequal-green bg-jobequal-green-light scale-105' 
-                : 'border-gray-300 hover:border-jobequal-green hover:bg-gray-50'
+              ${
+                isDragOver
+                  ? "border-jobequal-green bg-jobequal-green-light scale-105"
+                  : "border-gray-300 hover:border-jobequal-green hover:bg-gray-50"
               }
             `}
           >
@@ -192,7 +207,7 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
             >
               <Upload className="w-16 h-16 mx-auto mb-4 text-jobequal-green" />
               <h3 className="text-xl font-semibold text-jobequal-text mb-2">
-                {isDragOver ? 'Drop your CV here' : 'Upload your CV'}
+                {isDragOver ? "Drop your CV here" : "Upload your CV"}
               </h3>
               <p className="text-jobequal-text-muted mb-4">
                 Drag and drop your CV or click to browse
@@ -212,7 +227,9 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
             <div className="flex items-center space-x-4 mb-4">
               <FileText className="w-8 h-8 text-jobequal-green" />
               <div>
-                <h3 className="font-semibold text-jobequal-text">{uploadedFile.name}</h3>
+                <h3 className="font-semibold text-jobequal-text">
+                  {uploadedFile.name}
+                </h3>
                 <p className="text-sm text-jobequal-text-muted">
                   {(uploadedFile.size / 1024 / 1024).toFixed(2)} MB
                 </p>
@@ -281,10 +298,18 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20,
+                  delay: 0.5,
+                }}
                 className="relative w-32 h-32 mx-auto mb-6"
               >
-                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <svg
+                  className="w-full h-full transform -rotate-90"
+                  viewBox="0 0 100 100"
+                >
                   <circle
                     cx="50"
                     cy="50"
@@ -308,7 +333,7 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
                     transition={{ duration: 2, delay: 0.5 }}
                     style={{
                       strokeDasharray: "283",
-                      strokeDashoffset: "283"
+                      strokeDashoffset: "283",
                     }}
                   />
                 </svg>
@@ -331,32 +356,38 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
           <StaggeredList className="grid md:grid-cols-3 gap-6">
             {[
               {
-                title: 'Skills Match',
+                title: "Skills Match",
                 score: analysisResult.skillsMatch.score,
                 icon: Target,
-                description: `${analysisResult.skillsMatch.matched.length} skills matched`
+                description: `${analysisResult.skillsMatch.matched.length} skills matched`,
               },
               {
-                title: 'Experience',
+                title: "Experience",
                 score: analysisResult.experienceAnalysis.score,
                 icon: TrendingUp,
-                description: `${analysisResult.experienceAnalysis.yearsOfExperience} years total`
+                description: `${analysisResult.experienceAnalysis.yearsOfExperience} years total`,
               },
               {
-                title: 'Education',
+                title: "Education",
                 score: analysisResult.educationAnalysis.score,
                 icon: Award,
-                description: analysisResult.educationAnalysis.degree
-              }
+                description: analysisResult.educationAnalysis.degree,
+              },
             ].map((item, index) => (
               <div key={index} className="bg-white rounded-2xl p-6 shadow-lg">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${getScoreGradient(item.score)}`}>
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-r ${getScoreGradient(item.score)}`}
+                  >
                     <item.icon className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-jobequal-text">{item.title}</h3>
-                    <p className="text-sm text-jobequal-text-muted">{item.description}</p>
+                    <h3 className="font-semibold text-jobequal-text">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-jobequal-text-muted">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
                 <div className="relative">
@@ -368,7 +399,9 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
                       transition={{ duration: 1.5, delay: 0.5 + index * 0.2 }}
                     />
                   </div>
-                  <span className={`text-lg font-bold ${getScoreColor(item.score)} mt-2 block`}>
+                  <span
+                    className={`text-lg font-bold ${getScoreColor(item.score)} mt-2 block`}
+                  >
                     {item.score}%
                   </span>
                 </div>
@@ -390,18 +423,15 @@ export const SimplifiedCVUpload: React.FC<SimplifiedCVUploadProps> = ({
               <Upload className="w-4 h-4 mr-2" />
               Upload Another CV
             </AnimatedButton>
-            
-            <AnimatedButton
-              variant="secondary"
-              onClick={() => window.print()}
-            >
+
+            <AnimatedButton variant="secondary" onClick={() => window.print()}>
               <Download className="w-4 h-4 mr-2" />
               Download Report
             </AnimatedButton>
-            
+
             <AnimatedButton
               variant="accent"
-              onClick={() => window.location.href = '/job-search'}
+              onClick={() => (window.location.href = "/job-search")}
             >
               <Eye className="w-4 h-4 mr-2" />
               View Matching Jobs

@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Navigation } from '../components/Navigation';
-import { PageHeader } from '../components/ui/page-header';
-import { CompanyShareButton } from '../components/ui/share-button';
+import React, { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Navigation } from "../components/Navigation";
+import { PageHeader } from "../components/ui/page-header";
+import { CompanyShareButton } from "../components/ui/share-button";
 import {
   Building,
   MapPin,
@@ -20,9 +20,9 @@ import {
   CheckCircle,
   Grid3X3,
   List,
-  SlidersHorizontal
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
+  SlidersHorizontal,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Company {
   id: string;
@@ -39,154 +39,215 @@ interface Company {
   reviewCount: number;
   benefits: string[];
   techStack: string[];
-  remotePolicy: 'onsite' | 'hybrid' | 'remote' | 'flexible';
+  remotePolicy: "onsite" | "hybrid" | "remote" | "flexible";
   verified: boolean;
   featured: boolean;
   founded: number;
   funding: string;
-  growthStage: 'startup' | 'scaleup' | 'enterprise';
+  growthStage: "startup" | "scaleup" | "enterprise";
 }
 
 const companies: Company[] = [
   {
-    id: '1',
-    name: 'TechCorp Zurich',
-    logo: '🏢',
-    industry: 'Financial Technology',
-    size: '200-500',
-    location: 'Zurich',
-    canton: 'Zurich',
-    description: 'Leading fintech company revolutionizing digital banking solutions across Europe.',
-    website: 'https://techcorp.ch',
+    id: "1",
+    name: "TechCorp Zurich",
+    logo: "🏢",
+    industry: "Financial Technology",
+    size: "200-500",
+    location: "Zurich",
+    canton: "Zurich",
+    description:
+      "Leading fintech company revolutionizing digital banking solutions across Europe.",
+    website: "https://techcorp.ch",
     openJobs: 12,
     rating: 4.8,
     reviewCount: 156,
-    benefits: ['Health Insurance', 'Flexible Hours', 'Remote Work', 'Learning Budget'],
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'AWS'],
-    remotePolicy: 'hybrid',
+    benefits: [
+      "Health Insurance",
+      "Flexible Hours",
+      "Remote Work",
+      "Learning Budget",
+    ],
+    techStack: ["React", "Node.js", "PostgreSQL", "AWS"],
+    remotePolicy: "hybrid",
     verified: true,
     featured: true,
     founded: 2015,
-    funding: 'Series B',
-    growthStage: 'scaleup'
+    funding: "Series B",
+    growthStage: "scaleup",
   },
   {
-    id: '2',
-    name: 'Swiss Innovations',
-    logo: '🔬',
-    industry: 'Biotechnology',
-    size: '50-200',
-    location: 'Basel',
-    canton: 'Basel-Stadt',
-    description: 'Pioneering biotech research and development for next-generation therapeutics.',
-    website: 'https://swissinnovations.com',
+    id: "2",
+    name: "Swiss Innovations",
+    logo: "🔬",
+    industry: "Biotechnology",
+    size: "50-200",
+    location: "Basel",
+    canton: "Basel-Stadt",
+    description:
+      "Pioneering biotech research and development for next-generation therapeutics.",
+    website: "https://swissinnovations.com",
     openJobs: 8,
     rating: 4.6,
     reviewCount: 89,
-    benefits: ['Research Budget', 'Conference Travel', 'Health Insurance', 'Stock Options'],
-    techStack: ['Python', 'R', 'Docker', 'Kubernetes'],
-    remotePolicy: 'onsite',
+    benefits: [
+      "Research Budget",
+      "Conference Travel",
+      "Health Insurance",
+      "Stock Options",
+    ],
+    techStack: ["Python", "R", "Docker", "Kubernetes"],
+    remotePolicy: "onsite",
     verified: true,
     featured: false,
     founded: 2018,
-    funding: 'Series A',
-    growthStage: 'startup'
+    funding: "Series A",
+    growthStage: "startup",
   },
   {
-    id: '3',
-    name: 'Alpine Digital',
-    logo: '⛰️',
-    industry: 'Software Development',
-    size: '10-50',
-    location: 'Geneva',
-    canton: 'Geneva',
-    description: 'Boutique software consultancy specializing in enterprise digital transformation.',
-    website: 'https://alpinedigital.ch',
+    id: "3",
+    name: "Alpine Digital",
+    logo: "⛰️",
+    industry: "Software Development",
+    size: "10-50",
+    location: "Geneva",
+    canton: "Geneva",
+    description:
+      "Boutique software consultancy specializing in enterprise digital transformation.",
+    website: "https://alpinedigital.ch",
     openJobs: 5,
     rating: 4.9,
     reviewCount: 34,
-    benefits: ['Unlimited PTO', 'Remote Work', 'Profit Sharing', 'Training Budget'],
-    techStack: ['TypeScript', 'React', 'Next.js', 'Supabase'],
-    remotePolicy: 'remote',
+    benefits: [
+      "Unlimited PTO",
+      "Remote Work",
+      "Profit Sharing",
+      "Training Budget",
+    ],
+    techStack: ["TypeScript", "React", "Next.js", "Supabase"],
+    remotePolicy: "remote",
     verified: true,
     featured: true,
     founded: 2020,
-    funding: 'Bootstrapped',
-    growthStage: 'startup'
+    funding: "Bootstrapped",
+    growthStage: "startup",
   },
   {
-    id: '4',
-    name: 'SwissBank Digital',
-    logo: '🏦',
-    industry: 'Banking',
-    size: '1000+',
-    location: 'Bern',
-    canton: 'Bern',
-    description: 'Traditional Swiss bank embracing digital transformation and innovative banking solutions.',
-    website: 'https://swissbank.ch',
+    id: "4",
+    name: "SwissBank Digital",
+    logo: "🏦",
+    industry: "Banking",
+    size: "1000+",
+    location: "Bern",
+    canton: "Bern",
+    description:
+      "Traditional Swiss bank embracing digital transformation and innovative banking solutions.",
+    website: "https://swissbank.ch",
     openJobs: 25,
     rating: 4.2,
     reviewCount: 312,
-    benefits: ['Pension Plan', 'Health Insurance', 'Bonuses', 'Career Development'],
-    techStack: ['Java', 'Spring', 'Oracle', 'Jenkins'],
-    remotePolicy: 'flexible',
+    benefits: [
+      "Pension Plan",
+      "Health Insurance",
+      "Bonuses",
+      "Career Development",
+    ],
+    techStack: ["Java", "Spring", "Oracle", "Jenkins"],
+    remotePolicy: "flexible",
     verified: true,
     featured: false,
     founded: 1856,
-    funding: 'Public',
-    growthStage: 'enterprise'
+    funding: "Public",
+    growthStage: "enterprise",
   },
   {
-    id: '5',
-    name: 'Crypto Valley Labs',
-    logo: '₿',
-    industry: 'Blockchain',
-    size: '20-50',
-    location: 'Zug',
-    canton: 'Zug',
-    description: 'Blockchain and cryptocurrency research lab developing next-gen DeFi protocols.',
-    website: 'https://cryptovalleylabs.com',
+    id: "5",
+    name: "Crypto Valley Labs",
+    logo: "₿",
+    industry: "Blockchain",
+    size: "20-50",
+    location: "Zug",
+    canton: "Zug",
+    description:
+      "Blockchain and cryptocurrency research lab developing next-gen DeFi protocols.",
+    website: "https://cryptovalleylabs.com",
     openJobs: 7,
     rating: 4.7,
     reviewCount: 45,
-    benefits: ['Crypto Salary', 'Remote Work', 'Equity', 'Conference Budget'],
-    techStack: ['Solidity', 'Rust', 'Web3', 'IPFS'],
-    remotePolicy: 'remote',
+    benefits: ["Crypto Salary", "Remote Work", "Equity", "Conference Budget"],
+    techStack: ["Solidity", "Rust", "Web3", "IPFS"],
+    remotePolicy: "remote",
     verified: true,
     featured: true,
     founded: 2019,
-    funding: 'Token Sale',
-    growthStage: 'startup'
+    funding: "Token Sale",
+    growthStage: "startup",
   },
   {
-    id: '6',
-    name: 'MedTech Innovations',
-    logo: '🏥',
-    industry: 'Medical Technology',
-    size: '100-200',
-    location: 'Lausanne',
-    canton: 'Vaud',
-    description: 'Medical device company developing AI-powered diagnostic and treatment solutions.',
-    website: 'https://medtechinnovations.ch',
+    id: "6",
+    name: "MedTech Innovations",
+    logo: "🏥",
+    industry: "Medical Technology",
+    size: "100-200",
+    location: "Lausanne",
+    canton: "Vaud",
+    description:
+      "Medical device company developing AI-powered diagnostic and treatment solutions.",
+    website: "https://medtechinnovations.ch",
     openJobs: 15,
     rating: 4.5,
     reviewCount: 78,
-    benefits: ['Research Time', 'Health Insurance', 'Patent Bonuses', 'Continuing Education'],
-    techStack: ['Python', 'TensorFlow', 'C++', 'Azure'],
-    remotePolicy: 'hybrid',
+    benefits: [
+      "Research Time",
+      "Health Insurance",
+      "Patent Bonuses",
+      "Continuing Education",
+    ],
+    techStack: ["Python", "TensorFlow", "C++", "Azure"],
+    remotePolicy: "hybrid",
     verified: true,
     featured: false,
     founded: 2017,
-    funding: 'Series A',
-    growthStage: 'scaleup'
-  }
+    funding: "Series A",
+    growthStage: "scaleup",
+  },
 ];
 
-const industries = ['All Industries', 'Financial Technology', 'Biotechnology', 'Software Development', 'Banking', 'Blockchain', 'Medical Technology'];
-const companySizes = ['All Sizes', '1-10', '10-50', '50-200', '200-500', '500-1000', '1000+'];
-const cantons = ['All Cantons', 'Zurich', 'Geneva', 'Basel-Stadt', 'Bern', 'Vaud', 'Zug'];
-const remotePolicies = ['All Policies', 'onsite', 'hybrid', 'remote', 'flexible'];
-const sortOptions = ['relevance', 'newest', 'size', 'rating', 'jobs'];
+const industries = [
+  "All Industries",
+  "Financial Technology",
+  "Biotechnology",
+  "Software Development",
+  "Banking",
+  "Blockchain",
+  "Medical Technology",
+];
+const companySizes = [
+  "All Sizes",
+  "1-10",
+  "10-50",
+  "50-200",
+  "200-500",
+  "500-1000",
+  "1000+",
+];
+const cantons = [
+  "All Cantons",
+  "Zurich",
+  "Geneva",
+  "Basel-Stadt",
+  "Bern",
+  "Vaud",
+  "Zug",
+];
+const remotePolicies = [
+  "All Policies",
+  "onsite",
+  "hybrid",
+  "remote",
+  "flexible",
+];
+const sortOptions = ["relevance", "newest", "size", "rating", "jobs"];
 
 function CompanyCard({ company, index }: { company: Company; index: number }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -213,25 +274,29 @@ function CompanyCard({ company, index }: { company: Company; index: number }) {
               {company.verified && (
                 <CheckCircle className="w-5 h-5 text-jobequal-green" />
               )}
-              {company.featured && (
-                <Star className="w-5 h-5 text-yellow-500" />
-              )}
+              {company.featured && <Star className="w-5 h-5 text-yellow-500" />}
             </div>
-            <p className="text-jobequal-text-muted font-medium">{company.industry}</p>
+            <p className="text-jobequal-text-muted font-medium">
+              {company.industry}
+            </p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
-          <CompanyShareButton company={{ id: company.id, name: company.name }} />
+          <CompanyShareButton
+            company={{ id: company.id, name: company.name }}
+          />
           <button
             onClick={() => setIsLiked(!isLiked)}
             className={`p-3 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg transition-colors ${
-              isLiked ? 'text-red-500 bg-red-50 hover:bg-red-100' : 'text-gray-400 hover:text-red-500 hover:bg-gray-50'
+              isLiked
+                ? "text-red-500 bg-red-50 hover:bg-red-100"
+                : "text-gray-400 hover:text-red-500 hover:bg-gray-50"
             }`}
-            aria-label={isLiked ? 'Remove from favorites' : 'Add to favorites'}
+            aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
             aria-pressed={isLiked}
           >
-            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+            <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
           </button>
         </div>
       </div>
@@ -245,19 +310,27 @@ function CompanyCard({ company, index }: { company: Company; index: number }) {
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="flex items-center space-x-2">
           <MapPin className="w-4 h-4 text-jobequal-green" />
-          <span className="text-sm text-jobequal-text-muted">{company.location}</span>
+          <span className="text-sm text-jobequal-text-muted">
+            {company.location}
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <Users className="w-4 h-4 text-jobequal-blue" />
-          <span className="text-sm text-jobequal-text-muted">{company.size} employees</span>
+          <span className="text-sm text-jobequal-text-muted">
+            {company.size} employees
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <Briefcase className="w-4 h-4 text-jobequal-teal" />
-          <span className="text-sm text-jobequal-text-muted">{company.openJobs} open jobs</span>
+          <span className="text-sm text-jobequal-text-muted">
+            {company.openJobs} open jobs
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <Star className="w-4 h-4 text-yellow-500" />
-          <span className="text-sm text-jobequal-text-muted">{company.rating} ({company.reviewCount})</span>
+          <span className="text-sm text-jobequal-text-muted">
+            {company.rating} ({company.reviewCount})
+          </span>
         </div>
       </div>
 
@@ -282,14 +355,20 @@ function CompanyCard({ company, index }: { company: Company; index: number }) {
 
       {/* Remote Policy */}
       <div className="mb-6">
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-          company.remotePolicy === 'remote' ? 'bg-green-100 text-green-800' :
-          company.remotePolicy === 'hybrid' ? 'bg-blue-100 text-blue-800' :
-          company.remotePolicy === 'flexible' ? 'bg-purple-100 text-purple-800' :
-          'bg-gray-100 text-gray-800'
-        }`}>
+        <span
+          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+            company.remotePolicy === "remote"
+              ? "bg-green-100 text-green-800"
+              : company.remotePolicy === "hybrid"
+                ? "bg-blue-100 text-blue-800"
+                : company.remotePolicy === "flexible"
+                  ? "bg-purple-100 text-purple-800"
+                  : "bg-gray-100 text-gray-800"
+          }`}
+        >
           <Globe className="w-3 h-3 mr-1" />
-          {company.remotePolicy.charAt(0).toUpperCase() + company.remotePolicy.slice(1)}
+          {company.remotePolicy.charAt(0).toUpperCase() +
+            company.remotePolicy.slice(1)}
         </span>
       </div>
 
@@ -329,13 +408,15 @@ function FilterSection() {
         className="flex items-center justify-between w-full py-2 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-jobequal-green focus:ring-offset-2 rounded-lg"
         aria-expanded={isOpen}
         aria-controls="filter-content"
-        aria-label={isOpen ? 'Hide filters' : 'Show filters'}
+        aria-label={isOpen ? "Hide filters" : "Show filters"}
       >
         <div className="flex items-center space-x-3">
           <SlidersHorizontal className="w-5 h-5 text-jobequal-green" />
           <span className="font-semibold text-jobequal-text">Filters</span>
         </div>
-        <ChevronDown className={`w-5 h-5 text-jobequal-text-muted transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`w-5 h-5 text-jobequal-text-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       <AnimatePresence>
@@ -343,7 +424,7 @@ function FilterSection() {
           <motion.div
             id="filter-content"
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
             className="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4"
@@ -351,34 +432,50 @@ function FilterSection() {
             aria-label="Filter options"
           >
             <div>
-              <label className="block text-sm font-medium text-jobequal-text mb-2">Industry</label>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">
+                Industry
+              </label>
               <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
-                {industries.map(industry => (
-                  <option key={industry} value={industry}>{industry}</option>
+                {industries.map((industry) => (
+                  <option key={industry} value={industry}>
+                    {industry}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-jobequal-text mb-2">Company Size</label>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">
+                Company Size
+              </label>
               <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
-                {companySizes.map(size => (
-                  <option key={size} value={size}>{size}</option>
+                {companySizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-jobequal-text mb-2">Canton</label>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">
+                Canton
+              </label>
               <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
-                {cantons.map(canton => (
-                  <option key={canton} value={canton}>{canton}</option>
+                {cantons.map((canton) => (
+                  <option key={canton} value={canton}>
+                    {canton}
+                  </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-jobequal-text mb-2">Remote Policy</label>
+              <label className="block text-sm font-medium text-jobequal-text mb-2">
+                Remote Policy
+              </label>
               <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent">
-                {remotePolicies.map(policy => (
-                  <option key={policy} value={policy}>{policy}</option>
+                {remotePolicies.map((policy) => (
+                  <option key={policy} value={policy}>
+                    {policy}
+                  </option>
                 ))}
               </select>
             </div>
@@ -390,22 +487,23 @@ function FilterSection() {
 }
 
 export default function Companies() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState('relevance');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState("relevance");
 
   const filteredCompanies = useMemo(() => {
-    return companies.filter(company =>
-      company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      company.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      company.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return companies.filter(
+      (company) =>
+        company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        company.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        company.description.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [searchQuery]);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue">
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -417,11 +515,15 @@ export default function Companies() {
             <div className="flex items-center justify-center space-x-3 mt-6">
               <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
                 <CheckCircle className="w-4 h-4 text-jobequal-green" />
-                <span className="text-sm font-medium text-jobequal-text">Designed in Switzerland</span>
+                <span className="text-sm font-medium text-jobequal-text">
+                  Designed in Switzerland
+                </span>
               </div>
               <div className="flex items-center space-x-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full">
                 <Building className="w-4 h-4 text-jobequal-blue" />
-                <span className="text-sm font-medium text-jobequal-text">{companies.length}+ Companies</span>
+                <span className="text-sm font-medium text-jobequal-text">
+                  {companies.length}+ Companies
+                </span>
               </div>
             </div>
           </PageHeader>
@@ -448,17 +550,21 @@ export default function Companies() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center bg-white rounded-xl border border-gray-300 p-1">
                 <button
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => setViewMode("grid")}
                   className={`p-2 rounded-lg transition-colors ${
-                    viewMode === 'grid' ? 'bg-jobequal-green text-white' : 'text-jobequal-text-muted'
+                    viewMode === "grid"
+                      ? "bg-jobequal-green text-white"
+                      : "text-jobequal-text-muted"
                   }`}
                 >
                   <Grid3X3 className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode("list")}
                   className={`p-2 rounded-lg transition-colors ${
-                    viewMode === 'list' ? 'bg-jobequal-green text-white' : 'text-jobequal-text-muted'
+                    viewMode === "list"
+                      ? "bg-jobequal-green text-white"
+                      : "text-jobequal-text-muted"
                   }`}
                 >
                   <List className="w-4 h-4" />
@@ -470,7 +576,7 @@ export default function Companies() {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-jobequal-green focus:border-transparent bg-white"
               >
-                {sortOptions.map(option => (
+                {sortOptions.map((option) => (
                   <option key={option} value={option}>
                     Sort by {option.charAt(0).toUpperCase() + option.slice(1)}
                   </option>
@@ -492,11 +598,13 @@ export default function Companies() {
             </p>
           </div>
 
-          <div className={`grid gap-8 ${
-            viewMode === 'grid' 
-              ? 'md:grid-cols-2 lg:grid-cols-3' 
-              : 'grid-cols-1 max-w-4xl mx-auto'
-          }`}>
+          <div
+            className={`grid gap-8 ${
+              viewMode === "grid"
+                ? "md:grid-cols-2 lg:grid-cols-3"
+                : "grid-cols-1 max-w-4xl mx-auto"
+            }`}
+          >
             <AnimatePresence>
               {filteredCompanies.map((company, index) => (
                 <CompanyCard key={company.id} company={company} index={index} />
@@ -511,8 +619,12 @@ export default function Companies() {
               className="text-center py-16"
             >
               <Building className="w-16 h-16 text-jobequal-text-muted mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-jobequal-text mb-2">No companies found</h3>
-              <p className="text-jobequal-text-muted">Try adjusting your search or filters</p>
+              <h3 className="text-xl font-semibold text-jobequal-text mb-2">
+                No companies found
+              </h3>
+              <p className="text-jobequal-text-muted">
+                Try adjusting your search or filters
+              </p>
             </motion.div>
           )}
         </div>

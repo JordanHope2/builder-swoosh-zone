@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, Filter, SortAsc, SortDesc } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import SecurityUtils from '../../lib/security';
+import React, { useState, useCallback, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, X, Filter, SortAsc, SortDesc } from "lucide-react";
+import { cn } from "../../lib/utils";
+import SecurityUtils from "../../lib/security";
 
 interface SearchFilters {
   [key: string]: string | number | boolean;
@@ -15,32 +15,32 @@ interface SecureSearchProps {
   filters?: Array<{
     key: string;
     label: string;
-    type: 'select' | 'range' | 'checkbox';
+    type: "select" | "range" | "checkbox";
     options?: Array<{ value: string; label: string }>;
     min?: number;
     max?: number;
   }>;
   sortOptions?: Array<{ value: string; label: string }>;
-  onSort?: (field: string, direction: 'asc' | 'desc') => void;
+  onSort?: (field: string, direction: "asc" | "desc") => void;
   className?: string;
   debounceMs?: number;
 }
 
 export const SecureSearch: React.FC<SecureSearchProps> = ({
-  placeholder = 'Search...',
+  placeholder = "Search...",
   onSearch,
   onFilter,
   filters = [],
   sortOptions = [],
   onSort,
   className,
-  debounceMs = 300
+  debounceMs = 300,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<SearchFilters>({});
-  const [sortField, setSortField] = useState('');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortField, setSortField] = useState("");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   // Debounced search
   const debouncedSearch = useCallback(
@@ -50,7 +50,7 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
         onSearch(sanitizedTerm);
       }
     }, debounceMs),
-    [onSearch, debounceMs]
+    [onSearch, debounceMs],
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,12 +60,13 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
   };
 
   const clearSearch = () => {
-    setSearchTerm('');
-    onSearch('');
+    setSearchTerm("");
+    onSearch("");
   };
 
   const handleFilterChange = (key: string, value: any) => {
-    const sanitizedValue = typeof value === 'string' ? SecurityUtils.sanitizeText(value) : value;
+    const sanitizedValue =
+      typeof value === "string" ? SecurityUtils.sanitizeText(value) : value;
     const newFilters = { ...activeFilters, [key]: sanitizedValue };
     setActiveFilters(newFilters);
     onFilter?.(newFilters);
@@ -77,15 +78,16 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
   };
 
   const handleSort = (field: string) => {
-    const newDirection = field === sortField && sortDirection === 'asc' ? 'desc' : 'asc';
+    const newDirection =
+      field === sortField && sortDirection === "asc" ? "desc" : "asc";
     setSortField(field);
     setSortDirection(newDirection);
     onSort?.(field, newDirection);
   };
 
   const activeFilterCount = useMemo(() => {
-    return Object.values(activeFilters).filter(value => 
-      value !== '' && value !== null && value !== undefined
+    return Object.values(activeFilters).filter(
+      (value) => value !== "" && value !== null && value !== undefined,
     ).length;
   }, [activeFilters]);
 
@@ -127,7 +129,7 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
                 "flex items-center space-x-2 px-4 py-2 rounded-xl border transition-all duration-200",
                 isFilterOpen
                   ? "bg-jobequal-green text-white border-jobequal-green"
-                  : "bg-white dark:bg-gray-800 text-jobequal-text dark:text-white border-jobequal-neutral-dark dark:border-gray-600 hover:border-jobequal-green"
+                  : "bg-white dark:bg-gray-800 text-jobequal-text dark:text-white border-jobequal-neutral-dark dark:border-gray-600 hover:border-jobequal-green",
               )}
             >
               <Filter className="w-4 h-4" />
@@ -157,7 +159,9 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
         {/* Sort Options */}
         {sortOptions.length > 0 && (
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              Sort by:
+            </span>
             <div className="flex items-center space-x-1">
               {sortOptions.map((option) => (
                 <motion.button
@@ -169,13 +173,16 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
                     "flex items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200",
                     sortField === option.value
                       ? "bg-jobequal-green text-white"
-                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700",
                   )}
                 >
                   <span>{option.label}</span>
-                  {sortField === option.value && (
-                    sortDirection === 'asc' ? <SortAsc className="w-3 h-3" /> : <SortDesc className="w-3 h-3" />
-                  )}
+                  {sortField === option.value &&
+                    (sortDirection === "asc" ? (
+                      <SortAsc className="w-3 h-3" />
+                    ) : (
+                      <SortDesc className="w-3 h-3" />
+                    ))}
                 </motion.button>
               ))}
             </div>
@@ -188,7 +195,7 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
         {isFilterOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="bg-white dark:bg-gray-800 border border-jobequal-neutral-dark dark:border-gray-600 rounded-xl p-6 space-y-4"
           >
@@ -198,11 +205,13 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
                   <label className="text-sm font-medium text-jobequal-text dark:text-white">
                     {filter.label}
                   </label>
-                  
-                  {filter.type === 'select' && (
+
+                  {filter.type === "select" && (
                     <select
-                      value={activeFilters[filter.key] as string || ''}
-                      onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                      value={(activeFilters[filter.key] as string) || ""}
+                      onChange={(e) =>
+                        handleFilterChange(filter.key, e.target.value)
+                      }
                       className="w-full px-3 py-2 border border-jobequal-neutral-dark dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-jobequal-text dark:text-white focus:outline-none focus:ring-2 focus:ring-jobequal-green"
                     >
                       <option value="">All</option>
@@ -214,12 +223,16 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
                     </select>
                   )}
 
-                  {filter.type === 'checkbox' && (
+                  {filter.type === "checkbox" && (
                     <label className="flex items-center space-x-2">
                       <input
                         type="checkbox"
-                        checked={activeFilters[filter.key] as boolean || false}
-                        onChange={(e) => handleFilterChange(filter.key, e.target.checked)}
+                        checked={
+                          (activeFilters[filter.key] as boolean) || false
+                        }
+                        onChange={(e) =>
+                          handleFilterChange(filter.key, e.target.checked)
+                        }
                         className="rounded border-jobequal-neutral-dark text-jobequal-green focus:ring-jobequal-green"
                       />
                       <span className="text-sm text-jobequal-text dark:text-white">
@@ -228,14 +241,23 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
                     </label>
                   )}
 
-                  {filter.type === 'range' && (
+                  {filter.type === "range" && (
                     <div className="space-y-2">
                       <input
                         type="range"
                         min={filter.min || 0}
                         max={filter.max || 100}
-                        value={activeFilters[filter.key] as number || filter.min || 0}
-                        onChange={(e) => handleFilterChange(filter.key, parseInt(e.target.value))}
+                        value={
+                          (activeFilters[filter.key] as number) ||
+                          filter.min ||
+                          0
+                        }
+                        onChange={(e) =>
+                          handleFilterChange(
+                            filter.key,
+                            parseInt(e.target.value),
+                          )
+                        }
                         className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                       />
                       <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -256,7 +278,7 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
 // Debounce utility
 function debounce<T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {

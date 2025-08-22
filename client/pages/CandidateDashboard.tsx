@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navigation } from '../components/Navigation';
-import { 
-  User, 
-  FileText, 
-  Briefcase, 
-  Heart, 
-  CheckCircle, 
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Navigation } from "../components/Navigation";
+import {
+  User,
+  FileText,
+  Briefcase,
+  Heart,
+  CheckCircle,
   ArrowRight,
   TrendingUp,
   Clock,
@@ -19,8 +19,8 @@ import {
   Settings,
   Upload,
   Bell,
-  Activity
-} from 'lucide-react';
+  Activity,
+} from "lucide-react";
 
 interface ProfileProgress {
   overall: number;
@@ -51,7 +51,7 @@ interface Application {
   jobTitle: string;
   company: string;
   appliedDate: string;
-  status: 'submitted' | 'reviewing' | 'interview' | 'rejected' | 'offered';
+  status: "submitted" | "reviewing" | "interview" | "rejected" | "offered";
   logo: string;
 }
 
@@ -62,72 +62,72 @@ const mockProfile: ProfileProgress = {
     cv: true,
     skills: true,
     experience: false,
-    preferences: false
-  }
+    preferences: false,
+  },
 };
 
 const mockRecommendations: JobRecommendation[] = [
   {
-    id: '1',
-    title: 'Senior Frontend Developer',
-    company: 'TechCorp Zurich',
-    location: 'Zurich',
-    salary: 'CHF 120,000 - 140,000',
+    id: "1",
+    title: "Senior Frontend Developer",
+    company: "TechCorp Zurich",
+    location: "Zurich",
+    salary: "CHF 120,000 - 140,000",
     matchScore: 95,
-    logo: '🚀',
-    type: 'Full-time',
-    posted: '2 days ago',
-    featured: true
+    logo: "🚀",
+    type: "Full-time",
+    posted: "2 days ago",
+    featured: true,
   },
   {
-    id: '2',
-    title: 'React Developer',
-    company: 'InnovateCH',
-    location: 'Geneva',
-    salary: 'CHF 100,000 - 120,000',
+    id: "2",
+    title: "React Developer",
+    company: "InnovateCH",
+    location: "Geneva",
+    salary: "CHF 100,000 - 120,000",
     matchScore: 88,
-    logo: '💡',
-    type: 'Full-time',
-    posted: '1 week ago'
+    logo: "💡",
+    type: "Full-time",
+    posted: "1 week ago",
   },
   {
-    id: '3',
-    title: 'Full Stack Engineer',
-    company: 'StartupHub',
-    location: 'Basel',
-    salary: 'CHF 90,000 - 110,000',
+    id: "3",
+    title: "Full Stack Engineer",
+    company: "StartupHub",
+    location: "Basel",
+    salary: "CHF 90,000 - 110,000",
     matchScore: 82,
-    logo: '⚡',
-    type: 'Full-time',
-    posted: '3 days ago'
-  }
+    logo: "⚡",
+    type: "Full-time",
+    posted: "3 days ago",
+  },
 ];
 
 const mockApplications: Application[] = [
   {
-    id: '1',
-    jobTitle: 'Senior Software Engineer',
-    company: 'TechCorp Zurich',
-    appliedDate: '2024-01-15',
-    status: 'interview',
-    logo: '🚀'
+    id: "1",
+    jobTitle: "Senior Software Engineer",
+    company: "TechCorp Zurich",
+    appliedDate: "2024-01-15",
+    status: "interview",
+    logo: "🚀",
   },
   {
-    id: '2',
-    jobTitle: 'Product Manager',
-    company: 'InnovateCH',
-    appliedDate: '2024-01-12',
-    status: 'reviewing',
-    logo: '💡'
+    id: "2",
+    jobTitle: "Product Manager",
+    company: "InnovateCH",
+    appliedDate: "2024-01-12",
+    status: "reviewing",
+    logo: "💡",
   },
   {
-    id: '3',
-    jobTitle: 'UX Designer',
-    company: 'DesignStudio',
-    appliedDate: '2024-01-10',
-    status: 'submitted',
-    logo: '🎨'
-  }
+    id: "3",
+    jobTitle: "UX Designer",
+    company: "DesignStudio",
+    appliedDate: "2024-01-10",
+    status: "submitted",
+    logo: "🎨",
+  },
 ];
 
 function ProfileProgressCard({ profile }: { profile: ProfileProgress }) {
@@ -146,34 +146,41 @@ function ProfileProgressCard({ profile }: { profile: ProfileProgress }) {
           {profile.overall}%
         </div>
       </div>
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <span className="text-jobequal-text-muted">Progress</span>
-          <span className="text-jobequal-text font-semibold">{profile.overall}% Complete</span>
+          <span className="text-jobequal-text font-semibold">
+            {profile.overall}% Complete
+          </span>
         </div>
         <div className="w-full bg-jobequal-neutral rounded-full h-3">
-          <div 
+          <div
             className="bg-gradient-to-r from-jobequal-green to-jobequal-teal h-3 rounded-full transition-all duration-500"
             style={{ width: `${profile.overall}%` }}
           ></div>
         </div>
       </div>
-      
+
       {incompleteSections.length > 0 && (
         <div className="space-y-3 mb-6">
-          <h3 className="font-semibold text-jobequal-text">Complete your profile:</h3>
+          <h3 className="font-semibold text-jobequal-text">
+            Complete your profile:
+          </h3>
           {incompleteSections.map((section) => (
-            <div key={section} className="flex items-center justify-between p-3 bg-jobequal-green-light rounded-xl">
+            <div
+              key={section}
+              className="flex items-center justify-between p-3 bg-jobequal-green-light rounded-xl"
+            >
               <span className="text-jobequal-green-dark font-medium capitalize">
-                {section.replace(/([A-Z])/g, ' $1').trim()}
+                {section.replace(/([A-Z])/g, " $1").trim()}
               </span>
               <ArrowRight className="w-4 h-4 text-jobequal-green" />
             </div>
           ))}
         </div>
       )}
-      
+
       <Link
         to="/profile"
         className="block w-full bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-4 rounded-xl font-semibold text-center hover:from-jobequal-green-hover hover:to-jobequal-teal transition-all duration-200"
@@ -186,17 +193,20 @@ function ProfileProgressCard({ profile }: { profile: ProfileProgress }) {
 
 function JobRecommendationCard({ job }: { job: JobRecommendation }) {
   const getMatchColor = (score: number) => {
-    if (score >= 85) return 'text-jobequal-green bg-jobequal-green-light border-jobequal-green';
-    if (score >= 70) return 'text-yellow-600 bg-yellow-100 border-yellow-200';
-    if (score >= 55) return 'text-orange-600 bg-orange-100 border-orange-200';
-    return 'text-red-600 bg-red-100 border-red-200';
+    if (score >= 85)
+      return "text-jobequal-green bg-jobequal-green-light border-jobequal-green";
+    if (score >= 70) return "text-yellow-600 bg-yellow-100 border-yellow-200";
+    if (score >= 55) return "text-orange-600 bg-orange-100 border-orange-200";
+    return "text-red-600 bg-red-100 border-red-200";
   };
 
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 border border-jobequal-neutral-dark hover:shadow-xl transition-all duration-300 group">
       {/* AI Match Score Header */}
       <div className="text-center mb-4">
-        <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-2xl font-bold border-2 ${getMatchColor(job.matchScore)}`}>
+        <div
+          className={`inline-flex items-center space-x-2 px-4 py-2 rounded-2xl font-bold border-2 ${getMatchColor(job.matchScore)}`}
+        >
           <Activity className="w-4 h-4" />
           <span>{job.matchScore}% AI Match</span>
         </div>
@@ -221,7 +231,7 @@ function JobRecommendationCard({ job }: { job: JobRecommendation }) {
           </div>
         </div>
       </div>
-      
+
       <div className="space-y-2 mb-4">
         <div className="flex items-center space-x-4">
           <div className="flex items-center text-sm text-jobequal-text-muted">
@@ -238,7 +248,7 @@ function JobRecommendationCard({ job }: { job: JobRecommendation }) {
           {job.salary}
         </div>
       </div>
-      
+
       <div className="flex items-center space-x-3">
         <Link
           to={`/job/${job.id}`}
@@ -257,23 +267,35 @@ function JobRecommendationCard({ job }: { job: JobRecommendation }) {
 function ApplicationCard({ application }: { application: Application }) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'submitted': return 'text-blue-600 bg-blue-100';
-      case 'reviewing': return 'text-yellow-600 bg-yellow-100';
-      case 'interview': return 'text-jobequal-green bg-jobequal-green-light';
-      case 'offered': return 'text-green-600 bg-green-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      default: return 'text-jobequal-text-muted bg-jobequal-neutral';
+      case "submitted":
+        return "text-blue-600 bg-blue-100";
+      case "reviewing":
+        return "text-yellow-600 bg-yellow-100";
+      case "interview":
+        return "text-jobequal-green bg-jobequal-green-light";
+      case "offered":
+        return "text-green-600 bg-green-100";
+      case "rejected":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-jobequal-text-muted bg-jobequal-neutral";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'submitted': return <Clock className="w-4 h-4" />;
-      case 'reviewing': return <Eye className="w-4 h-4" />;
-      case 'interview': return <Calendar className="w-4 h-4" />;
-      case 'offered': return <Award className="w-4 h-4" />;
-      case 'rejected': return <Clock className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case "submitted":
+        return <Clock className="w-4 h-4" />;
+      case "reviewing":
+        return <Eye className="w-4 h-4" />;
+      case "interview":
+        return <Calendar className="w-4 h-4" />;
+      case "offered":
+        return <Award className="w-4 h-4" />;
+      case "rejected":
+        return <Clock className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
@@ -285,17 +307,23 @@ function ApplicationCard({ application }: { application: Application }) {
             {application.logo}
           </div>
           <div>
-            <h3 className="font-semibold text-jobequal-text">{application.jobTitle}</h3>
-            <p className="text-jobequal-text-muted text-sm">{application.company}</p>
+            <h3 className="font-semibold text-jobequal-text">
+              {application.jobTitle}
+            </h3>
+            <p className="text-jobequal-text-muted text-sm">
+              {application.company}
+            </p>
           </div>
         </div>
-        
-        <div className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}>
+
+        <div
+          className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}
+        >
           {getStatusIcon(application.status)}
           <span className="capitalize">{application.status}</span>
         </div>
       </div>
-      
+
       <div className="text-sm text-jobequal-text-muted">
         Applied on {new Date(application.appliedDate).toLocaleDateString()}
       </div>
@@ -304,12 +332,14 @@ function ApplicationCard({ application }: { application: Application }) {
 }
 
 export default function CandidateDashboard() {
-  const [activeTab, setActiveTab] = useState<'overview' | 'applications' | 'saved'>('overview');
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "applications" | "saved"
+  >("overview");
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
       <Navigation />
-      
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-12">
@@ -321,7 +351,7 @@ export default function CandidateDashboard() {
               Ready to find your next opportunity? You have 3 new job matches.
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <button className="p-3 rounded-xl border border-jobequal-neutral-dark text-jobequal-text-muted hover:text-jobequal-green hover:bg-jobequal-green-light transition-all duration-200">
               <Bell className="w-6 h-6" />
@@ -341,26 +371,32 @@ export default function CandidateDashboard() {
             <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center mx-auto mb-3">
               <Target className="w-6 h-6 text-white" />
             </div>
-            <div className="text-3xl font-bold text-jobequal-green mb-1">24</div>
+            <div className="text-3xl font-bold text-jobequal-green mb-1">
+              24
+            </div>
             <div className="text-jobequal-text-muted">Job Matches</div>
           </div>
-          
+
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark text-center">
             <div className="w-12 h-12 bg-gradient-to-br from-jobequal-blue-dark to-jobequal-teal rounded-xl flex items-center justify-center mx-auto mb-3">
               <Briefcase className="w-6 h-6 text-white" />
             </div>
-            <div className="text-3xl font-bold text-jobequal-blue-dark mb-1">8</div>
+            <div className="text-3xl font-bold text-jobequal-blue-dark mb-1">
+              8
+            </div>
             <div className="text-jobequal-text-muted">Applications</div>
           </div>
-          
+
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark text-center">
             <div className="w-12 h-12 bg-gradient-to-br from-jobequal-green to-jobequal-blue rounded-xl flex items-center justify-center mx-auto mb-3">
               <Heart className="w-6 h-6 text-white" />
             </div>
-            <div className="text-3xl font-bold text-jobequal-green mb-1">12</div>
+            <div className="text-3xl font-bold text-jobequal-green mb-1">
+              12
+            </div>
             <div className="text-jobequal-text-muted">Saved Jobs</div>
           </div>
-          
+
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark text-center">
             <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center mx-auto mb-3">
               <Activity className="w-6 h-6 text-white" />
@@ -377,17 +413,25 @@ export default function CandidateDashboard() {
             <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-2 border border-jobequal-neutral-dark">
               <div className="flex space-x-2">
                 {[
-                  { key: 'overview', label: 'Job Recommendations', icon: Target },
-                  { key: 'applications', label: 'My Applications', icon: Briefcase },
-                  { key: 'saved', label: 'Saved Jobs', icon: Heart }
+                  {
+                    key: "overview",
+                    label: "Job Recommendations",
+                    icon: Target,
+                  },
+                  {
+                    key: "applications",
+                    label: "My Applications",
+                    icon: Briefcase,
+                  },
+                  { key: "saved", label: "Saved Jobs", icon: Heart },
                 ].map(({ key, label, icon: Icon }) => (
                   <button
                     key={key}
                     onClick={() => setActiveTab(key as any)}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
                       activeTab === key
-                        ? 'bg-jobequal-green text-white shadow-md'
-                        : 'text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral'
+                        ? "bg-jobequal-green text-white shadow-md"
+                        : "text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral"
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -398,10 +442,12 @@ export default function CandidateDashboard() {
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'overview' && (
+            {activeTab === "overview" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-jobequal-text">Recommended Jobs</h2>
+                  <h2 className="text-2xl font-bold text-jobequal-text">
+                    Recommended Jobs
+                  </h2>
                   <Link
                     to="/job-search"
                     className="text-jobequal-green hover:text-jobequal-green-dark font-semibold flex items-center space-x-1"
@@ -418,25 +464,35 @@ export default function CandidateDashboard() {
               </div>
             )}
 
-            {activeTab === 'applications' && (
+            {activeTab === "applications" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-jobequal-text">My Applications</h2>
+                <h2 className="text-2xl font-bold text-jobequal-text">
+                  My Applications
+                </h2>
                 <div className="space-y-4">
                   {mockApplications.map((application) => (
-                    <ApplicationCard key={application.id} application={application} />
+                    <ApplicationCard
+                      key={application.id}
+                      application={application}
+                    />
                   ))}
                 </div>
               </div>
             )}
 
-            {activeTab === 'saved' && (
+            {activeTab === "saved" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-jobequal-text">Saved Jobs</h2>
+                <h2 className="text-2xl font-bold text-jobequal-text">
+                  Saved Jobs
+                </h2>
                 <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-12 border border-jobequal-neutral-dark text-center">
                   <Heart className="w-16 h-16 text-jobequal-text-muted mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-jobequal-text mb-2">No saved jobs yet</h3>
+                  <h3 className="text-xl font-semibold text-jobequal-text mb-2">
+                    No saved jobs yet
+                  </h3>
                   <p className="text-jobequal-text-muted mb-6">
-                    Start saving jobs you're interested in to keep track of them here.
+                    Start saving jobs you're interested in to keep track of them
+                    here.
                   </p>
                   <Link
                     to="/job-search"
@@ -457,7 +513,9 @@ export default function CandidateDashboard() {
 
             {/* Quick Actions */}
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 border border-jobequal-neutral-dark">
-              <h2 className="text-2xl font-bold text-jobequal-text mb-6">Quick Actions</h2>
+              <h2 className="text-2xl font-bold text-jobequal-text mb-6">
+                Quick Actions
+              </h2>
               <div className="space-y-4">
                 <Link
                   to="/cv-upload"
@@ -474,7 +532,7 @@ export default function CandidateDashboard() {
                   </div>
                   <ArrowRight className="w-4 h-4 text-jobequal-text-muted group-hover:text-jobequal-green" />
                 </Link>
-                
+
                 <Link
                   to="/job-search"
                   className="flex items-center space-x-3 p-4 rounded-xl border border-jobequal-neutral-dark hover:bg-jobequal-green-light hover:border-jobequal-green transition-all duration-200 group"
@@ -490,7 +548,7 @@ export default function CandidateDashboard() {
                   </div>
                   <ArrowRight className="w-4 h-4 text-jobequal-text-muted group-hover:text-jobequal-green" />
                 </Link>
-                
+
                 <Link
                   to="/profile"
                   className="flex items-center space-x-3 p-4 rounded-xl border border-jobequal-neutral-dark hover:bg-jobequal-green-light hover:border-jobequal-green transition-all duration-200 group"

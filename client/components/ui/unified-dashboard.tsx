@@ -1,13 +1,15 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import React from "react";
+import { motion } from "framer-motion";
+import { LucideIcon } from "lucide-react";
+import { cn } from "../../lib/utils";
 
 // Security utility to sanitize and validate data
-export const sanitizeText = (text: string | number | undefined | null): string => {
-  if (text === null || text === undefined) return '';
+export const sanitizeText = (
+  text: string | number | undefined | null,
+): string => {
+  if (text === null || text === undefined) return "";
   const str = String(text);
-  return str.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+  return str.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 };
 
 export const validateNumber = (value: any): number => {
@@ -19,25 +21,25 @@ export const validateNumber = (value: any): number => {
 export const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
+  exit: { opacity: 0, y: -20 },
 };
 
 export const scaleIn = {
   initial: { opacity: 0, scale: 0.9 },
   animate: { opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.9 }
+  exit: { opacity: 0, scale: 0.9 },
 };
 
 export const slideInLeft = {
   initial: { opacity: 0, x: -20 },
   animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -20 }
+  exit: { opacity: 0, x: -20 },
 };
 
 export const slideInRight = {
   initial: { opacity: 0, x: 20 },
   animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: 20 }
+  exit: { opacity: 0, x: 20 },
 };
 
 // Unified Dashboard Container
@@ -46,14 +48,16 @@ interface DashboardContainerProps {
   className?: string;
 }
 
-export const DashboardContainer: React.FC<DashboardContainerProps> = ({ 
-  children, 
-  className 
+export const DashboardContainer: React.FC<DashboardContainerProps> = ({
+  children,
+  className,
 }) => (
-  <main className={cn(
-    "min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900",
-    className
-  )}>
+  <main
+    className={cn(
+      "min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900",
+      className,
+    )}
+  >
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {children}
     </div>
@@ -65,7 +69,7 @@ export interface StatsCardProps {
   title: string;
   value: string | number;
   change?: string;
-  changeType?: 'positive' | 'negative' | 'neutral';
+  changeType?: "positive" | "negative" | "neutral";
   icon: LucideIcon;
   description?: string;
   loading?: boolean;
@@ -77,12 +81,12 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   title,
   value,
   change,
-  changeType = 'neutral',
+  changeType = "neutral",
   icon: Icon,
   description,
   loading = false,
   onClick,
-  index = 0
+  index = 0,
 }) => {
   const sanitizedTitle = sanitizeText(title);
   const sanitizedValue = sanitizeText(value);
@@ -90,9 +94,10 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   const sanitizedChange = sanitizeText(change);
 
   const changeColors = {
-    positive: 'text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30',
-    negative: 'text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30',
-    neutral: 'text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-900/30'
+    positive:
+      "text-green-600 bg-green-100 dark:text-green-400 dark:bg-green-900/30",
+    negative: "text-red-600 bg-red-100 dark:text-red-400 dark:bg-red-900/30",
+    neutral: "text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-900/30",
   };
 
   return (
@@ -105,7 +110,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
       whileTap={onClick ? { scale: 0.98 } : undefined}
       className={cn(
         "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl p-6 border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300",
-        onClick && "cursor-pointer"
+        onClick && "cursor-pointer",
       )}
       onClick={onClick}
     >
@@ -123,10 +128,12 @@ export const StatsCard: React.FC<StatsCardProps> = ({
           <div className="flex items-center justify-between mb-4">
             <Icon className="w-8 h-8 text-jobequal-green" />
             {change && (
-              <span className={cn(
-                "text-sm font-semibold px-2 py-1 rounded-full",
-                changeColors[changeType]
-              )}>
+              <span
+                className={cn(
+                  "text-sm font-semibold px-2 py-1 rounded-full",
+                  changeColors[changeType],
+                )}
+              >
                 {sanitizedChange}
               </span>
             )}
@@ -160,12 +167,15 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   title,
   subtitle,
   actions,
-  className
+  className,
 }) => (
   <motion.div
     initial={{ opacity: 0, y: -10 }}
     animate={{ opacity: 1, y: 0 }}
-    className={cn("flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6", className)}
+    className={cn(
+      "flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6",
+      className,
+    )}
   >
     <div>
       <h2 className="text-2xl font-bold text-jobequal-text dark:text-white mb-1">
@@ -178,9 +188,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
       )}
     </div>
     {actions && (
-      <div className="mt-4 sm:mt-0 flex items-center space-x-3">
-        {actions}
-      </div>
+      <div className="mt-4 sm:mt-0 flex items-center space-x-3">{actions}</div>
     )}
   </motion.div>
 );
@@ -188,8 +196,8 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 // Unified Action Button
 interface ActionButtonProps {
   children?: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "danger" | "success";
+  size?: "sm" | "md" | "lg";
   loading?: boolean;
   disabled?: boolean;
   onClick?: () => void;
@@ -199,25 +207,29 @@ interface ActionButtonProps {
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
   children,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   loading = false,
   disabled = false,
   onClick,
   className,
-  icon: Icon
+  icon: Icon,
 }) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg',
-    secondary: 'bg-white dark:bg-gray-700 text-jobequal-text dark:text-white border border-jobequal-neutral-dark dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600',
-    danger: 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-md hover:shadow-lg',
-    success: 'bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md hover:shadow-lg'
+    primary:
+      "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg",
+    secondary:
+      "bg-white dark:bg-gray-700 text-jobequal-text dark:text-white border border-jobequal-neutral-dark dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600",
+    danger:
+      "bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 shadow-md hover:shadow-lg",
+    success:
+      "bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700 shadow-md hover:shadow-lg",
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base'
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
   };
 
   return (
@@ -229,7 +241,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
         variants[variant],
         sizes[size],
         (disabled || loading) && "opacity-50 cursor-not-allowed",
-        className
+        className,
       )}
       onClick={onClick}
       disabled={disabled || loading}
@@ -238,10 +250,10 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className={`w-4 h-4 border-2 border-white border-t-transparent rounded-full ${children ? 'mr-2' : ''}`}
+          className={`w-4 h-4 border-2 border-white border-t-transparent rounded-full ${children ? "mr-2" : ""}`}
         />
       ) : Icon ? (
-        <Icon className={`w-4 h-4 ${children ? 'mr-2' : ''}`} />
+        <Icon className={`w-4 h-4 ${children ? "mr-2" : ""}`} />
       ) : null}
       {children}
     </motion.button>
@@ -262,7 +274,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   title,
   className,
   loading = false,
-  noPadding = false
+  noPadding = false,
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -271,7 +283,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
     className={cn(
       "bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl border border-jobequal-neutral-dark dark:border-gray-600 shadow-lg hover:shadow-xl transition-all duration-300",
       !noPadding && "p-6",
-      className
+      className,
     )}
   >
     {title && (
@@ -292,13 +304,13 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
 );
 
 // Unified Loading Spinner
-export const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ 
-  size = 'md' 
+export const LoadingSpinner: React.FC<{ size?: "sm" | "md" | "lg" }> = ({
+  size = "md",
 }) => {
   const sizes = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8'
+    sm: "w-4 h-4",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
   };
 
   return (
@@ -307,7 +319,7 @@ export const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({
       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       className={cn(
         "border-2 border-jobequal-green border-t-transparent rounded-full",
-        sizes[size]
+        sizes[size],
       )}
     />
   );
@@ -319,7 +331,10 @@ interface ErrorFallbackProps {
   resetError: () => void;
 }
 
-export const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError }) => (
+export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
+  error,
+  resetError,
+}) => (
   <DashboardCard className="text-center">
     <div className="text-red-500 mb-4">
       <h3 className="text-lg font-semibold mb-2">Something went wrong</h3>

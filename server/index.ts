@@ -51,25 +51,33 @@ export function createServer() {
         .single();
 
       if (profileError || !profile) {
-        return res.status(404).json({ error: `User profile not found for ID: ${userId}` });
+        return res
+          .status(404)
+          .json({ error: `User profile not found for ID: ${userId}` });
       }
 
-      const profileText = `Bio: ${profile.bio || ''}\nSkills: ${(profile.skills || []).join(', ')}`;
+      const profileText = `Bio: ${profile.bio || ""}\nSkills: ${(profile.skills || []).join(", ")}`;
       if (!profileText.trim()) {
-          return res.status(400).json({ error: "User profile is empty, cannot generate recommendations." });
+        return res
+          .status(400)
+          .json({
+            error: "User profile is empty, cannot generate recommendations.",
+          });
       }
       const userEmbedding = await getEmbedding(profileText);
 
-      const { data: jobs, error: matchError } = await supabase.rpc("match_jobs", {
-        query_embedding: userEmbedding,
-        match_threshold: 0.7,
-        match_count: 10,
-      });
+      const { data: jobs, error: matchError } = await supabase.rpc(
+        "match_jobs",
+        {
+          query_embedding: userEmbedding,
+          match_threshold: 0.7,
+          match_count: 10,
+        },
+      );
 
       if (matchError) throw matchError;
 
       res.json({ jobs: jobs ?? [] });
-
     } catch (e: any) {
       console.error(e);
       res.status(500).json({ error: e.message ?? "Unknown error" });

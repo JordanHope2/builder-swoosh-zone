@@ -212,9 +212,20 @@ const App = () => (
                         </ProtectedRoute>
                       }
                     />
-                    <Route path="/settings/security" element={<Navigate to="/settings?tab=security" replace />} />
-                    <Route path="/settings/privacy" element={<Navigate to="/settings?tab=privacy" replace />} />
-                    <Route path="/settings/notifications" element={<Navigate to="/settings?tab=notifications" replace />} />
+                    <Route
+                      path="/settings/security"
+                      element={<Navigate to="/settings?tab=security" replace />}
+                    />
+                    <Route
+                      path="/settings/privacy"
+                      element={<Navigate to="/settings?tab=privacy" replace />}
+                    />
+                    <Route
+                      path="/settings/notifications"
+                      element={
+                        <Navigate to="/settings?tab=notifications" replace />
+                      }
+                    />
                     <Route path="/salary-guide" element={<SalaryGuide />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route
@@ -227,7 +238,10 @@ const App = () => (
                     <Route path="/status" element={<SystemStatus />} />
                     <Route path="/applications" element={<Applications />} />
                     <Route path="/career-tips" element={<CareerTips />} />
-                    <Route path="/find-candidates" element={<FindCandidates />} />
+                    <Route
+                      path="/find-candidates"
+                      element={<FindCandidates />}
+                    />
                     <Route path="/post-job" element={<PostJob />} />
                     <Route
                       path="/favorites"
