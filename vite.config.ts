@@ -5,7 +5,16 @@ import path from "path";
 // ⛔️ DO NOT import "./server" here.
 // We will dynamically import it inside configureServer.
 
+import type { UserConfig } from "vitest/config";
+
+const vitestConfig: UserConfig["test"] = {
+  globals: true,
+  environment: "jsdom",
+  setupFiles: "./client/tests/setup.ts",
+};
+
 export default defineConfig(() => ({
+  test: vitestConfig,
   server: {
     host: "localhost",
     port: 8080,

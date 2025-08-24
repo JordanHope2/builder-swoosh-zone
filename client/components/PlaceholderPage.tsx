@@ -1,4 +1,4 @@
-import { Navigation } from "./Navigation";
+import Navigation from "./ui/improved-navigation";
 
 interface PlaceholderPageProps {
   title: string;

@@ -14,8 +14,8 @@
     ]
   },
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "dev:client": "vite --host 127.0.0.1",
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "preview": "vite preview --host 127.0.0.1 --port 8080",
     "dev:server": "tsx server/dev.ts",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/spa",
@@ -23,6 +23,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
+    "test:e2e": "TS_NODE_PROJECT=tsconfig.e2e.json playwright test",
     "format.fix": "prettier --write .",
     "typecheck": "tsc"
   },
@@ -30,6 +31,7 @@
     "@aws-sdk/client-s3": "^3.864.0",
     "@aws-sdk/s3-request-presigner": "^3.864.0",
     "@builder.io/react": "^8.2.6",
+    "@clerk/clerk-react": "^5.43.1",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.54.0",
     "dotenv": "^17.2.0",
@@ -43,6 +45,7 @@
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@playwright/test": "^1.55.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
@@ -75,6 +78,9 @@
     "@swc/core": "^1.11.24",
     "@tailwindcss/typography": "^0.5.15",
     "@tanstack/react-query": "^5.56.2",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/multer": "^2.0.0",
@@ -94,6 +100,7 @@
     "framer-motion": "^12.23.12",
     "globals": "^15.9.0",
     "input-otp": "^1.2.4",
+    "jsdom": "^26.1.0",
     "lucide-react": "^0.462.0",
     "next-themes": "^0.3.0",
     "postcss": "^8.5.6",
@@ -112,10 +119,12 @@
     "tailwindcss": "^3.4.11",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.176.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.0",
     "typescript": "^5.5.3",
     "vaul": "^0.9.3",
     "vite": "^6.2.2",
-    "vitest": "^3.1.4"
+    "vitest": "^3.1.4",
+    "wait-on": "^8.0.4"
   }
 }

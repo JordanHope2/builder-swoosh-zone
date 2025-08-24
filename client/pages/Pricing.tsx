@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Navigation } from "../components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
-  Check,
   Users,
   Briefcase,
   CheckCircle,
@@ -15,7 +13,6 @@ import { useAuth } from "../contexts/AuthContext";
 // Helper function to make authenticated API requests
 const fetchFromApi = async (endpoint: string, token: string | undefined, options: RequestInit = {}) => {
   if (!token) {
-    // Or handle this case as an error, depending on requirements
     return Promise.reject(new Error("No auth token provided."));
   }
 
@@ -44,7 +41,7 @@ export default function Pricing() {
   const { data: products, isLoading: isLoadingProducts, error: productsError } = useQuery({
     queryKey: ["products"],
     queryFn: () => fetchFromApi("/products", token),
-    enabled: !!token, // Only run the query if the user is logged in
+    enabled: !!token,
   });
 
   const { mutate: createCheckoutSession, isPending: isCreatingCheckout } = useMutation({
@@ -149,8 +146,6 @@ export default function Pricing() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Navigation />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
           <h1 className="text-4xl lg:text-5xl font-bold text-jobequal-text dark:text-white mb-4">
@@ -181,8 +176,6 @@ export default function Pricing() {
         </motion.div>
 
         {renderContent()}
-
       </div>
-    </main>
   );
 }

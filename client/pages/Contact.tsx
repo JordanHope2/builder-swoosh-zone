@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import Navigation from "../components/ui/improved-navigation";
 import { PageHeader } from "../components/ui/page-header";
 import { applicationToast } from "../hooks/use-toast";
 import {

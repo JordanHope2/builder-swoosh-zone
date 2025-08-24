@@ -1,4 +1,4 @@
-import { Navigation } from "../components/Navigation";
+import Navigation from "../components/ui/improved-navigation";
 import { HeroSection } from "../components/HeroSection";
 import { FeaturedJobs } from "../components/FeaturedJobs";
 

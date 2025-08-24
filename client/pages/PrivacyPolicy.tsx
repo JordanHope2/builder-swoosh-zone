@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import Navigation from "../components/ui/improved-navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
   Shield,

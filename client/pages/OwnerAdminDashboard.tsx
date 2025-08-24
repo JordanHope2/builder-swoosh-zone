@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import Navigation from "@/components/ui/improved-navigation";
+import Sidebar from "@/components/ui/sidebar";
+import PageHeader from "@/components/ui/page-header";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
 import {
   BarChart3,
@@ -115,7 +117,7 @@ const UserManagementTab = () => {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex space-x-2">
-                    <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
+                    <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100" data-testid={`delete-user-${user.id}`}>
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
