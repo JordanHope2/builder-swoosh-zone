@@ -1,4 +1,5 @@
 import os
+import json
 from typing import List, Dict, Set, Any
 from dotenv import load_dotenv
 from supabase import create_client, Client
@@ -11,18 +12,36 @@ load_dotenv(dotenv_path=dotenv_path)
 class SupabaseClient:
     """
     A client for interacting with the Supabase database.
+    In "dry run" mode (when SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set),
+    it prints the data that would be sent to the database instead of making a real call.
     """
     def __init__(self):
-        self.client: Client = create_client(
-            os.environ.get("SUPABASE_URL"),
-            os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-        )
+        self.client: Client | None = None
+        self.dry_run = False
+
+        supabase_url = os.environ.get("SUPABASE_URL")
+        supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+
+        if supabase_url and supabase_key:
+            self.client = create_client(supabase_url, supabase_key)
+        else:
+            self.dry_run = True
+            print("--- SUPABASE DRY RUN MODE ---")
+            print("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not found.")
+            print("Database operations will be printed instead of executed.")
+            print("-----------------------------")
+
 
     def upsert_jobs(self, jobs: List[Dict]):
         """
         Upserts a list of jobs to the Supabase database.
         """
         if not jobs:
+            return
+
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would upsert jobs:")
+            print(json.dumps(jobs, indent=2))
             return
 
         try:
@@ -41,6 +60,11 @@ class SupabaseClient:
         Returns the ID of the upserted record.
         """
         if not candidate:
+            return None
+
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would upsert candidate:")
+            print(json.dumps(candidate, indent=2))
             return None
 
         try:
@@ -66,9 +90,13 @@ class SupabaseClient:
             return
 
         skill_records = [
-            # Note: the column name in the table is 'source_of_skill'
             {"candidate_id": candidate_id, "skill": skill, "source_of_skill": "bio_keyword"} for skill in skills
         ]
+
+        if self.dry_run or not self.client:
+            print(f"[DRY RUN] Would upsert {len(skill_records)} skills for candidate ID {candidate_id}:")
+            print(json.dumps(skill_records, indent=2))
+            return
 
         try:
             data, count = self.client.table('scraped_candidate_skills').upsert(
@@ -83,12 +111,13 @@ class SupabaseClient:
     def upsert_company(self, company: Dict[str, Any]) -> str | None:
         """
         Upserts a company profile.
-        - If zefix_uid is present, it upserts based on that.
-        - If not, it attempts to find a match by name and update.
-        - If no match is found, it creates a new company.
-        Returns the UUID of the upserted/created record.
         """
         if not company or not company.get('name'):
+            return None
+
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would upsert company:")
+            print(json.dumps(company, indent=2))
             return None
 
         # Case 1: We have a Zefix UID (from Zefix scraper)
@@ -113,18 +142,12 @@ class SupabaseClient:
 
         # Case 2: No Zefix UID (from Adzuna enrichment)
         else:
-            # This part is complex and better handled in a dedicated service/linker.
-            # For now, we will just insert, and the linking logic can merge later.
-            # A true upsert here would require a fuzzy match against the DB.
             enrichment_data = {
                 'name': company.get('name'),
                 'description': company.get('description'),
                 'tech_stack': company.get('tech_stack')
             }
             try:
-                # We use upsert on 'name' as a proxy for now. This can create near-duplicates
-                # that will need to be merged later. A more robust solution would involve
-                # a separate staging area or a more complex matching function.
                 data, count = self.client.table('companies').upsert(enrichment_data, on_conflict='name').execute()
                 if data and data[1]:
                     company_id = data[1][0]['id']
@@ -140,6 +163,11 @@ class SupabaseClient:
         Logs the raw scraped data for a company to the `companies_scraped_raw_data` table.
         """
         if not all([company_id, source, source_id, raw_data]):
+            return
+
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would log raw company scrape:")
+            print(json.dumps({'company_id': company_id, 'source': source, 'source_id': source_id}, indent=2))
             return
 
         log_entry = {
@@ -159,8 +187,10 @@ class SupabaseClient:
         """
         Fetches all jobs that do not have a company_id assigned yet.
         """
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would get jobs without company link. Returning empty list.")
+            return []
         try:
-            # The correct way to filter for NULL is to use the value `None`.
             response = self.client.table('jobs').select('id, company_name').is_('company_id', None).execute()
             print(f"Found {len(response.data)} jobs without a company link.")
             return response.data
@@ -172,6 +202,9 @@ class SupabaseClient:
         """
         Fetches all companies from the canonical companies table.
         """
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would get all companies. Returning empty list.")
+            return []
         try:
             response = self.client.table('companies').select('id, name').execute()
             print(f"Found {len(response.data)} canonical companies.")
@@ -184,6 +217,9 @@ class SupabaseClient:
         """
         Updates a job record to link it to a company.
         """
+        if self.dry_run or not self.client:
+            print(f"[DRY RUN] Would link job {job_id} to company {company_id}.")
+            return
         try:
             self.client.table('jobs').update({'company_id': company_id}).eq('id', job_id).execute()
             print(f"Successfully linked job {job_id} to company {company_id}.")
@@ -194,6 +230,9 @@ class SupabaseClient:
         """
         Fetches all jobs that have a valid, linked company_id.
         """
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would get all jobs with company. Returning empty list.")
+            return []
         try:
             response = self.client.table('jobs').select('company_id, description').not_.is_('company_id', None).execute()
             print(f"Found {len(response.data)} jobs with a linked company to analyze.")
@@ -206,6 +245,9 @@ class SupabaseClient:
         """
         Updates the sponsorship status for a company.
         """
+        if self.dry_run or not self.client:
+            print(f"[DRY RUN] Would update sponsorship for company {company_id} to {status}.")
+            return
         try:
             self.client.table('companies').update({'offers_visa_sponsorship': status}).eq('id', company_id).execute()
             print(f"Successfully updated sponsorship status for company {company_id}.")
@@ -216,6 +258,9 @@ class SupabaseClient:
         """
         Fetches companies that have a description but have not yet been tagged.
         """
+        if self.dry_run or not self.client:
+            print("[DRY RUN] Would get companies for tagging. Returning empty list.")
+            return []
         try:
             response = self.client.table('companies').select('id, description').not_.is_('description', None).is_('tags', None).execute()
             print(f"Found {len(response.data)} companies to tag.")
@@ -229,6 +274,10 @@ class SupabaseClient:
         Updates the tags for a specific company.
         """
         if not tags:
+            return
+        if self.dry_run or not self.client:
+            print(f"[DRY RUN] Would update tags for company {company_id}:")
+            print(json.dumps(tags, indent=2))
             return
         try:
             self.client.table('companies').update({'tags': tags}).eq('id', company_id).execute()

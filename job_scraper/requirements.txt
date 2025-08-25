@@ -6,3 +6,5 @@ nltk
 supabase
 python-dotenv
 openai
+beautifulsoup4
+lxml
