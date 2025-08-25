@@ -66,7 +66,18 @@ jobs:
       - name: Install dependencies
         run: ${{ env.INSTALL_CMD }}
 
+      - name: Supabase health check
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          curl -fsSL "$VITE_SUPABASE_URL/auth/v1/health" \
+          -H "apikey: $VITE_SUPABASE_ANON_KEY" >/dev/null
+
       - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
         run: ${{ env.BUILD_CMD }}
 
       # Detect actual build output (dist/spa > dist) and expose as an output
