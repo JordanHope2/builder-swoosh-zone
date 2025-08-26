@@ -64,12 +64,27 @@ Copy the example environment file and configure:
 cp .env.example .env
 ```
 
-Fill in your environment variables:
+Fill in your environment variables.
 
-- Supabase credentials
-- Stripe keys for payments
-- SMTP settings for emails
-- OpenAI API key for AI features
+### Secrets Matrix
+
+This table lists the required environment variables for each environment.
+
+| Variable | Local (`.env`) | Frontend (Vercel) | Backend (Railway) | GitHub Secrets |
+| :--- | :--- | :--- | :--- | :--- |
+| `NEXT_PUBLIC_SUPABASE_URL` | ✅ | ✅ | | |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ | ✅ | | |
+| `NEXT_PUBLIC_BUILDER_API_KEY` | ✅ | ✅ | | |
+| `NEXT_PUBLIC_API_BASE_URL` | ✅ | ✅ | | |
+| `SUPABASE_URL` | ✅ | | ✅ | ✅ |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | | ✅ | ✅ |
+| `OPENAI_API_KEY` | ✅ | | ✅ | ✅ |
+| `STRIPE_SECRET_KEY` | ✅ | | ✅ | ✅ |
+| `STRIPE_WEBHOOK_SECRET` | ✅ | | ✅ | ✅ |
+| `SENTRY_DSN` | ✅ | ✅ | ✅ | |
+| `SENTRY_AUTH_TOKEN` | | | | ✅ |
+| `GCP_WIF_PROVIDER` | | | | ✅ |
+| *Mail Credentials* | ✅ | | ✅ | |
 
 ### 3. Database Setup (Supabase)
 
@@ -193,6 +208,15 @@ The project includes `netlify.toml` configuration:
 - Data encryption
 - Secure API endpoints
 - Rate limiting
+
+### Secret Handling
+
+This project follows security best practices for managing secrets and credentials.
+
+-   **Local Development:** For local development, create a `.env` file in the root of the project by copying the `.env.example` file. Fill in the required values for your local setup. The `.gitignore` file is configured to prevent `.env` files from being committed to the repository.
+-   **CI/CD and Production:** In CI/CD environments and for production deployments, secrets are managed using GitHub secrets and environment variables in the hosting platforms (Vercel, Railway). Refer to the "Secrets Matrix" section for a detailed breakdown of where each secret is used.
+-   **No Hardcoded Secrets:** No secrets should ever be hardcoded in the source code. Always use environment variables.
+-   **Secret Scanning:** The repository is configured with Gitleaks to automatically scan for any accidentally committed secrets in pull requests.
 
 ## 🎨 Architecture
 
