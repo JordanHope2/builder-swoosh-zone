@@ -1,0 +1,34 @@
+name: Job Scraper
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Runs every day at 3 AM UTC
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  scrape:
+    name: Run Job Scraper
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and run scraper container
+        run: |
+          docker build -t job-scraper ./job_scraper
+          docker run --name scraper-container \
+            -e SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            -e SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }} \
+            -e ADZUNA_APP_ID=${{ secrets.ADZUNA_APP_ID }} \
+            -e ADZUNA_API_KEY=${{ secrets.ADZUNA_API_KEY }} \
+            job-scraper
+
+      - name: Copy summary from container
+        run: docker cp scraper-container:/app/scraper-summary.txt .
+
+      - name: Upload scraper summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: scraper-summary
+          path: scraper-summary.txt
