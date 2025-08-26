@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "pip"
+    directory: "/job_scraper"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "chore"
+      include: "scope"

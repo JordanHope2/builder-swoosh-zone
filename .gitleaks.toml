@@ -1,0 +1,8 @@
+title = "gitleaks config for builder-swoosh-zone"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allowlist for known false positives or rotated secrets"
+regexes = []
