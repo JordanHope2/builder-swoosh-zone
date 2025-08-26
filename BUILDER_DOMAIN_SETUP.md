@@ -40,8 +40,8 @@ This guide explains how to configure Builder.io project settings to allow your p
 Your current Builder.io configuration:
 
 ```javascript
-VITE_PUBLIC_BUILDER_KEY = a8a771bec0f40debf22ee94a25cce67;
-NEXT_PUBLIC_BUILDER_API_KEY = ea8a771bec0f40debf22ee94a25cce67;
+VITE_PUBLIC_BUILDER_KEY = your_builder_io_public_key;
+NEXT_PUBLIC_BUILDER_API_KEY = your_builder_io_api_key;
 ```
 
 ### 4. Set Up Content Models (if needed)
@@ -91,7 +91,7 @@ Make sure these are set in your production environment:
 
 ```bash
 # Builder.io
-VITE_PUBLIC_BUILDER_KEY=a8a771bec0f40debf22ee94a25cce67
+VITE_PUBLIC_BUILDER_KEY=your_builder_io_public_key
 
 # Production URLs
 VITE_APP_URL=https://jobequal.ch
