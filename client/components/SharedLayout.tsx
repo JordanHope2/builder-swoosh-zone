@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { BuilderComponent, builder } from "@builder.io/react";
+import { Content, fetchOneEntry } from "@builder.io/sdk-react";
 import { builderConfig } from "../lib/builderConfig";
-
-// Initialize the Builder SDK with your public API key
-builder.init(builderConfig.apiKey);
 
 interface SharedLayoutProps {
   children: React.ReactNode;
@@ -18,8 +15,14 @@ export function SharedLayout({ children }: SharedLayoutProps) {
     async function fetchLayoutContent() {
       try {
         const [header, footer] = await Promise.all([
-          builder.get("header").promise(),
-          builder.get("footer").promise(),
+          fetchOneEntry({
+            model: "header",
+            apiKey: builderConfig.apiKey,
+          }),
+          fetchOneEntry({
+            model: "footer",
+            apiKey: builderConfig.apiKey,
+          }),
         ]);
         setHeaderContent(header);
         setFooterContent(footer);
@@ -40,9 +43,9 @@ export function SharedLayout({ children }: SharedLayoutProps) {
 
   return (
     <div>
-      {headerContent && <BuilderComponent model="header" content={headerContent} />}
+      {headerContent && <Content model="header" content={headerContent} apiKey={builderConfig.apiKey} />}
       <main>{children}</main>
-      {footerContent && <BuilderComponent model="footer" content={footerContent} />}
+      {footerContent && <Content model="footer" content={footerContent} apiKey={builderConfig.apiKey} />}
     </div>
   );
 }

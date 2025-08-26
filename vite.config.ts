@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -6,6 +7,11 @@ import path from "path";
 // We will dynamically import it inside configureServer.
 
 export default defineConfig(() => ({
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './tests/setup.ts',
+  },
   server: {
     host: "localhost",
     port: 8080,
@@ -21,6 +27,7 @@ export default defineConfig(() => ({
     alias: {
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
+      "@components": path.resolve(__dirname, "./client/components"),
     },
   },
 }));

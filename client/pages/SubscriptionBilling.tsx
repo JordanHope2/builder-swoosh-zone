@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth } from "../contexts/AuthContext";
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "@components/Navigation";
 import { Loader2, ExternalLink, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 

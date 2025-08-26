@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
   Check,

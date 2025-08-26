@@ -29,3 +29,9 @@ dist-ssr
 .env
 .env.*
 *.secret
+
+# Ensure all secret files are ignored
+.env
+.env.*
+*.local
+*.secret

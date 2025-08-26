@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "./ui/button";
 import { Icons } from "./ui/icons";
@@ -23,8 +24,6 @@ export function GoogleSignIn({
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true);
-
-      const { supabase } = await import("../lib/supabase");
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",

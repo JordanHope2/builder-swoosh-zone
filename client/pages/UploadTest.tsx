@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "@components/Navigation";
 
 export default function UploadTest() {
   const [file, setFile] = useState<File | null>(null);

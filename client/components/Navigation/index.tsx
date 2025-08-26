@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Bell, Settings, User, LogOut, Shield } from "lucide-react";
-import { LanguageSwitcher } from "../LanguageSwitcher";
-import { ThemeToggle } from "../ThemeProvider";
-import { NotificationsOverlay } from "../NotificationsOverlay";
-import { useLanguage } from "../../contexts/LanguageContext";
-import SecurityUtils from "../../lib/security";
+import { LanguageSwitcher } from "@components/LanguageSwitcher";
+import { ThemeToggle } from "@components/ThemeProvider";
+import { NotificationsOverlay } from "@components/NotificationsOverlay";
+import { useLanguage } from "@/contexts/LanguageContext";
+import SecurityUtils from "@/lib/security";
 
 interface UserProfile {
   id: string;
@@ -16,15 +16,15 @@ interface UserProfile {
   avatar?: string;
 }
 
-interface ImprovedNavigationProps {
+interface NavigationProps {
   user?: UserProfile;
   onLogout?: () => void;
 }
 
-export function ImprovedNavigation({
+export function Navigation({
   user,
   onLogout,
-}: ImprovedNavigationProps) {
+}: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -449,4 +449,4 @@ export function ImprovedNavigation({
   );
 }
 
-export default ImprovedNavigation;
+export default Navigation;

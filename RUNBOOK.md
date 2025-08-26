@@ -69,3 +69,46 @@ For the deployment workflow to run successfully, you must configure the followin
 *   `FTP_USERNAME`: Your FTP username.
 *   `FTP_PASSWORD`: Your FTP password.
 *   `FTP_TARGET_DIR`: The directory on your server where the website files should be uploaded (e.g., `/httpdocs`, `/public_html`, or `/`). Check with Swizzonic for the correct value.
+
+## 5. Security
+
+### Removing Secrets from Git History
+
+If you accidentally commit sensitive data (e.g., API keys, passwords) to the repository, you must remove it from the entire Git history to prevent it from being exposed.
+
+**Warning:** This is a destructive operation that rewrites the history of your repository. All collaborators will need to fetch the new history and rebase their local branches.
+
+We recommend using the `git-filter-repo` tool for this purpose.
+
+**1. Install `git-filter-repo`:**
+
+You can install it using pip:
+```bash
+pip install git-filter-repo
+```
+
+**2. Run `git-filter-repo` to Remove the Secret:**
+
+Run the following command for each secret string you want to remove. Replace `THE_SECRET_STRING` with the actual secret you want to remove.
+
+```bash
+git filter-repo --replace-text <(echo 'THE_SECRET_STRING==>REMOVED')
+```
+
+For example, if you accidentally committed a Supabase anon key, you would run:
+```bash
+git filter-repo --replace-text <(echo 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppdGhrdnRsd2ZqanNycWFmd2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyNDg4NDIsImV4cCI6MjA3MDgyNDg0Mn0.IUhGxHCiSRalAghaZ-4m88REuMCDtjjo0X_SKmALQk0==>REMOVED')
+```
+
+**3. Force-push the Changes:**
+
+After running `git filter-repo`, you will need to force-push the changes to your remote repository to overwrite the old history:
+
+```bash
+git push origin --force --all
+git push origin --force --tags
+```
+
+**4. Inform Collaborators:**
+
+Notify all collaborators about the history rewrite so they can update their local repositories accordingly.
