@@ -1,4 +1,4 @@
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { PageHeader, SectionHeader } from "../components/ui/page-header";
 import { motion } from "framer-motion";
 import {

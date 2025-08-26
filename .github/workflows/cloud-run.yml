@@ -29,6 +29,7 @@ jobs:
             --image ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/containers/je-api \
             --region ${{ vars.GCP_REGION }} \
             --allow-unauthenticated \
-            --service-account je-api-runner@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+            --service-account je-api-runner@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com \
+            --set-secrets "SUPABASE_URL=SUPABASE_URL:latest,SUPABASE_SERVICE_ROLE_KEY=SUPABASE_SERVICE_ROLE_KEY:latest"
       - name: Show URL
         run: gcloud run services describe je-api --region ${{ vars.GCP_REGION }} --format='value(status.url)'

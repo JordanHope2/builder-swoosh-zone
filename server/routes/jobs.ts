@@ -34,6 +34,31 @@ router.get("/", async (_req, res) => {
 });
 
 /**
+ * GET /api/jobs/:id — get a single job by ID (public)
+ * Uses anon client -> respects RLS
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("jobs")
+      .select("*, companies(*)")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    if (!data) {
+      return res.status(404).json({ error: "Job not found" });
+    }
+
+    res.json({ job: data });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message ?? "Unknown error" });
+  }
+});
+
+/**
  * POST /api/jobs — create a job
  * SECURED: Uses authMiddleware to verify JWT.
  * Uses admin client to allow server-side insert (bypasses RLS), but owner_id is from a verified token.

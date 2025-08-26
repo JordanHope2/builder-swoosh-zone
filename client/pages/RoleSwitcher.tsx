@@ -11,7 +11,7 @@ import {
   ArrowRight,
   Crown,
 } from "lucide-react";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 
 interface UserRole {
   id: string;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useFavorites } from "../contexts/FavoritesContext";
 import {

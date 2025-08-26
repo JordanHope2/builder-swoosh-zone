@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { EnhancedApplicationForm } from "../components/EnhancedApplicationForm";
 import {
   PageTransition,
