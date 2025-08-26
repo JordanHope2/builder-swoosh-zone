@@ -1,5 +1,8 @@
 # JobEqual Platform
 
+[![CI](https://github.com/JordanHope2/builder-swoosh-zone/actions/workflows/ci.yml/badge.svg)](https://github.com/JordanHope2/builder-swoosh-zone/actions/workflows/ci.yml)
+[![Docker](https://github.com/JordanHope2/builder-swoosh-zone/actions/workflows/docker.yml/badge.svg)](https://github.com/JordanHope2/builder-swoosh-zone/actions/workflows/docker.yml)
+
 A comprehensive job platform built with React, TypeScript, and Vite, featuring advanced analytics, messaging, subscription management, and role-based dashboards.
 
 ## 🚀 Features
