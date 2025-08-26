@@ -112,3 +112,43 @@ git push origin --force --tags
 **4. Inform Collaborators:**
 
 Notify all collaborators about the history rewrite so they can update their local repositories accordingly.
+
+## 6. Backend Deployment (Cloud Run)
+
+The backend is deployed to Google Cloud Run via a GitHub Actions workflow defined in `.github/workflows/gcp-build.yml`.
+
+### a) Deployment Process
+
+1.  **Trigger:** A deployment is triggered by a push to the `main` branch.
+2.  **Build:** The workflow uses Google Cloud Build to build a Docker image from the `./server` directory.
+3.  **Push:** The built image is pushed to the Artifact Registry repository `europe-west6-docker.pkg.dev/jobequal/containers/je-api`.
+4.  **Deploy:** The workflow then deploys the new image to the `je-api` Cloud Run service.
+
+### b) Rollback Procedure
+
+To roll back the backend service to a previous version:
+
+1.  Go to the [Cloud Run service page](https://console.cloud.google.com/run?project=jobequal) in the Google Cloud Console.
+2.  Select the `je-api` service.
+3.  Go to the "Revisions" tab.
+4.  Select a previous, stable revision and click "Deploy". This will immediately route traffic to the selected revision.
+
+## 7. Observability and Monitoring
+
+### a) Dashboards
+
+-   **Sentry:** [Sentry Dashboard](https://sentry.io/organizations/your-org/projects/your-project/) (replace with your Sentry org and project) - for error tracking and performance monitoring.
+-   **Google Cloud Run:** [Cloud Run Dashboard](https://console.cloud.google.com/run?project=jobequal) - for service health, logs, and metrics.
+
+### b) Alerting
+
+Alerts are configured in Sentry and Google Cloud Monitoring.
+
+-   **Sentry Alerts:** Configure alerts in Sentry to be notified of new or frequent errors.
+-   **Google Cloud Alerts:** Configure alerts in Google Cloud Monitoring for high latency, high error rates, or high CPU usage on the Cloud Run service.
+
+### c) On-call Tips
+
+-   **First Response:** When an alert is received, first check the Sentry dashboard for any new errors. Then, check the Cloud Run logs for any unusual activity.
+-   **Escalation:** If the issue cannot be resolved quickly, escalate to the on-call lead.
+-   **Post-mortem:** After any incident, a post-mortem should be conducted to identify the root cause and prevent future occurrences.

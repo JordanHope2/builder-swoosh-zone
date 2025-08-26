@@ -2,6 +2,7 @@
 import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // ⛔️ DO NOT import "./server" here.
 // We will dynamically import it inside configureServer.
@@ -21,8 +22,19 @@ export default defineConfig(() => ({
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],
     },
   },
-  build: { outDir: "dist/spa" },
-  plugins: [react(), expressPlugin()],
+  build: {
+    outDir: "dist/spa",
+    sourcemap: true,
+  },
+  plugins: [
+    react(),
+    expressPlugin(),
+    sentryVitePlugin({
+      org: "your-org",
+      project: "your-project",
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),

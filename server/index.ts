@@ -1,5 +1,6 @@
 // server/index.ts
 import "dotenv/config";
+import * as Sentry from "@sentry/node";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
@@ -21,8 +22,25 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
 });
 
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Sentry.Integrations.Express({ app: express() }),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0,
+});
+
 export function createServer() {
   const app = express();
+
+  // The request handler must be the first middleware on the app
+  app.use(Sentry.Handlers.requestHandler());
+  // TracingHandler creates a trace for every incoming request
+  app.use(Sentry.Handlers.tracingHandler());
 
   // Middleware
   app.use(cors());
@@ -149,6 +167,27 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  // Health and readiness probes
+  app.get("/healthz", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
+
+  app.get("/readyz", async (_req, res) => {
+    try {
+      const supabase = getSupabaseAdmin();
+      const { error } = await supabase.from("jobs").select("id").limit(1);
+
+      if (error) {
+        throw new Error("Supabase connection check failed");
+      }
+
+      res.status(200).json({ status: "ready" });
+    } catch (error) {
+      console.error("Readiness check failed:", error);
+      res.status(503).json({ status: "not_ready" });
+    }
+  });
+
   // Example API routes
   app.get("/api/ping", (_req, res) => {
     const ping = process.env.PING_MESSAGE ?? "ping";
@@ -214,6 +253,9 @@ export function createServer() {
       res.status(500).json({ error: e.message ?? "Unknown error" });
     }
   });
+
+  // The error handler must be registered before any other error middleware and after all controllers
+  app.use(Sentry.Handlers.errorHandler());
 
   return app;
 }
