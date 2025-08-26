@@ -82,14 +82,17 @@ from job_scraper.db.supabase_client import SupabaseClient
 async def main():
     """
     Main function to run the Adzuna scraper and upsert the data.
+    Returns the number of jobs scraped.
     """
     print("Starting Adzuna scraper...")
+    num_jobs = 0
     try:
         scraper = AdzunaScraper()
         jobs, company_data = await scraper.scrape()
+        num_jobs = len(jobs)
 
         if jobs:
-            print(f"Attempting to upsert {len(jobs)} jobs to Supabase...")
+            print(f"Attempting to upsert {num_jobs} jobs to Supabase...")
             supabase_client = SupabaseClient()
             supabase_client.upsert_jobs(jobs)
         else:
@@ -109,6 +112,7 @@ async def main():
         print(f"An unexpected error occurred in Adzuna main: {e}")
 
     print("Adzuna scraper finished.")
+    return num_jobs
 
 
 if __name__ == '__main__':

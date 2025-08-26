@@ -63,19 +63,22 @@ async def main():
     """
     Main function to run the scraper and upsert the data.
     This function can be imported and called by other scripts.
+    Returns the number of jobs scraped.
     """
     logging.info("Starting SwissDevJobs scraper...")
     scraper = SwissDevJobsScraper()
     jobs = await scraper.scrape()
+    num_jobs = len(jobs)
 
     if jobs:
-        logging.info(f"Attempting to upsert {len(jobs)} jobs to Supabase...")
+        logging.info(f"Attempting to upsert {num_jobs} jobs to Supabase...")
         supabase_client = SupabaseClient()
         supabase_client.upsert_jobs(jobs)
     else:
         logging.info("No jobs found to upsert.")
 
     logging.info("SwissDevJobs scraper finished.")
+    return num_jobs
 
 if __name__ == '__main__':
     # This allows the script to be run directly for testing.
