@@ -39,7 +39,7 @@ import {
   Shield,
   Ban,
 } from "lucide-react";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
   DashboardContainer,

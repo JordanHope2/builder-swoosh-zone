@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
   BarChart3,

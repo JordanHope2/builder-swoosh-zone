@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { Navigation } from "../components/Navigation";
+import Navigation from "@components/Navigation";
 import { Home, Search, Upload, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
