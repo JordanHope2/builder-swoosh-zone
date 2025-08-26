@@ -24,9 +24,26 @@ A comprehensive job platform built with React, TypeScript, and Vite, featuring a
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - npm or yarn
 - Git
+
+### Local Development with Dev Containers
+
+This repository is configured to use [Dev Containers](https://containers.dev/), which allows you to use a Docker container as a fully-featured development environment. This is the recommended way to work on this project.
+
+**Prerequisites:**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) for VS Code.
+
+**One-Command Start:**
+
+1.  Clone this repository to your local machine.
+2.  Open the repository in Visual Studio Code.
+3.  When prompted, click on "Reopen in Container". VS Code will automatically build the dev container and configure your environment.
+
+That's it! All dependencies, including Node.js, Playwright dependencies, and gitleaks, will be available in your development environment. You can then proceed to run the application using `npm run dev`.
 
 ### 1. Clone and Install
 
