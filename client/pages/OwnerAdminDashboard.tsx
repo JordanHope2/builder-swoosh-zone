@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "@components/Navigation";
 import { useAuth } from "../contexts/AuthContext";
 import {
   BarChart3,

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
+import { Navigation } from "@components/Navigation";
 import { PageHeader } from "../components/ui/page-header";
 import { CompanyShareButton } from "../components/ui/share-button";
 import {
