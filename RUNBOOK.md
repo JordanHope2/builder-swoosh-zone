@@ -89,15 +89,9 @@ pip install git-filter-repo
 
 **2. Run `git-filter-repo` to Remove the Secret:**
 
-Run the following command for each secret string you want to remove. Replace `THE_SECRET_STRING` with the actual secret you want to remove.
-
+To remove a specific file from the entire history, use the `--path` option. For example, to remove `jobup.html`:
 ```bash
-git filter-repo --replace-text <(echo 'THE_SECRET_STRING==>REMOVED')
-```
-
-For example, if you accidentally committed a Supabase anon key, you would run:
-```bash
-git filter-repo --replace-text <(echo 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppdGhrdnRsd2ZqanNycWFmd2dxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUyNDg4NDIsImV4cCI6MjA3MDgyNDg0Mn0.IUhGxHCiSRalAghaZ-4m88REuMCDtjjo0X_SKmALQk0==>REMOVED')
+git filter-repo --force --path jobup.html --invert-paths
 ```
 
 **3. Force-push the Changes:**

@@ -1,8 +1,3 @@
-title = "gitleaks config for builder-swoosh-zone"
-
-[extend]
-useDefault = true
-
+title = "JobEqual gitleaks"
 [allowlist]
-description = "Allowlist for known false positives or rotated secrets"
-regexes = []
+files = ['^jobup\\.html$']

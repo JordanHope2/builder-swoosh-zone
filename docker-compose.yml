@@ -38,3 +38,8 @@ services:
     # to run it once when you start the services.
     # command: python main.py
     # restart: "no"
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"

@@ -17,6 +17,9 @@ import adminRouter from "./routes/admin";
 import { getSupabaseAdmin } from "./supabase";
 import { getEmbedding } from "./services/aiService";
 import { Stripe } from "stripe";
+import { createHandler } from 'graphql-http/lib/use/express';
+import { schema } from './graphql/schema';
+import { root } from './graphql/resolvers';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -207,6 +210,9 @@ export function createServer() {
   app.use("/api/billing", billingRouter);
   app.use("/api/dashboard", dashboardRouter);
   app.use("/api/admin", adminRouter);
+
+  // GraphQL endpoint
+  app.use('/graphql', createHandler({ schema, rootValue: root }));
 
   // Temporary test route for recommendations
   app.get("/api/test-recommendations/:userId", async (req, res) => {

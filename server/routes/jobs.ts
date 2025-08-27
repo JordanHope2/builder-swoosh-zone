@@ -10,8 +10,16 @@ const router = Router();
  * GET /api/jobs — list all jobs (public)
  * Uses anon client -> respects RLS
  */
+import redisClient from '../redis';
+
 router.get("/", async (_req, res) => {
+  const cacheKey = 'jobs:all';
   try {
+    const cachedJobs = await redisClient.get(cacheKey);
+    if (cachedJobs) {
+      return res.json({ jobs: JSON.parse(cachedJobs) });
+    }
+
     const supabase = getSupabase();
     // Select jobs and join the related company data
     const { data, error } = await supabase
@@ -26,6 +34,11 @@ router.get("/", async (_req, res) => {
       ...job,
       matchScore: Math.floor(Math.random() * (99 - 50 + 1)) + 50, // Random score between 50-99
     }));
+
+    // Cache the result in Redis for 1 hour
+    await redisClient.set(cacheKey, JSON.stringify(jobsWithMatchScore), {
+      EX: 3600, // 1 hour
+    });
 
     res.json({ jobs: jobsWithMatchScore });
   } catch (e: any) {
