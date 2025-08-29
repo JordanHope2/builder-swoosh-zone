@@ -43,3 +43,19 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+
+  rabbitmq:
+    image: "rabbitmq:3-management-alpine"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run worker
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env

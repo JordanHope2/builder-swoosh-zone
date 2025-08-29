@@ -1,7 +1,7 @@
 // server/routes/jobs.ts
 import { Router } from "express";
 import { z } from "zod";
-import { getSupabase, getSupabaseAdmin } from "../supabase";
+import { getSupabaseReadReplica, getSupabaseAdmin } from "../supabase";
 import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
@@ -20,7 +20,7 @@ router.get("/", async (_req, res) => {
       return res.json({ jobs: JSON.parse(cachedJobs) });
     }
 
-    const supabase = getSupabase();
+    const supabase = getSupabaseReadReplica();
     // Select jobs and join the related company data
     const { data, error } = await supabase
       .from("jobs")

@@ -15,7 +15,6 @@ import {
   X,
 } from "lucide-react";
 import { ThemeToggle } from "../components/ThemeProvider";
-import { signUpWithEmail } from "../lib/supabase";
 import { useToast } from "../hooks/use-toast";
 
 const userTypes = [
@@ -78,21 +77,30 @@ export default function SignUp() {
 
     setIsLoading(true);
     try {
-      await signUpWithEmail(formData.email, formData.password, {
-        full_name: `${formData.firstName} ${formData.lastName}`,
-        username: formData.firstName, // Using firstName as a simple username for now
-        // TODO: Add user_type to profiles table and pass it here
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          userData: {
+            full_name: `${formData.firstName} ${formData.lastName}`,
+            username: formData.firstName,
+          },
+        }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Signup failed');
+      }
+
       toast({
-        title: "Account created!",
+        title: "Registration request sent!",
         description:
-          "Please check your email to verify your account and complete registration.",
+          "Please check your email to verify your account. This may take a few moments.",
         variant: "default",
       });
-      // Don't redirect immediately, wait for email confirmation.
-      // Or redirect to a "please check your email" page.
-      // For now, we just show the toast and reset the loading state.
     } catch (error: any) {
       toast({
         title: "Registration Error",

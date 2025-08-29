@@ -58,3 +58,22 @@ export function getSupabaseAdmin(): SupabaseClient<Database> {
   });
   return _admin;
 }
+
+let _readReplica: SupabaseClient<Database> | null = null;
+
+export function getSupabaseReadReplica(): SupabaseClient<Database> {
+  if (_readReplica) return _readReplica;
+
+  const url = getEnv("READ_REPLICA_DATABASE_URL");
+  const anon = getEnv("SUPABASE_ANON_KEY") || getEnv("VITE_SUPABASE_ANON_KEY") || getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+
+  if (!url || !anon) {
+    // If the read replica URL is not configured, fall back to the primary client.
+    return getSupabase();
+  }
+
+  _readReplica = createClient<Database>(url, anon, {
+    auth: { persistSession: false, autoRefreshToken: true },
+  });
+  return _readReplica;
+}

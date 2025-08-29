@@ -57,19 +57,6 @@ export const signInWithEmail = async (email: string, password: string) => {
   return data;
 };
 
-export const signUpWithEmail = async (
-  email: string,
-  password: string,
-  userData?: any,
-) => {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: { data: userData },
-  });
-  if (error) throw error;
-  return data;
-};
 
 // ===== Mock data (kept) =====
 const mockJobs = [
