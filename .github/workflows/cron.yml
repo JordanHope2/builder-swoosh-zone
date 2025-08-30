@@ -1,0 +1,89 @@
+name: Cron Jobs
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Nightly at midnight UTC
+
+jobs:
+  ingest_greenhouse:
+    name: Ingest Greenhouse Jobs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Greenhouse ingestion script
+        run: node scripts/ingest-greenhouse.mjs
+        env:
+          GREENHOUSE_API_KEY: ${{ secrets.GREENHOUSE_API_KEY }}
+
+  reindex_meilisearch:
+    name: Re-index Meilisearch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Meilisearch re-index script
+        run: node scripts/reindex-meilisearch.mjs
+        env:
+          MEILISEARCH_HOST: ${{ secrets.MEILISEARCH_HOST }}
+          MEILISEARCH_API_KEY: ${{ secrets.MEILISEARCH_API_KEY }}
+
+  generate_sitemaps:
+    name: Generate Sitemaps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run sitemap generation script
+        run: node scripts/generate-sitemaps.mjs
+
+  retention_sweep:
+    name: Data Retention Sweep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run retention sweep script
+        run: node scripts/retention-sweep.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+  performance_test:
+    name: Nightly Performance Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Run k6 performance test
+        uses: grafana/k6-action@v0.4.0
+        with:
+          filename: scripts/perf/k6-test.js

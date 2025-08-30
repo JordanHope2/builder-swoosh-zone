@@ -25,8 +25,26 @@
     "test": "node run-tests.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format.fix": "prettier --write .",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "size": "size-limit",
+    "db:migrate": "supabase db push",
+    "db:migrate:dry-run": "supabase db push --dry-run",
+    "db:seed": "supabase db reset",
+    "test:a11y": "npx playwright test --grep @a11y",
+    "perf:k6": "k6 run scripts/perf/k6-test.js",
+    "seo:sitemaps": "node scripts/generate-sitemaps.mjs",
+    "ingest:greenhouse": "node scripts/ingest-greenhouse.mjs",
+    "search:reindex": "node scripts/reindex-meilisearch.mjs",
+    "smoke:prod": "playwright test --grep @smoke"
   },
+  "size-limit": [
+    {
+      "path": "dist/spa/assets/index-*.js",
+      "limit": "150 kB"
+    }
+  ],
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
     "@aws-sdk/s3-request-presigner": "^3.864.0",
@@ -92,6 +110,9 @@
     "@typescript-eslint/parser": "^8.41.0",
     "@vitejs/plugin-react-swc": "^4.0.1",
     "autoprefixer": "^10.4.21",
+    "@axe-core/playwright": "^4.9.0",
+    "axe-core": "^4.9.1",
+    "@lhci/cli": "^0.13.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
@@ -127,6 +148,20 @@
     "typescript": "^5.5.3",
     "vaul": "^0.9.3",
     "vite": "^6.2.2",
-    "vitest": "^3.1.4"
+    "vitest": "^3.1.4",
+    "@storybook/react-vite": "8.2.4",
+    "@storybook/react": "8.2.4",
+    "storybook": "8.2.4",
+    "size-limit": "^11.1.4",
+    "@size-limit/preset-app": "^9.0.0",
+    "@storybook/addon-essentials": "8.2.4",
+    "@storybook/addon-interactions": "8.2.4",
+    "@storybook/addon-links": "8.2.4",
+    "@storybook/testing-library": "0.2.2",
+    "semantic-release": "^24.0.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "supabase": "^1.183.3",
+    "@playwright/test": "^1.45.1"
   }
 }

@@ -29,9 +29,9 @@ export default defineConfig(() => ({
   plugins: [
     react(),
     expressPlugin(),
-    sentryVitePlugin({
-      org: "your-org",
-      project: "your-project",
+    process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
+      org: "jordanhope2",
+      project: "jobequal-ch",
       authToken: process.env.SENTRY_AUTH_TOKEN,
     }),
   ],
