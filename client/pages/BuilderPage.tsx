@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { BuilderComponent, builder } from '@builder.io/sdk-react';
+import { BuilderComponent, builder, BuilderContent } from '@builder.io/sdk';
 import { useLocation } from 'react-router-dom';
 import { builderConfig } from '../lib/builderConfig';
 
 builder.init(builderConfig.apiKey);
 
 export function BuilderPage() {
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState<BuilderContent | null>(null);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
