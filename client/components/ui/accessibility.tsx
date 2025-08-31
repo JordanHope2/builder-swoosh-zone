@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Eye,
   EyeOff,
   Volume2,
-  VolumeX,
   Type,
   Contrast,
-  MousePointer,
   Keyboard,
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Accessibility preferences context
 interface AccessibilityPreferences {
@@ -356,7 +354,7 @@ export const useFocusTrap = (isActive: boolean) => {
       if (e.key === "Escape") {
         const closeButton = container.querySelector(
           "[data-close]",
-        ) as HTMLElement;
+        );
         closeButton?.click();
       }
     };

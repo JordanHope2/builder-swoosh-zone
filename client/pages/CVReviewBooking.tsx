@@ -1,26 +1,22 @@
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
 import {
   Calendar,
-  Clock,
   User,
-  Mail,
-  Phone,
   FileText,
   CheckCircle,
   ArrowLeft,
   ArrowRight,
   Star,
-  Award,
-  Zap,
-  Users,
   Video,
   MessageSquare,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useState } from "react";
+
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface TimeSlot {
   time: string;

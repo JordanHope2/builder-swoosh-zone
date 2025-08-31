@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { Navigation } from "@components/Navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircle,
@@ -12,42 +12,25 @@ import {
   Star,
   Archive,
   Trash2,
-  Clock,
   CheckCheck,
   Check,
-  Circle,
-  Filter,
   Plus,
-  UserPlus,
   Settings,
   Bell,
   BellOff,
   File,
-  Image,
   Download,
   Eye,
-  EyeOff,
-  Mic,
-  MicOff,
-  Camera,
-  CameraOff,
-  Share2,
-  Reply,
-  Forward,
-  Edit3,
   Flag,
-  Shield,
   Ban,
 } from "lucide-react";
-import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import React, { useState, useEffect, useRef } from "react";
+
 import {
   DashboardContainer,
-  SectionHeader,
   ActionButton,
-  DashboardCard,
-  LoadingSpinner,
 } from "../components/ui/unified-dashboard";
+import { useLanguage } from "../contexts/LanguageContext";
 import SecurityUtils from "../lib/security";
 
 interface User {

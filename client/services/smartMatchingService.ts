@@ -75,7 +75,7 @@ class SmartMatchingService {
       return matches
         .sort((a, b) => b.matchScore - a.matchScore)
         .slice(0, limit);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error finding job matches:", error);
       return this.getFallbackMatches(candidateId);
     }
@@ -106,7 +106,7 @@ class SmartMatchingService {
           companySize: [],
         },
       };
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching candidate profile:", error);
       return null;
     }
@@ -144,7 +144,7 @@ class SmartMatchingService {
         requirements: Array.isArray(job.requirements) ? job.requirements : [],
         skills: Array.isArray(job.skills) ? job.skills : [],
       }));
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching jobs:", error);
       return [];
     }
@@ -470,7 +470,7 @@ class SmartMatchingService {
       });
 
       if (error) throw error;
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error saving job match:", error);
     }
   }
@@ -526,7 +526,7 @@ class SmartMatchingService {
             }
           : undefined,
       }));
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching job matches:", error);
       return this.getFallbackMatches(candidateId);
     }
@@ -546,7 +546,7 @@ class SmartMatchingService {
       for (const match of highScoreMatches) {
         await this.sendMatchNotification(match);
       }
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error triggering matching:", error);
     }
   }
@@ -567,7 +567,7 @@ class SmartMatchingService {
       });
 
       if (error) throw error;
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error sending match notification:", error);
     }
   }

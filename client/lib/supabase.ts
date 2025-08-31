@@ -1,6 +1,11 @@
 // src/lib/supabase.ts
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "../../shared/types/supabase";
+import {
+  createClient,
+  type RealtimePostgresChangesPayload,
+  type SupabaseClient,
+} from "@supabase/supabase-js";
+
+import type { Database } from "../../app/types/supabase";
 
 // Create a browser client once (uses Vite's import.meta.env)
 let _client: SupabaseClient<Database> | null = null;
@@ -136,7 +141,7 @@ export const getJobs = async (filters?: any) => {
     }
 
     return data ?? mockJobs;
-  } catch (error) {
+  } catch (err: unknown) {
     // Filter mock data as a fallback
     let filtered = [...mockJobs];
     if (filters?.location) {
@@ -168,7 +173,7 @@ export const getJobById = async (id: string) => {
       throw new Error("Job not found");
     }
     return data;
-  } catch (err) {
+  } catch (err: unknown) {
     console.warn("Error in getJobById, trying mock:", err);
     const mock = mockJobs.find((j) => j.id === id);
     if (mock) return mock;
@@ -213,7 +218,11 @@ export const subscribeToMessages = (
 
 export const subscribeToNotifications = (
   userId: string,
-  callback: (payload: any) => void,
+  callback: (
+    payload: RealtimePostgresChangesPayload<
+      Database["public"]["Tables"]["notifications"]["Row"]
+    >,
+  ) => void,
 ) => {
   return supabase
     .channel(`notifications:${userId}`)

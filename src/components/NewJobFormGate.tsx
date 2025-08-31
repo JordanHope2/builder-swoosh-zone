@@ -1,13 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { supabaseClient } from '@/lib/supabaseClient';
-import NewJobForm from '@/components/NewJobForm';
+
+import NewJobForm from './NewJobForm';
+import { supabase } from '../lib/supabaseClient';
 
 export default function NewJobFormGate() {
   const [authed, setAuthed] = useState<boolean | null>(null); // null = loading
 
   useEffect(() => {
-    supabaseClient.auth.getUser().then(({ data }) => setAuthed(!!data.user));
+    supabase.auth.getUser().then(({ data }) => setAuthed(!!data.user));
   }, []);
 
   if (authed === null) return <p>Checking session…</p>;

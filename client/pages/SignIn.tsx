@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 import {
   Eye,
   EyeOff,
@@ -9,7 +6,12 @@ import {
   AlertCircle,
   CheckCircle,
 } from "lucide-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import { GoogleSignIn } from "../components/GoogleSignIn";
+import { useAuth } from "../contexts/AuthContext";
+import { errorMessage } from "app/client/lib/errors";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -36,8 +38,8 @@ export default function SignIn() {
       setTimeout(() => {
         navigate(redirectTo);
       }, 1000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to sign in");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? errorMessage(err) : "Failed to sign in");
     } finally {
       setIsLoading(false);
     }
@@ -52,9 +54,9 @@ export default function SignIn() {
     try {
       await signInWithOtp(email);
       setSuccess("Magic link sent! Check your email to sign in.");
-    } catch (err) {
+    } catch (err: unknown) {
       setError(
-        err instanceof Error ? err.message : "Failed to send magic link",
+        err instanceof Error ? errorMessage(err) : "Failed to send magic link",
       );
     } finally {
       setIsLoading(false);

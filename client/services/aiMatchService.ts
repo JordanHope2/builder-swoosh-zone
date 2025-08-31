@@ -1,24 +1,16 @@
+import { z } from "zod";
+import type { Database } from "../../app/types/supabase";
 import { supabase } from "../lib/supabase";
+import { errorMessage } from "app/client/lib/errors";
+import {
+  AIMatchBreakdownSchema,
+  AIMatchReportSchema,
+} from "./validation/aiMatchSchemas";
 
-export interface AIMatchBreakdown {
-  skills: number;
-  experience: number;
-  education: number;
-  location: number;
-  salary: number;
-}
+type AIMatch = Database['public']['Tables']['ai_matches']['Row'];
 
-export interface AIMatchReport {
-  id: string;
-  jobId: string;
-  userId: string;
-  matchPercent: number;
-  breakdown: AIMatchBreakdown;
-  strengths: string[];
-  recommendations: string[];
-  generatedAt: string;
-  updatedAt: string;
-}
+export type AIMatchBreakdown = z.infer<typeof AIMatchBreakdownSchema>;
+export type AIMatchReport = z.infer<typeof AIMatchReportSchema>;
 
 export interface JobProfile {
   title: string;
@@ -73,10 +65,10 @@ class AIMatchService {
         if (data) {
           existingReport = data;
         }
-      } catch (dbError) {
+      } catch (dbError: unknown) {
         console.debug(
           "Database lookup failed, proceeding to generate new report:",
-          dbError,
+          dbError instanceof Error ? errorMessage(dbError) : dbError,
         );
       }
 
@@ -93,15 +85,15 @@ class AIMatchService {
       );
 
       // Save to database (non-blocking)
-      this.saveMatchReport(report).catch((err) => {
-        console.debug("Report saving failed but continuing:", err);
+      this.saveMatchReport(report).catch((err: unknown) => {
+        console.debug("Report saving failed but continuing:", err instanceof Error ? err.message : err);
       });
 
       return report;
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn(
         "Error getting/generating match report, using fallback:",
-        error instanceof Error ? error.message : "Unknown error",
+        err instanceof Error ? errorMessage(err) : "Unknown error",
       );
       // Return fallback report
       return this.generateFallbackReport(
@@ -169,8 +161,8 @@ class AIMatchService {
       const analysisText = result.choices[0].message.content;
 
       return this.parseAIResponse(analysisText, jobId, userId);
-    } catch (error) {
-      console.warn("AI generation failed, using intelligent fallback:", error);
+    } catch (err: unknown) {
+      console.warn("AI generation failed, using intelligent fallback:", err instanceof Error ? errorMessage(err) : "Unknown error");
       return this.generateIntelligentFallbackReport(
         jobId,
         userId,
@@ -234,35 +226,21 @@ class AIMatchService {
     userId: string,
   ): AIMatchReport {
     try {
-      const parsed = JSON.parse(response);
+      const parsed = AIResponseSchema.parse(JSON.parse(response));
 
       return {
         id: `${jobId}_${userId}_${Date.now()}`,
         jobId,
         userId,
-        matchPercent: parsed.overallMatch || 75,
-        breakdown: {
-          skills: parsed.breakdown?.skills || 70,
-          experience: parsed.breakdown?.experience || 75,
-          education: parsed.breakdown?.education || 80,
-          location: parsed.breakdown?.location || 85,
-          salary: parsed.breakdown?.salary || 70,
-        },
-        strengths: parsed.strengths || [
-          "Strong technical background",
-          "Relevant industry experience",
-          "Good cultural fit",
-        ],
-        recommendations: parsed.recommendations || [
-          "Consider highlighting specific project achievements",
-          "Expand expertise in emerging technologies",
-          "Network within the target industry",
-        ],
+        matchPercent: parsed.overallMatch,
+        breakdown: parsed.breakdown,
+        strengths: parsed.strengths,
+        recommendations: parsed.recommendations,
         generatedAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-    } catch (error) {
-      console.error("Failed to parse AI response:", error);
+    } catch (err: unknown) {
+      console.error("Failed to parse AI response:", err instanceof Error ? errorMessage(err) : "Unknown error");
       return this.generateIntelligentFallbackReport(
         jobId,
         userId,
@@ -463,8 +441,8 @@ class AIMatchService {
   private generateFallbackReport(
     jobId: string,
     userId: string,
-    jobProfile: JobProfile,
-    candidateProfile: CandidateProfile,
+    _jobProfile: JobProfile,
+    _candidateProfile: CandidateProfile,
   ): AIMatchReport {
     return {
       id: `${jobId}_${userId}_${Date.now()}`,
@@ -517,22 +495,22 @@ class AIMatchService {
         );
         // Don't throw - saving failure shouldn't break the analysis feature
       }
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn("Error saving match report (non-critical):", {
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: err instanceof Error ? errorMessage(err) : "Unknown error",
         jobId: report.jobId,
       });
       // Gracefully handle saving failures
     }
   }
 
-  private transformDatabaseRecord(record: any): AIMatchReport {
+  private transformDatabaseRecord(record: AIMatch): AIMatchReport {
     return {
       id: `${record.job_id}_${record.user_id}_${record.generated_at}`,
       jobId: record.job_id,
       userId: record.user_id,
       matchPercent: record.match_percent,
-      breakdown: record.breakdown,
+      breakdown: record.breakdown as AIMatchBreakdown,
       strengths: record.strengths,
       recommendations: record.recommendations,
       generatedAt: record.generated_at,

@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react";
-import { subscribeToNotifications, supabase } from "../lib/supabase";
-import { useAuth } from "../contexts/AuthContext";
 
-interface Notification {
-  id: string;
-  user_id: string;
-  title: string;
-  message: string;
-  type: "info" | "success" | "warning" | "error";
-  read: boolean;
-  created_at: string;
-  data?: any;
-}
+import { useAuth } from "../contexts/AuthContext";
+import { subscribeToNotifications, supabase } from "../lib/supabase";
+import type { Database } from "../../app/types/supabase";
+
+type Notification = Database['public']['Tables']['notifications']['Row'];
 
 export function useRealTimeNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -39,8 +32,8 @@ export function useRealTimeNotifications() {
 
         setNotifications(data || []);
         setUnreadCount(data?.filter((n) => !n.read).length || 0);
-      } catch (error) {
-        console.error("Error loading notifications:", error);
+      } catch (err: unknown) {
+        console.error("Error loading notifications:", err);
       }
     };
 
@@ -48,11 +41,25 @@ export function useRealTimeNotifications() {
 
     // Subscribe to real-time updates
     const subscription = subscribeToNotifications(user.id, (payload) => {
-      const newNotification = payload.new as Notification;
-
-      setNotifications((prev) => [newNotification, ...prev.slice(0, 49)]);
-      if (!newNotification.read) {
-        setUnreadCount((prev) => prev + 1);
+      if (payload.eventType === "INSERT" && payload.new) {
+        setNotifications((prev) => [payload.new, ...prev.slice(0, 49)]);
+        if (!payload.new.read) {
+          setUnreadCount((prev) => prev + 1);
+        }
+      } else if (payload.eventType === "UPDATE" && payload.new) {
+        setNotifications((prev) =>
+          prev.map((n) => (n.id === payload.new.id ? payload.new : n)),
+        );
+        if (payload.old && !(payload.old as Notification).read && payload.new.read) {
+          setUnreadCount((prev) => Math.max(0, prev - 1));
+        }
+      } else if (payload.eventType === "DELETE" && payload.old && 'id' in payload.old) {
+        setNotifications((prev) =>
+          prev.filter((n) => n.id !== (payload.old as Notification).id),
+        );
+        if (!(payload.old as Notification).read) {
+          setUnreadCount((prev) => Math.max(0, prev - 1));
+        }
       }
     });
 
@@ -76,8 +83,8 @@ export function useRealTimeNotifications() {
         prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
+    } catch (err: unknown) {
+      console.error("Error marking notification as read:", err);
     }
   };
 
@@ -95,8 +102,8 @@ export function useRealTimeNotifications() {
 
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch (error) {
-      console.error("Error marking all notifications as read:", error);
+    } catch (err: unknown) {
+      console.error("Error marking all notifications as read:", err);
     }
   };
 
@@ -115,8 +122,8 @@ export function useRealTimeNotifications() {
       if (notification && !notification.read) {
         setUnreadCount((prev) => Math.max(0, prev - 1));
       }
-    } catch (error) {
-      console.error("Error deleting notification:", error);
+    } catch (err: unknown) {
+      console.error("Error deleting notification:", err);
     }
   };
 

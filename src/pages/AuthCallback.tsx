@@ -1,7 +1,9 @@
 // src/pages/AuthCallback.tsx
 import { useEffect, useState } from 'react';
-import { supabaseClient } from '@/lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+
+import { supabaseClient } from '@/lib/supabaseClient';
+import { errorMessage } from "app/client/lib/errors";
 
 export default function AuthCallback() {
   const [msg, setMsg] = useState('Finalizing sign-in...');
@@ -14,8 +16,8 @@ export default function AuthCallback() {
         if (error) throw error;
         setMsg('Signed in! Redirecting…');
         setTimeout(() => navigate('/jobs', { replace: true }), 500);
-      } catch (e: any) {
-        setMsg(`Sign-in error: ${e.message}`);
+      } catch (e: unknown) {
+        setMsg(`Sign-in error: ${errorMessage(e)}`);
       }
     })();
   }, [navigate]);

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Share2,
@@ -11,8 +10,10 @@ import {
   Twitter,
   ExternalLink,
 } from "lucide-react";
-import { cn } from "../../lib/utils";
+import React, { useState } from "react";
+
 import { applicationToast } from "../../hooks/use-toast";
+import { cn } from "../../lib/utils";
 
 interface ShareData {
   title: string;
@@ -94,7 +95,7 @@ export function ShareButton({
           "Content shared via native sharing",
         );
         return;
-      } catch (error) {
+      } catch (err: unknown) {
         // User cancelled or error occurred, fall back to modal
         if ((error as Error).name !== "AbortError") {
           console.warn("Web Share API failed:", error);
@@ -115,7 +116,7 @@ export function ShareButton({
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Failed to copy to clipboard:", error);
       applicationToast.error("Failed to copy link");
     }

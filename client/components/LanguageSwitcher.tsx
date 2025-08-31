@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Globe, ChevronDown } from "lucide-react";
+import { useState } from "react";
+
 import { useLanguage, languages } from "../contexts/LanguageContext";
 
 export function LanguageSwitcher() {

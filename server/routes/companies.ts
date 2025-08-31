@@ -1,25 +1,24 @@
-import { Router } from "express";
+import { Router, type Request, type Response } from "express";
+import { asyncHandler } from "../utils/asyncHandler";
 import { getSupabaseAdmin } from "../supabase";
+import type { Database } from "../../app/types/supabase";
+
+type Company = Database['public']['Tables']['companies']['Row'];
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", asyncHandler(async (_req: Request, res: Response) => {
   const supabase = getSupabaseAdmin();
-  try {
-    const { data, error } = await supabase
-      .from("companies")
-      .select("*")
-      .order("created_at", { ascending: false });
+  const { data, error } = await supabase
+    .from("companies")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-    if (error) {
-      throw error;
-    }
-
-    res.json(data);
-  } catch (error: any) {
-    console.error("Error fetching companies:", error);
-    res.status(500).json({ error: error.message });
+  if (error) {
+    throw error;
   }
-});
+
+  res.json(data);
+}));
 
 export default router;

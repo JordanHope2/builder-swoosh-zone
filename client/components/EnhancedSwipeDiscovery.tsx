@@ -1,4 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
 import {
   motion,
   AnimatePresence,
@@ -13,19 +12,14 @@ import {
   Star,
   MapPin,
   Clock,
-  Building,
   DollarSign,
   Zap,
-  Target,
   Award,
-  ArrowUp,
-  ArrowDown,
   Sparkles,
-  TrendingUp,
 } from "lucide-react";
-import { useJobs } from "../contexts/JobsContext";
+import React, { useState, useRef } from "react";
+
 import { useFavorites } from "../contexts/FavoritesContext";
-import { useAppData } from "../hooks/useAppData";
 
 interface SwipeableJob {
   id: string;
@@ -113,7 +107,6 @@ const EnhancedSwipeDiscovery: React.FC = () => {
   ]);
 
   const { addToFavorites } = useFavorites();
-  const { auth } = useAppData();
   const constraintsRef = useRef(null);
 
   const currentJob = jobs[currentJobIndex];
@@ -172,27 +165,6 @@ const EnhancedSwipeDiscovery: React.FC = () => {
       scale: 0.8,
       rotate: direction < 0 ? 30 : -30,
     }),
-  };
-
-  const swipeVariants = {
-    like: {
-      x: 1000,
-      rotate: 30,
-      opacity: 0,
-      transition: { duration: 0.3 },
-    },
-    dislike: {
-      x: -1000,
-      rotate: -30,
-      opacity: 0,
-      transition: { duration: 0.3 },
-    },
-    super: {
-      y: -1000,
-      scale: 1.2,
-      opacity: 0,
-      transition: { duration: 0.4 },
-    },
   };
 
   if (!currentJob) {
@@ -265,7 +237,7 @@ const EnhancedSwipeDiscovery: React.FC = () => {
           className="flex justify-between items-center mb-8"
         >
           <div className="flex space-x-6">
-            {actions.map((action, index) => (
+            {actions.map((action) => (
               <motion.div
                 key={action.type}
                 className="flex items-center space-x-2"
@@ -399,7 +371,7 @@ const SwipeCard: React.FC<SwipeCardProps> = ({
   const rotate = useTransform(x, [-200, 200], [-30, 30]);
   const opacity = useTransform(x, [-200, -150, 0, 150, 200], [0, 1, 1, 1, 0]);
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (_event: any, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
 

@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   Eye,
   EyeOff,
@@ -14,9 +12,12 @@ import {
   CheckCircle,
   X,
 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import { ThemeToggle } from "../components/ThemeProvider";
-import { signUpWithEmail } from "../lib/supabase";
 import { useToast } from "../hooks/use-toast";
+import { signUpWithEmail } from "../lib/supabase";
 
 const userTypes = [
   {
@@ -93,7 +94,7 @@ export default function SignUp() {
       // Don't redirect immediately, wait for email confirmation.
       // Or redirect to a "please check your email" page.
       // For now, we just show the toast and reset the loading state.
-    } catch (error: any) {
+    } catch (err: unknown) {
       toast({
         title: "Registration Error",
         description:

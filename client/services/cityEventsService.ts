@@ -1,47 +1,14 @@
+import { z } from "zod";
 import { supabase } from "../lib/supabase";
+import {
+  CityEventSchema,
+  CityOverviewSchema,
+  CityEventsDataSchema,
+} from "./validation/cityEventsSchemas";
 
-export interface CityEvent {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
-  venue?: string;
-  category:
-    | "cultural"
-    | "sports"
-    | "business"
-    | "music"
-    | "arts"
-    | "festival"
-    | "other";
-  url?: string;
-}
-
-export interface CityOverview {
-  name: string;
-  country: string;
-  population: number;
-  highlights: string[];
-  description: string;
-  coordinates?: {
-    lat: number;
-    lng: number;
-  };
-}
-
-export interface CityEventsData {
-  id: string;
-  cityName: string;
-  overview: CityOverview;
-  events: CityEvent[];
-  quickLinks: {
-    tourism: string;
-    events: string;
-    official: string;
-  };
-  lastUpdated: string;
-  expiresAt: string;
-}
+export type CityEvent = z.infer<typeof CityEventSchema>;
+export type CityOverview = z.infer<typeof CityOverviewSchema>;
+export type CityEventsData = z.infer<typeof CityEventsDataSchema>;
 
 class CityEventsService {
   private readonly CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
@@ -56,7 +23,7 @@ class CityEventsService {
         if (cachedData && !this.isCacheExpired(cachedData)) {
           return cachedData;
         }
-      } catch (cacheError) {
+      } catch (cacheError: unknown) {
         console.debug(
           "Cache check failed, proceeding without cache:",
           cacheError,
@@ -72,7 +39,7 @@ class CityEventsService {
       });
 
       return cityData;
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn(
         "Error getting city events, using fallback:",
         error instanceof Error ? error.message : "Unknown error",
@@ -102,7 +69,7 @@ class CityEventsService {
       }
 
       return this.transformDatabaseRecord(data);
-    } catch (error) {
+    } catch (err: unknown) {
       console.debug(
         "Cache lookup failed (non-critical):",
         error instanceof Error ? error.message : "Unknown error",
@@ -138,7 +105,7 @@ class CityEventsService {
         lastUpdated: now.toISOString(),
         expiresAt: expiresAt.toISOString(),
       };
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching city data:", error);
       return this.getFallbackCityData(cityName);
     }
@@ -152,7 +119,7 @@ class CityEventsService {
       } else {
         return this.getFallbackCityOverview(cityName);
       }
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching city overview:", error);
       return this.getFallbackCityOverview(cityName);
     }
@@ -214,9 +181,9 @@ class CityEventsService {
       const result = await response.json();
       const cityInfo = JSON.parse(result.choices[0].message.content);
 
-      return cityInfo;
-    } catch (error) {
-      console.warn("AI city overview generation failed:", error);
+      return CityOverviewSchema.parse(cityInfo);
+    } catch (err) {
+      console.warn("AI city overview generation failed:", err);
       return this.getFallbackCityOverview(cityName);
     }
   }
@@ -318,7 +285,7 @@ class CityEventsService {
       // In a real implementation, you would integrate with event APIs
       // For now, we'll generate realistic mock events
       return this.generateMockEvents(cityName);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error fetching city events:", error);
       return this.generateMockEvents(cityName);
     }
@@ -422,7 +389,7 @@ class CityEventsService {
         });
         // Don't throw error - caching failure shouldn't break the feature
       }
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn("Error caching city data (non-critical):", {
         error: error instanceof Error ? error.message : "Unknown error",
         cityName: cityData.cityName,
@@ -447,7 +414,7 @@ class CityEventsService {
   }
 
   private transformDatabaseRecord(record: any): CityEventsData {
-    return {
+    const data = {
       id: `${record.city_name}_${record.last_updated}`,
       cityName: record.city_name,
       overview: record.overview,
@@ -456,6 +423,7 @@ class CityEventsService {
       lastUpdated: record.last_updated,
       expiresAt: record.expires_at,
     };
+    return CityEventsDataSchema.parse(data);
   }
 }
 

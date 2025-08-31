@@ -1,10 +1,11 @@
+import { LanguageSwitcher } from "@components/LanguageSwitcher";
+import { NotificationsOverlay } from "@components/NotificationsOverlay";
+import { ThemeToggle } from "@components/ThemeProvider";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Settings, User, LogOut, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Bell, Settings, User, LogOut, Shield } from "lucide-react";
-import { LanguageSwitcher } from "@components/LanguageSwitcher";
-import { ThemeToggle } from "@components/ThemeProvider";
-import { NotificationsOverlay } from "@components/NotificationsOverlay";
+
 import { useLanguage } from "@/contexts/LanguageContext";
 import SecurityUtils from "@/lib/security";
 

@@ -1,11 +1,10 @@
-import { supabaseServer } from '@/lib/supabaseServer';
-import { withCORS, handleOPTIONS } from '@/lib/cors';
-import type { NextRequest } from 'next/server';
-
-export function OPTIONS(req: NextRequest) { return handleOPTIONS(req); }
+import { getSupabaseServer } from '../../../lib/supabaseServer';
 
 export async function GET() {
-  const supabase = supabaseServer();
+  const supabase = getSupabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
-  return new Response(JSON.stringify({ user }), withCORS());
+  return new Response(JSON.stringify({ user }), {
+    headers: { 'content-type': 'application/json' },
+    status: 200,
+  });
 }

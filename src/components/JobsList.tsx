@@ -1,19 +1,8 @@
- 'use client';
-import { useEffect, useState } from 'react';
+import type { Job } from '../../lib/types.db';
 
-export default function JobsList() {
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+type Props = { jobs: Pick<Job, 'id' | 'title' | 'location'>[] };
 
-  useEffect(() => {
-    fetch('/api/jobs')
-      .then(r => r.json())
-      .then(setJobs)
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <p>Loading jobs…</p>;
+export function JobsList({ jobs }: Props) {
   if (!jobs.length) return <p>No jobs yet.</p>;
 
   return (
@@ -27,4 +16,5 @@ export default function JobsList() {
     </ul>
   );
 }
+export default JobsList;
    

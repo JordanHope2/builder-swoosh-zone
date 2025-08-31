@@ -1,11 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
 import request from "supertest";
+import { describe, it, expect, vi } from "vitest";
+import type { Express } from 'express';
+
 import { createServer } from "../index";
 import { getSupabaseAdmin } from "../supabase";
 
 // Mock the auth middleware
 vi.mock("../middleware/auth", () => ({
-  authMiddleware: (req: any, res: any, next: () => void) => {
+  authMiddleware: (req: { user?: { id: string, email: string } }, _res: unknown, next: () => void) => {
     req.user = { id: "test-user-id", email: "test@example.com" };
     next();
   },
@@ -47,30 +49,34 @@ describe("GET /api/dashboard/recruiter", () => {
       }),
     };
 
-    (getSupabaseAdmin as any).mockReturnValue(mockSupabaseClient);
+    (getSupabaseAdmin as ReturnType<typeof vi.fn>).mockReturnValue(mockSupabaseClient);
 
-    const app = createServer();
+    const app: Express = createServer();
     const response = await request(app).get("/api/dashboard/recruiter");
 
     expect(response.status).toBe(200);
 
     // Check stats and pipeline
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(response.body.stats).toEqual({
       activeJobs: 1,
       totalApplicants: 3,
     });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(response.body.pipeline).toEqual({
       applied: 2,
       reviewed: 1,
     });
 
     // Check jobs array without being dependent on order
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(response.body.jobs).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ id: "job-1", applicantCount: 2 }),
         expect.objectContaining({ id: "job-2", applicantCount: 1 }),
       ])
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(response.body.jobs.length).toBe(2);
   });
 });

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Navigation } from "../components/Navigation";
+
 import { EnhancedCVUpload } from "../components/EnhancedCVUpload";
+import { Navigation } from "../components/Navigation";
 import { PageTransition } from "../components/ui/enhanced-motion";
 import { CVAnalysisResult } from "../services/aiAnalysisService";
 

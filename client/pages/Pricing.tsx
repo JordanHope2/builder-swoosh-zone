@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import {
-  Check,
   Users,
   Briefcase,
   CheckCircle,
   Loader2,
 } from "lucide-react";
+import { useState } from "react";
+
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
 
 // Helper function to make authenticated API requests
 const fetchFromApi = async (endpoint: string, token: string | undefined, options: RequestInit = {}) => {

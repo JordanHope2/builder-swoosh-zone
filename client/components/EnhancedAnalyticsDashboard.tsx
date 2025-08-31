@@ -1,12 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { Icons } from "./ui/icons";
-import { Progress } from "./ui/progress";
-import { useAuth } from "../contexts/AuthContext";
-import { supabase } from "../lib/supabase";
 import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
 import {
   LineChart,
   Line,
@@ -21,6 +14,17 @@ import {
   Pie,
   Cell,
 } from "recharts";
+
+import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
+
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Icons } from "./ui/icons";
+import { Progress } from "./ui/progress";
+
+
 
 interface DashboardMetrics {
   totalJobs: number;
@@ -95,12 +99,12 @@ const mockLocationData: LocationData[] = [
 export function EnhancedAnalyticsDashboard() {
   const { user } = useAuth();
   const [metrics, setMetrics] = useState<DashboardMetrics>(mockMetrics);
-  const [timeSeriesData, setTimeSeriesData] =
+  const [timeSeriesData] =
     useState<TimeSeriesData[]>(mockTimeSeriesData);
-  const [skillData, setSkillData] = useState<SkillData[]>(mockSkillData);
-  const [locationData, setLocationData] =
+  const [skillData] = useState<SkillData[]>(mockSkillData);
+  const [locationData] =
     useState<LocationData[]>(mockLocationData);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState<
     "7d" | "30d" | "90d"
   >("7d");
@@ -117,7 +121,7 @@ export function EnhancedAnalyticsDashboard() {
           .from("jobs")
           .select("id, created_at, title, location");
 
-        const { data: applications, error: appsError } = await supabase
+        const { data: applications } = await supabase
           .from("applications")
           .select("id, created_at, job_id")
           .eq("candidate_id", user.id);
@@ -129,7 +133,7 @@ export function EnhancedAnalyticsDashboard() {
             totalApplications: applications?.length || 0,
           }));
         }
-      } catch (error) {
+      } catch {
         console.log("Using mock data for analytics");
       } finally {
         setLoading(false);
@@ -372,7 +376,7 @@ export function EnhancedAnalyticsDashboard() {
                   fill="#8884d8"
                   dataKey="jobs"
                 >
-                  {locationData.map((entry, index) => (
+                  {locationData.map((_entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={COLORS[index % COLORS.length]}

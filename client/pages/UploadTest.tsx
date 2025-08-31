@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Navigation } from "@components/Navigation";
+import { useState } from "react";
 
 export default function UploadTest() {
   const [file, setFile] = useState<File | null>(null);
@@ -58,7 +58,7 @@ export default function UploadTest() {
       // Construct the public URL
       const publicUrl = `${process.env.VITE_R2_PUBLIC_URL}/${key}`;
       setUploadedFileUrl(publicUrl);
-    } catch (error: any) {
+    } catch (err: unknown) {
       setStatus(`Error: ${error.message}`);
     }
   };

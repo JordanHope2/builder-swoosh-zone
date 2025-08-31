@@ -1,34 +1,27 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion } from "framer-motion";
 import {
   MessageCircle,
   X,
   Send,
   Bot,
-  User,
   Sparkles,
   Briefcase,
   MapPin,
   Search,
   TrendingUp,
-  Zap,
   FileText,
-  DollarSign,
   Users,
-  Clock,
-  Star,
-  Settings,
-  RefreshCw,
   ChevronDown,
   Mic,
   MicOff,
-  Volume2,
   ThumbsUp,
   ThumbsDown,
   Copy,
-  ExternalLink,
 } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface Message {
   id: string;
@@ -37,12 +30,10 @@ interface Message {
   timestamp: Date;
   suggestions?: string[];
   type?: "text" | "action" | "error" | "system";
-  data?: any;
   isThinking?: boolean;
 }
 
 interface ChatContext {
-  userProfile?: any;
   currentPage?: string;
   sessionId: string;
   preferences: {
@@ -89,7 +80,7 @@ export function EnhancedAIChatbot() {
     },
   ]);
 
-  const [context, setContext] = useState<ChatContext>({
+  const [context] = useState<ChatContext>({
     sessionId,
     currentPage: window.location.pathname,
     preferences: {
@@ -315,7 +306,7 @@ I understand context about Swiss employment law, work permits, and cultural expe
         };
         return [...withoutThinking, botResponse];
       });
-    } catch (error) {
+    } catch {
       setMessages((prev) => {
         const withoutThinking = prev.filter((m) => !m.isThinking);
         const errorMessage: Message = {
@@ -342,14 +333,14 @@ I understand context about Swiss employment law, work permits, and cultural expe
       company_match: "Find companies that match my profile",
     };
 
-    sendMessage(
+    void sendMessage(
       actionTexts[action as keyof typeof actionTexts] || action,
       true,
     );
   };
 
   const copyMessage = (text: string) => {
-    navigator.clipboard.writeText(text);
+    void navigator.clipboard.writeText(text);
   };
 
   const toggleVoice = () => {
@@ -532,9 +523,11 @@ I understand context about Swiss employment law, work permits, and cultural expe
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={(e) =>
-                    e.key === "Enter" && sendMessage(inputText)
-                  }
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      void sendMessage(inputText);
+                    }
+                  }}
                   placeholder={t("ai.type_message") || "Type your message..."}
                   className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl text-jobequal-text dark:text-white placeholder-gray-500 focus:ring-2 focus:ring-jobequal-green focus:border-transparent"
                   disabled={isTyping}
@@ -555,7 +548,9 @@ I understand context about Swiss employment law, work permits, and cultural expe
                 )}
               </button>
               <button
-                onClick={() => sendMessage(inputText)}
+                onClick={() => {
+                  void sendMessage(inputText);
+                }}
                 disabled={!inputText.trim() || isTyping}
                 className="p-2 bg-jobequal-green hover:bg-jobequal-green-hover text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >

@@ -1,24 +1,20 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion } from "framer-motion";
 import {
   TrendingUp,
   MapPin,
-  Briefcase,
-  GraduationCap,
   BarChart3,
   Download,
-  Filter,
   Search,
-  ChevronDown,
   DollarSign,
   Users,
-  Building,
   Award,
-  Clock,
   Target,
 } from "lucide-react";
+import { useState } from "react";
+
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface SalaryData {
   role: string;

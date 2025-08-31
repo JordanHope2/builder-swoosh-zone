@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { Content, fetchOneEntry } from "@builder.io/sdk-react";
+import React, { useEffect, useState } from "react";
+
 import { builderConfig } from "../lib/builderConfig";
 
 interface SharedLayoutProps {
@@ -26,7 +27,7 @@ export function SharedLayout({ children }: SharedLayoutProps) {
         ]);
         setHeaderContent(header);
         setFooterContent(footer);
-      } catch (error) {
+      } catch (err: unknown) {
         console.error("Error fetching Builder.io layout content:", error);
       } finally {
         setLoading(false);

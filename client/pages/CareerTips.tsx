@@ -1,32 +1,25 @@
-import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Navigation } from "../components/Navigation";
-import { PageHeader, SectionHeader } from "../components/ui/page-header";
 import {
   TrendingUp,
   BookOpen,
   Users,
   Target,
-  Lightbulb,
-  Award,
   Clock,
   FileText,
   MessageCircle,
   ArrowRight,
-  Calendar,
-  Building,
-  Globe,
   Star,
-  CheckCircle,
-  Briefcase,
   Shield,
   Search,
-  Filter,
   Eye,
   Heart,
-  Share2,
 } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
+import { Navigation } from "../components/Navigation";
+import { PageHeader, SectionHeader } from "../components/ui/page-header";
+
 
 interface Article {
   id: string;

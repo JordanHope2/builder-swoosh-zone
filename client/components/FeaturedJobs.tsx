@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
 import {
   MapPin,
-  Clock,
-  Building,
   Heart,
   Star,
   TrendingUp,
   Zap,
   ChevronDown,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import { useLanguage } from "../contexts/LanguageContext";
+import { errorMessage } from "app/client/lib/errors";
 
 interface Company {
   id: string;
@@ -158,8 +158,8 @@ export function FeaturedJobs() {
         }
         const data = await response.json();
         setJobs(data.jobs.slice(0, 6)); // Take first 6 jobs for the featured section
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(errorMessage(err));
         console.error("Error fetching jobs:", err);
       } finally {
         setIsLoading(false);

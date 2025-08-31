@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
 import {
   BarChart3,
   Users,
@@ -13,7 +10,6 @@ import {
   Calendar,
   DollarSign,
   Clock,
-  Filter,
   Search,
   Download,
   Plus,
@@ -21,40 +17,24 @@ import {
   Trash2,
   ExternalLink,
   ArrowUp,
-  ArrowDown,
   Target,
-  Award,
-  AlertCircle,
   CheckCircle,
   MapPin,
   Building,
-  Heart,
-  Share2,
   Settings,
   Bell,
-  FileText,
   PieChart,
   Activity,
   Zap,
-  Globe,
   Camera,
-  Video,
   Mail,
-  Phone,
-  Linkedin,
-  Twitter,
 } from "lucide-react";
-import {
-  DashboardContainer,
-  StatsCard,
-  SectionHeader,
-  ActionButton,
-  DashboardCard,
-  LoadingSpinner,
-  fadeInUp,
-  slideInLeft,
-} from "../components/ui/unified-dashboard";
-import SecurityUtils from "../lib/security";
+import React, { useState } from "react";
+
+import { Navigation } from "../components/Navigation";
+
+
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface DashboardStats {
   totalJobPosts: number;

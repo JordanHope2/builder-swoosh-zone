@@ -1,14 +1,12 @@
-import React from "react";
 import {
   motion,
-  AnimatePresence,
   useInView,
   useAnimation,
   Variants,
 } from "framer-motion";
-import { useRef, useEffect } from "react";
-
 import { TargetAndTransition, Transition } from "framer-motion";
+import React from "react";
+import { useRef, useEffect } from "react";
 
 // Define a structured type for our animation configurations
 interface AnimationConfig {

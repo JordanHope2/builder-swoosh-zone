@@ -1,18 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircle,
   X,
   Send,
   Bot,
-  User,
   Sparkles,
   Briefcase,
   MapPin,
   Search,
   TrendingUp,
-  Zap,
 } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+
 import { useLanguage } from "../contexts/LanguageContext";
 
 interface Message {
@@ -29,19 +28,6 @@ const quickActions = [
   { icon: Briefcase, text: "Remote positions", action: "remote_jobs" },
   { icon: TrendingUp, text: "Salary insights", action: "salary_info" },
 ];
-
-const mockResponses = {
-  search_jobs:
-    "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
-  jobs_zurich:
-    "Great choice! Zurich has amazing opportunities. I found 47 jobs in Zurich matching your profile. The top matches include:\n\n🚀 Senior Software Engineer at TechCorp (95% match)\n💡 Product Manager at InnovateCH (89% match)\n📊 Data Scientist at Analytics Pro (87% match)\n\nWould you like to see more details?",
-  remote_jobs:
-    "I found 23 remote positions that match your profile! Remote work is very popular in Switzerland. Here are the top matches:\n\n☁️ DevOps Engineer at CloudTech (92% match)\n🎨 UX Designer at DesignStudio (85% match)\n📈 Digital Marketing Lead at GrowthCo (81% match)",
-  salary_info:
-    "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?",
-  default:
-    "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?",
-};
 
 export function AIChatbot() {
   const { t } = useLanguage();
@@ -83,7 +69,7 @@ export function AIChatbot() {
     sendMessage(text, action);
   };
 
-  const sendMessage = async (text: string, action?: string) => {
+  const sendMessage = (text: string, action?: string) => {
     if (!text.trim()) return;
 
     const userMessage: Message = {
@@ -101,7 +87,7 @@ export function AIChatbot() {
     setTimeout(
       () => {
         const responseKey = action || "default";
-        let response;
+        let response: string;
 
         switch (responseKey) {
           case "search_jobs":

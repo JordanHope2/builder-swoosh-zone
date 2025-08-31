@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -16,6 +15,9 @@ import {
   User,
   Zap,
 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+
+import { applicationToast } from "../../hooks/use-toast";
 import { cn } from "../../lib/utils";
 import {
   AIMatchReport,
@@ -23,7 +25,6 @@ import {
   JobProfile,
   CandidateProfile,
 } from "../../services/aiMatchService";
-import { applicationToast } from "../../hooks/use-toast";
 
 interface AIMatchReportModalProps {
   isOpen: boolean;
@@ -218,7 +219,7 @@ export function AIMatchReportModal({
         candidateProfile,
       );
       setReport(matchReport);
-    } catch (err) {
+    } catch (err: unknown) {
       setError("Failed to load match analysis. Please try again.");
       console.error("Error loading match report:", err);
     } finally {

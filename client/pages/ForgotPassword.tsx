@@ -1,7 +1,8 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Mail, ArrowLeft, CheckCircle, Sparkles, Shield } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import { ThemeToggle } from "../components/ThemeProvider";
 import { applicationToast } from "../hooks/use-toast";
 
@@ -37,7 +38,7 @@ export default function ForgotPassword() {
         "Reset link sent!",
         "Check your email for further instructions.",
       );
-    } catch (error) {
+    } catch (err: unknown) {
       applicationToast.error("Failed to send reset email. Please try again.");
       console.error("Password reset error:", error);
     } finally {

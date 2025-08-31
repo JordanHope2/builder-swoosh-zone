@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import { Navigation } from "@components/Navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "@components/Navigation";
-import { useAuth } from "../contexts/AuthContext";
 import {
   BarChart3,
   Users,
-  Building,
   DollarSign,
   Server,
   Shield,
@@ -16,18 +13,30 @@ import {
   AlertCircle,
   Briefcase,
 } from "lucide-react";
+import React, { useState } from "react";
+
+import { useAuth } from "../contexts/AuthContext";
+import type { Database } from "@shared/types/supabase";
+
+type Profile = Database["public"]["Tables"]["users"]["Row"];
+type Job = Database["public"]["Tables"]["jobs"]["Row"];
+type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"];
+
 
 // Helper function to make authenticated API requests
-const fetchFromApi = async (endpoint: string, token: string | undefined, options: RequestInit = {}) => {
+const fetchFromApi = async <T,>(endpoint: string, token: string | undefined, options: RequestInit = {}): Promise<T> => {
   if (!token) throw new Error("Authentication token not found.");
   const res = await fetch(endpoint, {
     ...options,
     headers: { ...options.headers, "Content-Type": "application/json", Authorization: `Bearer ${token}` },
   });
   if (!res.ok) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const errorData = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     throw new Error(errorData.error || "An API error occurred.");
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return res.json();
 };
 
@@ -39,7 +48,7 @@ const UserManagementTab = () => {
   const token = session?.access_token;
   const queryClient = useQueryClient();
 
-  const { data: users, isLoading, error } = useQuery({
+  const { data: users, isLoading, error } = useQuery<Profile[]>({
     queryKey: ["adminUsers"],
     queryFn: () => fetchFromApi("/api/admin/users", token),
     enabled: !!token,
@@ -96,10 +105,10 @@ const UserManagementTab = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {users?.map((user: any) => (
+            {users?.map((user) => (
               <tr key={user.id}>
                 <td className="px-6 py-4">
-                  <div className="font-medium text-jobequal-text dark:text-white">{user.full_name || user.username}</div>
+                  <div className="font-medium text-jobequal-text dark:text-white">{user.full_name || user.email}</div>
                   <div className="text-sm text-jobequal-text-muted dark:text-gray-400">{user.id}</div>
                 </td>
                 <td className="px-6 py-4">
@@ -108,8 +117,9 @@ const UserManagementTab = () => {
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                     className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-jobequal-text dark:text-white"
                   >
-                    <option value="free">Free</option>
-                    <option value="pro">Pro</option>
+                    <option value="candidate">Candidate</option>
+                    <option value="recruiter">Recruiter</option>
+                    <option value="company">Company</option>
                     <option value="admin">Admin</option>
                   </select>
                 </td>
@@ -137,7 +147,7 @@ const JobManagementTab = () => {
     const token = session?.access_token;
     const queryClient = useQueryClient();
 
-    const { data: jobs, isLoading, error } = useQuery({
+    const { data: jobs, isLoading, error } = useQuery<Job[]>({
       queryKey: ["adminJobs"],
       queryFn: () => fetchFromApi("/api/admin/jobs", token),
       enabled: !!token,
@@ -178,13 +188,13 @@ const JobManagementTab = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {jobs?.map((job: any) => (
+              {jobs?.map((job) => (
                 <tr key={job.id}>
                   <td className="px-6 py-4">
                     <div className="font-medium text-jobequal-text dark:text-white">{job.title}</div>
                     <div className="text-sm text-jobequal-text-muted dark:text-gray-400">{job.id}</div>
                   </td>
-                  <td className="px-6 py-4">{job.owner?.full_name || 'N/A'}</td>
+                  <td className="px-6 py-4">{job.recruiter_id || 'N/A'}</td>
                   <td className="px-6 py-4">{job.status || 'N/A'}</td>
                   <td className="px-6 py-4">
                     <button onClick={() => handleDeleteJob(job.id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
@@ -206,7 +216,7 @@ const RevenueManagementTab = () => {
     const token = session?.access_token;
     const queryClient = useQueryClient();
 
-    const { data: subscriptions, isLoading, error } = useQuery({
+    const { data: subscriptions, isLoading, error } = useQuery<Subscription[]>({
         queryKey: ["adminSubscriptions"],
         queryFn: () => fetchFromApi("/api/admin/subscriptions", token),
         enabled: !!token,
@@ -222,8 +232,8 @@ const RevenueManagementTab = () => {
             alert("Subscription cancelled. The change will be reflected shortly after the webhook is processed.");
             queryClient.invalidateQueries({ queryKey: ["adminSubscriptions"] });
         },
-        onError: (err: any) => {
-            alert(`Failed to cancel subscription: ${err.message}`);
+        onError: (err: unknown) => {
+            alert(`Failed to cancel subscription: ${err instanceof Error ? err.message : "Unknown error"}`);
         }
     });
 
@@ -252,17 +262,17 @@ const RevenueManagementTab = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {subscriptions?.map((sub: any) => (
+                        {subscriptions?.map((sub) => (
                             <tr key={sub.id}>
-                                <td className="px-6 py-4">{sub.profile?.full_name || sub.user_id}</td>
-                                <td className="px-6 py-4">{sub.stripe_price_id}</td>
+                                <td className="px-6 py-4">{sub.user_id}</td>
+                                <td className="px-6 py-4">{sub.plan_id}</td>
                                 <td className="px-6 py-4">
                                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${sub.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
                                         {sub.status}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <button onClick={() => handleCancelSubscription(sub.stripe_subscription_id)} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
+                                    <button onClick={() => handleCancelSubscription(sub.stripe_subscription_id ?? "")} className="text-red-600 hover:text-red-800 p-2 rounded-lg hover:bg-red-100">
                                         Cancel Now
                                     </button>
                                 </td>

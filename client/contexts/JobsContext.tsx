@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+
 import {
   getJobs,
   getJobById,
   submitApplication,
-  supabase,
 } from "../lib/supabase";
+
 import { useAuth } from "./AuthContext";
 
 // Utility function to extract error message from various error types
@@ -75,7 +76,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       const data = await getJobs(currentFilters);
       setJobs(data || []);
-    } catch (err) {
+    } catch (err: unknown) {
       const errorMessage = getErrorMessage(err);
       setError(errorMessage);
       console.error("Error loading jobs:", err);
@@ -96,7 +97,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
     try {
       const job = await getJobById(id);
       return job;
-    } catch (err) {
+    } catch (err: unknown) {
       throw new Error(getErrorMessage(err));
     }
   };
@@ -110,7 +111,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       await submitApplication(jobId, user.id, applicationData);
       // Refresh jobs to update application status
       await loadJobs(filters);
-    } catch (err) {
+    } catch (err: unknown) {
       throw new Error(getErrorMessage(err));
     }
   };

@@ -1,8 +1,9 @@
 /// <reference types="vitest" />
-import { defineConfig, Plugin } from "vite";
-import react from "@vitejs/plugin-react-swc";
 import path from "path";
+
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import react from "@vitejs/plugin-react-swc";
+import { defineConfig, Plugin } from "vite";
 
 // ⛔️ DO NOT import "./server" here.
 // We will dynamically import it inside configureServer.

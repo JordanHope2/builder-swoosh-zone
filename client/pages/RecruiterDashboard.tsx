@@ -1,8 +1,5 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useAuth } from "../contexts/AuthContext";
-import { DashboardLayout } from "../components/DashboardLayout";
 import {
   Users,
   Briefcase,
@@ -12,6 +9,9 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+
+import { DashboardLayout } from "../components/DashboardLayout";
+import { useAuth } from "../contexts/AuthContext";
 
 // Helper function to make authenticated API requests
 const fetchFromApi = async (endpoint: string, token: string | undefined) => {

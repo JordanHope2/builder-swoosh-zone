@@ -1,9 +1,9 @@
 'use client';
-import { supabaseClient } from '@/lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 export default function SignInWithGoogle() {
   async function signIn() {
-    await supabaseClient.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`

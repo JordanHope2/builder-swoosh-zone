@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
-import { useFavorites } from "../contexts/FavoritesContext";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Users,
@@ -13,29 +9,25 @@ import {
   Star,
   Heart,
   ExternalLink,
-  TrendingUp,
   Award,
-  Coffee,
   Briefcase,
   Clock,
-  DollarSign,
-  Shield,
-  Zap,
-  ChevronRight,
   ThumbsUp,
   MessageCircle,
   Share2,
-  Filter,
   Search,
   ArrowRight,
   CheckCircle,
   Target,
   Sparkles,
   Camera,
-  Video,
-  FileText,
-  Download,
 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface CompanyData {
   id: string;

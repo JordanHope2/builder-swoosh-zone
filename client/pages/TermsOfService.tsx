@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion } from "framer-motion";
 import {
   FileText,
   Scale,
@@ -19,6 +17,10 @@ import {
   ChevronRight,
   ExternalLink,
 } from "lucide-react";
+import { useState } from "react";
+
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 export default function TermsOfService() {
   const [expandedSection, setExpandedSection] = useState<string | null>(

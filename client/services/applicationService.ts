@@ -1,5 +1,23 @@
 import { supabase } from "../lib/supabase";
 import { getCurrentUser } from "../lib/supabase";
+import { Database } from "../../shared/types/supabase";
+import { errorMessage } from "app/client/lib/errors";
+
+type Job = Database["public"]["Tables"]["jobs"]["Row"];
+type Company = Database["public"]["Tables"]["companies"]["Row"];
+type Profile = Database["public"]["Tables"]["users"]["Row"];
+type Application = Database["public"]["Tables"]["applications"]["Row"];
+
+type JobWithCompany = Job & {
+  companies: Company | null;
+};
+
+interface SendApplicationEmailsParams {
+  job: JobWithCompany;
+  candidate: Profile | null;
+  application: Application;
+  companyEmail?: string;
+}
 
 export interface ApplicationData {
   jobId: string;
@@ -11,6 +29,42 @@ export interface ApplicationData {
   customAnswers?: Record<string, string>;
 }
 
+export interface ApplicationSubmittedTemplateData {
+  candidateName: string;
+  jobTitle: string;
+  companyName: string;
+  applicationId: string;
+  dashboardUrl: string;
+  jobUrl: string;
+}
+
+export interface ApplicationReceivedTemplateData {
+  companyName: string;
+  candidateName: string;
+  jobTitle: string;
+  applicationId: string;
+  candidateEmail?: string;
+  coverLetter?: string | null;
+  portfolioUrl?: string | null;
+  expectedSalary?: number | null;
+  availabilityDate?: string | null;
+  reviewUrl: string;
+}
+
+export interface ApplicationStatusUpdateTemplateData {
+  candidateName: string;
+  jobTitle: string;
+  companyName: string;
+  status: string;
+  notes?: string;
+  dashboardUrl: string;
+}
+
+export type EmailTemplateData =
+  | ApplicationSubmittedTemplateData
+  | ApplicationReceivedTemplateData
+  | ApplicationStatusUpdateTemplateData;
+
 export interface EmailNotificationData {
   recipientEmail: string;
   recipientName: string;
@@ -18,7 +72,7 @@ export interface EmailNotificationData {
     | "application_submitted"
     | "application_received"
     | "application_status_update";
-  templateData: Record<string, any>;
+  templateData: EmailTemplateData;
 }
 
 class ApplicationService {
@@ -46,7 +100,7 @@ class ApplicationService {
         `,
         )
         .eq("id", applicationData.jobId)
-        .single();
+        .single<JobWithCompany>();
 
       if (jobError || !job) {
         throw new Error("Job not found");
@@ -69,7 +123,7 @@ class ApplicationService {
         .from("profiles")
         .select("*")
         .eq("id", user.id)
-        .single();
+        .single<Profile>();
 
       // Submit application
       const { data: application, error: applicationError } = await supabase
@@ -86,31 +140,37 @@ class ApplicationService {
           applied_at: new Date().toISOString(),
         })
         .select()
-        .single();
+        .single<Application>();
 
-      if (applicationError) {
+      if (applicationError || !application) {
         throw new Error("Failed to submit application");
       }
 
       // Send email notifications
-      await this.sendApplicationEmails({
-        job,
-        candidate: candidateProfile,
-        application,
-        companyEmail: job.companies?.email,
-      });
+      if (job) {
+        await this.sendApplicationEmails({
+          job,
+          candidate: candidateProfile,
+          application,
+          companyEmail: job.companies?.email ?? undefined,
+        });
+      }
 
       // Create notification for candidate
-      await this.createNotification({
-        userId: user.id,
-        type: "success",
-        title: "Application Submitted Successfully",
-        message: `Your application for ${job.title} at ${job.companies?.name} has been submitted.`,
-        data: {
-          jobId: job.id,
-          applicationId: application.id,
-        },
-      });
+      if (job?.title && application?.id) {
+        await this.createNotification({
+          userId: user.id,
+          type: "success",
+          title: "Application Submitted Successfully",
+          message: `Your application for ${job.title} at ${
+            job.companies?.name ?? "the company"
+          } has been submitted.`,
+          data: {
+            jobId: job.id,
+            applicationId: application.id,
+          },
+        });
+      }
 
       // Create notification for company (if they have a user account)
       if (job.companies?.email) {
@@ -118,14 +178,16 @@ class ApplicationService {
           .from("profiles")
           .select("id")
           .eq("email", job.companies.email)
-          .single();
+          .single<{ id: string }>();
 
-        if (companyUser) {
+        if (companyUser && job?.title && application?.id) {
           await this.createNotification({
             userId: companyUser.id,
             type: "info",
             title: "New Job Application",
-            message: `${candidateProfile?.full_name || "A candidate"} has applied for ${job.title}`,
+            message: `${
+              candidateProfile?.full_name ?? "A candidate"
+            } has applied for ${job.title}`,
             data: {
               jobId: job.id,
               applicationId: application.id,
@@ -139,13 +201,13 @@ class ApplicationService {
         success: true,
         applicationId: application.id,
       };
-    } catch (error) {
-      console.error("Application submission error:", error);
+    } catch (err: unknown) {
+      console.error("Application submission error:", err);
       return {
         success: false,
         error:
-          error instanceof Error
-            ? error.message
+          err instanceof Error
+            ? errorMessage(err)
             : "Failed to submit application",
       };
     }
@@ -156,18 +218,18 @@ class ApplicationService {
     candidate,
     application,
     companyEmail,
-  }: any) {
+  }: SendApplicationEmailsParams) {
     try {
       // Send confirmation email to candidate
-      if (candidate?.email) {
+      if (candidate?.email && job?.id) {
         await this.sendEmail({
           recipientEmail: candidate.email,
-          recipientName: candidate.full_name || "Candidate",
+          recipientName: candidate.full_name ?? "Candidate",
           templateType: "application_submitted",
           templateData: {
-            candidateName: candidate.full_name || "Candidate",
+            candidateName: candidate.full_name ?? "Candidate",
             jobTitle: job.title,
-            companyName: job.companies?.name || "Company",
+            companyName: job.companies?.name ?? "Company",
             applicationId: application.id,
             dashboardUrl: `${window.location.origin}/dashboard`,
             jobUrl: `${window.location.origin}/job/${job.id}`,
@@ -176,14 +238,14 @@ class ApplicationService {
       }
 
       // Send notification email to company
-      if (companyEmail) {
+      if (companyEmail && application.id) {
         await this.sendEmail({
           recipientEmail: companyEmail,
-          recipientName: job.companies?.name || "Hiring Manager",
+          recipientName: job.companies?.name ?? "Hiring Manager",
           templateType: "application_received",
           templateData: {
-            companyName: job.companies?.name || "Company",
-            candidateName: candidate?.full_name || "A candidate",
+            companyName: job.companies?.name ?? "Company",
+            candidateName: candidate?.full_name ?? "A candidate",
             jobTitle: job.title,
             applicationId: application.id,
             candidateEmail: candidate?.email,
@@ -195,8 +257,8 @@ class ApplicationService {
           },
         });
       }
-    } catch (error) {
-      console.error("Failed to send application emails:", error);
+    } catch (err: unknown) {
+      console.error("Failed to send application emails:", err);
       // Don't throw here as the application was successfully submitted
     }
   }
@@ -217,28 +279,23 @@ class ApplicationService {
       }
 
       return await response.json();
-    } catch (error) {
-      console.error("Email sending error:", error);
+    } catch (err: unknown) {
+      console.error("Email sending error:", err);
       // Fallback to local notification if email fails
       this.showLocalNotification(
-        "Email notification failed, but application was submitted successfully",
+        "Email notification failed, but application was successfully submitted",
       );
     }
   }
 
-  private async createNotification({
-    userId,
-    type,
-    title,
-    message,
-    data,
-  }: {
+  private async createNotification(notificationData: {
     userId: string;
     type: "info" | "success" | "warning" | "error";
     title: string;
     message: string;
-    data?: any;
+    data?: Record<string, unknown>;
   }) {
+    const { userId, type, title, message, data } = notificationData;
     try {
       await supabase.from("notifications").insert({
         user_id: userId,
@@ -249,8 +306,8 @@ class ApplicationService {
         read: false,
         created_at: new Date().toISOString(),
       });
-    } catch (error) {
-      console.error("Failed to create notification:", error);
+    } catch (err: unknown) {
+      console.error("Failed to create notification:", err);
     }
   }
 
@@ -270,6 +327,11 @@ class ApplicationService {
     notes?: string,
   ) {
     try {
+      type ApplicationWithJobAndProfile = Application & {
+        jobs: { title: string; companies: { name: string } | null } | null;
+        profiles: Profile | null;
+      };
+
       const { data, error } = await supabase
         .from("applications")
         .update({
@@ -288,20 +350,20 @@ class ApplicationService {
           profiles:candidate_id (email, full_name)
         `,
         )
-        .single();
+        .single<ApplicationWithJobAndProfile>();
 
       if (error) throw error;
 
       // Send status update email to candidate
-      if (data.profiles?.email) {
+      if (data?.profiles?.email) {
         await this.sendEmail({
           recipientEmail: data.profiles.email,
-          recipientName: data.profiles.full_name || "Candidate",
+          recipientName: data.profiles.full_name ?? "Candidate",
           templateType: "application_status_update",
           templateData: {
-            candidateName: data.profiles.full_name || "Candidate",
-            jobTitle: data.jobs?.title,
-            companyName: data.jobs?.companies?.name,
+            candidateName: data.profiles.full_name ?? "Candidate",
+            jobTitle: data.jobs?.title ?? "N/A",
+            companyName: data.jobs?.companies?.name ?? "the company",
             status: status,
             notes: notes,
             dashboardUrl: `${window.location.origin}/dashboard`,
@@ -310,18 +372,22 @@ class ApplicationService {
       }
 
       return { success: true };
-    } catch (error) {
-      console.error("Failed to update application status:", error);
+    } catch (err: unknown) {
+      console.error("Failed to update application status:", err);
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to update status",
+          err instanceof Error ? errorMessage(err) : "Failed to update status",
       };
     }
   }
 
   async getApplications(userId: string) {
     try {
+      type ApplicationWithJob = Application & {
+        jobs: JobWithCompany | null;
+      };
+
       const { data, error } = await supabase
         .from("applications")
         .select(
@@ -334,16 +400,17 @@ class ApplicationService {
         `,
         )
         .eq("candidate_id", userId)
-        .order("applied_at", { ascending: false });
+        .order("applied_at", { ascending: false })
+        .returns<ApplicationWithJob[]>();
 
       if (error) throw error;
-      return { success: true, applications: data };
-    } catch (error) {
-      console.error("Failed to get applications:", error);
+      return { success: true, applications: data ?? [] };
+    } catch (err: unknown) {
+      console.error("Failed to get applications:", err);
       return {
         success: false,
         error:
-          error instanceof Error ? error.message : "Failed to get applications",
+          err instanceof Error ? errorMessage(err) : "Failed to get applications",
       };
     }
   }

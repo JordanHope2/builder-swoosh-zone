@@ -1,8 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useFavorites } from "../contexts/FavoritesContext";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
   Briefcase,
@@ -13,12 +10,16 @@ import {
   Trash2,
   ExternalLink,
   Search,
-  Filter,
   SortAsc,
   SortDesc,
   X,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 export default function Favorites() {
   const { favorites, removeFromFavorites, clearFavorites, getFavoritesByType } =

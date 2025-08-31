@@ -1,22 +1,17 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import {
   ArrowRight,
   ArrowLeft,
   Check,
-  Upload,
   MapPin,
-  Briefcase,
-  GraduationCap,
-  Target,
   Star,
   Plus,
   X,
-  Sparkles,
   Mountain,
   Zap,
 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const steps = [
   { id: 1, title: "Welcome", description: "Personal Information" },

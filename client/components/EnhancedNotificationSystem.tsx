@@ -1,9 +1,11 @@
+import { formatDistanceToNow } from "date-fns";
 import React, { useEffect, useState, useCallback } from "react";
+
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
-import { Button } from "./ui/button";
+
 import { Badge } from "./ui/badge";
-import { Icons } from "./ui/icons";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,20 +14,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Icons } from "./ui/icons";
 import { ScrollArea } from "./ui/scroll-area";
 import { useToast } from "./ui/use-toast";
-import { formatDistanceToNow } from "date-fns";
+import type { Database } from "../../app/types/supabase";
 
-interface Notification {
-  id: string;
-  type: "message" | "application" | "job_match" | "interview" | "system";
-  title: string;
-  content: string;
-  read: boolean;
-  created_at: string;
-  data?: any;
-  user_id: string;
-}
+type Notification = Database['public']['Tables']['notifications']['Row'];
 
 interface RealTimeEvent {
   eventType: "INSERT" | "UPDATE" | "DELETE";
@@ -57,8 +51,8 @@ export function EnhancedNotificationSystem() {
 
       setNotifications(data || []);
       setUnreadCount(data?.filter((n) => !n.read).length || 0);
-    } catch (error) {
-      console.error("Error loading notifications:", error);
+    } catch (err: unknown) {
+      console.error("Error loading notifications:", err);
       // Use mock notifications for demo
       const mockNotifications: Notification[] = [
         {
@@ -120,7 +114,7 @@ export function EnhancedNotificationSystem() {
           console.log("Notification event:", payload);
 
           if (payload.eventType === "INSERT" && payload.new) {
-            setNotifications((prev) => [payload.new!, ...prev]);
+            setNotifications((prev) => [payload.new, ...prev]);
             setUnreadCount((prev) => prev + 1);
 
             // Show toast for new notification
@@ -140,7 +134,7 @@ export function EnhancedNotificationSystem() {
             }
           } else if (payload.eventType === "UPDATE" && payload.new) {
             setNotifications((prev) =>
-              prev.map((n) => (n.id === payload.new!.id ? payload.new! : n)),
+              prev.map((n) => (n.id === payload.new.id ? payload.new : n)),
             );
 
             if (payload.old && !payload.old.read && payload.new.read) {
@@ -148,7 +142,7 @@ export function EnhancedNotificationSystem() {
             }
           } else if (payload.eventType === "DELETE" && payload.old) {
             setNotifications((prev) =>
-              prev.filter((n) => n.id !== payload.old!.id),
+              prev.filter((n) => n.id !== payload.old.id),
             );
             if (!payload.old.read) {
               setUnreadCount((prev) => Math.max(0, prev - 1));
@@ -183,8 +177,8 @@ export function EnhancedNotificationSystem() {
         prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
       );
       setUnreadCount((prev) => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
+    } catch (err: unknown) {
+      console.error("Error marking notification as read:", err);
       // Fallback for demo
       setNotifications((prev) =>
         prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n)),
@@ -207,8 +201,8 @@ export function EnhancedNotificationSystem() {
 
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch (error) {
-      console.error("Error marking all notifications as read:", error);
+    } catch (err: unknown) {
+      console.error("Error marking all notifications as read:", err);
       // Fallback for demo
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
       setUnreadCount(0);
@@ -230,8 +224,8 @@ export function EnhancedNotificationSystem() {
       if (notification && !notification.read) {
         setUnreadCount((prev) => Math.max(0, prev - 1));
       }
-    } catch (error) {
-      console.error("Error deleting notification:", error);
+    } catch (err: unknown) {
+      console.error("Error deleting notification:", err);
       // Fallback for demo
       const notification = notifications.find((n) => n.id === notificationId);
       setNotifications((prev) => prev.filter((n) => n.id !== notificationId));

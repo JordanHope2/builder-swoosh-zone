@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  TrendingUp,
-  Award,
   Target,
   Zap,
   Star,
@@ -12,12 +9,10 @@ import {
   Clock,
   Users,
   Eye,
-  ThumbsUp,
   Crown,
-  Gem,
-  Shield,
   Rocket,
 } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
 // Resume Score Component
 export function ResumeScore({

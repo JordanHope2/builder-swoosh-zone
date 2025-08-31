@@ -1,15 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { DashboardLayout } from "../components/DashboardLayout";
 import {
-  User,
-  Briefcase,
-  Heart,
-  ArrowRight,
-  Target,
   Settings,
   Bell,
 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { DashboardLayout } from "../components/DashboardLayout";
 
 // NOTE: This is still a mockup. Data fetching and functional components
 // would need to be implemented in a future step.

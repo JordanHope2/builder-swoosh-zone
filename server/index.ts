@@ -1,22 +1,30 @@
 // server/index.ts
 import "dotenv/config";
 import * as Sentry from "@sentry/node";
-import express from "express";
 import cors from "cors";
+import express from "express";
+import { Stripe } from "stripe";
+
+import adminRouter from "./routes/admin";
+import billingRouter from "./routes/billing";
+import candidatesRouter from "./routes/candidates";
+import companiesRouter from "./routes/companies";
+import dashboardRouter from "./routes/dashboard";
 import { handleDemo } from "./routes/demo";
 import jobsRouter from "./routes/jobs";
-import scrapeRouter from "./routes/scrape";
-import uploadRouter from "./routes/upload";
-import companiesRouter from "./routes/companies";
-import candidatesRouter from "./routes/candidates";
 import matchRouter from "./routes/match";
 import recommendationsRouter from "./routes/recommendations";
-import billingRouter from "./routes/billing";
-import dashboardRouter from "./routes/dashboard";
-import adminRouter from "./routes/admin";
-import { getSupabaseAdmin } from "./supabase";
+import scrapeRouter from "./routes/scrape";
+import uploadRouter from "./routes/upload";
 import { getEmbedding } from "./services/aiService";
-import { Stripe } from "stripe";
+import { getSupabaseAdmin } from "./supabase";
+import { errorHandler } from "./middleware/errors";
+import { asyncHandler } from "./utils/asyncHandler";
+import { errorMessage } from "app/client/lib/errors";
+import {
+  CheckoutSessionCompletedSchema,
+  CustomerSubscriptionSchema,
+} from "./validation/stripeSchemas";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2024-06-20",
@@ -62,9 +70,9 @@ export function createServer() {
 
       try {
         event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-      } catch (err: any) {
-        console.error(`Webhook signature verification failed: ${err.message}`);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+      } catch (err: unknown) {
+        console.error(`Webhook signature verification failed: ${errorMessage(err)}`);
+        return res.status(400).send(`Webhook Error: ${errorMessage(err)}`);
       }
 
       const supabase = getSupabaseAdmin();
@@ -72,7 +80,7 @@ export function createServer() {
       // Handle the event
       switch (event.type) {
         case "checkout.session.completed": {
-          const session = event.data.object as Stripe.Checkout.Session;
+          const session = CheckoutSessionCompletedSchema.parse(event.data.object);
           const userId = session.metadata?.userId;
           const subscriptionId = session.subscription;
 
@@ -114,7 +122,7 @@ export function createServer() {
         }
         case "customer.subscription.updated":
         case "customer.subscription.deleted": {
-            const subscription = event.data.object as Stripe.Subscription;
+            const subscription = CustomerSubscriptionSchema.parse(event.data.object);
             const { error } = await supabase
                 .from("subscriptions")
                 .update({
@@ -172,21 +180,16 @@ export function createServer() {
     res.status(200).json({ status: "ok" });
   });
 
-  app.get("/readyz", async (_req, res) => {
-    try {
-      const supabase = getSupabaseAdmin();
-      const { error } = await supabase.from("jobs").select("id").limit(1);
+  app.get("/readyz", asyncHandler(async (_req, res, _next) => {
+    const supabase = getSupabaseAdmin();
+    const { error } = await supabase.from("jobs").select("id").limit(1);
 
-      if (error) {
-        throw new Error("Supabase connection check failed");
-      }
-
-      res.status(200).json({ status: "ready" });
-    } catch (error) {
-      console.error("Readiness check failed:", error);
-      res.status(503).json({ status: "not_ready" });
+    if (error) {
+      throw new Error("Supabase connection check failed");
     }
-  });
+
+    res.status(200).json({ status: "ready" });
+  }));
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
@@ -209,53 +212,50 @@ export function createServer() {
   app.use("/api/admin", adminRouter);
 
   // Temporary test route for recommendations
-  app.get("/api/test-recommendations/:userId", async (req, res) => {
-    try {
-      const { userId } = req.params;
-      const supabase = getSupabaseAdmin();
+  app.get("/api/test-recommendations/:userId", asyncHandler(async (req, res, _next) => {
+    const { userId } = req.params;
+    const supabase = getSupabaseAdmin();
 
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("bio, skills")
-        .eq("id", userId)
-        .single();
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("bio, skills")
+      .eq("id", userId)
+      .single();
 
-      if (profileError || !profile) {
-        return res
-          .status(404)
-          .json({ error: `User profile not found for ID: ${userId}` });
-      }
-
-      const profileText = `Bio: ${profile.bio || ""}\nSkills: ${(profile.skills || []).join(", ")}`;
-      if (!profileText.trim()) {
-        return res
-          .status(400)
-          .json({
-            error: "User profile is empty, cannot generate recommendations.",
-          });
-      }
-      const userEmbedding = await getEmbedding(profileText);
-
-      const { data: jobs, error: matchError } = await supabase.rpc(
-        "match_jobs",
-        {
-          query_embedding: userEmbedding,
-          match_threshold: 0.7,
-          match_count: 10,
-        },
-      );
-
-      if (matchError) throw matchError;
-
-      res.json({ jobs: jobs ?? [] });
-    } catch (e: any) {
-      console.error(e);
-      res.status(500).json({ error: e.message ?? "Unknown error" });
+    if (profileError || !profile) {
+      return res
+        .status(404)
+        .json({ error: `User profile not found for ID: ${userId}` });
     }
-  });
+
+    const profileText = `Bio: ${profile.bio || ""}\nSkills: ${(profile.skills || []).join(", ")}`;
+    if (!profileText.trim()) {
+      return res
+        .status(400)
+        .json({
+          error: "User profile is empty, cannot generate recommendations.",
+        });
+    }
+    const userEmbedding = await getEmbedding(profileText);
+
+    const { data: jobs, error: matchError } = await supabase.rpc(
+      "match_jobs",
+      {
+        query_embedding: userEmbedding,
+        match_threshold: 0.7,
+        match_count: 10,
+      },
+    );
+
+    if (matchError) throw matchError;
+
+    res.json({ jobs: jobs ?? [] });
+  }));
 
   // The error handler must be registered before any other error middleware and after all controllers
   app.use(Sentry.Handlers.errorHandler());
+
+  app.use(errorHandler);
 
   return app;
 }

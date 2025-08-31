@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
+
 import { useAuth } from "../contexts/AuthContext";
-import { HeroSkeletonLoader } from "./SkeletonLoader"; // Assuming a generic loader exists
+
+// Assuming a generic loader exists
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, session } = useAuth();

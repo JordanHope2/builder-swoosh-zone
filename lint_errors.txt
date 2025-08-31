@@ -1,0 +1,1289 @@
+
+> lint
+> node --max-old-space-size=4096 ./node_modules/eslint/bin/eslint.js . --ext js,jsx,ts,tsx,mjs --report-unused-disable-directives --max-warnings 0
+
+
+/app/client/components/AIChatbot.tsx
+    7:3   error  'User' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+   13:3   error  'Zap' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+   34:7   error  'mockResponses' is assigned a value but never used                                                                                                                  @typescript-eslint/no-unused-vars
+   84:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   87:61  error  Async arrow function 'sendMessage' has no 'await' expression                                                                                                        @typescript-eslint/require-await
+  127:11  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  144:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/EnhancedAIChatbot.tsx
+    1:18  error  'AnimatePresence' is defined but never used                                                                                                                         @typescript-eslint/no-unused-vars
+    7:3   error  'User' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+   13:3   error  'Zap' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+   15:3   error  'DollarSign' is defined but never used                                                                                                                              @typescript-eslint/no-unused-vars
+   17:3   error  'Clock' is defined but never used                                                                                                                                   @typescript-eslint/no-unused-vars
+   18:3   error  'Star' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+   19:3   error  'Settings' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+   20:3   error  'RefreshCw' is defined but never used                                                                                                                               @typescript-eslint/no-unused-vars
+   24:3   error  'Volume2' is defined but never used                                                                                                                                 @typescript-eslint/no-unused-vars
+   28:3   error  'ExternalLink' is defined but never used                                                                                                                            @typescript-eslint/no-unused-vars
+   42:10  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   47:17  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   94:19  error  'setContext' is assigned a value but never used                                                                                                                     @typescript-eslint/no-unused-vars
+  320:14  error  'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  347:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  354:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/EnhancedAnalyticsDashboard.tsx
+  102:26  error    'setTimeSeriesData' is assigned a value but never used                                                                                                              @typescript-eslint/no-unused-vars
+  104:21  error    'setSkillData' is assigned a value but never used                                                                                                                   @typescript-eslint/no-unused-vars
+  105:24  error    'setLocationData' is assigned a value but never used                                                                                                                @typescript-eslint/no-unused-vars
+  107:10  error    'loading' is assigned a value but never used                                                                                                                        @typescript-eslint/no-unused-vars
+  124:44  error    'appsError' is assigned a value but never used                                                                                                                      @typescript-eslint/no-unused-vars
+  136:16  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  137:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                   no-console
+  143:5   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  152:11  error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  159:11  error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  165:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  179:11  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  343:29  error    Invalid type "ValueType" of template literal expression                                                                                                             @typescript-eslint/restrict-template-expressions
+
+/app/client/components/EnhancedApplicationForm.tsx
+   12:3   error  'Mail' is defined but never used                                         @typescript-eslint/no-unused-vars
+   14:3   error  'MapPin' is defined but never used                                       @typescript-eslint/no-unused-vars
+   15:3   error  'Briefcase' is defined but never used                                    @typescript-eslint/no-unused-vars
+   16:3   error  'Award' is defined but never used                                        @typescript-eslint/no-unused-vars
+   17:3   error  'Target' is defined but never used                                       @typescript-eslint/no-unused-vars
+   18:3   error  'Heart' is defined but never used                                        @typescript-eslint/no-unused-vars
+   19:3   error  'Zap' is defined but never used                                          @typescript-eslint/no-unused-vars
+   31:3   error  'EnhancedMotion' is defined but never used                               @typescript-eslint/no-unused-vars
+  101:10  error  Unsafe array destructuring of a tuple element with an `any` value        @typescript-eslint/no-unsafe-assignment
+  101:10  error  'userProfile' is assigned a value but never used                         @typescript-eslint/no-unused-vars
+  101:50  error  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  109:9   error  Unsafe assignment of an `any` value                                      @typescript-eslint/no-unsafe-assignment
+  111:9   error  Unsafe assignment of an `any` value                                      @typescript-eslint/no-unsafe-assignment
+  112:9   error  Unsafe assignment of an `any` value                                      @typescript-eslint/no-unsafe-assignment
+  221:14  error  'err' is defined but never used                                          @typescript-eslint/no-unused-vars
+  224:9   error  Unsafe assignment of an error typed value                                @typescript-eslint/no-unsafe-assignment
+  226:21  error  Unsafe member access .message on an `error` typed value                  @typescript-eslint/no-unsafe-member-access
+  398:41  error  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/app/client/components/EnhancedCVUpload.tsx
+    1:18  error  'AnimatePresence' is defined but never used                                                                                                                         @typescript-eslint/no-unused-vars
+  143:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  150:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/EnhancedNotificationSystem.tsx
+   28:10  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   61:45  error    Unsafe member access .read on an `any` value                                                                                                                        @typescript-eslint/no-unsafe-member-access
+   62:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  109:5   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  114:9   error    Unsafe argument of type `any` assigned to a parameter of type `"system"`                                                                                            @typescript-eslint/no-unsafe-argument
+  114:31  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  122:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                   no-console
+  164:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  171:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  188:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  212:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  235:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  335:25  error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/EnhancedSwipeDiscovery.tsx
+   15:3   error  'Building' is defined but never used                                     @typescript-eslint/no-unused-vars
+   18:3   error  'Target' is defined but never used                                       @typescript-eslint/no-unused-vars
+   20:3   error  'ArrowUp' is defined but never used                                      @typescript-eslint/no-unused-vars
+   21:3   error  'ArrowDown' is defined but never used                                    @typescript-eslint/no-unused-vars
+   23:3   error  'TrendingUp' is defined but never used                                   @typescript-eslint/no-unused-vars
+   25:35  error  'useEffect' is defined but never used                                    @typescript-eslint/no-unused-vars
+   28:10  error  'useJobs' is defined but never used                                      @typescript-eslint/no-unused-vars
+  117:11  error  'auth' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+  178:9   error  'swipeVariants' is assigned a value but never used                       @typescript-eslint/no-unused-vars
+  269:35  error  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  386:13  error  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  403:33  error  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+  422:17  error  Unsafe assignment of an `any` value                                      @typescript-eslint/no-unsafe-assignment
+  568:29  error  Unexpected any. Specify a different type                                 @typescript-eslint/no-explicit-any
+
+/app/client/components/EnhancedSwipeJobDiscovery.tsx
+    9:3   error  'DollarSign' is defined but never used                                                                                                                              @typescript-eslint/no-unused-vars
+   10:3   error  'Star' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+   11:3   error  'ChevronUp' is defined but never used                                                                                                                               @typescript-eslint/no-unused-vars
+   12:3   error  'ChevronDown' is defined but never used                                                                                                                             @typescript-eslint/no-unused-vars
+   15:27  error  'useRef' is defined but never used                                                                                                                                  @typescript-eslint/no-unused-vars
+   64:10  error  'showDetails' is assigned a value but never used                                                                                                                    @typescript-eslint/no-unused-vars
+   99:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  100:23  error  Unsafe argument of type `any` assigned to a parameter of type `SetStateAction<number>`                                                                              @typescript-eslint/no-unsafe-argument
+  100:28  error  Unsafe member access .match_score on an `any` value                                                                                                                 @typescript-eslint/no-unsafe-member-access
+  102:23  error  Unsafe argument of type error typed assigned to a parameter of type `SetStateAction<string>`                                                                        @typescript-eslint/no-unsafe-argument
+  108:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  119:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  122:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  122:43  error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  122:49  error  Unsafe member access .results on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  122:64  error  Unsafe member access .map on an `any` value                                                                                                                         @typescript-eslint/no-unsafe-member-access
+  140:18  error  Unsafe argument of type error typed assigned to a parameter of type `SetStateAction<string>`                                                                        @typescript-eslint/no-unsafe-argument
+  146:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  197:13  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  202:9   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  204:9   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/FeaturedJobs.tsx
+    3:3   error  'Clock' is defined but never used                                                                                                                                   @typescript-eslint/no-unused-vars
+    4:3   error  'Building' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+  160:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  161:17  error  Unsafe argument of type `any` assigned to a parameter of type `SetStateAction<Job[]>`                                                                               @typescript-eslint/no-unsafe-argument
+  161:17  error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  161:22  error  Unsafe member access .jobs on an `any` value                                                                                                                        @typescript-eslint/no-unsafe-member-access
+  163:18  error  Unsafe argument of type error typed assigned to a parameter of type `SetStateAction<string>`                                                                        @typescript-eslint/no-unsafe-argument
+  170:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/GoogleSignIn.tsx
+   3:10  error  'useAuth' is defined but never used                      @typescript-eslint/no-unused-vars
+  52:14  error  'err' is defined but never used                          @typescript-eslint/no-unused-vars
+  56:9   error  Unsafe assignment of an error typed value                @typescript-eslint/no-unsafe-assignment
+  58:21  error  Unsafe member access .message on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+
+/app/client/components/HeroSection.tsx
+   31:10  error  'analysisResult' is assigned a value but never used                                                                                                                 @typescript-eslint/no-unused-vars
+   83:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  116:9   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/LuxurySwipeDiscovery.tsx
+    14:3   error    'Building' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+    18:3   error    'Sparkles' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+    19:3   error    'TrendingUp' is defined but never used                                                                                                                              @typescript-eslint/no-unused-vars
+    20:3   error    'Users' is defined but never used                                                                                                                                   @typescript-eslint/no-unused-vars
+    21:3   error    'Globe' is defined but never used                                                                                                                                   @typescript-eslint/no-unused-vars
+    22:3   error    'Calendar' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+    23:3   error    'ArrowUp' is defined but never used                                                                                                                                 @typescript-eslint/no-unused-vars
+    24:3   error    'ArrowDown' is defined but never used                                                                                                                               @typescript-eslint/no-unused-vars
+    25:3   error    'Bookmark' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+    26:3   error    'Share2' is defined but never used                                                                                                                                  @typescript-eslint/no-unused-vars
+    32:3   error    'Briefcase' is defined but never used                                                                                                                               @typescript-eslint/no-unused-vars
+    38:10  error    'useJobs' is defined but never used                                                                                                                                 @typescript-eslint/no-unused-vars
+   250:34  error    'event' is defined but never used. Allowed unused args must match /^_/u                                                                                             @typescript-eslint/no-unused-vars
+   250:41  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   254:38  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   255:23  error    Unsafe argument of type `any` assigned to a parameter of type `SetStateAction<string>`                                                                              @typescript-eslint/no-unsafe-argument
+   255:29  error    Unsafe member access .detail on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+   312:5   error    Async arrow function 'createApplication' has no 'await' expression                                                                                                  @typescript-eslint/require-await
+   330:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                   no-console
+   335:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+   379:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   574:21  error    Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+   574:74  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   611:33  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   915:29  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   973:43  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   996:69  error    Unsafe member access .liked on an `any` value                                                                                                                       @typescript-eslint/no-unsafe-member-access
+  1001:20  error    Unsafe member access .superLiked on an `any` value                                                                                                                  @typescript-eslint/no-unsafe-member-access
+
+/app/client/components/Navigation/index.tsx
+  5:19  error  'Bell' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/client/components/NotificationSystem.tsx
+    4:3   error  'BellOff' is defined but never used       @typescript-eslint/no-unused-vars
+    5:3   error  'Check' is defined but never used         @typescript-eslint/no-unused-vars
+    6:3   error  'CheckCheck' is defined but never used    @typescript-eslint/no-unused-vars
+    9:3   error  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+   12:3   error  'Clock' is defined but never used         @typescript-eslint/no-unused-vars
+   18:3   error  'Users' is defined but never used         @typescript-eslint/no-unused-vars
+   19:3   error  'Briefcase' is defined but never used     @typescript-eslint/no-unused-vars
+   20:3   error  'DollarSign' is defined but never used    @typescript-eslint/no-unused-vars
+   22:3   error  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+   23:3   error  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+   24:3   error  'FileText' is defined but never used      @typescript-eslint/no-unused-vars
+   25:3   error  'Zap' is defined but never used           @typescript-eslint/no-unused-vars
+   26:3   error  'Activity' is defined but never used      @typescript-eslint/no-unused-vars
+   28:3   error  'UserPlus' is defined but never used      @typescript-eslint/no-unused-vars
+   29:3   error  'Building' is defined but never used      @typescript-eslint/no-unused-vars
+   30:3   error  'Award' is defined but never used         @typescript-eslint/no-unused-vars
+   31:3   error  'Target' is defined but never used        @typescript-eslint/no-unused-vars
+   32:3   error  'Eye' is defined but never used           @typescript-eslint/no-unused-vars
+   33:3   error  'EyeOff' is defined but never used        @typescript-eslint/no-unused-vars
+   34:3   error  'MoreVertical' is defined but never used  @typescript-eslint/no-unused-vars
+   36:3   error  'Globe' is defined but never used         @typescript-eslint/no-unused-vars
+   37:3   error  'Mail' is defined but never used          @typescript-eslint/no-unused-vars
+   38:3   error  'Phone' is defined but never used         @typescript-eslint/no-unused-vars
+   39:3   error  'Share2' is defined but never used        @typescript-eslint/no-unused-vars
+   76:20  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  195:11  error  't' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/app/client/components/NotificationsOverlay.tsx
+    8:3   error  'Heart' is defined but never used                   @typescript-eslint/no-unused-vars
+    9:3   error  'Star' is defined but never used                    @typescript-eslint/no-unused-vars
+   10:3   error  'TrendingUp' is defined but never used              @typescript-eslint/no-unused-vars
+   11:3   error  'Clock' is defined but never used                   @typescript-eslint/no-unused-vars
+   13:3   error  'AlertCircle' is defined but never used             @typescript-eslint/no-unused-vars
+   16:3   error  'Zap' is defined but never used                     @typescript-eslint/no-unused-vars
+   17:3   error  'Eye' is defined but never used                     @typescript-eslint/no-unused-vars
+   20:3   error  'MoreHorizontal' is defined but never used          @typescript-eslint/no-unused-vars
+   39:10  error  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  358:55  error  Unsafe member access .matchScore on an `any` value  @typescript-eslint/no-unsafe-member-access
+  360:58  error  Unsafe member access .matchScore on an `any` value  @typescript-eslint/no-unsafe-member-access
+
+/app/client/components/ProtectedRoute.tsx
+  5:10  error  'HeroSkeletonLoader' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/client/components/RealtimeFeedback.tsx
+    3:3   error  'TrendingUp' is defined but never used                                           @typescript-eslint/no-unused-vars
+    4:3   error  'Award' is defined but never used                                                @typescript-eslint/no-unused-vars
+   14:3   error  'ThumbsUp' is defined but never used                                             @typescript-eslint/no-unused-vars
+   16:3   error  'Gem' is defined but never used                                                  @typescript-eslint/no-unused-vars
+   17:3   error  'Shield' is defined but never used                                               @typescript-eslint/no-unused-vars
+   25:3   error  'onScoreChange' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  184:29  error  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+  347:29  error  Unexpected any. Specify a different type                                         @typescript-eslint/no-explicit-any
+
+/app/client/components/SharedLayout.tsx
+  11:10  error  Unsafe array destructuring of a tuple element with an `any` value                                                                                                   @typescript-eslint/no-unsafe-assignment
+  12:10  error  Unsafe array destructuring of a tuple element with an `any` value                                                                                                   @typescript-eslint/no-unsafe-assignment
+  21:13  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  25:13  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  30:16  error  'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  36:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  47:58  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  47:81  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  49:58  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  49:81  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+
+/app/client/components/SimplifiedCVUpload.tsx
+    1:18  error  'AnimatePresence' is defined but never used                                                                                                                         @typescript-eslint/no-unused-vars
+    5:3   error  'CheckCircle' is defined but never used                                                                                                                             @typescript-eslint/no-unused-vars
+   10:3   error  'Star' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+   13:3   error  'Zap' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+   15:3   error  'BarChart3' is defined but never used                                                                                                                               @typescript-eslint/no-unused-vars
+  144:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  151:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/SwipeJobDiscovery.tsx
+    5:3   error  'Bookmark' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+   13:3   error  'Users' is defined but never used                                                                                                                                   @typescript-eslint/no-unused-vars
+  163:29  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  166:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  173:11  error  'lastSwiped' is assigned a value but never used                                                                                                                     @typescript-eslint/no-unused-vars
+
+/app/client/components/VideoInterview.tsx
+   50:25  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   95:16  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  106:5   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  113:6   warning  React Hook useEffect has a missing dependency: 'mediaStream'. Either include it or remove the dependency array                                                      react-hooks/exhaustive-deps
+  132:6   warning  React Hook useEffect has a missing dependency: 'stopRecording'. Either include it or remove the dependency array                                                    react-hooks/exhaustive-deps
+  184:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  207:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  209:6   warning  React Hook useCallback has a missing dependency: 'completeInterview'. Either include it or remove the dependency array                                              react-hooks/exhaustive-deps
+  227:14  error    'err' is defined but never used                                                                                                                                     @typescript-eslint/no-unused-vars
+  241:5   error    'responses' is defined but never used. Allowed unused args must match /^_/u                                                                                         @typescript-eslint/no-unused-vars
+  241:16  error    Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+
+/app/client/components/ui/accessibility.tsx
+    6:3  error  'VolumeX' is defined but never used           @typescript-eslint/no-unused-vars
+    9:3  error  'MousePointer' is defined but never used      @typescript-eslint/no-unused-vars
+   58:9  error  Unsafe return of a value of type `any`        @typescript-eslint/no-unsafe-return
+  360:9  error  Unsafe call of a(n) `error` type typed value  @typescript-eslint/no-unsafe-call
+
+/app/client/components/ui/ai-match-report.tsx
+  196:3  error    'initialMatchPercent' is defined but never used. Allowed unused args must match /^_/u                                                                               @typescript-eslint/no-unused-vars
+  206:7  error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  208:6  warning  React Hook useEffect has missing dependencies: 'loadMatchReport' and 'report'. Either include them or remove the dependency array                                   react-hooks/exhaustive-deps
+
+/app/client/components/ui/chart.tsx
+  189:19  error  Unsafe assignment of an `any` value                                                             @typescript-eslint/no-unsafe-assignment
+  189:58  error  Unsafe member access .fill on an `any` value                                                    @typescript-eslint/no-unsafe-member-access
+  200:65  error  Unsafe argument of type `any` assigned to a parameter of type `Payload<ValueType, NameType>[]`  @typescript-eslint/no-unsafe-argument
+  220:31  error  Unsafe assignment of an `any` value                                                             @typescript-eslint/no-unsafe-assignment
+  221:31  error  Unsafe assignment of an `any` value                                                             @typescript-eslint/no-unsafe-assignment
+  287:26  error  Invalid type "DataKey<any>" of template literal expression                                      @typescript-eslint/restrict-template-expressions
+  292:20  error  Unsafe assignment of an `any` value                                                             @typescript-eslint/no-unsafe-assignment
+
+/app/client/components/ui/city-events-modal.tsx
+   20:10  error    'applicationToast' is defined but never used                                                                                                                        @typescript-eslint/no-unused-vars
+   21:10  error    'cn' is defined but never used                                                                                                                                      @typescript-eslint/no-unused-vars
+  177:3   error    'cityName' is defined but never used. Allowed unused args must match /^_/u                                                                                          @typescript-eslint/no-unused-vars
+  252:7   error    Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  254:6   warning  React Hook useEffect has a missing dependency: 'loadCityData'. Either include it or remove the dependency array                                                     react-hooks/exhaustive-deps
+
+/app/client/components/ui/command.tsx
+  24:11  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+/app/client/components/ui/enhanced-animations.tsx
+  4:3  error  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/client/components/ui/enhanced-form.tsx
+    4:3   error  'useForm' is defined but never used                                                     @typescript-eslint/no-unused-vars
+   32:11  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+   61:5   error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  201:11  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+  218:10  error  'isFocused' is assigned a value but never used                                          @typescript-eslint/no-unused-vars
+  227:5   error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  240:18  error  Unsafe argument of type `any` assigned to a parameter of type `SetStateAction<number>`  @typescript-eslint/no-unsafe-argument
+  332:11  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+  359:5   error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  374:36  error  Unsafe call of a(n) `any` typed value                                                   @typescript-eslint/no-unsafe-call
+  382:12  error  Unsafe spread of an `any` value in an array                                             @typescript-eslint/no-unsafe-assignment
+  477:27  error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  479:25  error  Unsafe call of a(n) `any` typed value                                                   @typescript-eslint/no-unsafe-call
+
+/app/client/components/ui/enhanced-motion.tsx
+    3:3   error  'AnimatePresence' is defined but never used                                                                                                                         @typescript-eslint/no-unused-vars
+  266:12  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  293:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  313:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/components/ui/secure-search.tsx
+   47:27  warning  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead  react-hooks/exhaustive-deps
+   68:51  error    Unexpected any. Specify a different type                                                                    @typescript-eslint/no-explicit-any
+   69:11  error    Unsafe assignment of an `any` value                                                                         @typescript-eslint/no-unsafe-assignment
+   71:44  error    Unsafe assignment of an `any` value                                                                         @typescript-eslint/no-unsafe-assignment
+  280:39  error    Unexpected any. Specify a different type                                                                    @typescript-eslint/no-explicit-any
+  280:49  error    Unexpected any. Specify a different type                                                                    @typescript-eslint/no-explicit-any
+  287:34  error    Unsafe return of a value of type `any`                                                                      @typescript-eslint/no-unsafe-return
+
+/app/client/components/ui/share-button.tsx
+   98:16  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+  119:14  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/client/components/ui/textarea.tsx
+  5:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+/app/client/components/ui/unified-dashboard.tsx
+  16:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/client/contexts/AuthContext.tsx
+   4:20  error  'getCurrentUser' is defined but never used                                                                                                                          @typescript-eslint/no-unused-vars
+  11:56  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  14:25  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  26:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  35:64  error  Async arrow function has no 'await' expression                                                                                                                      @typescript-eslint/require-await
+  52:69  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  57:9   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  77:38  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  81:7   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+
+/app/client/contexts/FavoritesContext.tsx
+  41:15  error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  42:9   error  Unsafe return of a value of type `any`                                                  @typescript-eslint/no-unsafe-return
+  42:16  error  Unsafe call of a(n) `any` typed value                                                   @typescript-eslint/no-unsafe-call
+  42:23  error  Unsafe member access .map on an `any` value                                             @typescript-eslint/no-unsafe-member-access
+  42:33  error  Unexpected any. Specify a different type                                                @typescript-eslint/no-explicit-any
+  42:42  error  Unsafe return of a value of type `any`                                                  @typescript-eslint/no-unsafe-return
+  44:31  error  Unsafe argument of type `any` assigned to a parameter of type `string | number | Date`  @typescript-eslint/no-unsafe-argument
+  44:35  error  Unsafe member access .dateAdded on an `any` value                                       @typescript-eslint/no-unsafe-member-access
+  46:16  error  'err' is defined but never used                                                         @typescript-eslint/no-unused-vars
+
+/app/client/contexts/JobsContext.tsx
+    7:3   error  'supabase' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+   18:43  error  'error.message' will use Object's default stringification format ('[object Object]') when stringified                                                               @typescript-eslint/no-base-to-string
+   53:48  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+   90:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   99:13  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  100:7   error  Unsafe return of a value of type `any`                                                                                                                              @typescript-eslint/no-unsafe-return
+  106:61  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+
+/app/client/hooks/use-toast.ts
+  15:7  error  'actionTypes' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+
+/app/client/hooks/useAppData.ts
+  42:62  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/client/hooks/useRealTimeNotifications.ts
+  14:10  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  42:47  error  Unsafe member access .read on an `any` value                                                                                                                        @typescript-eslint/no-unsafe-member-access
+  48:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  52:39  error  Unsafe member access .new on an `any` value                                                                                                                         @typescript-eslint/no-unsafe-member-access
+  62:9   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/lib/builderConfig.ts
+   4:3  error  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+  62:7  error  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+  69:5  error  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+
+/app/client/lib/security.ts
+    7:38  error  Unnecessary escape character: \+                                                                                no-useless-escape
+    9:42  error  Unnecessary escape character: \+                                                                                no-useless-escape
+    9:95  error  Unnecessary escape character: \+                                                                                no-useless-escape
+   58:32  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  153:30  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  154:44  error  Unsafe return of a value of type `any`                                                                          @typescript-eslint/no-unsafe-return
+  161:22  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  162:49  error  Unsafe argument of type `any` assigned to a parameter of type `ArrayLike<unknown> | { [s: string]: unknown; }`  @typescript-eslint/no-unsafe-argument
+  164:19  error  Unsafe member access [key] on an `any` value                                                                    @typescript-eslint/no-unsafe-member-access
+  166:11  error  Unsafe assignment of an `any` value                                                                             @typescript-eslint/no-unsafe-assignment
+  166:19  error  Unsafe member access [key] on an `any` value                                                                    @typescript-eslint/no-unsafe-member-access
+  169:7   error  Unsafe return of a value of type `any`                                                                          @typescript-eslint/no-unsafe-return
+  176:5   error  Unsafe return of a value of type `any`                                                                          @typescript-eslint/no-unsafe-return
+  243:56  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  251:48  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  259:35  error  Unsafe argument of type `any` assigned to a parameter of type `string`                                          @typescript-eslint/no-unsafe-argument
+  266:35  error  Unsafe argument of type `any` assigned to a parameter of type `string`                                          @typescript-eslint/no-unsafe-argument
+  274:43  error  Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  275:11  error  Unsafe assignment of an `any` value                                                                             @typescript-eslint/no-unsafe-assignment
+  277:37  error  Unsafe assignment of an `any` value                                                                             @typescript-eslint/no-unsafe-assignment
+
+/app/client/lib/supabase.ts
+   10:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   13:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   26:33  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+   26:46  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+   64:14  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   69:16  error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  122:41  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  126:18  error  Unsafe member access .location on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  127:51  error  Unsafe member access .location on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  129:18  error  Unsafe member access .title on an `any` value                           @typescript-eslint/no-unsafe-member-access
+  130:48  error  Unsafe member access .title on an `any` value                           @typescript-eslint/no-unsafe-member-access
+  139:5   error  Unsafe return of a value of type `any[]`                                @typescript-eslint/no-unsafe-return
+  140:12  error  'err' is defined but never used                                         @typescript-eslint/no-unused-vars
+  143:18  error  Unsafe member access .location on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  145:43  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+  145:43  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  145:51  error  Unsafe member access .location on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  148:18  error  Unsafe member access .title on an `any` value                           @typescript-eslint/no-unsafe-member-access
+  150:40  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+  150:40  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  150:48  error  Unsafe member access .title on an `any` value                           @typescript-eslint/no-unsafe-member-access
+  159:13  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+  171:5   error  Unsafe return of a value of type `any`                                  @typescript-eslint/no-unsafe-return
+  183:9   error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  185:17  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+  192:3   error  Unsafe return of a value of type `any`                                  @typescript-eslint/no-unsafe-return
+  198:23  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  217:23  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+/app/client/lib/supabaseClient.ts
+  5:3  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+  6:3  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+
+/app/client/pages/AIScore.tsx
+    8:3   error  'Award' is defined but never used                    @typescript-eslint/no-unused-vars
+   11:3   error  'PieChart' is defined but never used                 @typescript-eslint/no-unused-vars
+   14:3   error  'AlertCircle' is defined but never used              @typescript-eslint/no-unused-vars
+   23:3   error  'Building' is defined but never used                 @typescript-eslint/no-unused-vars
+   25:3   error  'Clock' is defined but never used                    @typescript-eslint/no-unused-vars
+   26:3   error  'Briefcase' is defined but never used                @typescript-eslint/no-unused-vars
+   27:3   error  'GraduationCap' is defined but never used            @typescript-eslint/no-unused-vars
+   28:3   error  'Globe' is defined but never used                    @typescript-eslint/no-unused-vars
+  204:23  error  'setSelectedJob' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/About.tsx
+    7:3   error  'Users' is defined but never used                                        @typescript-eslint/no-unused-vars
+   10:3   error  'Clock' is defined but never used                                        @typescript-eslint/no-unused-vars
+   13:3   error  'Zap' is defined but never used                                          @typescript-eslint/no-unused-vars
+   18:3   error  'MapPin' is defined but never used                                       @typescript-eslint/no-unused-vars
+   20:3   error  'Building' is defined but never used                                     @typescript-eslint/no-unused-vars
+   22:3   error  'Mountain' is defined but never used                                     @typescript-eslint/no-unused-vars
+  313:39  error  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  345:33  error  'index' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/app/client/pages/Applications.tsx
+    8:3   error  'Building2' is defined but never used                 @typescript-eslint/no-unused-vars
+   11:3   error  'Filter' is defined but never used                    @typescript-eslint/no-unused-vars
+   13:3   error  'AlertCircle' is defined but never used               @typescript-eslint/no-unused-vars
+   17:3   error  'User' is defined but never used                      @typescript-eslint/no-unused-vars
+   18:3   error  'Mail' is defined but never used                      @typescript-eslint/no-unused-vars
+   22:27  error  'useEffect' is defined but never used                 @typescript-eslint/no-unused-vars
+   26:10  error  'cn' is defined but never used                        @typescript-eslint/no-unused-vars
+  285:24  error  'setApplications' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  289:10  error  'isFilterOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  289:24  error  'setIsFilterOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/CVReviewBooking.tsx
+    4:3   error  'Clock' is defined but never used                                     @typescript-eslint/no-unused-vars
+    6:3   error  'Mail' is defined but never used                                      @typescript-eslint/no-unused-vars
+    7:3   error  'Phone' is defined but never used                                     @typescript-eslint/no-unused-vars
+   13:3   error  'Award' is defined but never used                                     @typescript-eslint/no-unused-vars
+   14:3   error  'Zap' is defined but never used                                       @typescript-eslint/no-unused-vars
+   15:3   error  'Users' is defined but never used                                     @typescript-eslint/no-unused-vars
+   21:20  error  'useEffect' is defined but never used                                 @typescript-eslint/no-unused-vars
+  123:11  error  't' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+  159:5   error  Unsafe return of a value of type `any[]`                              @typescript-eslint/no-unsafe-return
+  341:35  error  Unsafe member access .available on an `any` value                     @typescript-eslint/no-unsafe-member-access
+  341:59  error  Unsafe argument of type `any` assigned to a parameter of type `Date`  @typescript-eslint/no-unsafe-argument
+  341:63  error  Unsafe member access .date on an `any` value                          @typescript-eslint/no-unsafe-member-access
+  343:44  error  Unsafe member access .available on an `any` value                     @typescript-eslint/no-unsafe-member-access
+  346:31  error  Unsafe call of a(n) `any` typed value                                 @typescript-eslint/no-unsafe-call
+  346:35  error  Unsafe member access .date on an `any` value                          @typescript-eslint/no-unsafe-member-access
+  348:39  error  Unsafe member access .available on an `any` value                     @typescript-eslint/no-unsafe-member-access
+  351:37  error  Unsafe member access .isToday on an `any` value                       @typescript-eslint/no-unsafe-member-access
+  353:34  error  Unsafe member access .day on an `any` value                           @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/CVUpload.tsx
+  10:10  error    'analysisComplete' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+  12:43  error    Unsafe member access .analysisResult on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  24:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+
+/app/client/pages/CandidateDashboard.tsx
+   2:3   error  'User' is defined but never used                   @typescript-eslint/no-unused-vars
+   3:3   error  'Briefcase' is defined but never used              @typescript-eslint/no-unused-vars
+   4:3   error  'Heart' is defined but never used                  @typescript-eslint/no-unused-vars
+   5:3   error  'ArrowRight' is defined but never used             @typescript-eslint/no-unused-vars
+   6:3   error  'Target' is defined but never used                 @typescript-eslint/no-unused-vars
+  19:10  error  'activeTab' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  19:21  error  'setActiveTab' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/CandidateProfile.tsx
+   19:3   error  'Award' is defined but never used                    @typescript-eslint/no-unused-vars
+   23:3   error  'Star' is defined but never used                     @typescript-eslint/no-unused-vars
+  335:23  error  'setExperiences' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/CareerTips.tsx
+   7:3  error  'Lightbulb' is defined but never used    @typescript-eslint/no-unused-vars
+   8:3  error  'Award' is defined but never used        @typescript-eslint/no-unused-vars
+  13:3  error  'Calendar' is defined but never used     @typescript-eslint/no-unused-vars
+  14:3  error  'Building' is defined but never used     @typescript-eslint/no-unused-vars
+  15:3  error  'Globe' is defined but never used        @typescript-eslint/no-unused-vars
+  17:3  error  'CheckCircle' is defined but never used  @typescript-eslint/no-unused-vars
+  18:3  error  'Briefcase' is defined but never used    @typescript-eslint/no-unused-vars
+  21:3  error  'Filter' is defined but never used       @typescript-eslint/no-unused-vars
+  24:3  error  'Share2' is defined but never used       @typescript-eslint/no-unused-vars
+
+/app/client/pages/Companies.tsx
+   7:3  error  'TrendingUp' is defined but never used  @typescript-eslint/no-unused-vars
+   8:3  error  'Award' is defined but never used       @typescript-eslint/no-unused-vars
+  10:3  error  'Filter' is defined but never used      @typescript-eslint/no-unused-vars
+
+/app/client/pages/CompanyDashboard.tsx
+   13:3   error  'Filter' is defined but never used              @typescript-eslint/no-unused-vars
+   21:3   error  'ArrowDown' is defined but never used           @typescript-eslint/no-unused-vars
+   23:3   error  'Award' is defined but never used               @typescript-eslint/no-unused-vars
+   24:3   error  'AlertCircle' is defined but never used         @typescript-eslint/no-unused-vars
+   28:3   error  'Heart' is defined but never used               @typescript-eslint/no-unused-vars
+   29:3   error  'Share2' is defined but never used              @typescript-eslint/no-unused-vars
+   32:3   error  'FileText' is defined but never used            @typescript-eslint/no-unused-vars
+   36:3   error  'Globe' is defined but never used               @typescript-eslint/no-unused-vars
+   38:3   error  'Video' is defined but never used               @typescript-eslint/no-unused-vars
+   40:3   error  'Phone' is defined but never used               @typescript-eslint/no-unused-vars
+   41:3   error  'Linkedin' is defined but never used            @typescript-eslint/no-unused-vars
+   42:3   error  'Twitter' is defined but never used             @typescript-eslint/no-unused-vars
+   44:27  error  'useEffect' is defined but never used           @typescript-eslint/no-unused-vars
+   48:3   error  'DashboardContainer' is defined but never used  @typescript-eslint/no-unused-vars
+   49:3   error  'StatsCard' is defined but never used           @typescript-eslint/no-unused-vars
+   50:3   error  'SectionHeader' is defined but never used       @typescript-eslint/no-unused-vars
+   51:3   error  'ActionButton' is defined but never used        @typescript-eslint/no-unused-vars
+   52:3   error  'DashboardCard' is defined but never used       @typescript-eslint/no-unused-vars
+   53:3   error  'LoadingSpinner' is defined but never used      @typescript-eslint/no-unused-vars
+   54:3   error  'fadeInUp' is defined but never used            @typescript-eslint/no-unused-vars
+   55:3   error  'slideInLeft' is defined but never used         @typescript-eslint/no-unused-vars
+   58:8   error  'SecurityUtils' is defined but never used       @typescript-eslint/no-unused-vars
+  233:11  error  't' is assigned a value but never used          @typescript-eslint/no-unused-vars
+
+/app/client/pages/CompanyDetail.tsx
+   12:3   error  'TrendingUp' is defined but never used    @typescript-eslint/no-unused-vars
+   14:3   error  'Coffee' is defined but never used        @typescript-eslint/no-unused-vars
+   17:3   error  'DollarSign' is defined but never used    @typescript-eslint/no-unused-vars
+   18:3   error  'Shield' is defined but never used        @typescript-eslint/no-unused-vars
+   19:3   error  'Zap' is defined but never used           @typescript-eslint/no-unused-vars
+   20:3   error  'ChevronRight' is defined but never used  @typescript-eslint/no-unused-vars
+   24:3   error  'Filter' is defined but never used        @typescript-eslint/no-unused-vars
+   31:3   error  'Video' is defined but never used         @typescript-eslint/no-unused-vars
+   32:3   error  'FileText' is defined but never used      @typescript-eslint/no-unused-vars
+   33:3   error  'Download' is defined but never used      @typescript-eslint/no-unused-vars
+  327:11  error  't' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/app/client/pages/Contact.tsx
+   13:3   error    'Calendar' is defined but never used                                               @typescript-eslint/no-unused-vars
+  181:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  202:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+
+/app/client/pages/FAQ.tsx
+   10:3   error  'CreditCard' is defined but never used  @typescript-eslint/no-unused-vars
+  194:11  error  't' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/Favorites.tsx
+  13:3   error  'Filter' is defined but never used              @typescript-eslint/no-unused-vars
+  26:11  error  'favorites' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  28:11  error  't' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  47:19  error  Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  47:32  error  Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+
+/app/client/pages/FindCandidates.tsx
+    5:3   error  'Filter' is defined but never used                  @typescript-eslint/no-unused-vars
+   17:3   error  'Award' is defined but never used                   @typescript-eslint/no-unused-vars
+   18:3   error  'Languages' is defined but never used               @typescript-eslint/no-unused-vars
+   22:3   error  'User' is defined but never used                    @typescript-eslint/no-unused-vars
+   23:3   error  'Mail' is defined but never used                    @typescript-eslint/no-unused-vars
+   24:3   error  'Phone' is defined but never used                   @typescript-eslint/no-unused-vars
+   25:3   error  'Linkedin' is defined but never used                @typescript-eslint/no-unused-vars
+   26:3   error  'Github' is defined but never used                  @typescript-eslint/no-unused-vars
+   27:3   error  'ExternalLink' is defined but never used            @typescript-eslint/no-unused-vars
+   30:3   error  'Zap' is defined but never used                     @typescript-eslint/no-unused-vars
+   36:22  error  'SectionHeader' is defined but never used           @typescript-eslint/no-unused-vars
+  217:10  error  'isViewed' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  219:9   error  'handleContact' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/ForgotPassword.tsx
+  34:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  41:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+
+/app/client/pages/JobDetails.tsx
+    5:3   error    'Building' is defined but never used                                               @typescript-eslint/no-unused-vars
+   24:10  error    'EnhancedApplicationForm' is defined but never used                                @typescript-eslint/no-unused-vars
+   28:3   error    'PageTransition' is defined but never used                                         @typescript-eslint/no-unused-vars
+   29:3   error    'AnimatedButton' is defined but never used                                         @typescript-eslint/no-unused-vars
+  127:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  138:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  241:11  error    'id' is assigned a value but never used                                            @typescript-eslint/no-unused-vars
+
+/app/client/pages/JobSearch.tsx
+    5:3   error  'Building' is defined but never used                      @typescript-eslint/no-unused-vars
+    8:3   error  'ChevronDown' is defined but never used                   @typescript-eslint/no-unused-vars
+   12:3   error  'Target' is defined but never used                        @typescript-eslint/no-unused-vars
+   16:20  error  'useEffect' is defined but never used                     @typescript-eslint/no-unused-vars
+  493:11  error  'auth' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+  494:11  error  'addToFavorites' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  494:27  error  'removeFromFavorites' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  494:48  error  'isFavorite' is assigned a value but never used           @typescript-eslint/no-unused-vars
+
+/app/client/pages/Jobs.tsx
+  30:15  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  31:17  error  Unsafe argument of type `any` assigned to a parameter of type `SetStateAction<Job[]>`                                                                               @typescript-eslint/no-unsafe-argument
+  31:22  error  Unsafe member access .results on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  33:18  error  Unsafe argument of type error typed assigned to a parameter of type `SetStateAction<string>`                                                                        @typescript-eslint/no-unsafe-argument
+  39:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/pages/Messages.tsx
+   15:3   error    'Clock' is defined but never used                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   18:3   error    'Circle' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   19:3   error    'Filter' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   21:3   error    'UserPlus' is defined but never used                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   26:3   error    'Image' is defined but never used                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   29:3   error    'EyeOff' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   30:3   error    'Mic' is defined but never used                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   31:3   error    'MicOff' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   32:3   error    'Camera' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   33:3   error    'CameraOff' is defined but never used                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   34:3   error    'Share2' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   35:3   error    'Reply' is defined but never used                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   36:3   error    'Forward' is defined but never used                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   37:3   error    'Edit3' is defined but never used                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   39:3   error    'Shield' is defined but never used                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   46:3   error    'SectionHeader' is defined but never used                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   48:3   error    'DashboardCard' is defined but never used                                                                                                                                                                  @typescript-eslint/no-unused-vars
+   49:3   error    'LoadingSpinner' is defined but never used                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  229:11  error    't' is assigned a value but never used                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  236:20  error    'setIsTyping' is assigned a value but never used                                                                                                                                                           @typescript-eslint/no-unused-vars
+  244:9   warning  The 'currentMessages' conditional could make the dependencies of useEffect Hook (at line 252) change on every render. To fix this, wrap the initialization of 'currentMessages' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  261:5   warning  Unexpected console statement. Only these console methods are allowed: warn, error                                                                                                                          no-console
+
+/app/client/pages/Onboarding.tsx
+    6:3   error  'Upload' is defined but never used         @typescript-eslint/no-unused-vars
+    8:3   error  'Briefcase' is defined but never used      @typescript-eslint/no-unused-vars
+    9:3   error  'GraduationCap' is defined but never used  @typescript-eslint/no-unused-vars
+   10:3   error  'Target' is defined but never used         @typescript-eslint/no-unused-vars
+   14:3   error  'Sparkles' is defined but never used       @typescript-eslint/no-unused-vars
+  134:52  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  135:39  error  Unsafe assignment of an `any` value        @typescript-eslint/no-unsafe-assignment
+
+/app/client/pages/OwnerAdminDashboard.tsx
+    7:3    error  'Building' is defined but never used                                                                                                                                @typescript-eslint/no-unused-vars
+   30:11   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+   31:21   error  Unsafe argument of type `any` assigned to a parameter of type `string`                                                                                              @typescript-eslint/no-unsafe-argument
+   31:31   error  Unsafe member access .error on an `any` value                                                                                                                       @typescript-eslint/no-unsafe-member-access
+   33:3    error  Unsafe return of a value of type `Promise<any>`                                                                                                                     @typescript-eslint/no-unsafe-return
+   44:17   error  Unsafe object destructuring of a property with an `any` value                                                                                                       @typescript-eslint/no-unsafe-assignment
+   57:7    error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   67:7    error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+   89:34   error  Unsafe member access .length on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  101:14   error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  101:21   error  Unsafe member access .map on an `any` value                                                                                                                         @typescript-eslint/no-unsafe-member-access
+  101:32   error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  102:24   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  102:29   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  104:89   error  Unsafe member access .full_name on an `any` value                                                                                                                   @typescript-eslint/no-unsafe-member-access
+  104:107  error  Unsafe member access .username on an `any` value                                                                                                                    @typescript-eslint/no-unsafe-member-access
+  105:94   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  109:28   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  109:33   error  Unsafe member access .role on an `any` value                                                                                                                        @typescript-eslint/no-unsafe-member-access
+  110:55   error  Unsafe argument of type `any` assigned to a parameter of type `string`                                                                                              @typescript-eslint/no-unsafe-argument
+  110:60   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  120:61   error  Unsafe argument of type `any` assigned to a parameter of type `string`                                                                                              @typescript-eslint/no-unsafe-argument
+  120:66   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  142:19   error  Unsafe object destructuring of a property with an `any` value                                                                                                       @typescript-eslint/no-unsafe-assignment
+  154:9    error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  170:34   error  Unsafe member access .length on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  183:16   error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  183:22   error  Unsafe member access .map on an `any` value                                                                                                                         @typescript-eslint/no-unsafe-member-access
+  183:32   error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  184:26   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  184:30   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  186:90   error  Unsafe member access .title on an `any` value                                                                                                                       @typescript-eslint/no-unsafe-member-access
+  187:95   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  189:50   error  Unsafe member access .owner on an `any` value                                                                                                                       @typescript-eslint/no-unsafe-member-access
+  190:50   error  Unsafe member access .status on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  192:60   error  Unsafe argument of type `any` assigned to a parameter of type `string`                                                                                              @typescript-eslint/no-unsafe-argument
+  192:64   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  211:19   error  Unsafe object destructuring of a property with an `any` value                                                                                                       @typescript-eslint/no-unsafe-assignment
+  225:13   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  227:24   error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  228:57   error  Unsafe member access .message on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  244:58   error  Unsafe member access .length on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  257:26   error  Unsafe call of a(n) `any` typed value                                                                                                                               @typescript-eslint/no-unsafe-call
+  257:41   error  Unsafe member access .map on an `any` value                                                                                                                         @typescript-eslint/no-unsafe-member-access
+  257:51   error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  258:38   error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+  258:42   error  Unsafe member access .id on an `any` value                                                                                                                          @typescript-eslint/no-unsafe-member-access
+  259:64   error  Unsafe member access .profile on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  259:90   error  Unsafe member access .user_id on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+  260:64   error  Unsafe member access .stripe_price_id on an `any` value                                                                                                             @typescript-eslint/no-unsafe-member-access
+  262:106  error  Unsafe member access .status on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  263:46   error  Unsafe member access .status on an `any` value                                                                                                                      @typescript-eslint/no-unsafe-member-access
+  267:85   error  Unsafe argument of type `any` assigned to a parameter of type `string`                                                                                              @typescript-eslint/no-unsafe-argument
+  267:89   error  Unsafe member access .stripe_subscription_id on an `any` value                                                                                                      @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/PostJob.tsx
+    2:10  error  'motion' is defined but never used                              @typescript-eslint/no-unused-vars
+    4:3   error  'Briefcase' is defined but never used                           @typescript-eslint/no-unused-vars
+    5:3   error  'MapPin' is defined but never used                              @typescript-eslint/no-unused-vars
+    6:3   error  'DollarSign' is defined but never used                          @typescript-eslint/no-unused-vars
+    7:3   error  'Clock' is defined but never used                               @typescript-eslint/no-unused-vars
+    8:3   error  'Users' is defined but never used                               @typescript-eslint/no-unused-vars
+    9:3   error  'Building' is defined but never used                            @typescript-eslint/no-unused-vars
+   10:3   error  'FileText' is defined but never used                            @typescript-eslint/no-unused-vars
+   11:3   error  'Globe' is defined but never used                               @typescript-eslint/no-unused-vars
+   12:3   error  'Zap' is defined but never used                                 @typescript-eslint/no-unused-vars
+   13:3   error  'Star' is defined but never used                                @typescript-eslint/no-unused-vars
+   14:3   error  'Target' is defined but never used                              @typescript-eslint/no-unused-vars
+   15:3   error  'Save' is defined but never used                                @typescript-eslint/no-unused-vars
+   16:3   error  'Eye' is defined but never used                                 @typescript-eslint/no-unused-vars
+   21:3   error  'AlertCircle' is defined but never used                         @typescript-eslint/no-unused-vars
+   23:3   error  'Calendar' is defined but never used                            @typescript-eslint/no-unused-vars
+   24:3   error  'TrendingUp' is defined but never used                          @typescript-eslint/no-unused-vars
+  161:49  error  Unexpected any. Specify a different type                        @typescript-eslint/no-explicit-any
+  165:20  error  Unexpected any. Specify a different type                        @typescript-eslint/no-explicit-any
+  168:9   error  Unsafe assignment of an `any` value                             @typescript-eslint/no-unsafe-assignment
+  168:17  error  Unsafe member access [keys[i]] on an `any` value                @typescript-eslint/no-unsafe-member-access
+  168:41  error  Unsafe member access [keys[i]] on an `any` value                @typescript-eslint/no-unsafe-member-access
+  169:9   error  Unsafe assignment of an `any` value                             @typescript-eslint/no-unsafe-assignment
+  169:27  error  Unsafe member access [keys[i]] on an `any` value                @typescript-eslint/no-unsafe-member-access
+  171:7   error  Unsafe assignment of an `any` value                             @typescript-eslint/no-unsafe-assignment
+  171:15  error  Unsafe member access [keys[keys.length - 1]] on an `any` value  @typescript-eslint/no-unsafe-member-access
+  246:14  error  'err' is defined but never used                                 @typescript-eslint/no-unused-vars
+
+/app/client/pages/Pricing.tsx
+    5:3   error  'Check' is defined but never used                                       @typescript-eslint/no-unused-vars
+   33:11  error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   34:21  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+   34:27  error  Unsafe member access .error on an `any` value                           @typescript-eslint/no-unsafe-member-access
+   36:3   error  Unsafe return of a value of type `Promise<any>`                         @typescript-eslint/no-unsafe-return
+   42:11  error  't' is assigned a value but never used                                  @typescript-eslint/no-unused-vars
+   45:17  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+   57:7   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   57:35  error  Unsafe member access .url on an `any` value                             @typescript-eslint/no-unsafe-member-access
+   78:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   78:17  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+   78:27  error  Unsafe member access .filter on an `any` value                          @typescript-eslint/no-unsafe-member-access
+   78:38  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+   78:48  error  Unsafe member access .metadata on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  103:10  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  103:16  error  Unsafe member access .map on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  103:27  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+  105:18  error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  105:23  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  110:20  error  Unsafe member access .metadata on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  116:96  error  Unsafe member access .name on an `any` value                            @typescript-eslint/no-unsafe-member-access
+  117:85  error  Unsafe member access .description on an `any` value                     @typescript-eslint/no-unsafe-member-access
+  120:30  error  Unsafe member access .default_price on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  123:26  error  Unsafe member access .default_price on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  128:16  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  128:16  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  128:21  error  Unsafe member access .metadata on an `any` value                        @typescript-eslint/no-unsafe-member-access
+  128:51  error  Unsafe member access .map on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  136:46  error  Unsafe argument of type `any` assigned to a parameter of type `string`  @typescript-eslint/no-unsafe-argument
+  136:51  error  Unsafe member access .default_price on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  139:22  error  Unsafe member access .metadata on an `any` value                        @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/PrivacyPolicy.tsx
+  26:11  error  't' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/ProfileSettings.tsx
+    4:3   error  'Mail' is defined but never used                                @typescript-eslint/no-unused-vars
+    5:3   error  'Phone' is defined but never used                               @typescript-eslint/no-unused-vars
+    6:3   error  'MapPin' is defined but never used                              @typescript-eslint/no-unused-vars
+    7:3   error  'Bell' is defined but never used                                @typescript-eslint/no-unused-vars
+    9:3   error  'Eye' is defined but never used                                 @typescript-eslint/no-unused-vars
+   11:3   error  'Globe' is defined but never used                               @typescript-eslint/no-unused-vars
+   12:3   error  'Palette' is defined but never used                             @typescript-eslint/no-unused-vars
+   14:3   error  'Upload' is defined but never used                              @typescript-eslint/no-unused-vars
+   15:3   error  'Trash2' is defined but never used                              @typescript-eslint/no-unused-vars
+   19:3   error  'Check' is defined but never used                               @typescript-eslint/no-unused-vars
+   23:3   error  'Minus' is defined but never used                               @typescript-eslint/no-unused-vars
+   25:3   error  'Info' is defined but never used                                @typescript-eslint/no-unused-vars
+   26:3   error  'Star' is defined but never used                                @typescript-eslint/no-unused-vars
+   28:3   error  'GraduationCap' is defined but never used                       @typescript-eslint/no-unused-vars
+   29:3   error  'Award' is defined but never used                               @typescript-eslint/no-unused-vars
+   35:20  error  'useEffect' is defined but never used                           @typescript-eslint/no-unused-vars
+   36:10  error  'useSearchParams' is defined but never used                     @typescript-eslint/no-unused-vars
+  145:47  error  Unexpected any. Specify a different type                        @typescript-eslint/no-explicit-any
+  149:20  error  Unexpected any. Specify a different type                        @typescript-eslint/no-explicit-any
+  152:9   error  Unsafe assignment of an `any` value                             @typescript-eslint/no-unsafe-assignment
+  152:27  error  Unsafe member access [keys[i]] on an `any` value                @typescript-eslint/no-unsafe-member-access
+  154:7   error  Unsafe assignment of an `any` value                             @typescript-eslint/no-unsafe-assignment
+  154:15  error  Unsafe member access [keys[keys.length - 1]] on an `any` value  @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/RecruiterDashboard.tsx
+   12:10  error  'useState' is defined but never used                           @typescript-eslint/no-unused-vars
+   27:3   error  Unsafe return of a value of type `Promise<any>`                @typescript-eslint/no-unsafe-return
+   32:45  error  Unexpected any. Specify a different type                       @typescript-eslint/no-explicit-any
+   39:42  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   39:48  error  Unsafe member access .activeJobs on an `any` value             @typescript-eslint/no-unsafe-member-access
+   40:47  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   40:53  error  Unsafe member access .totalApplicants on an `any` value        @typescript-eslint/no-unsafe-member-access
+   73:43  error  Unexpected any. Specify a different type                       @typescript-eslint/no-explicit-any
+   87:18  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   87:22  error  Unsafe member access .id on an `any` value                     @typescript-eslint/no-unsafe-member-access
+   95:92  error  Unsafe member access .title on an `any` value                  @typescript-eslint/no-unsafe-member-access
+   97:95  error  Unsafe member access .location on an `any` value               @typescript-eslint/no-unsafe-member-access
+  102:56  error  Unsafe member access .applicantCount on an `any` value         @typescript-eslint/no-unsafe-member-access
+  123:11  error  Unsafe object destructuring of a property with an `any` value  @typescript-eslint/no-unsafe-assignment
+  149:32  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  149:37  error  Unsafe member access .stats on an `any` value                  @typescript-eslint/no-unsafe-member-access
+  150:35  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  150:40  error  Unsafe member access .pipeline on an `any` value               @typescript-eslint/no-unsafe-member-access
+  152:33  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  152:38  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/RoleSwitcher.tsx
+   21:9   error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  100:7   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  130:19  error  Unsafe assignment of an `any` value                                                                                                                                 @typescript-eslint/no-unsafe-assignment
+
+/app/client/pages/SalaryGuide.tsx
+    6:3   error  'Briefcase' is defined but never used                 @typescript-eslint/no-unused-vars
+    7:3   error  'GraduationCap' is defined but never used             @typescript-eslint/no-unused-vars
+   10:3   error  'Filter' is defined but never used                    @typescript-eslint/no-unused-vars
+   12:3   error  'ChevronDown' is defined but never used               @typescript-eslint/no-unused-vars
+   15:3   error  'Building' is defined but never used                  @typescript-eslint/no-unused-vars
+   17:3   error  'Clock' is defined but never used                     @typescript-eslint/no-unused-vars
+  203:24  error  'setSelectedRole' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  207:11  error  't' is assigned a value but never used                @typescript-eslint/no-unused-vars
+
+/app/client/pages/SignIn.tsx
+  38:9  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/client/pages/SignUp.tsx
+   97:14  error  'err' is defined but never used                          @typescript-eslint/no-unused-vars
+  100:9   error  Unsafe assignment of an error typed value                @typescript-eslint/no-unsafe-assignment
+  101:17  error  Unsafe member access .message on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/SubscriptionBilling.tsx
+  24:11  error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  25:21  error  Unsafe argument of type `any` assigned to a parameter of type `string`                  @typescript-eslint/no-unsafe-argument
+  25:27  error  Unsafe member access .error on an `any` value                                           @typescript-eslint/no-unsafe-member-access
+  27:3   error  Unsafe return of a value of type `Promise<any>`                                         @typescript-eslint/no-unsafe-return
+  34:17  error  Unsafe object destructuring of a property with an `any` value                           @typescript-eslint/no-unsafe-assignment
+  43:7   error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  43:35  error  Unsafe member access .url on an `any` value                                             @typescript-eslint/no-unsafe-member-access
+  80:89  error  Unsafe member access .stripe_price_id on an `any` value                                 @typescript-eslint/no-unsafe-member-access
+  85:26  error  Unsafe member access .status on an `any` value                                          @typescript-eslint/no-unsafe-member-access
+  86:29  error  Unsafe member access .status on an `any` value                                          @typescript-eslint/no-unsafe-member-access
+  91:23  error  Unsafe argument of type `any` assigned to a parameter of type `string | number | Date`  @typescript-eslint/no-unsafe-argument
+  91:36  error  Unsafe member access .current_period_end on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  94:23  error  Unsafe member access .cancel_at_period_end on an `any` value                            @typescript-eslint/no-unsafe-member-access
+
+/app/client/pages/SystemStatus.tsx
+  18:27  error  'useEffect' is defined but never used     @typescript-eslint/no-unused-vars
+  27:29  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/client/pages/TermsOfService.tsx
+  29:11  error  't' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/client/pages/UploadTest.tsx
+  41:13  error  Unsafe assignment of an `any` value                                                     @typescript-eslint/no-unsafe-assignment
+  45:42  error  Unsafe argument of type `any` assigned to a parameter of type `string | URL | Request`  @typescript-eslint/no-unsafe-argument
+  61:14  error  'err' is defined but never used                                                         @typescript-eslint/no-unused-vars
+  62:33  error  Unsafe member access .message on an `error` typed value                                 @typescript-eslint/no-unsafe-member-access
+
+/app/client/services/aiAnalysisService.ts
+   39:3   error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+   49:17  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+   78:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+   86:3   error  Async method 'extractTextFromCV' has no 'await' expression                  @typescript-eslint/require-await
+   99:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+  105:33  error  'fileName' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  153:11  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  200:13  error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+  202:19  error  Unsafe member access .choices on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  202:38  error  Unsafe member access .choices on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  202:60  error  Unsafe member access .choices on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  207:13  error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+  207:35  error  Unsafe member access .choices on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  209:35  error  Unsafe argument of type `any` assigned to a parameter of type `string`      @typescript-eslint/no-unsafe-argument
+  210:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+  216:54  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  218:32  error  Unsafe member access .id on an `any` value                                  @typescript-eslint/no-unsafe-member-access
+  218:43  error  Unsafe member access .title on an `any` value                               @typescript-eslint/no-unsafe-member-access
+  218:58  error  Unsafe member access .description on an `any` value                         @typescript-eslint/no-unsafe-member-access
+  263:55  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  268:15  error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+  269:9   error  Unsafe return of a value of type `any`                                      @typescript-eslint/no-unsafe-return
+  271:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+  281:11  error  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+  331:9   error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+  331:20  error  Unsafe member access .id on an `any` value                                  @typescript-eslint/no-unsafe-member-access
+  332:9   error  Unsafe assignment of an `any` value                                         @typescript-eslint/no-unsafe-assignment
+  332:23  error  Unsafe member access .title on an `any` value                               @typescript-eslint/no-unsafe-member-access
+  343:36  error  'cvData' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  446:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+  461:14  error  'err' is defined but never used                                             @typescript-eslint/no-unused-vars
+  465:9   error  Unsafe assignment of an error typed value                                   @typescript-eslint/no-unsafe-assignment
+  465:47  error  Unsafe member access .message on an `error` typed value                     @typescript-eslint/no-unsafe-member-access
+
+/app/client/services/aiMatchService.ts
+   54:3   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+   66:17  error    Unsafe object destructuring of a property with an `any` value                       @typescript-eslint/no-unsafe-assignment
+   74:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+   77:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error   no-console
+   97:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error   no-console
+  168:13  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  169:13  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  169:35  error    Unsafe member access .choices on an `any` value                                     @typescript-eslint/no-unsafe-member-access
+  171:35  error    Unsafe argument of type `any` assigned to a parameter of type `string`              @typescript-eslint/no-unsafe-argument
+  237:13  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  243:9   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  243:30  error    Unsafe member access .overallMatch on an `any` value                                @typescript-eslint/no-unsafe-member-access
+  245:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  245:26  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  246:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  246:30  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  247:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  247:29  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  248:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  248:28  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  249:11  error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  249:26  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  251:9   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  251:27  error    Unsafe member access .strengths on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  256:9   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  256:33  error    Unsafe member access .recommendations on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  429:5   error    Unsafe return of a value of type `any[]`                                            @typescript-eslint/no-unsafe-return
+  460:5   error    Unsafe return of a value of type `any[]`                                            @typescript-eslint/no-unsafe-return
+  466:5   error    'jobProfile' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+  467:5   error    'candidateProfile' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  529:43  error    Unexpected any. Specify a different type                                            @typescript-eslint/no-explicit-any
+  531:21  error    Unsafe member access .job_id on an `any` value                                      @typescript-eslint/no-unsafe-member-access
+  531:38  error    Unsafe member access .user_id on an `any` value                                     @typescript-eslint/no-unsafe-member-access
+  531:56  error    Unsafe member access .generated_at on an `any` value                                @typescript-eslint/no-unsafe-member-access
+  532:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  532:21  error    Unsafe member access .job_id on an `any` value                                      @typescript-eslint/no-unsafe-member-access
+  533:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  533:22  error    Unsafe member access .user_id on an `any` value                                     @typescript-eslint/no-unsafe-member-access
+  534:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  534:28  error    Unsafe member access .match_percent on an `any` value                               @typescript-eslint/no-unsafe-member-access
+  535:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  535:25  error    Unsafe member access .breakdown on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  536:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  536:25  error    Unsafe member access .strengths on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  537:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  537:31  error    Unsafe member access .recommendations on an `any` value                             @typescript-eslint/no-unsafe-member-access
+  538:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  538:27  error    Unsafe member access .generated_at on an `any` value                                @typescript-eslint/no-unsafe-member-access
+  539:7   error    Unsafe assignment of an `any` value                                                 @typescript-eslint/no-unsafe-assignment
+  539:25  error    Unsafe member access .updated_at on an `any` value                                  @typescript-eslint/no-unsafe-member-access
+
+/app/client/services/applicationService.ts
+  154:11  error  Unsafe assignment of an error typed value  @typescript-eslint/no-unsafe-assignment
+  280:7   error  Unsafe return of a value of type `any`     @typescript-eslint/no-unsafe-return
+
+/app/client/services/cityEventsService.ts
+   48:3   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+   60:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+   71:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+   75:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+   78:40  error    Unsafe member access .message on an `error` typed value                            @typescript-eslint/no-unsafe-member-access
+   88:15  error    Unsafe object destructuring of a property with an `any` value                      @typescript-eslint/no-unsafe-assignment
+   96:9   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  105:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  106:7   warning  Unexpected console statement. Only these console methods are allowed: warn, error  no-console
+  108:40  error    Unsafe member access .message on an `error` typed value                            @typescript-eslint/no-unsafe-member-access
+  141:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  155:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  214:13  error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  215:13  error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  215:35  error    Unsafe argument of type `any` assigned to a parameter of type `string`             @typescript-eslint/no-unsafe-argument
+  215:42  error    Unsafe member access .choices on an `any` value                                    @typescript-eslint/no-unsafe-member-access
+  217:7   error    Unsafe return of a value of type `any`                                             @typescript-eslint/no-unsafe-return
+  218:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  316:3   error    Async method 'fetchCityEvents' has no 'await' expression                           @typescript-eslint/require-await
+  321:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  425:14  error    'err' is defined but never used                                                    @typescript-eslint/no-unused-vars
+  427:9   error    Unsafe assignment of an error typed value                                          @typescript-eslint/no-unsafe-assignment
+  427:47  error    Unsafe member access .message on an `error` typed value                            @typescript-eslint/no-unsafe-member-access
+  449:43  error    Unexpected any. Specify a different type                                           @typescript-eslint/no-explicit-any
+  451:21  error    Unsafe member access .city_name on an `any` value                                  @typescript-eslint/no-unsafe-member-access
+  451:41  error    Unsafe member access .last_updated on an `any` value                               @typescript-eslint/no-unsafe-member-access
+  452:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  452:24  error    Unsafe member access .city_name on an `any` value                                  @typescript-eslint/no-unsafe-member-access
+  453:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  453:24  error    Unsafe member access .overview on an `any` value                                   @typescript-eslint/no-unsafe-member-access
+  454:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  454:22  error    Unsafe member access .events on an `any` value                                     @typescript-eslint/no-unsafe-member-access
+  455:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  455:26  error    Unsafe member access .quick_links on an `any` value                                @typescript-eslint/no-unsafe-member-access
+  456:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  456:27  error    Unsafe member access .last_updated on an `any` value                               @typescript-eslint/no-unsafe-member-access
+  457:7   error    Unsafe assignment of an `any` value                                                @typescript-eslint/no-unsafe-assignment
+  457:25  error    Unsafe member access .expires_at on an `any` value                                 @typescript-eslint/no-unsafe-member-access
+
+/app/client/services/smartMatchingService.ts
+   78:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+   88:15  error  Unsafe object destructuring of a property with an `any` value  @typescript-eslint/no-unsafe-assignment
+   97:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   97:18  error  Unsafe member access .id on an `any` value                     @typescript-eslint/no-unsafe-member-access
+   98:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   98:22  error  Unsafe member access .skills on an `any` value                 @typescript-eslint/no-unsafe-member-access
+   99:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+   99:26  error  Unsafe member access .experience on an `any` value             @typescript-eslint/no-unsafe-member-access
+  100:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  100:24  error  Unsafe member access .location on an `any` value               @typescript-eslint/no-unsafe-member-access
+  101:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  101:33  error  Unsafe member access .salary_expectation on an `any` value     @typescript-eslint/no-unsafe-member-access
+  102:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  102:22  error  Unsafe member access .remote_work on an `any` value            @typescript-eslint/no-unsafe-member-access
+  103:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  103:30  error  Unsafe member access .job_preferences on an `any` value        @typescript-eslint/no-unsafe-member-access
+  109:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+  143:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  147:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+  170:3   error  Async method 'calculateSingleMatch' has no 'await' expression  @typescript-eslint/require-await
+  473:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+  502:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  502:19  error  Unsafe member access .id on an `any` value                     @typescript-eslint/no-unsafe-member-access
+  503:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  503:22  error  Unsafe member access .job_id on an `any` value                 @typescript-eslint/no-unsafe-member-access
+  504:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  504:28  error  Unsafe member access .candidate_id on an `any` value           @typescript-eslint/no-unsafe-member-access
+  505:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  505:27  error  Unsafe member access .match_score on an `any` value            @typescript-eslint/no-unsafe-member-access
+  506:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  506:29  error  Unsafe member access .match_reasons on an `any` value          @typescript-eslint/no-unsafe-member-access
+  507:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  507:29  error  Unsafe member access .skill_matches on an `any` value          @typescript-eslint/no-unsafe-member-access
+  508:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  508:30  error  Unsafe member access .location_match on an `any` value         @typescript-eslint/no-unsafe-member-access
+  509:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  509:28  error  Unsafe member access .salary_match on an `any` value           @typescript-eslint/no-unsafe-member-access
+  510:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  510:32  error  Unsafe member access .experience_match on an `any` value       @typescript-eslint/no-unsafe-member-access
+  511:9   error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  511:26  error  Unsafe member access .created_at on an `any` value             @typescript-eslint/no-unsafe-member-access
+  512:20  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  514:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  514:25  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  515:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  515:28  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  516:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  516:30  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  517:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  517:31  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  518:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  518:33  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  519:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  519:33  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  520:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  520:34  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  525:15  error  Unsafe assignment of an `any` value                            @typescript-eslint/no-unsafe-assignment
+  525:33  error  Unsafe member access .jobs on an `any` value                   @typescript-eslint/no-unsafe-member-access
+  529:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+  549:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+  570:14  error  'err' is defined but never used                                @typescript-eslint/no-unused-vars
+
+/app/server/dev.ts
+  8:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+
+/app/server/index.ts
+   32:5   error    Unsafe construction of a(n) `error` type typed value                                              @typescript-eslint/no-unsafe-call
+   32:29  error    Unsafe member access .Http on an `error` typed value                                              @typescript-eslint/no-unsafe-member-access
+   34:5   error    Unsafe construction of a(n) `error` type typed value                                              @typescript-eslint/no-unsafe-call
+   34:29  error    Unsafe member access .Express on an `error` typed value                                           @typescript-eslint/no-unsafe-member-access
+   44:11  error    Unsafe call of a(n) `error` type typed value                                                      @typescript-eslint/no-unsafe-call
+   44:27  error    Unsafe member access .requestHandler on an `error` typed value                                    @typescript-eslint/no-unsafe-member-access
+   46:11  error    Unsafe call of a(n) `error` type typed value                                                      @typescript-eslint/no-unsafe-call
+   46:27  error    Unsafe member access .tracingHandler on an `error` typed value                                    @typescript-eslint/no-unsafe-member-access
+   55:5   error    Promise returned in function argument where a void return was expected                            @typescript-eslint/no-misused-promises
+   67:48  error    Unsafe argument of type `any` assigned to a parameter of type `string | Buffer<ArrayBufferLike>`  @typescript-eslint/no-unsafe-argument
+   68:21  error    Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+   69:69  error    Unsafe member access .message on an `any` value                                                   @typescript-eslint/no-unsafe-member-access
+   70:59  error    Unsafe member access .message on an `any` value                                                   @typescript-eslint/no-unsafe-member-access
+  162:11  warning  Unexpected console statement. Only these console methods are allowed: warn, error                 no-console
+  178:22  error    Promise returned in function argument where a void return was expected                            @typescript-eslint/no-misused-promises
+  215:48  error    Promise returned in function argument where a void return was expected                            @typescript-eslint/no-misused-promises
+  232:65  error    Unsafe call of a(n) `any` typed value                                                             @typescript-eslint/no-unsafe-call
+  232:88  error    Unsafe member access .join on an `any` value                                                      @typescript-eslint/no-unsafe-member-access
+  242:21  error    Unsafe object destructuring of a property with an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  253:18  error    Unsafe assignment of an `any` value                                                               @typescript-eslint/no-unsafe-assignment
+  254:17  error    Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+  256:30  error    Unsafe assignment of an `any` value                                                               @typescript-eslint/no-unsafe-assignment
+  256:39  error    Unsafe member access .message on an `any` value                                                   @typescript-eslint/no-unsafe-member-access
+  261:11  error    Unsafe call of a(n) `error` type typed value                                                      @typescript-eslint/no-unsafe-call
+  261:27  error    Unsafe member access .errorHandler on an `error` typed value                                      @typescript-eslint/no-unsafe-member-access
+
+/app/server/middleware/auth.ts
+   8:3   error  ES2015 module syntax is preferred over namespaces  @typescript-eslint/no-namespace
+  10:14  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  46:15  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  49:15  error  Unsafe assignment of an `any` value                @typescript-eslint/no-unsafe-assignment
+  49:24  error  Unsafe member access .message on an `any` value    @typescript-eslint/no-unsafe-member-access
+
+/app/server/middleware/errors.ts
+  4:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  4:33  error  Unsafe member access .status on an `any` value                          @typescript-eslint/no-unsafe-member-access
+  4:62  error  Unsafe member access .status on an `any` value                          @typescript-eslint/no-unsafe-member-access
+  6:14  error  Unsafe argument of type `any` assigned to a parameter of type `number`  @typescript-eslint/no-unsafe-argument
+
+/app/server/node-build.ts
+  28:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  29:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  30:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  35:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+  40:3  warning  Unexpected console statement. Only these console methods are allowed: warn, error, info  no-console
+
+/app/server/routes/admin.ts
+  14:9   error  Unsafe assignment of an `any` value          @typescript-eslint/no-unsafe-assignment
+  14:28  error  Unsafe member access .id on an `any` value   @typescript-eslint/no-unsafe-member-access
+  76:17  error  'status' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/server/routes/billing.ts
+   17:25  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+   27:29  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+   28:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   28:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+   31:11  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+   46:41  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+   53:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   53:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+   68:7   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   73:7   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   73:23  error  Unsafe member access .email on an `any` value                           @typescript-eslint/no-unsafe-member-access
+   74:19  error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   82:5   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+   92:7   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  100:39  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+  101:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  101:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  116:5   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+
+/app/server/routes/candidates.ts
+  11:17  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+
+/app/server/routes/dashboard.ts
+   9:26  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+  10:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  10:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  25:34  error  Unsafe return of a value of type `any`                                  @typescript-eslint/no-unsafe-return
+
+/app/server/routes/jobs.ts
+  29:57  error  Unsafe return of a value of type `any`                                  @typescript-eslint/no-unsafe-return
+  42:18  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+  49:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  49:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  53:11  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+  56:7   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+
+/app/server/routes/match.ts
+   7:15  error  'Candidate' is defined but never used             @typescript-eslint/no-unused-vars
+   7:26  error  'Job' is defined but never used                   @typescript-eslint/no-unused-vars
+  62:21  error  Unsafe call of a(n) `any` typed value             @typescript-eslint/no-unsafe-call
+  62:26  error  Unsafe member access .toString on an `any` value  @typescript-eslint/no-unsafe-member-access
+
+/app/server/routes/recommendations.ts
+  14:17  error  Promise returned in function argument where a void return was expected  @typescript-eslint/no-misused-promises
+  15:9   error  Unsafe assignment of an `any` value                                     @typescript-eslint/no-unsafe-assignment
+  15:27  error  Unsafe member access .id on an `any` value                              @typescript-eslint/no-unsafe-member-access
+  31:61  error  Unsafe call of a(n) `any` typed value                                   @typescript-eslint/no-unsafe-call
+  31:84  error  Unsafe member access .join on an `any` value                            @typescript-eslint/no-unsafe-member-access
+  41:17  error  Unsafe object destructuring of a property with an `any` value           @typescript-eslint/no-unsafe-assignment
+
+/app/server/routes/scrape.ts
+  27:7   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  50:57  error  'page' may use Object's default stringification format ('[object Object]') when stringified   @typescript-eslint/no-base-to-string
+  50:57  error  Invalid type "string | 1 | ParsedQs | (string | ParsedQs)[]" of template literal expression   @typescript-eslint/restrict-template-expressions
+  54:60  error  'limit' may use Object's default stringification format ('[object Object]') when stringified  @typescript-eslint/no-base-to-string
+  73:37  error  Unexpected any. Specify a different type                                                      @typescript-eslint/no-explicit-any
+  74:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  74:17  error  Unsafe member access .id on an `any` value                                                    @typescript-eslint/no-unsafe-member-access
+  75:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  75:20  error  Unsafe member access .title on an `any` value                                                 @typescript-eslint/no-unsafe-member-access
+  76:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  76:22  error  Unsafe member access .company on an `any` value                                               @typescript-eslint/no-unsafe-member-access
+  77:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  77:23  error  Unsafe member access .location on an `any` value                                              @typescript-eslint/no-unsafe-member-access
+  78:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  78:26  error  Unsafe member access .description on an `any` value                                           @typescript-eslint/no-unsafe-member-access
+  79:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  79:19  error  Unsafe member access .redirect_url on an `any` value                                          @typescript-eslint/no-unsafe-member-access
+  80:9   error  Unsafe assignment of an `any` value                                                           @typescript-eslint/no-unsafe-assignment
+  80:22  error  Unsafe member access .created on an `any` value                                               @typescript-eslint/no-unsafe-member-access
+
+/app/src/app/[...slug]/page.tsx
+  12:17  error  Unsafe return of a value of type error        @typescript-eslint/no-unsafe-return
+  12:24  error  Unsafe call of a(n) `error` type typed value  @typescript-eslint/no-unsafe-call
+
+/app/src/app/api/auth/session/route.ts
+  4:9   error  Unsafe assignment of an error typed value             @typescript-eslint/no-unsafe-assignment
+  4:20  error  Unsafe call of a(n) `error` type typed value          @typescript-eslint/no-unsafe-call
+  5:9   error  Unsafe assignment of an error typed value             @typescript-eslint/no-unsafe-assignment
+  5:36  error  Unsafe call of a(n) `error` type typed value          @typescript-eslint/no-unsafe-call
+  5:45  error  Unsafe member access .auth on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+  6:40  error  Unsafe assignment of an error typed value             @typescript-eslint/no-unsafe-assignment
+
+/app/src/app/api/jobs/route.ts
+  19:22  error  Unsafe call of a(n) `error` type typed value                   @typescript-eslint/no-unsafe-call
+  19:22  error  Unsafe call of a(n) `error` type typed value                   @typescript-eslint/no-unsafe-call
+  19:26  error  Unsafe member access .json on an `error` typed value           @typescript-eslint/no-unsafe-member-access
+  19:33  error  Unsafe member access .catch on an `error` typed value          @typescript-eslint/no-unsafe-member-access
+  26:11  error  Unsafe object destructuring of a property with an `any` value  @typescript-eslint/no-unsafe-assignment
+
+/app/src/app/auth/callback/route.ts
+  3:8   error  Async function 'GET' has no 'await' expression            @typescript-eslint/require-await
+  6:3   error  Unsafe return of a value of type error                    @typescript-eslint/no-unsafe-return
+  6:10  error  Unsafe call of a(n) `error` type typed value              @typescript-eslint/no-unsafe-call
+  6:23  error  Unsafe member access .redirect on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+
+/app/src/app/sign-in/page.tsx
+  14:11  error  Unsafe assignment of an error typed value                @typescript-eslint/no-unsafe-assignment
+  14:29  error  Unsafe call of a(n) `error` type typed value             @typescript-eslint/no-unsafe-call
+  14:44  error  Unsafe member access .auth on an `error` typed value     @typescript-eslint/no-unsafe-member-access
+  18:37  error  Unsafe member access .message on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+  22:11  error  Unsafe call of a(n) `error` type typed value             @typescript-eslint/no-unsafe-call
+  22:26  error  Unsafe member access .auth on an `error` typed value     @typescript-eslint/no-unsafe-member-access
+
+/app/src/components/JobsList.tsx
+  11:18  error  Unsafe assignment of an error typed value  @typescript-eslint/no-unsafe-assignment
+
+/app/src/components/NewJobFormGate.tsx
+  11:5  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/src/components/SessionInfo.tsx
+  10:5  error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+
+/app/src/lib/supabaseServer.ts
+   7:9   error  Unsafe assignment of an error typed value              @typescript-eslint/no-unsafe-assignment
+   7:23  error  Unsafe call of a(n) `error` type typed value           @typescript-eslint/no-unsafe-call
+  13:29  error  Unsafe return of a value of type error                 @typescript-eslint/no-unsafe-return
+  13:36  error  Unsafe call of a(n) `error` type typed value           @typescript-eslint/no-unsafe-call
+  13:48  error  Unsafe member access .get on an `error` typed value    @typescript-eslint/no-unsafe-member-access
+  13:59  error  Unsafe member access .value on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+  14:68  error  Unsafe call of a(n) `error` type typed value           @typescript-eslint/no-unsafe-call
+  14:80  error  Unsafe member access .set on an `error` typed value    @typescript-eslint/no-unsafe-member-access
+  15:56  error  Unsafe call of a(n) `error` type typed value           @typescript-eslint/no-unsafe-call
+  15:68  error  Unsafe member access .set on an `error` typed value    @typescript-eslint/no-unsafe-member-access
+
+/app/src/main.tsx
+  7:3  error  Unsafe assignment of an `any` value  @typescript-eslint/no-unsafe-assignment
+
+/app/src/pages/AuthCallback.tsx
+  12:5   error  Promises must be awaited, end with a call to .catch, end with a call to .then with a rejection handler or be explicitly marked as ignored with the `void` operator  @typescript-eslint/no-floating-promises
+  14:15  error  Unsafe assignment of an error typed value                                                                                                                           @typescript-eslint/no-unsafe-assignment
+  14:33  error  Unsafe call of a(n) `error` type typed value                                                                                                                        @typescript-eslint/no-unsafe-call
+  14:48  error  Unsafe member access .auth on an `error` typed value                                                                                                                @typescript-eslint/no-unsafe-member-access
+  17:20  error  Promise returned in function argument where a void return was expected                                                                                              @typescript-eslint/no-misused-promises
+  18:19  error  Unexpected any. Specify a different type                                                                                                                            @typescript-eslint/no-explicit-any
+  19:36  error  Unsafe member access .message on an `any` value                                                                                                                     @typescript-eslint/no-unsafe-member-access
+
+/app/src/pages/SignIn.tsx
+  13:11  error  Unsafe assignment of an error typed value                @typescript-eslint/no-unsafe-assignment
+  13:29  error  Unsafe call of a(n) `error` type typed value             @typescript-eslint/no-unsafe-call
+  13:44  error  Unsafe member access .auth on an `error` typed value     @typescript-eslint/no-unsafe-member-access
+  17:36  error  Unsafe member access .message on an `error` typed value  @typescript-eslint/no-unsafe-member-access
+  21:11  error  Unsafe call of a(n) `error` type typed value             @typescript-eslint/no-unsafe-call
+  21:26  error  Unsafe member access .auth on an `error` typed value     @typescript-eslint/no-unsafe-member-access
+
+✖ 1067 problems (1039 errors, 28 warnings)

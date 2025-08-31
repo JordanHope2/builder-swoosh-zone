@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigation } from "@components/Navigation";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -11,7 +10,8 @@ import {
   ArrowRight,
   Crown,
 } from "lucide-react";
-import { Navigation } from "@components/Navigation";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface UserRole {
   id: string;

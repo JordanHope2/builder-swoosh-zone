@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion } from "framer-motion";
 import {
   Shield,
   Lock,
@@ -18,6 +16,10 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
+import { useState } from "react";
+
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 export default function PrivacyPolicy() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);

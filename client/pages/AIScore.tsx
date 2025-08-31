@@ -1,19 +1,14 @@
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Navigation } from "../components/Navigation";
 import {
   Zap,
   Target,
   TrendingUp,
   ChevronRight,
   Star,
-  Award,
   Brain,
   BarChart3,
-  PieChart,
   Activity,
   CheckCircle,
-  AlertCircle,
   ArrowUp,
   ArrowDown,
   Eye,
@@ -22,14 +17,12 @@ import {
   Users,
   Calendar,
   MapPin,
-  Building,
   DollarSign,
-  Clock,
-  Briefcase,
-  GraduationCap,
-  Globe,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import { Navigation } from "../components/Navigation";
 
 interface JobMatch {
   id: string;

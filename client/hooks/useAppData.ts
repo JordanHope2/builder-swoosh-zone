@@ -1,6 +1,6 @@
 import { useAuth } from "../contexts/AuthContext";
-import { useJobs } from "../contexts/JobsContext";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { useJobs } from "../contexts/JobsContext";
 import { useLanguage } from "../contexts/LanguageContext";
 
 // Combined hook for easy access to all app data

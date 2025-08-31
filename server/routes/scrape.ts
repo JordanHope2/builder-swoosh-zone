@@ -1,11 +1,24 @@
-import { Router } from "express";
+import { Router, type Request, type Response } from "express";
 import "dotenv/config";
 import Parser from "rss-parser";
+import { asyncHandler } from "../utils/asyncHandler";
 
 const router = Router();
 const parser = new Parser();
 
-const scrapeSwissDevJobs = async () => {
+interface Job {
+  id?: string;
+  title?: string;
+  company?: string;
+  location?: string;
+  description?: string;
+  link?: string;
+  pubDate?: string;
+  created?: string;
+  source: string;
+}
+
+const scrapeSwissDevJobs = async (): Promise<Job[]> => {
   try {
     const feed = await parser.parseURL("https://swissdevjobs.ch/jobs/rss");
     return feed.items.map((item) => ({
@@ -17,16 +30,16 @@ const scrapeSwissDevJobs = async () => {
       pubDate: item.pubDate,
       source: "SwissDevJobs",
     }));
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error scraping from SwissDevJobs:", error);
     return [];
   }
 };
 
-router.get("/", async (req, res) => {
+router.get("/", asyncHandler(async (req: Request, res: Response) => {
   const { search, location, page = 1, limit = 20 } = req.query;
 
-  const adzunaPromise = (async () => {
+  const adzunaPromise = (async (): Promise<Job[]> => {
     if (!process.env.ADZUNA_APP_ID || !process.env.ADZUNA_API_KEY) {
       console.error("Adzuna API credentials not configured.");
       return [];
@@ -48,6 +61,7 @@ router.get("/", async (req, res) => {
       adzunaApiUrl.searchParams.append("content-type", "application/json");
 
       const response = await fetch(adzunaApiUrl.toString());
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data = await response.json();
 
       if (!response.ok) {
@@ -55,6 +69,7 @@ router.get("/", async (req, res) => {
         return [];
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       return data.results.map((job: any) => ({
         id: job.id,
         title: job.title,
@@ -65,7 +80,7 @@ router.get("/", async (req, res) => {
         created: job.created,
         source: "Adzuna",
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error scraping from Adzuna:", error);
       return [];
     }
@@ -73,22 +88,15 @@ router.get("/", async (req, res) => {
 
   const swissDevJobsPromise = scrapeSwissDevJobs();
 
-  try {
-    const [adzunaJobs, swissDevJobs] = await Promise.all([
-      adzunaPromise,
-      swissDevJobsPromise,
-    ]);
+  const [adzunaJobs, swissDevJobs] = await Promise.all([
+    adzunaPromise,
+    swissDevJobsPromise,
+  ]);
 
-    // Simple merge, could be improved with deduplication
-    const allJobs = [...adzunaJobs, ...swissDevJobs];
+  // Simple merge, could be improved with deduplication
+  const allJobs = [...adzunaJobs, ...swissDevJobs];
 
-    res.json({ results: allJobs });
-  } catch (error) {
-    console.error("Error fetching or combining job data:", error);
-    res
-      .status(500)
-      .json({ error: "An unexpected error occurred while scraping." });
-  }
-});
+  res.json({ results: allJobs });
+}));
 
 export default router;

@@ -1,6 +1,8 @@
 // server/middleware/auth.ts
 import { Request, Response, NextFunction } from "express";
+
 import { getSupabase } from "../supabase";
+import { errorMessage } from "app/client/lib/errors";
 
 // Extend the Express Request type to include our user property
 declare global {
@@ -42,9 +44,9 @@ export const authMiddleware = async (
 
     req.user = user;
     next();
-  } catch (e: any) {
+  } catch (e: unknown) {
     res
       .status(500)
-      .json({ error: e.message ?? "Unknown authentication error" });
+      .json({ error: errorMessage(e) ?? "Unknown authentication error" });
   }
 };

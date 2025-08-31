@@ -1,11 +1,7 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader, SectionHeader } from "../components/ui/page-header";
-import { ProtectedRoute } from "../components/ProtectedRoute";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
-  Filter,
   MapPin,
   Briefcase,
   GraduationCap,
@@ -17,22 +13,17 @@ import {
   BookmarkPlus,
   Users,
   TrendingUp,
-  Award,
-  Languages,
   Clock,
   DollarSign,
   ChevronDown,
-  User,
-  Mail,
-  Phone,
-  Linkedin,
-  Github,
-  ExternalLink,
   CheckCircle,
   Target,
-  Zap,
 } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { PageHeader } from "../components/ui/page-header";
 
 interface Candidate {
   id: string;

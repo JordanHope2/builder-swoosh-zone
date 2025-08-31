@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
@@ -6,20 +5,13 @@ import {
   Briefcase,
   Users,
   MessageCircle,
-  Heart,
-  Star,
-  TrendingUp,
-  Clock,
   CheckCircle,
-  AlertCircle,
   Info,
   Award,
-  Zap,
-  Eye,
   Settings,
   Trash2,
-  MoreHorizontal,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface Notification {
   id: string;

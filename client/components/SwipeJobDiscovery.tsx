@@ -1,9 +1,7 @@
-import React, { useState, useRef, useCallback } from "react";
 import { motion, PanInfo, useAnimation } from "framer-motion";
 import {
   Heart,
   X,
-  Bookmark,
   MapPin,
   Clock,
   TrendingUp,
@@ -11,10 +9,10 @@ import {
   RotateCcw,
   Star,
   Building,
-  Users,
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
+import React, { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 interface SwipeJob {
@@ -160,7 +158,7 @@ export function SwipeJobDiscovery() {
     [currentJob, hasMoreJobs, controls],
   );
 
-  const handlePan = (event: any, info: PanInfo) => {
+  const handlePan = (_event: any, info: PanInfo) => {
     const threshold = 50;
     if (Math.abs(info.offset.x) > threshold) {
       handleSwipe(info.offset.x > 0 ? "right" : "left");

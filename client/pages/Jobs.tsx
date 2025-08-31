@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
 import { Navigation } from "@components/Navigation";
+import { useState, useEffect } from "react";
+import { errorMessage } from "app/client/lib/errors";
 
 interface Job {
   id: string;
@@ -29,8 +30,8 @@ export default function Jobs() {
         }
         const data = await response.json();
         setJobs(data.results || []);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(errorMessage(err));
       } finally {
         setLoading(false);
       }

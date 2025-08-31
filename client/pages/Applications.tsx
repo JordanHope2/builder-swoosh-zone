@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader } from "../components/ui/page-header";
-import { ProtectedRoute } from "../components/ProtectedRoute";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Briefcase,
   Calendar,
   Clock,
   MapPin,
-  Building2,
   Eye,
   ExternalLink,
-  Filter,
   Search,
-  AlertCircle,
   CheckCircle,
   XCircle,
   PlayCircle,
-  User,
-  Mail,
   ChevronDown,
   TrendingUp,
 } from "lucide-react";
-import { cn } from "../lib/utils";
+import React, { useState } from "react";
+
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { PageHeader } from "../components/ui/page-header";
 
 interface Application {
   id: string;

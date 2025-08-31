@@ -1,41 +1,27 @@
-import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
-import { Navigation } from "../components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
 import {
   User,
-  Mail,
-  Phone,
-  MapPin,
-  Bell,
   Shield,
-  Eye,
   Lock,
-  Globe,
-  Palette,
   Download,
-  Upload,
-  Trash2,
   Settings,
   Save,
   X,
-  Check,
   Camera,
   Edit,
   Plus,
-  Minus,
   AlertTriangle,
-  Info,
-  Star,
   Briefcase,
-  GraduationCap,
-  Award,
   Link as LinkIcon,
   Github,
   Linkedin,
   Twitter,
 } from "lucide-react";
+import { useState } from "react";
+
+import { Navigation } from "../components/Navigation";
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface UserProfile {
   personalInfo: {

@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader } from "../components/ui/page-header";
-import { applicationToast } from "../hooks/use-toast";
+import { motion } from "framer-motion";
 import {
   MapPin,
   Phone,
@@ -13,11 +10,15 @@ import {
   CheckCircle,
   Globe,
   MessageCircle,
-  Calendar,
   Users,
   HeadphonesIcon,
   Shield,
 } from "lucide-react";
+import React, { useState } from "react";
+
+import { PageHeader } from "../components/ui/page-header";
+import { applicationToast } from "../hooks/use-toast";
+
 
 interface ContactFormData {
   name: string;
@@ -197,7 +198,7 @@ export default function Contact() {
         inquiryType: "general",
         honeypot: "",
       });
-    } catch (error) {
+    } catch (err: unknown) {
       applicationToast.error("Failed to send message. Please try again.");
       console.error("Contact form error:", error);
     } finally {

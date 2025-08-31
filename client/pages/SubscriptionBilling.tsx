@@ -1,8 +1,9 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { useAuth } from "../contexts/AuthContext";
 import { Navigation } from "@components/Navigation";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Loader2, ExternalLink, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { useAuth } from "../contexts/AuthContext";
 
 // Helper function to make authenticated API requests
 const fetchFromApi = async (endpoint: string, token: string | undefined, options: RequestInit = {}) => {

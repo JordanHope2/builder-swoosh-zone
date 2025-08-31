@@ -1,16 +1,10 @@
-import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader } from "../components/ui/page-header";
-import { CompanyShareButton } from "../components/ui/share-button";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Building,
   MapPin,
   Users,
-  TrendingUp,
-  Award,
   Search,
-  Filter,
   ChevronDown,
   ExternalLink,
   Star,
@@ -22,7 +16,12 @@ import {
   List,
   SlidersHorizontal,
 } from "lucide-react";
+import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+
+import { PageHeader } from "../components/ui/page-header";
+import { CompanyShareButton } from "../components/ui/share-button";
+
 
 interface Company {
   id: string;

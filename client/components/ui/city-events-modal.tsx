@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -16,13 +15,13 @@ import {
   Navigation,
   AlertCircle,
 } from "lucide-react";
-import { cn } from "../../lib/utils";
+import React, { useState, useEffect } from "react";
+
 import {
   CityEventsData,
   CityEvent,
   cityEventsService,
 } from "../../services/cityEventsService";
-import { applicationToast } from "../../hooks/use-toast";
 
 interface CityEventsModalProps {
   isOpen: boolean;
@@ -259,7 +258,7 @@ export function CityEventsModal({
     try {
       const data = await cityEventsService.getCityEvents(cityName);
       setCityData(data);
-    } catch (err) {
+    } catch (err: unknown) {
       setError("Failed to load city information. Please try again.");
       console.error("Error loading city data:", err);
     } finally {

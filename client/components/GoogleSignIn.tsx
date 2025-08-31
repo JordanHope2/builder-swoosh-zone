@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { supabase } from "@/lib/supabase";
-import { useAuth } from "../contexts/AuthContext";
+
 import { Button } from "./ui/button";
 import { Icons } from "./ui/icons";
 import { useToast } from "./ui/use-toast";
+
+import { supabase } from "@/lib/supabase";
+import { errorMessage } from "app/client/lib/errors";
 
 interface GoogleSignInProps {
   redirectTo?: string;
@@ -46,13 +48,13 @@ export function GoogleSignIn({
         description: "Connecting with Google authentication.",
         duration: 2000,
       });
-    } catch (error) {
-      console.error("Google sign-in error:", error);
+    } catch (err: unknown) {
+      console.error("Google sign-in error:", err);
       toast({
         title: "Authentication Failed",
         description:
-          error instanceof Error
-            ? error.message
+          err instanceof Error
+            ? errorMessage(err)
             : "Failed to sign in with Google. Please try again.",
         variant: "destructive",
       });

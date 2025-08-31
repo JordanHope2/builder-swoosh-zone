@@ -1,19 +1,7 @@
-import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
 import { Navigation } from "@components/Navigation";
-import { EnhancedApplicationForm } from "../components/EnhancedApplicationForm";
-import {
-  PageTransition,
-  AnimatedButton,
-} from "../components/ui/enhanced-motion";
-import { JobShareButton } from "../components/ui/share-button";
-import { AIMatchReportModal } from "../components/ui/ai-match-report";
-import { CityEventsModal } from "../components/ui/city-events-modal";
-import { applicationToast } from "../hooks/use-toast";
 import {
   MapPin,
   Clock,
-  Building,
   ArrowLeft,
   Bookmark,
   Share2,
@@ -29,6 +17,16 @@ import {
   Zap,
   Target,
 } from "lucide-react";
+import { useState } from "react";
+import { useParams, Link } from "react-router-dom";
+
+import { AIMatchReportModal } from "../components/ui/ai-match-report";
+import { CityEventsModal } from "../components/ui/city-events-modal";
+
+
+import { JobShareButton } from "../components/ui/share-button";
+import { applicationToast } from "../hooks/use-toast";
+
 
 // Mock job data - in real app this would come from API
 const mockJob = {
@@ -133,7 +131,7 @@ function ApplicationModal({
       // Reset form and close modal
       setApplicationData({ coverLetter: "", portfolio: "", availability: "" });
       onClose();
-    } catch (error) {
+    } catch (err: unknown) {
       // Show error toast if submission fails
       applicationToast.error("Failed to submit application. Please try again.");
       console.error("Application submission error:", error);

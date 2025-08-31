@@ -1,6 +1,7 @@
 'use client';
-import { supabaseClient } from '@/lib/supabaseClient';
 import { useState } from 'react';
+
+import { supabase } from '../lib/supabaseClient';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -9,7 +10,7 @@ export default function SignIn() {
   async function sendLink(e: React.FormEvent) {
     e.preventDefault();
     setMsg('Sending…');
-    const { error } = await supabaseClient.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback` }
     });

@@ -1,10 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Express } from 'express';
+
 import { createServer } from "../index";
 
 // Mock the entire auth middleware module
 vi.mock("../middleware/auth", () => ({
-  authMiddleware: (req: any, res: any, next: () => void) => {
+  authMiddleware: (req: { user?: { id: string } }, _res: unknown, next: () => void) => {
     req.user = { id: "test-admin-id" };
     next();
   },
@@ -25,7 +27,7 @@ vi.mock("../supabase", () => ({
 }));
 
 describe("/api/admin", () => {
-  let app: any;
+  let app: Express;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -68,6 +70,7 @@ describe("/api/admin", () => {
         const response = await request(app).get("/api/admin/users");
 
         expect(response.status).toBe(403);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(response.body.error).toBe("Forbidden: requires admin privileges.");
       });
   });
@@ -85,6 +88,7 @@ describe("/api/admin", () => {
         const response = await request(app).delete("/api/admin/users/user-to-delete");
 
         expect(response.status).toBe(200);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(response.body.message).toBe("User deleted successfully.");
         expect(mockSupabaseClient.auth.admin.deleteUser).toHaveBeenCalledWith("user-to-delete");
     });
@@ -127,6 +131,7 @@ describe("/api/admin", () => {
         const response = await request(app).delete("/api/admin/jobs/job-to-delete");
 
         expect(response.status).toBe(200);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         expect(response.body.message).toBe("Job deleted successfully.");
         expect(deleteFrom.eq).toHaveBeenCalledWith("id", "job-to-delete");
     });

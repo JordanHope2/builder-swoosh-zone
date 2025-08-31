@@ -139,6 +139,9 @@ export interface Database {
           resume_url: string | null;
           created_at: string;
           updated_at: string;
+          portfolio_url?: string | null;
+          expected_salary?: number | null;
+          availability_date?: string | null;
         };
         Insert: {
           id?: string;
@@ -154,6 +157,9 @@ export interface Database {
           resume_url?: string | null;
           created_at?: string;
           updated_at?: string;
+          portfolio_url?: string | null;
+          expected_salary?: number | null;
+          availability_date?: string | null;
         };
         Update: {
           id?: string;
@@ -169,6 +175,9 @@ export interface Database {
           resume_url?: string | null;
           created_at?: string;
           updated_at?: string;
+          portfolio_url?: string | null;
+          expected_salary?: number | null;
+          availability_date?: string | null;
         };
       };
       subscriptions: {

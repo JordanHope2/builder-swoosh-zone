@@ -1,7 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
 import { motion, PanInfo, useAnimation, AnimatePresence } from "framer-motion";
-import { useFavorites } from "../contexts/FavoritesContext";
-import { useLanguage } from "../contexts/LanguageContext";
 import {
   Heart,
   X,
@@ -9,13 +6,14 @@ import {
   CheckCircle,
   Target,
   MapPin,
-  DollarSign,
-  Star,
-  ChevronUp,
-  ChevronDown,
   Briefcase,
 } from "lucide-react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
+
+import { useFavorites } from "../contexts/FavoritesContext";
+import { useLanguage } from "../contexts/LanguageContext";
+import { errorMessage } from "app/client/lib/errors";
 
 const getMatchScoreColor = (score: number) => {
   if (score >= 80) return "text-green-600 bg-green-100 dark:bg-green-900/30";
@@ -59,7 +57,6 @@ export function EnhancedSwipeJobDiscovery() {
   const [swipedJobs, setSwipedJobs] = useState<
     { job: SwipeJob; action: "like" | "pass" }[]
   >([]);
-  const [showDetails, setShowDetails] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(
     null,
   );
@@ -96,8 +93,8 @@ export function EnhancedSwipeJobDiscovery() {
         }
         const data = await response.json();
         setMatchScore(data.match_score);
-      } catch (err: any) {
-        setMatchError(err.message);
+      } catch (err: unknown) {
+        setMatchError(errorMessage(err));
       } finally {
         setIsMatchLoading(false);
       }
@@ -134,8 +131,8 @@ export function EnhancedSwipeJobDiscovery() {
         );
 
         setJobs(formattedJobs);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(errorMessage(err));
       } finally {
         setLoading(false);
       }
@@ -175,7 +172,6 @@ export function EnhancedSwipeJobDiscovery() {
 
       if (hasMoreJobs) {
         setCurrentJobIndex((prev) => prev + 1);
-        setShowDetails(false); // Reset details view for the next card
         await controls.start({
           x: 0,
           rotate: 0,
@@ -192,7 +188,7 @@ export function EnhancedSwipeJobDiscovery() {
   );
 
   const handleDragEnd = useCallback(
-    (event: any, info: PanInfo) => {
+    (_event: any, info: PanInfo) => {
       const threshold = 150;
       const velocity = Math.abs(info.velocity.x);
 

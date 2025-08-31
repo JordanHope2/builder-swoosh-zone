@@ -1,5 +1,3 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   motion,
   AnimatePresence,
@@ -13,30 +11,22 @@ import {
   Star,
   MapPin,
   Clock,
-  Building,
   DollarSign,
   Zap,
   Award,
-  Sparkles,
-  TrendingUp,
-  Users,
-  Globe,
-  Calendar,
-  ArrowUp,
-  ArrowDown,
-  Bookmark,
-  Share2,
   Eye,
   ChevronRight,
   Diamond,
   Crown,
   Target,
-  Briefcase,
 } from "lucide-react";
-import { useJobs } from "../contexts/JobsContext";
+import React, { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import { useFavorites } from "../contexts/FavoritesContext";
-import { useAppData } from "../hooks/useAppData";
 import { applicationToast } from "../hooks/use-toast";
+import { useAppData } from "../hooks/useAppData";
+
 import { AIMatchReportModal } from "./ui/ai-match-report";
 import { CityEventsModal } from "./ui/city-events-modal";
 
@@ -245,7 +235,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
 
   // Event listeners for modal triggers
   useEffect(() => {
-    const handleAIMatchReport = (event: any) => {
+    const handleAIMatchReport = (_event: any) => {
       setIsAIMatchModalOpen(true);
     };
 
@@ -330,7 +320,7 @@ const LuxurySwipeDiscovery: React.FC = () => {
       // Here you would typically make an API call to create the application
       // The API should handle idempotency by job+user combination
       // await applicationService.createApplication(applicationData);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Failed to create application:", error);
       applicationToast.error("Failed to submit application. Please try again.");
     }
@@ -606,7 +596,7 @@ const LuxuryJobCard: React.FC<LuxuryJobCardProps> = ({
   const rotate = useTransform(x, [-300, 300], [-30, 30]);
   const opacity = useTransform(x, [-300, -150, 0, 150, 300], [0, 1, 1, 1, 0]);
 
-  const handleDragEnd = (event: any, info: PanInfo) => {
+  const handleDragEnd = (_event: any, info: PanInfo) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
 

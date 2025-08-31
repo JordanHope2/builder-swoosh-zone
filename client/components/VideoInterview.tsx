@@ -1,10 +1,3 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Icons } from "./ui/icons";
-import { useToast } from "./ui/use-toast";
-import { Progress } from "./ui/progress";
 import {
   AlertCircle,
   Camera,
@@ -13,6 +6,14 @@ import {
   Video,
   VideoOff,
 } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Icons } from "./ui/icons";
+import { Progress } from "./ui/progress";
+import { useToast } from "./ui/use-toast";
 
 interface InterviewQuestion {
   id: string;
@@ -91,7 +92,7 @@ export function VideoInterview({
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
-      } catch (error) {
+      } catch (err: unknown) {
         console.error("Error accessing media devices:", error);
         toast({
           title: "Camera/Microphone Access Required",
@@ -180,7 +181,7 @@ export function VideoInterview({
       setIsRecording(true);
       setInterviewState("recording");
       setTimeRemaining(currentQuestion.timeLimit);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error starting recording:", error);
       toast({
         title: "Recording Error",
@@ -223,7 +224,7 @@ export function VideoInterview({
       };
 
       onComplete(results);
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Error completing interview:", error);
       toast({
         title: "Analysis Error",
@@ -237,7 +238,7 @@ export function VideoInterview({
   }, [responses, session.id, onComplete, toast]);
 
   const simulateAIAnalysis = async (
-    responses: any[],
+    _responses: any[],
   ): Promise<InterviewSession["aiAnalysis"]> => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 3000));

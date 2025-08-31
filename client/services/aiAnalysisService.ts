@@ -1,32 +1,9 @@
+import { z } from "zod";
 import { supabase } from "../lib/supabase";
+import type { Database } from "../../app/types/supabase";
+import { CVAnalysisResultSchema } from "./validation/aiAnalysisSchemas";
 
-export interface CVAnalysisResult {
-  overallScore: number;
-  skillsMatch: {
-    matched: string[];
-    missing: string[];
-    score: number;
-  };
-  experienceAnalysis: {
-    yearsOfExperience: number;
-    relevantExperience: number;
-    score: number;
-  };
-  educationAnalysis: {
-    degree: string;
-    relevance: number;
-    score: number;
-  };
-  recommendations: string[];
-  improvementAreas: string[];
-  strengths: string[];
-  compatibilityWithJobs: {
-    jobId: string;
-    jobTitle: string;
-    compatibilityScore: number;
-    reasons: string[];
-  }[];
-}
+export type CVAnalysisResult = z.infer<typeof CVAnalysisResultSchema>;
 
 export interface CVData {
   fileName: string;
@@ -46,14 +23,17 @@ class AIAnalysisService {
       const extractedText = await this.extractTextFromCV(cvData);
 
       // Get job postings for compatibility analysis
-      let jobs: any[] = [];
+      let jobs = [];
       try {
-        const { data: jobsData } = await supabase
+        const { data: jobsData, error: dbError } = await supabase
           .from("jobs")
           .select("id, title, description, requirements")
           .eq("status", "published")
           .limit(10);
 
+        if (dbError) {
+          throw dbError;
+        }
         jobs = jobsData || [];
       } catch (dbError) {
         console.warn(
@@ -69,13 +49,13 @@ class AIAnalysisService {
       // Try to save analysis results (non-blocking)
       try {
         await this.saveAnalysisResults(cvData.userId, analysis);
-      } catch (saveError) {
+      } catch (saveError: unknown) {
         console.warn("Could not save analysis results:", saveError);
         // Continue without saving - don't fail the entire operation
       }
 
       return analysis;
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn("CV Analysis Error, using fallback:", error);
 
       // Return fallback analysis if everything fails
@@ -96,13 +76,13 @@ class AIAnalysisService {
         // Plain text or other formats
         return cvData.fileContent;
       }
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Text extraction error:", error);
       return cvData.fileName; // Fallback to filename analysis
     }
   }
 
-  private simulatePDFExtraction(fileName: string): string {
+  private simulatePDFExtraction(_fileName: string): string {
     // Simulate realistic CV text extraction
     return `
       John Doe
@@ -150,7 +130,12 @@ class AIAnalysisService {
 
   private async performAIAnalysis(
     cvText: string,
-    jobs: any[],
+    jobs: {
+      id: string;
+      title: string;
+      description: string | null;
+      requirements: string[] | null;
+    }[],
   ): Promise<CVAnalysisResult> {
     try {
       // Check if API key is available
@@ -207,7 +192,7 @@ class AIAnalysisService {
       const analysisText = result.choices[0].message.content;
 
       return this.parseAIResponse(analysisText, jobs);
-    } catch (error) {
+    } catch (err: unknown) {
       console.warn("AI Analysis Error, using fallback:", error);
       return this.generateSmartFallbackAnalysis(cvText, jobs);
     }
@@ -266,10 +251,10 @@ class AIAnalysisService {
       const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
-        return parsed;
+        return CVAnalysisResultSchema.parse(parsed);
       }
-    } catch (error) {
-      console.error("Failed to parse AI response:", error);
+    } catch (err) {
+      console.error("Failed to parse AI response:", err);
     }
 
     // Fallback parsing if JSON fails
@@ -340,7 +325,7 @@ class AIAnalysisService {
     };
   }
 
-  private generateFallbackAnalysis(cvData: CVData): CVAnalysisResult {
+  private generateFallbackAnalysis(_cvData: CVData): CVAnalysisResult {
     return {
       overallScore: 70,
       skillsMatch: {
@@ -443,12 +428,12 @@ class AIAnalysisService {
         analysis_data: analysis,
         created_at: new Date().toISOString(),
       });
-    } catch (error) {
+    } catch (err: unknown) {
       console.error("Failed to save analysis results:", error);
     }
   }
 
-  async getAnalysisHistory(userId: string) {
+  async getAnalysisHistory(userId: string): Promise<{ success: true; analyses: Database['public']['Tables']['cv_analyses']['Row'][] } | { success: false; error: string }> {
     try {
       const { data, error } = await supabase
         .from("cv_analyses")
@@ -458,11 +443,11 @@ class AIAnalysisService {
 
       if (error) throw error;
       return { success: true, analyses: data };
-    } catch (error) {
-      console.error("Failed to get analysis history:", error);
+    } catch (err) {
+      console.error("Failed to get analysis history:", err);
       return {
         success: false,
-        error: error instanceof Error ? error.message : "Failed to get history",
+        error: err instanceof Error ? err.message : "Failed to get history",
       };
     }
   }

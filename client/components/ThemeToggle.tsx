@@ -1,13 +1,14 @@
 import React from "react";
+
+import { useTheme } from "./EnhancedThemeProvider";
 import { Button } from "./ui/button";
-import { Icons } from "./ui/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useTheme } from "./EnhancedThemeProvider";
+import { Icons } from "./ui/icons";
 
 export function ThemeToggle() {
   const { theme, setTheme, actualTheme } = useTheme();

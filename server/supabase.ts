@@ -1,7 +1,7 @@
 // server/supabase.ts
 import "dotenv/config";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@shared/types/supabase";
+import type { Database } from "../app/types/supabase";
 
 let _anon: SupabaseClient<Database> | null = null;
 let _admin: SupabaseClient<Database> | null = null;

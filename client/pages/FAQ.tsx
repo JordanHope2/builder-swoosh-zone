@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { useLanguage } from "../contexts/LanguageContext";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   HelpCircle,
   Search,
@@ -9,7 +7,6 @@ import {
   ChevronUp,
   Users,
   Briefcase,
-  CreditCard,
   Shield,
   Zap,
   MapPin,
@@ -20,6 +17,10 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
+import { useState } from "react";
+
+import { useLanguage } from "../contexts/LanguageContext";
+
 
 interface FAQItem {
   id: string;

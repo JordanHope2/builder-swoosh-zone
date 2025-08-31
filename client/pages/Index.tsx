@@ -1,6 +1,7 @@
 import { Navigation } from "@components/Navigation";
-import { HeroSection } from "../components/HeroSection";
+
 import { FeaturedJobs } from "../components/FeaturedJobs";
+import { HeroSection } from "../components/HeroSection";
 
 export default function Index() {
   return (

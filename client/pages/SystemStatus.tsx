@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader } from "../components/ui/page-header";
+import { motion } from "framer-motion";
 import {
   CheckCircle,
   AlertCircle,
@@ -17,6 +15,10 @@ import {
   Calendar,
   RefreshCw,
 } from "lucide-react";
+import React, { useState } from "react";
+
+import { PageHeader } from "../components/ui/page-header";
+
 
 interface ServiceStatus {
   name: string;

@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, Filter, SortAsc, SortDesc } from "lucide-react";
-import { cn } from "../../lib/utils";
+import React, { useState, useCallback, useMemo } from "react";
+
 import SecurityUtils from "../../lib/security";
+import { cn } from "../../lib/utils";
 
 interface SearchFilters {
   [key: string]: string | number | boolean;

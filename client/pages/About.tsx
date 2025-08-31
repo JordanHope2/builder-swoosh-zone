@@ -1,28 +1,23 @@
 import { Navigation } from "@components/Navigation";
-import { PageHeader, SectionHeader } from "../components/ui/page-header";
 import { motion } from "framer-motion";
 import {
   Target,
   Heart,
   Award,
-  Users,
   TrendingUp,
   Shield,
-  Clock,
   Globe,
   CheckCircle,
-  Zap,
   Star,
   Compass,
   ArrowRight,
   Mail,
-  MapPin,
   Linkedin,
-  Building,
   Flag,
-  Mountain,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
+import { PageHeader, SectionHeader } from "../components/ui/page-header";
 
 const foundersStory = {
   hero: "Bridging Afro roots with Swiss precision, Christian Mah and Jeanne BA founded JobEqual to democratize opportunity. From diverse backgrounds across continents, they recognized that talent knows no borders—but access to opportunity often does. Their vision: create a platform where skills meet opportunity, where precision meets inclusion, and where Swiss excellence serves global social mobility.",
@@ -309,7 +304,7 @@ export default function About() {
           />
 
           <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
-            {teamMembers.map((member, index) => (
+            {teamMembers.map((member, _index) => (
               <TeamMemberCard key={member.name} member={member} />
             ))}
           </div>
@@ -341,7 +336,7 @@ export default function About() {
           />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {values.map((value, index) => (
+            {values.map((value, _index) => (
               <ValueCard key={value.title} value={value} />
             ))}
           </div>

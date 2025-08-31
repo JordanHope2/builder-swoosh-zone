@@ -1,7 +1,6 @@
 import {
   motion,
   Variants,
-  AnimatePresence,
   TargetAndTransition,
   Transition,
 } from "framer-motion";

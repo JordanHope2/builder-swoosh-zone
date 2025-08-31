@@ -1,46 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell,
-  BellOff,
-  Check,
-  CheckCheck,
   X,
   Settings,
-  Filter,
   Archive,
   Star,
-  Clock,
   AlertTriangle,
   Info,
   CheckCircle,
   XCircle,
   MessageCircle,
-  Users,
-  Briefcase,
-  DollarSign,
   Shield,
-  TrendingUp,
-  Calendar,
-  FileText,
-  Zap,
-  Activity,
   CreditCard,
-  UserPlus,
-  Building,
-  Award,
-  Target,
-  Eye,
-  EyeOff,
-  MoreVertical,
   Search,
-  Globe,
-  Mail,
-  Phone,
-  Share2,
 } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+
 import { useLanguage } from "../contexts/LanguageContext";
 import SecurityUtils from "../lib/security";
+
 import { ActionButton } from "./ui/unified-dashboard";
 
 interface Notification {

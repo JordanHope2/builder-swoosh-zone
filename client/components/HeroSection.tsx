@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
   Upload,
   Search,
@@ -10,13 +8,18 @@ import {
   ChevronDown,
   Brain,
 } from "lucide-react";
-import { RedwoodTreeBackground } from "./RedwoodTreeBackground";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+
 import { useAuth } from "../contexts/AuthContext";
+import { useLanguage } from "../contexts/LanguageContext";
 import {
   aiAnalysisService,
-  CVAnalysisResult,
 } from "../services/aiAnalysisService";
+
+import { RedwoodTreeBackground } from "./RedwoodTreeBackground";
+import { errorMessage } from "app/client/lib/errors";
 
 export function HeroSection() {
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -25,9 +28,6 @@ export function HeroSection() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<CVAnalysisResult | null>(
-    null,
-  );
   const [error, setError] = useState<string | null>(null);
   const { t } = useLanguage();
   const { user } = useAuth();
@@ -106,14 +106,12 @@ export function HeroSection() {
         userId: user.id,
       });
 
-      setAnalysisResult(analysis);
-
       // Navigate to results page after a brief delay
       setTimeout(() => {
         navigate("/cv-upload", { state: { analysisResult: analysis } });
       }, 1500);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to analyze CV");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? errorMessage(err) : "Failed to analyze CV");
     } finally {
       setIsAnalyzing(false);
       setIsUploading(false);

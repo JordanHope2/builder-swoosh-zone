@@ -1,10 +1,18 @@
 'use client';
 import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { JobSchema } from '../app/validation/jobSchemas';
+import type { z } from 'zod';
+
+type JobInput = z.infer<typeof JobSchema>;
 
 export default function NewJobForm() {
-  const [title, setTitle] = useState('');
+  const [formData, setFormData] = useState<Partial<JobInput>>({});
   const [msg, setMsg] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,70 +33,69 @@ export default function NewJobForm() {
       return;
     }
 
+    const parsed = JobSchema.safeParse(formData);
+    if (!parsed.success) {
+        setMsg(`❌ Error: ${JSON.stringify(parsed.error.flatten())}`);
+        return;
+    }
+
     const res = await fetch('/api/jobs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ title }),
+      body: JSON.stringify(parsed.data),
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = await res.json();
     if (res.ok) {
-      setTitle('');
+      setFormData({});
       setMsg('✅ Created!');
       window.location.reload();
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       setMsg(`❌ ${data?.error?.message || data?.error || 'Error'}`);
     }
   }
 
   return (
-    <form onSubmit={submit} className="flex gap-2 mb-4">
+    <form onSubmit={submit} className="flex flex-col gap-4 mb-4 p-4 border rounded">
       <input
-        className="border p-2 rounded flex-1"
+        name="title"
+        className="border p-2 rounded"
         placeholder="Job title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleChange}
       />
-      <button className="px-3 py-2 border rounded">Create</button>
-      {msg && <span className="self-center text-sm">{msg}</span>}
-    </form>
-  );
-}
-MODIFIED FILE: src/components/SignIn.tsx
-
-'use client';
-import { supabase } from '../lib/supabaseClient';
-import { useState } from 'react';
-
-export default function SignIn() {
-  const [email, setEmail] = useState('');
-  const [msg, setMsg] = useState('');
-
-  async function sendLink(e: React.FormEvent) {
-    e.preventDefault();
-    setMsg('Sending…');
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback` }
-    });
-    setMsg(error ? `❌ ${error.message}` : '✅ Check your email for the sign-in link.');
-  }
-
-  return (
-    <form onSubmit={sendLink} className="space-y-3 max-w-sm">
+      <textarea
+        name="description"
+        className="border p-2 rounded"
+        placeholder="Job description"
+        onChange={handleChange}
+      />
       <input
-        type="email"
-        placeholder="you@example.com"
-        className="border p-2 w-full rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
+        name="location"
+        className="border p-2 rounded"
+        placeholder="Location"
+        onChange={handleChange}
       />
-      <button className="px-3 py-2 border rounded w-full">Send magic link</button>
-      {msg && <p className="text-sm">{msg}</p>}
+      <input
+        name="salary_min"
+        type="number"
+        className="border p-2 rounded"
+        placeholder="Salary min"
+        onChange={handleChange}
+      />
+      <input
+        name="salary_max"
+        type="number"
+        className="border p-2 rounded"
+        placeholder="Salary max"
+        onChange={handleChange}
+      />
+      <button className="px-3 py-2 border rounded bg-blue-500 text-white">Create</button>
+      {msg && <span className="self-center text-sm">{msg}</span>}
     </form>
   );
 }

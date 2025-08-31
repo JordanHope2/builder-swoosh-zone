@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Navigation } from "@components/Navigation";
 import {
   User,
@@ -17,14 +16,13 @@ import {
   Linkedin,
   Github,
   ExternalLink,
-  Award,
   Book,
   Briefcase,
   Code,
-  Star,
   Target,
   CheckCircle,
 } from "lucide-react";
+import { useState } from "react";
 
 interface Experience {
   id: string;

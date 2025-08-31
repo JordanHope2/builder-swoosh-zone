@@ -1,7 +1,7 @@
 // src/main.tsx
+import * as Sentry from "@sentry/react";
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import * as Sentry from "@sentry/react";
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -19,12 +19,13 @@ Sentry.init({
 });
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+import AuthCallback from './pages/AuthCallback';
 import Home from './pages/Home';               // make sure this exists
 import SignIn from './pages/SignIn';
-import AuthCallback from './pages/AuthCallback';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>

@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useRef, DragEvent } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Upload,
   FileText,
@@ -15,17 +14,21 @@ import {
   Award,
   BarChart3,
 } from "lucide-react";
+import React, { useState, useCallback, useRef, DragEvent } from "react";
+
+import { useAuth } from "../contexts/AuthContext";
 import {
   aiAnalysisService,
   CVAnalysisResult,
 } from "../services/aiAnalysisService";
-import { useAuth } from "../contexts/AuthContext";
+
 import {
   AnimatedButton,
   EnhancedMotion,
   StaggeredList,
   GradientText,
 } from "./ui/enhanced-motion";
+import { errorMessage } from "app/client/lib/errors";
 
 interface EnhancedCVUploadProps {
   onUploadComplete?: (analysisResult: CVAnalysisResult) => void;
@@ -108,8 +111,8 @@ export const EnhancedCVUpload: React.FC<EnhancedCVUploadProps> = ({
 
         setAnalysisResult(analysis);
         onUploadComplete?.(analysis);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to analyze CV");
+      } catch (err: unknown) {
+        setError(err instanceof Error ? errorMessage(err) : "Failed to analyze CV");
       } finally {
         setIsAnalyzing(false);
         clearInterval(progressInterval);

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
@@ -10,25 +9,21 @@ import {
   AlertCircle,
   Loader,
   User,
-  Mail,
   Phone,
-  MapPin,
-  Briefcase,
-  Award,
-  Target,
-  Heart,
-  Zap,
 } from "lucide-react";
+import React, { useState } from "react";
+
 import { useAuth } from "../contexts/AuthContext";
 import {
   applicationService,
   ApplicationData,
 } from "../services/applicationService";
+
 import {
   AnimatedButton,
-  EnhancedMotion,
   StaggeredList,
 } from "./ui/enhanced-motion";
+import { errorMessage } from "app/client/lib/errors";
 
 interface EnhancedApplicationFormProps {
   jobId: string;
@@ -96,21 +91,8 @@ export const EnhancedApplicationForm: React.FC<
     message: string;
   }>({ type: null, message: "" });
   const [currentStep, setCurrentStep] = useState(1);
-  const [userProfile, setUserProfile] = useState<any>(null);
 
   const { user } = useAuth();
-
-  useEffect(() => {
-    // Load user profile data if available
-    if (user) {
-      setUserProfile({
-        name: user.user_metadata?.full_name || "",
-        email: user.email || "",
-        phone: user.user_metadata?.phone || "",
-        linkedinUrl: user.user_metadata?.linkedin_url || "",
-      });
-    }
-  }, [user]);
 
   const handleInputChange = (field: string, value: string) => {
     if (field.startsWith("customAnswers.")) {
@@ -216,12 +198,12 @@ export const EnhancedApplicationForm: React.FC<
         });
         onApplicationSubmitted?.(false);
       }
-    } catch (error) {
+    } catch (err: unknown) {
       setSubmitStatus({
         type: "error",
         message:
-          error instanceof Error
-            ? error.message
+          err instanceof Error
+            ? errorMessage(err)
             : "Failed to submit application",
       });
       onApplicationSubmitted?.(false);
@@ -393,7 +375,7 @@ export const EnhancedApplicationForm: React.FC<
         <h4 className="text-lg font-semibold text-jobequal-text mb-4">
           Additional Questions
         </h4>
-        {customQuestions.map((question, index) => (
+        {customQuestions.map((question) => (
           <div key={question.id} className="mb-6">
             <label className="block text-sm font-medium text-jobequal-text mb-2">
               {question.question} {question.required && "*"}

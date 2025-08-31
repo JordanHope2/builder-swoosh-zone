@@ -1,32 +1,17 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { Navigation } from "@components/Navigation";
-import { PageHeader } from "../components/ui/page-header";
-import { ProtectedRoute } from "../components/ProtectedRoute";
-import { applicationToast } from "../hooks/use-toast";
 import {
-  Briefcase,
-  MapPin,
-  DollarSign,
-  Clock,
-  Users,
-  Building,
-  FileText,
-  Globe,
-  Zap,
-  Star,
-  Target,
-  Save,
-  Eye,
   Send,
   Plus,
   X,
   ChevronDown,
-  AlertCircle,
   CheckCircle,
-  Calendar,
-  TrendingUp,
 } from "lucide-react";
+import React, { useState } from "react";
+
+import { ProtectedRoute } from "../components/ProtectedRoute";
+import { PageHeader } from "../components/ui/page-header";
+import { applicationToast } from "../hooks/use-toast";
+
 
 interface JobFormData {
   title: string;
@@ -241,7 +226,7 @@ function PostJobPage() {
       // Reset form
       setFormData(initialFormData);
       setCurrentStep(1);
-    } catch (error) {
+    } catch (err: unknown) {
       applicationToast.error("Failed to post job. Please try again.");
     } finally {
       setIsSubmitting(false);

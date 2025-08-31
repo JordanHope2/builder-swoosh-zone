@@ -43,7 +43,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
           ...fav,
           dateAdded: new Date(fav.dateAdded),
         }));
-      } catch (error) {
+      } catch (err: unknown) {
         console.error("Error parsing saved favorites:", error);
         return [];
       }
