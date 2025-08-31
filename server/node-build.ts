@@ -1,9 +1,19 @@
 import path from "path";
 import { createServer } from "./index";
 import * as express from "express";
+import rateLimit from 'express-rate-limit';
 
 const app = createServer();
 const port = process.env.PORT || 8080;
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 60,             // 60 req/min/IP
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
 
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
