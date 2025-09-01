@@ -1,4 +1,5 @@
 import "./global.css";
+import "./lib/builder-registry";
 
 import { Toaster } from "./components/ui/toaster";
 import { createRoot } from "react-dom/client";
@@ -17,7 +18,7 @@ import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import JobSearch from "./pages/JobSearch";
+import { BuilderPage } from "./pages/BuilderPage";
 import JobDetails from "./pages/JobDetails";
 import CVUpload from "./pages/CVUpload";
 import SignUp from "./pages/SignUp";
@@ -71,11 +72,12 @@ const App = () => (
                     <Routes>
                       {/* Home & jobs */}
                       <Route path="/" element={<Index />} />
-                    <Route path="/jobs" element={<JobSearch />} />
-                    <Route path="/job-search" element={<JobSearch />} />
+                    <Route path="/search" element={<BuilderPage />} />
+                    <Route path="/jobs" element={<Navigate to="/search" replace />} />
+                    <Route path="/job-search" element={<Navigate to="/search" replace />} />
                     <Route
                       path="/careers"
-                      element={<Navigate to="/job-search" replace />}
+                      element={<Navigate to="/search" replace />}
                     />
                     <Route path="/job/:id" element={<JobDetails />} />
 

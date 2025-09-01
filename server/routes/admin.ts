@@ -1,11 +1,11 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, Request, Response as ExpressResponse, NextFunction } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { getSupabaseAdmin } from "../supabase";
 
 const router = Router();
 
 // Middleware to check for admin role
-const adminAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+const adminAuthMiddleware = async (req: Request, res: ExpressResponse, next: NextFunction) => {
   const userId = req.user?.id;
   if (!userId) {
     return res.status(401).json({ error: "User not authenticated." });
@@ -37,7 +37,7 @@ const protectedAdminRoute = [authMiddleware, adminAuthMiddleware];
 
 
 // GET /api/admin/users - List all users
-router.get("/users", protectedAdminRoute, async (req, res) => {
+router.get("/users", protectedAdminRoute, async (req, res: ExpressResponse) => {
   try {
     const supabase = getSupabaseAdmin();
     // Supabase auth users are not directly queryable in a simple way.
@@ -63,7 +63,7 @@ router.get("/users", protectedAdminRoute, async (req, res) => {
 
 
 // POST /api/admin/users/:id - Update a user's details
-router.post("/users/:id", protectedAdminRoute, async (req, res) => {
+router.post("/users/:id", protectedAdminRoute, async (req, res: ExpressResponse) => {
   const { id: userIdToUpdate } = req.params;
   const { role, status } = req.body; // e.g., update role or a conceptual 'status'
 
@@ -93,7 +93,7 @@ router.post("/users/:id", protectedAdminRoute, async (req, res) => {
 
 
 // DELETE /api/admin/users/:id - Delete a user
-router.delete("/users/:id", protectedAdminRoute, async (req, res) => {
+router.delete("/users/:id", protectedAdminRoute, async (req, res: ExpressResponse) => {
     const { id: userIdToDelete } = req.params;
 
     try {
@@ -115,7 +115,7 @@ router.delete("/users/:id", protectedAdminRoute, async (req, res) => {
 // --- Job Management ---
 
 // GET /api/admin/jobs - List all jobs
-router.get("/jobs", protectedAdminRoute, async (req, res) => {
+router.get("/jobs", protectedAdminRoute, async (req, res: ExpressResponse) => {
     try {
       const supabase = getSupabaseAdmin();
       const { data, error } = await supabase
@@ -132,7 +132,7 @@ router.get("/jobs", protectedAdminRoute, async (req, res) => {
 });
 
 // POST /api/admin/jobs/:id - Update a job
-router.post("/jobs/:id", protectedAdminRoute, async (req, res) => {
+router.post("/jobs/:id", protectedAdminRoute, async (req, res: ExpressResponse) => {
     const { id: jobId } = req.params;
     const { title, description, status } = req.body;
 
@@ -152,7 +152,7 @@ router.post("/jobs/:id", protectedAdminRoute, async (req, res) => {
 });
 
 // DELETE /api/admin/jobs/:id - Delete a job
-router.delete("/jobs/:id", protectedAdminRoute, async (req, res) => {
+router.delete("/jobs/:id", protectedAdminRoute, async (req, res: ExpressResponse) => {
     const { id: jobId } = req.params;
 
     try {
@@ -173,7 +173,7 @@ router.delete("/jobs/:id", protectedAdminRoute, async (req, res) => {
 // --- Subscription Management ---
 
 // GET /api/admin/subscriptions - List all subscriptions
-router.get("/subscriptions", protectedAdminRoute, async (req, res) => {
+router.get("/subscriptions", protectedAdminRoute, async (req, res: ExpressResponse) => {
     try {
         const supabase = getSupabaseAdmin();
         const { data, error } = await supabase
@@ -193,7 +193,7 @@ router.get("/subscriptions", protectedAdminRoute, async (req, res) => {
 });
 
 // POST /api/admin/subscriptions/:id - Cancel a subscription
-router.post("/subscriptions/:id", protectedAdminRoute, async (req, res) => {
+router.post("/subscriptions/:id", protectedAdminRoute, async (req, res: ExpressResponse) => {
     const { id: subscriptionId } = req.params;
     const { action } = req.body;
 

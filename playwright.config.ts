@@ -18,10 +18,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run preview',
-    url: 'http://127.0.0.1:4173',
+    command: process.env.CI ? 'npm run build && npm run preview' : 'npm run preview',
+    url: 'http://127.0.0.1:4173/',
     reuseExistingServer: !process.env.CI,
-    stdout: 'pipe',
-    stderr: 'pipe',
+    timeout: 120_000, // 2 minutes
   },
 });

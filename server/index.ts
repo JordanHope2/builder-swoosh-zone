@@ -14,21 +14,20 @@ import recommendationsRouter from "./routes/recommendations";
 import billingRouter from "./routes/billing";
 import dashboardRouter from "./routes/dashboard";
 import adminRouter from "./routes/admin";
+import searchRouter from "./routes/search";
 import { getSupabaseAdmin } from "./supabase";
 import { getEmbedding } from "./services/aiService";
-import { Stripe } from "stripe";
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20",
+  apiVersion: "2025-07-30.basil" as any,
 });
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({ tracing: true }),
-    // enable Express.js middleware tracing
-    new Sentry.Integrations.Express({ app: express() }),
+    Sentry.httpIntegration(),
+    Sentry.expressIntegration(),
   ],
   // Performance Monitoring
   tracesSampleRate: 1.0,
@@ -38,9 +37,9 @@ export function createServer() {
   const app = express();
 
   // The request handler must be the first middleware on the app
-  app.use(Sentry.Handlers.requestHandler());
+  app.use(Sentry.requestHandler());
   // TracingHandler creates a trace for every incoming request
-  app.use(Sentry.Handlers.tracingHandler());
+  app.use(Sentry.tracingHandler());
 
   // Middleware
   app.use(cors());
@@ -207,6 +206,7 @@ export function createServer() {
   app.use("/api/billing", billingRouter);
   app.use("/api/dashboard", dashboardRouter);
   app.use("/api/admin", adminRouter);
+  app.use("/api/search", searchRouter);
 
   // Temporary test route for recommendations
   app.get("/api/test-recommendations/:userId", async (req, res) => {
@@ -255,7 +255,7 @@ export function createServer() {
   });
 
   // The error handler must be registered before any other error middleware and after all controllers
-  app.use(Sentry.Handlers.errorHandler());
+  app.use(Sentry.errorHandler());
 
   return app;
 }
