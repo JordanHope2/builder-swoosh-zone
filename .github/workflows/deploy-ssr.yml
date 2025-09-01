@@ -1,0 +1,129 @@
+name: Deploy SSR (Swizzonic Passenger)
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ssr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy-ssr:
+    if: ${{ secrets.DEPLOY_MODE == 'SSR' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      NODE_VERSION: '20'
+      INSTALL_CMD: 'npm ci'
+      BUILD_CMD: 'npm run build'
+
+      # FTP / SFTP secrets
+      FTP_SERVER:     ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
+      FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
+
+      SFTP_HOST:       ${{ secrets.SFTP_HOST }}
+      SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
+      SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
+
+      # SSR Deploy Paths (optional overrides)
+      SERVER_REMOTE_DIR: ${{ secrets.SERVER_REMOTE_DIR || 'app/current/dist/server' }}
+      CLIENT_REMOTE_DIR: ${{ secrets.CLIENT_REMOTE_DIR || 'app/current/dist/client' }}
+      TMP_REMOTE_DIR:    ${{ secrets.TMP_REMOTE_DIR || 'app/current/tmp' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: ${{ env.INSTALL_CMD }}
+
+      - name: Build client and server
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: ${{ env.BUILD_CMD }}
+
+      # --- Deploy Server Code ---
+      - name: Deploy server via SFTP
+        id: deploy_server_sftp
+        if: ${{ env.SFTP_HOST != '' }}
+        uses: larrystone/sftp-upload-action@v1
+        with:
+          host: ${{ env.SFTP_HOST }}
+          username: ${{ env.SFTP_USERNAME }}
+          password: ${{ env.SFTP_PASSWORD }}
+          local_path: 'dist/server'
+          remote_path: ${{ env.SERVER_REMOTE_DIR }}
+
+      - name: Deploy server via FTP (fallback)
+        if: ${{ steps.deploy_server_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ env.FTP_SERVER }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          local-dir: 'dist/server/'
+          server-dir: ${{ env.SERVER_REMOTE_DIR }}/
+
+      # --- Deploy Client Assets ---
+      - name: Deploy client via SFTP
+        id: deploy_client_sftp
+        if: ${{ env.SFTP_HOST != '' }}
+        uses: larrystone/sftp-upload-action@v1
+        with:
+          host: ${{ env.SFTP_HOST }}
+          username: ${{ env.SFTP_USERNAME }}
+          password: ${{ env.SFTP_PASSWORD }}
+          local_path: 'dist/spa'
+          remote_path: ${{ env.CLIENT_REMOTE_DIR }}
+
+      - name: Deploy client via FTP (fallback)
+        if: ${{ steps.deploy_client_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ env.FTP_SERVER }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          local-dir: 'dist/spa/'
+          server-dir: ${{ env.CLIENT_REMOTE_DIR }}/
+
+      # --- Trigger Passenger Restart ---
+      - name: Deploy restart.txt via SFTP
+        id: deploy_restart_sftp
+        if: ${{ env.SFTP_HOST != '' }}
+        uses: larrystone/sftp-upload-action@v1
+        with:
+          host: ${{ env.SFTP_HOST }}
+          username: ${{ env.SFTP_USERNAME }}
+          password: ${{ env.SFTP_PASSWORD }}
+          local_path: '.github/passenger-restart/restart.txt'
+          remote_path: ${{ env.TMP_REMOTE_DIR }}
+
+      - name: Deploy restart.txt via FTP (fallback)
+        if: ${{ steps.deploy_restart_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ env.FTP_SERVER }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          local-dir: '.github/passenger-restart/'
+          server-dir: ${{ env.TMP_REMOTE_DIR }}/
+          state-name: ftp-sync-state-restart.json
