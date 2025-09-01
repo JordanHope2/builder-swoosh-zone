@@ -139,10 +139,10 @@ jobs:
           "
           echo "ok=true" >> "$GITHUB_OUTPUT"
 
-      # --- FTP (fallback if SFTP not configured) ---
-      - name: Deploy via FTP
+      # --- FTP (fallback if SFTP fails or is not configured) ---
+      - name: Deploy via FTP (fallback)
         id: deploy_ftp
-        if: ${{ env.SFTP_HOST == '' && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
+        if: ${{ (steps.deploy_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server:     ${{ env.FTP_SERVER }}
