@@ -43,13 +43,14 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   // Debounced search
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      const sanitizedTerm = SecurityUtils.sanitizeText(term);
-      if (SecurityUtils.validateStringLength(sanitizedTerm, 0, 100)) {
-        onSearch(sanitizedTerm);
-      }
-    }, debounceMs),
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((term: string) => {
+        const sanitizedTerm = SecurityUtils.sanitizeText(term);
+        if (SecurityUtils.validateStringLength(sanitizedTerm, 0, 100)) {
+          onSearch(sanitizedTerm);
+        }
+      }, debounceMs),
     [onSearch, debounceMs],
   );
 

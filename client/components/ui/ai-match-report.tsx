@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -200,13 +200,7 @@ export function AIMatchReportModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && !report) {
-      loadMatchReport();
-    }
-  }, [isOpen]);
-
-  const loadMatchReport = async () => {
+  const loadMatchReport = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -224,7 +218,13 @@ export function AIMatchReportModal({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [jobId, userId, jobProfile, candidateProfile]);
+
+  useEffect(() => {
+    if (isOpen && !report) {
+      loadMatchReport();
+    }
+  }, [isOpen, report, loadMatchReport]);
 
   const handleImproveProfile = () => {
     onClose();

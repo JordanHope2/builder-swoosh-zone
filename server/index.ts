@@ -21,12 +21,6 @@ import { handleStripeWebhook } from "./routes/billing";
 if (process.env.VITEST !== 'true') {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
-    integrations: [
-      // enable HTTP calls tracing
-      new Sentry.Integrations.Http({ tracing: true }),
-      // enable Express.js middleware tracing
-      new Sentry.Integrations.Express({ app: express() }),
-    ],
     // Performance Monitoring
     tracesSampleRate: 1.0,
   });
@@ -34,13 +28,6 @@ if (process.env.VITEST !== 'true') {
 
 export function createServer() {
   const app = express();
-
-  // The request handler must be the first middleware on the app
-  if (process.env.VITEST !== 'true') {
-    app.use(Sentry.Handlers.requestHandler());
-    // TracingHandler creates a trace for every incoming request
-    app.use(Sentry.Handlers.tracingHandler());
-  }
 
   // Middleware
   app.use(cors());
@@ -141,7 +128,7 @@ export function createServer() {
 
   // The error handler must be registered before any other error middleware and after all controllers
   if (process.env.VITEST !== 'true') {
-    app.use(Sentry.Handlers.errorHandler());
+    Sentry.setupExpressErrorHandler(app);
   }
 
   return app;

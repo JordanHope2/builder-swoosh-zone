@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageCircle,
@@ -240,7 +240,10 @@ export default function Messages() {
   const currentConversation = mockConversations.find(
     (conv) => conv.id === selectedConversation,
   );
-  const currentMessages = selectedConversation === "conv-1" ? mockMessages : [];
+  const currentMessages = useMemo(
+    () => (selectedConversation === "conv-1" ? mockMessages : []),
+    [selectedConversation],
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

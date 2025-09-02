@@ -1,0 +1,6 @@
+[
+  {
+    "path": "dist/spa/assets/index-*.js",
+    "limit": "150 kB"
+  }
+]

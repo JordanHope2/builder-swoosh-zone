@@ -78,6 +78,43 @@ export function VideoInterview({
   const progress =
     ((currentQuestionIndex + 1) / session.questions.length) * 100;
 
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      setInterviewState("break");
+    }
+  }, [isRecording]);
+
+  const completeInterview = useCallback(async () => {
+    setInterviewState("completed");
+    setAiAnalysisLoading(true);
+
+    try {
+      // Simulate AI analysis (replace with actual API call)
+      const mockAnalysis = await simulateAIAnalysis(responses);
+
+      const results = {
+        sessionId: session.id,
+        responses,
+        aiAnalysis: mockAnalysis,
+        completedAt: new Date().toISOString(),
+      };
+
+      onComplete(results);
+    } catch (error) {
+      console.error("Error completing interview:", error);
+      toast({
+        title: "Analysis Error",
+        description:
+          "Failed to analyze interview. Results saved without AI analysis.",
+        variant: "destructive",
+      });
+    } finally {
+      setAiAnalysisLoading(false);
+    }
+  }, [responses, session.id, onComplete, toast]);
+
   // Initialize media stream
   useEffect(() => {
     const initializeMedia = async () => {
@@ -109,7 +146,7 @@ export function VideoInterview({
         mediaStream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [toast]);
+  }, [toast, mediaStream]);
 
   // Timer effect
   useEffect(() => {
@@ -128,7 +165,7 @@ export function VideoInterview({
     }
 
     return () => clearInterval(interval);
-  }, [interviewState, timeRemaining]);
+  }, [interviewState, timeRemaining, stopRecording]);
 
   const toggleVideo = useCallback(() => {
     if (mediaStream) {
@@ -190,14 +227,6 @@ export function VideoInterview({
     }
   }, [mediaStream, currentQuestion, timeRemaining, toast]);
 
-  const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      setInterviewState("break");
-    }
-  }, [isRecording]);
-
   const nextQuestion = useCallback(() => {
     if (currentQuestionIndex < session.questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
@@ -205,36 +234,7 @@ export function VideoInterview({
     } else {
       completeInterview();
     }
-  }, [currentQuestionIndex, session.questions.length]);
-
-  const completeInterview = useCallback(async () => {
-    setInterviewState("completed");
-    setAiAnalysisLoading(true);
-
-    try {
-      // Simulate AI analysis (replace with actual API call)
-      const mockAnalysis = await simulateAIAnalysis(responses);
-
-      const results = {
-        sessionId: session.id,
-        responses,
-        aiAnalysis: mockAnalysis,
-        completedAt: new Date().toISOString(),
-      };
-
-      onComplete(results);
-    } catch (error) {
-      console.error("Error completing interview:", error);
-      toast({
-        title: "Analysis Error",
-        description:
-          "Failed to analyze interview. Results saved without AI analysis.",
-        variant: "destructive",
-      });
-    } finally {
-      setAiAnalysisLoading(false);
-    }
-  }, [responses, session.id, onComplete, toast]);
+  }, [currentQuestionIndex, session.questions.length, completeInterview]);
 
   const simulateAIAnalysis = async (
     responses: any[],
