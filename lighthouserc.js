@@ -1,4 +1,5 @@
-module.exports = {
+// lighthouserc.js (ESM)
+export default {
   ci: {
     collect: {
       startServerCommand: 'npm run preview',
