@@ -3,6 +3,11 @@ import { defineConfig, Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import dotenv from 'dotenv';
+
+// Load .env files to make them available to Vite's config process
+dotenv.config({ path: './.env.test' });
+dotenv.config({ path: './.env' });
 
 // ⛔️ DO NOT import "./server" here.
 // We will dynamically import it inside configureServer.
@@ -12,6 +17,26 @@ export default defineConfig(() => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
+    // Exclude node_modules and E2E tests from the test run
+    exclude: ['e2e/**', 'node_modules/**'],
+    // Configure test coverage reporting
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary', 'json', 'html'],
+      reportsDirectory: './coverage',
+      include: ['server/**', 'client/**'],
+      exclude: [
+        'server/dev.ts',
+        'server/node-build.ts',
+        'tests/**',
+        '**/*.test.ts',
+        '**/*.spec.ts',
+        '**/*.d.ts',
+        '.storybook/**',
+        'stories/**'
+      ],
+      all: true,
+    }
   },
   server: {
     host: "localhost",
@@ -28,7 +53,9 @@ export default defineConfig(() => ({
   },
   plugins: [
     react(),
-    expressPlugin(),
+    // The express plugin is disabled during tests to prevent the server from starting
+    process.env.VITEST !== 'true' && expressPlugin(),
+    // The Sentry plugin is disabled if the auth token is not present
     process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
       org: "jordanhope2",
       project: "jobequal-ch",
