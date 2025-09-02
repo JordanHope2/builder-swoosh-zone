@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -246,13 +246,7 @@ export function CityEventsModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && cityName) {
-      loadCityData();
-    }
-  }, [isOpen, cityName]);
-
-  const loadCityData = async () => {
+  const loadCityData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -265,7 +259,13 @@ export function CityEventsModal({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [cityName]);
+
+  useEffect(() => {
+    if (isOpen && cityName) {
+      loadCityData();
+    }
+  }, [isOpen, cityName, loadCityData]);
 
   const handleClose = () => {
     onClose();
