@@ -23,12 +23,13 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "start": "node dist/server/node-build.mjs",
     "test": "node run-tests.mjs",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint .",
+    "size": "size-limit",
+    "lhci": "lhci autorun",
     "format.fix": "prettier --write .",
     "typecheck": "tsc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "size": "size-limit",
     "db:migrate": "supabase db push",
     "db:migrate:dry-run": "supabase db push --dry-run",
     "db:seed": "supabase db reset",
@@ -65,6 +66,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "node-fetch": "^3.3.2",
     "@axe-core/playwright": "^4.9.0",
     "@hookform/resolvers": "^3.9.0",
     "@lhci/cli": "^0.13.0",

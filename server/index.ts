@@ -1,8 +1,12 @@
 // server/index.ts
 import "dotenv/config";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import * as Sentry from "@sentry/node";
 import express from "express";
 import cors from "cors";
+import health from "./routes/healthz";
+import builderWebhook from "./routes/builder-webhook";
 import { handleDemo } from "./routes/demo";
 import jobsRouter from "./routes/jobs";
 import scrapeRouter from "./routes/scrape";
@@ -52,26 +56,17 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  app.use((_, res, next) => {
+    res.setHeader('Content-Security-Policy',
+      "default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https://*.supabase.co https://cdn.builder.io; frame-ancestors 'none'; base-uri 'self'");
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    next();
+  });
+
   // Health and readiness probes
-  app.get("/healthz", (_req, res) => {
-    res.status(200).json({ status: "ok" });
-  });
-
-  app.get("/readyz", async (_req, res) => {
-    try {
-      const supabase = getSupabaseAdmin();
-      const { error } = await supabase.from("jobs").select("id").limit(1);
-
-      if (error) {
-        throw new Error("Supabase connection check failed");
-      }
-
-      res.status(200).json({ status: "ready" });
-    } catch (error) {
-      console.error("Readiness check failed:", error);
-      res.status(503).json({ status: "not_ready" });
-    }
-  });
+  app.use('/healthz', health);
+  app.post('/webhooks/builder', builderWebhook);
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

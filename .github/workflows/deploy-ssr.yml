@@ -1,135 +1,70 @@
-name: Deploy SSR (Swizzonic Passenger)
-
+name: Deploy SSR to Swizzonic
 on:
   push:
-    branches: [ main ]
-    paths-ignore:
-      - '**.md'
-      - '.github/ISSUE_TEMPLATE/**'
+    branches: [main]
   workflow_dispatch:
 
-concurrency:
-  group: deploy-ssr-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
 jobs:
-  build-and-deploy-ssr:
-    if: ${{ secrets.DEPLOY_MODE == 'SSR' }}
+  build-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    env:
-      NODE_VERSION: '20'
-      INSTALL_CMD: 'npm ci'
-      BUILD_CMD: 'npm run build'
-
-      # FTP / SFTP secrets
-      FTP_SERVER:     ${{ secrets.FTP_SERVER }}
-      FTP_USERNAME:   ${{ secrets.FTP_USERNAME }}
-      FTP_PASSWORD:   ${{ secrets.FTP_PASSWORD }}
-
-      SFTP_HOST:       ${{ secrets.SFTP_HOST }}
-      SFTP_USERNAME:   ${{ secrets.SFTP_USERNAME }}
-      SFTP_PASSWORD:   ${{ secrets.SFTP_PASSWORD }}
-
-      # SSR Deploy Paths (optional overrides)
-      SERVER_REMOTE_DIR: ${{ secrets.SERVER_REMOTE_DIR || 'app/current/dist/server' }}
-      CLIENT_REMOTE_DIR: ${{ secrets.CLIENT_REMOTE_DIR || 'app/current/dist/client' }}
-      TMP_REMOTE_DIR:    ${{ secrets.TMP_REMOTE_DIR || 'app/current/tmp' }}
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
+      - uses: actions/checkout@v4
 
-      - name: Use Node
+      - name: Use Node 20
         uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+        with: { node-version: '20' }
 
-      - name: Install dependencies
-        run: ${{ env.INSTALL_CMD }}
-
-      - name: Build client and server
+      - name: Preflight secrets
+        run: |
+          missing=()
+          for k in VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY \
+                   VITE_BUILDER_PUBLIC_API_KEY SFTP_HOST SFTP_USERNAME SFTP_REMOTE_DIR SSH_USER; do
+            [ -z "${!k}" ] && missing+=("$k")
+          done
+          echo "Resolved remote: ${SFTP_USERNAME}@${SFTP_HOST}:${SFTP_REMOTE_DIR}"
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing secrets: ${missing[*]}"
+            exit 1
+          fi
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: ${{ env.BUILD_CMD }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          VITE_BUILDER_PUBLIC_API_KEY: ${{ secrets.VITE_BUILDER_PUBLIC_API_KEY }}
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
+          SFTP_REMOTE_DIR: ${{ secrets.SFTP_REMOTE_DIR }}
 
-      # --- Deploy Server Code ---
-      - name: Deploy server via SFTP
-        id: deploy_server_sftp
-        if: ${{ env.SFTP_HOST != '' }}
+      - name: Install & build
+        run: |
+          npm ci
+          npm run build
+          du -sh dist/* || true
+          du -sh dist/server || true
+          du -sh dist/spa || true
+
+      - name: SFTP deploy (primary)
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          username: ${{ env.SFTP_USERNAME }}
-          server: ${{ env.SFTP_HOST }}
-          password: ${{ env.SFTP_PASSWORD }}
-          local_path: 'dist/server/'
-          remote_path: ${{ env.SERVER_REMOTE_DIR }}
+          server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          local_path: "dist/*"
+          remote_path: "${{ secrets.SFTP_REMOTE_DIR }}"
           sftp_only: true
-          delete_remote_files: false
+        continue-on-error: true
 
-      - name: Deploy server via FTP (fallback)
-        if: ${{ (steps.deploy_server_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
+      - name: FTP fallback (conditional)
+        if: failure()
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
-          server: ${{ env.FTP_SERVER }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
-          local-dir: 'dist/server/'
-          server-dir: ${{ env.SERVER_REMOTE_DIR }}/
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: "${{ secrets.SFTP_REMOTE_DIR }}/"
+          local-dir: "dist/"
 
-      # --- Deploy Client Assets ---
-      - name: Deploy client via SFTP
-        id: deploy_client_sftp
-        if: ${{ env.SFTP_HOST != '' }}
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ env.SFTP_USERNAME }}
-          server: ${{ env.SFTP_HOST }}
-          password: ${{ env.SFTP_PASSWORD }}
-          local_path: 'dist/spa/'
-          remote_path: ${{ env.CLIENT_REMOTE_DIR }}
-          sftp_only: true
-          delete_remote_files: false
-
-      - name: Deploy client via FTP (fallback)
-        if: ${{ (steps.deploy_client_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ env.FTP_SERVER }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
-          local-dir: 'dist/spa/'
-          server-dir: ${{ env.CLIENT_REMOTE_DIR }}/
-
-      # --- Trigger Passenger Restart ---
-      - name: Deploy restart.txt via SFTP
-        id: deploy_restart_sftp
-        if: ${{ env.SFTP_HOST != '' }}
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ env.SFTP_USERNAME }}
-          server: ${{ env.SFTP_HOST }}
-          password: ${{ env.SFTP_PASSWORD }}
-          local_path: '.github/passenger-restart/restart.txt'
-          remote_path: ${{ env.TMP_REMOTE_DIR }}
-          sftp_only: true
-          delete_remote_files: false
-
-      - name: Deploy restart.txt via FTP (fallback)
-        if: ${{ (steps.deploy_restart_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
-        with:
-          server: ${{ env.FTP_SERVER }}
-          username: ${{ env.FTP_USERNAME }}
-          password: ${{ env.FTP_PASSWORD }}
-          local-dir: '.github/passenger-restart/'
-          server-dir: ${{ env.TMP_REMOTE_DIR }}/
-          state-name: ftp-sync-state-restart.json
+      - name: Passenger restart
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SFTP_HOST }} "mkdir -p ${{ secrets.SFTP_REMOTE_DIR }}/tmp && touch ${{ secrets.SFTP_REMOTE_DIR }}/tmp/restart.txt" || true

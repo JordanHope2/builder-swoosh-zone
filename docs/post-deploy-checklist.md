@@ -1,0 +1,10 @@
+- [ ] Home page 200, <1s TTFB
+- [ ] Random job detail 200
+- [ ] Auth (magic link) end-to-end works
+- [ ] Create job (authorized) writes row; unauthorized blocked by RLS
+- [ ] Storage asset uploaded & publicly readable (if expected)
+- [ ] Builder publish reflects on site within pipeline delay
+- [ ] Sentry receives a test error
+- [ ] `/healthz` returns 200 (db: "ok", storage: "ok")
+- [ ] No mixed content / CSP violations in console
+- [ ] CI: lint/type/size/LHCI/gitleaks ✅

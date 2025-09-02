@@ -1,0 +1,3 @@
+[
+  { "name": "main client chunk", "path": "dist/spa/assets/*.js", "limit": "250 KB" }
+]
