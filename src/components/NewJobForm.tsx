@@ -1,46 +1,69 @@
 'use client';
-import { useState } from 'react';
+
+import { useState, type FormEvent } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 export default function NewJobForm() {
   const [title, setTitle] = useState('');
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState<string>('');
+  const [submitting, setSubmitting] = useState(false);
 
-  async function submit(e: React.FormEvent) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitting) return;
+
     setMsg('');
+    setSubmitting(true);
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
 
-    const {
-      data: { session },
-      error: sessionError,
-    } = await supabase.auth.getSession();
+      if (sessionError) {
+        setMsg(`❌ Error: ${sessionError.message}`);
+        return;
+      }
+      if (!session) {
+        setMsg('❌ Error: You must be logged in to create a job.');
+        return;
+      }
 
-    if (sessionError) {
-      setMsg(`❌ Error: ${sessionError.message}`);
-      return;
-    }
+      const res = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ title }),
+      });
 
-    if (!session) {
-      setMsg('❌ Error: You must be logged in to create a job.');
-      return;
-    }
+      // Try to parse JSON (may fail on non-JSON errors)
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        /* ignore */
+      }
 
-    const res = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({ title }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      setTitle('');
-      setMsg('✅ Created!');
-      window.location.reload();
-    } else {
-      setMsg(`❌ ${data?.error?.message || data?.error || 'Error'}`);
+      if (res.ok) {
+        setTitle('');
+        setMsg('✅ Created!');
+        // If you prefer SPA navigation instead of hard reload, replace with your router call
+        window.location.reload();
+      } else {
+        const errText =
+          data?.error?.message ||
+          data?.error ||
+          (typeof data === 'string' ? data : '') ||
+          (await res.text()).slice(0, 300) ||
+          'Error';
+        setMsg(`❌ ${errText}`);
+      }
+    } catch (err: any) {
+      setMsg(`❌ ${err?.message ?? 'Unexpected error'}`);
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -51,44 +74,12 @@ export default function NewJobForm() {
         placeholder="Job title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-      />
-      <button className="px-3 py-2 border rounded">Create</button>
-      {msg && <span className="self-center text-sm">{msg}</span>}
-    </form>
-  );
-}
-MODIFIED FILE: src/components/SignIn.tsx
-
-'use client';
-import { supabase } from '../lib/supabaseClient';
-import { useState } from 'react';
-
-export default function SignIn() {
-  const [email, setEmail] = useState('');
-  const [msg, setMsg] = useState('');
-
-  async function sendLink(e: React.FormEvent) {
-    e.preventDefault();
-    setMsg('Sending…');
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback` }
-    });
-    setMsg(error ? `❌ ${error.message}` : '✅ Check your email for the sign-in link.');
-  }
-
-  return (
-    <form onSubmit={sendLink} className="space-y-3 max-w-sm">
-      <input
-        type="email"
-        placeholder="you@example.com"
-        className="border p-2 w-full rounded"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <button className="px-3 py-2 border rounded w-full">Send magic link</button>
-      {msg && <p className="text-sm">{msg}</p>}
+      <button className="px-3 py-2 border rounded" disabled={!title.trim() || submitting}>
+        {submitting ? 'Creating…' : 'Create'}
+      </button>
+      {msg && <span className="self-center text-sm">{msg}</span>}
     </form>
   );
 }
