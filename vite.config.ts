@@ -5,10 +5,9 @@ import path from "path";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import dotenv from 'dotenv';
 
-// Load .env files
+// Load .env files to make them available to Vite's config process
 dotenv.config({ path: './.env.test' });
 dotenv.config({ path: './.env' });
-
 
 // ⛔️ DO NOT import "./server" here.
 // We will dynamically import it inside configureServer.
@@ -18,12 +17,9 @@ export default defineConfig(() => ({
     globals: true,
     environment: 'jsdom',
     setupFiles: './tests/setup.ts',
+    // Exclude node_modules and E2E tests from the test run
     exclude: ['e2e/**', 'node_modules/**'],
-    server: {
-      deps: {
-        inline: ['@testing-library/react'],
-      },
-    },
+    // Configure test coverage reporting
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json', 'html'],
@@ -59,6 +55,7 @@ export default defineConfig(() => ({
     react(),
     // The express plugin is disabled during tests to prevent the server from starting
     process.env.VITEST !== 'true' && expressPlugin(),
+    // The Sentry plugin is disabled if the auth token is not present
     process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
       org: "jordanhope2",
       project: "jobequal-ch",

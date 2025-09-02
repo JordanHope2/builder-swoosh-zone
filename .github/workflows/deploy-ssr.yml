@@ -43,8 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 1
 
       - name: Use Node
         uses: actions/setup-node@v4
@@ -64,7 +62,7 @@ jobs:
       # --- Deploy Server Code ---
       - name: Deploy server via SFTP
         id: deploy_server_sftp
-        if: ${{ env.SFTP_HOST != '' }}
+        if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           username: ${{ env.SFTP_USERNAME }}
@@ -73,7 +71,6 @@ jobs:
           local_path: 'dist/server/'
           remote_path: ${{ env.SERVER_REMOTE_DIR }}
           sftp_only: true
-          delete_remote_files: false
 
       - name: Deploy server via FTP (fallback)
         if: ${{ (steps.deploy_server_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
@@ -84,11 +81,12 @@ jobs:
           password: ${{ env.FTP_PASSWORD }}
           local-dir: 'dist/server/'
           server-dir: ${{ env.SERVER_REMOTE_DIR }}/
+          state-name: ftp-sync-state-server.json
 
       # --- Deploy Client Assets ---
       - name: Deploy client via SFTP
         id: deploy_client_sftp
-        if: ${{ env.SFTP_HOST != '' }}
+        if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           username: ${{ env.SFTP_USERNAME }}
@@ -97,7 +95,6 @@ jobs:
           local_path: 'dist/spa/'
           remote_path: ${{ env.CLIENT_REMOTE_DIR }}
           sftp_only: true
-          delete_remote_files: false
 
       - name: Deploy client via FTP (fallback)
         if: ${{ (steps.deploy_client_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
@@ -108,11 +105,15 @@ jobs:
           password: ${{ env.FTP_PASSWORD }}
           local-dir: 'dist/spa/'
           server-dir: ${{ env.CLIENT_REMOTE_DIR }}/
+          state-name: ftp-sync-state-client.json
 
       # --- Trigger Passenger Restart ---
+      - name: Create restart file placeholder
+        run: touch .github/passenger-restart/restart.txt
+
       - name: Deploy restart.txt via SFTP
         id: deploy_restart_sftp
-        if: ${{ env.SFTP_HOST != '' }}
+        if: ${{ env.SFTP_HOST != '' && env.SFTP_USERNAME != '' && env.SFTP_PASSWORD != '' }}
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           username: ${{ env.SFTP_USERNAME }}
@@ -121,7 +122,6 @@ jobs:
           local_path: '.github/passenger-restart/restart.txt'
           remote_path: ${{ env.TMP_REMOTE_DIR }}
           sftp_only: true
-          delete_remote_files: false
 
       - name: Deploy restart.txt via FTP (fallback)
         if: ${{ (steps.deploy_restart_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}

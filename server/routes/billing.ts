@@ -134,7 +134,6 @@ router.post("/create-portal-session", authMiddleware, async (req, res) => {
   }
 });
 
-
 // This function is extracted from server/index.ts to be more modular and testable.
 export const handleStripeWebhook = async (req: any, res: any) => {
   const sig = req.headers["stripe-signature"];
@@ -248,6 +247,5 @@ export const handleStripeWebhook = async (req: any, res: any) => {
 
   res.json({ received: true });
 };
-
 
 export default router;
