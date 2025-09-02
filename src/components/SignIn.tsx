@@ -1,19 +1,30 @@
 'use client';
-import { supabaseClient } from '@/lib/supabaseClient';
-import { useState } from 'react';
+
+import { useState, type FormEvent } from 'react';
+import { supabase } from '../lib/supabaseClient';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
+  const [sending, setSending] = useState(false);
 
-  async function sendLink(e: React.FormEvent) {
+  async function sendLink(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sending) return;
+
     setMsg('Sending…');
-    const { error } = await supabaseClient.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback` }
-    });
-    setMsg(error ? `❌ ${error.message}` : '✅ Check your email for the sign-in link.');
+    setSending(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${import.meta.env.VITE_APP_URL}/auth/callback` },
+      });
+      setMsg(error ? `❌ ${error.message}` : '✅ Check your email for the sign-in link.');
+    } catch (err: any) {
+      setMsg(`❌ ${err?.message ?? 'Unexpected error'}`);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -26,7 +37,9 @@ export default function SignIn() {
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <button className="px-3 py-2 border rounded w-full">Send magic link</button>
+      <button className="px-3 py-2 border rounded w-full" disabled={!email || sending}>
+        {sending ? 'Sending…' : 'Send magic link'}
+      </button>
       {msg && <p className="text-sm">{msg}</p>}
     </form>
   );
