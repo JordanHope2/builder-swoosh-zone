@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { getSupabaseAdmin } from "../supabase";
 import { authMiddleware } from "../middleware/auth";
+import { rbacMiddleware } from "../middleware/rbac";
 
 const router = Router();
 
 // This endpoint is now protected and requires authentication.
 // Further role-based authorization could be added in the future.
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/", [authMiddleware, rbacMiddleware(['recruiter', 'admin'])], async (req, res) => {
   const supabase = getSupabaseAdmin();
   try {
     // Corrected table name from `scraped_candidates` to `candidates`
