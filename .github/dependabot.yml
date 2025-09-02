@@ -23,3 +23,5 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    ignore:
+      - dependency-name: "larrystone/sftp-upload-action"
