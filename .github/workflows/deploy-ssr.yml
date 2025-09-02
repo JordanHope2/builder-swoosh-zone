@@ -65,16 +65,18 @@ jobs:
       - name: Deploy server via SFTP
         id: deploy_server_sftp
         if: ${{ env.SFTP_HOST != '' }}
-        uses: larrystone/sftp-upload-action@v1
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ env.SFTP_HOST }}
           username: ${{ env.SFTP_USERNAME }}
+          server: ${{ env.SFTP_HOST }}
           password: ${{ env.SFTP_PASSWORD }}
-          local_path: 'dist/server'
+          local_path: 'dist/server/'
           remote_path: ${{ env.SERVER_REMOTE_DIR }}
+          sftp_only: true
+          delete_remote_files: false
 
       - name: Deploy server via FTP (fallback)
-        if: ${{ steps.deploy_server_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        if: ${{ (steps.deploy_server_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ env.FTP_SERVER }}
@@ -87,16 +89,18 @@ jobs:
       - name: Deploy client via SFTP
         id: deploy_client_sftp
         if: ${{ env.SFTP_HOST != '' }}
-        uses: larrystone/sftp-upload-action@v1
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ env.SFTP_HOST }}
           username: ${{ env.SFTP_USERNAME }}
+          server: ${{ env.SFTP_HOST }}
           password: ${{ env.SFTP_PASSWORD }}
-          local_path: 'dist/spa'
+          local_path: 'dist/spa/'
           remote_path: ${{ env.CLIENT_REMOTE_DIR }}
+          sftp_only: true
+          delete_remote_files: false
 
       - name: Deploy client via FTP (fallback)
-        if: ${{ steps.deploy_client_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        if: ${{ (steps.deploy_client_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ env.FTP_SERVER }}
@@ -109,16 +113,18 @@ jobs:
       - name: Deploy restart.txt via SFTP
         id: deploy_restart_sftp
         if: ${{ env.SFTP_HOST != '' }}
-        uses: larrystone/sftp-upload-action@v1
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ env.SFTP_HOST }}
           username: ${{ env.SFTP_USERNAME }}
+          server: ${{ env.SFTP_HOST }}
           password: ${{ env.SFTP_PASSWORD }}
           local_path: '.github/passenger-restart/restart.txt'
           remote_path: ${{ env.TMP_REMOTE_DIR }}
+          sftp_only: true
+          delete_remote_files: false
 
       - name: Deploy restart.txt via FTP (fallback)
-        if: ${{ steps.deploy_restart_sftp.outcome != 'success' && env.FTP_SERVER != '' }}
+        if: ${{ (steps.deploy_restart_sftp.outcome != 'success' || env.SFTP_HOST == '') && env.FTP_SERVER != '' && env.FTP_USERNAME != '' && env.FTP_PASSWORD != '' }}
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ env.FTP_SERVER }}
