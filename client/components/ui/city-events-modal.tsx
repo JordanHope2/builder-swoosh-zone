@@ -246,13 +246,7 @@ export function CityEventsModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && cityName) {
-      loadCityData();
-    }
-  }, [isOpen, cityName]);
-
-  const loadCityData = async () => {
+  const loadCityData = React.useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -265,7 +259,13 @@ export function CityEventsModal({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [cityName]);
+
+  useEffect(() => {
+    if (isOpen && cityName) {
+      void loadCityData();
+    }
+  }, [isOpen, cityName, loadCityData]);
 
   const handleClose = () => {
     onClose();

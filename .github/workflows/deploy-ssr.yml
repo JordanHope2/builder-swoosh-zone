@@ -52,6 +52,19 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
+      - name: Preflight: Check for required secrets
+        run: |
+          echo "Checking for required secrets..."
+          if [[ -z "${{ secrets.SFTP_HOST }}" && -z "${{ secrets.FTP_SERVER }}" ]]; then
+            echo "::error::Deployment failed: You must provide secrets for either SFTP (SFTP_HOST) or FTP (FTP_SERVER)."
+            exit 1
+          fi
+          if [[ -z "${{ secrets.VITE_SUPABASE_URL }}" || -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]]; then
+            echo "::error::Deployment failed: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY secrets must be set."
+            exit 1
+          fi
+          echo "::notice::All required secrets are present."
+
       - name: Install dependencies
         run: ${{ env.INSTALL_CMD }}
 
@@ -59,7 +72,16 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: ${{ env.BUILD_CMD }}
+
+      - name: Post-Build: List artifact sizes
+        run: |
+          echo "--- Build artifacts ---"
+          ls -lR dist
+          echo "--- Artifact sizes ---"
+          du -sh dist/*
+          echo "-----------------------"
 
       # --- Deploy Server Code ---
       - name: Deploy server via SFTP

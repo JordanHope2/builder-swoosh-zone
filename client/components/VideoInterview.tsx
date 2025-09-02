@@ -109,7 +109,7 @@ export function VideoInterview({
         mediaStream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [toast]);
+  }, [toast, mediaStream]);
 
   // Timer effect
   useEffect(() => {
@@ -128,7 +128,7 @@ export function VideoInterview({
     }
 
     return () => clearInterval(interval);
-  }, [interviewState, timeRemaining]);
+  }, [interviewState, timeRemaining, stopRecording]);
 
   const toggleVideo = useCallback(() => {
     if (mediaStream) {
@@ -203,9 +203,9 @@ export function VideoInterview({
       setCurrentQuestionIndex((prev) => prev + 1);
       setInterviewState("question");
     } else {
-      completeInterview();
+      void completeInterview();
     }
-  }, [currentQuestionIndex, session.questions.length]);
+  }, [currentQuestionIndex, session.questions.length, completeInterview]);
 
   const completeInterview = useCallback(async () => {
     setInterviewState("completed");

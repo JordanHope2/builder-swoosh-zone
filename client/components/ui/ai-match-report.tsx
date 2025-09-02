@@ -200,13 +200,7 @@ export function AIMatchReportModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen && !report) {
-      loadMatchReport();
-    }
-  }, [isOpen]);
-
-  const loadMatchReport = async () => {
+  const loadMatchReport = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -224,7 +218,13 @@ export function AIMatchReportModal({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [jobId, userId, jobProfile, candidateProfile]);
+
+  useEffect(() => {
+    if (isOpen && !report) {
+      void loadMatchReport();
+    }
+  }, [isOpen, report, loadMatchReport]);
 
   const handleImproveProfile = () => {
     onClose();

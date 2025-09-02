@@ -26,6 +26,20 @@ interface SecureSearchProps {
   debounceMs?: number;
 }
 
+// Custom hook for debouncing
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+}
+
 export const SecureSearch: React.FC<SecureSearchProps> = ({
   placeholder = "Search...",
   onSearch,
@@ -37,26 +51,23 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
   debounceMs = 300,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, debounceMs);
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<SearchFilters>({});
   const [sortField, setSortField] = useState("");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  // Debounced search
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      const sanitizedTerm = SecurityUtils.sanitizeText(term);
-      if (SecurityUtils.validateStringLength(sanitizedTerm, 0, 100)) {
-        onSearch(sanitizedTerm);
-      }
-    }, debounceMs),
-    [onSearch, debounceMs],
-  );
+  useEffect(() => {
+    const sanitizedTerm = SecurityUtils.sanitizeText(debouncedSearchTerm);
+    if (SecurityUtils.validateStringLength(sanitizedTerm, 0, 100)) {
+      onSearch(sanitizedTerm);
+    }
+  }, [debouncedSearchTerm, onSearch]);
+
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    debouncedSearch(value);
+    setSearchTerm(e.target.value);
   };
 
   const clearSearch = () => {
@@ -274,17 +285,5 @@ export const SecureSearch: React.FC<SecureSearchProps> = ({
     </div>
   );
 };
-
-// Debounce utility
-function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  delay: number,
-): (...args: Parameters<T>) => void {
-  let timeoutId: ReturnType<typeof setTimeout>;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), delay);
-  };
-}
 
 export default SecureSearch;

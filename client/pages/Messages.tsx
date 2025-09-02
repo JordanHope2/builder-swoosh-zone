@@ -237,10 +237,15 @@ export default function Messages() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const currentConversation = mockConversations.find(
-    (conv) => conv.id === selectedConversation,
+  const currentConversation = React.useMemo(() =>
+    mockConversations.find((conv) => conv.id === selectedConversation),
+    [selectedConversation]
   );
-  const currentMessages = selectedConversation === "conv-1" ? mockMessages : [];
+
+  const currentMessages = React.useMemo(() =>
+    selectedConversation === "conv-1" ? mockMessages : [],
+    [selectedConversation]
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
