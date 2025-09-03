@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ulid } from "ulid";
 import {
   Eye,
   EyeOff,
@@ -80,7 +81,7 @@ export default function SignUp() {
     try {
       await signUpWithEmail(formData.email, formData.password, {
         full_name: `${formData.firstName} ${formData.lastName}`,
-        username: formData.firstName, // Using firstName as a simple username for now
+        username: `user-${ulid()}`,
         // TODO: Add user_type to profiles table and pass it here
       });
 
