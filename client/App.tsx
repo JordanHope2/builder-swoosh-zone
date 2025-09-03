@@ -13,7 +13,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { JobsProvider } from "./contexts/JobsContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { SharedLayout } from "./components/SharedLayout";
-import { EnhancedAIChatbot } from "./components/EnhancedAIChatbot";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -285,7 +284,6 @@ const App = () => (
                     <Route path="*" element={<NotFound />} />
                     </Routes>
                   </SharedLayout>
-                  <EnhancedAIChatbot />
                 </BrowserRouter>
               </TooltipProvider>
             </FavoritesProvider>
