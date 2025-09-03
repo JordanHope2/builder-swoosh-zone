@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -435,10 +436,23 @@ export default function CompanyDetail() {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Navigation />
+    <>
+      <Helmet>
+        <title>{`${company.name} | Company Profile | JobEqual`}</title>
+        <meta name="description" content={company.description.substring(0, 160)} />
+        <link rel="canonical" href={`https://jobequal.ch/company/${company.id}`} />
+        <meta property="og:title" content={`${company.name} | Company Profile`} />
+        <meta property="og:description" content={company.description.substring(0, 160)} />
+        <meta property="og:url" content={`https://jobequal.ch/company/${company.id}`} />
+        <meta property="og:type" content="profile" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${company.name} | Company Profile`} />
+        <meta name="twitter:description" content={company.description.substring(0, 160)} />
+      </Helmet>
+      <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -904,5 +918,6 @@ export default function CompanyDetail() {
         </AnimatePresence>
       </div>
     </main>
+    </>
   );
 }

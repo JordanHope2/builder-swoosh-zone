@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Navigation } from "@components/Navigation";
 import { EnhancedApplicationForm } from "../components/EnhancedApplicationForm";
 import {
@@ -279,10 +280,57 @@ export default function JobDetails() {
   });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
-      <Navigation />
+    <>
+      <Helmet>
+        <title>{`${job.title} at ${job.company} | JobEqual`}</title>
+        <meta name="description" content={job.description.substring(0, 160)} />
+        <link rel="canonical" href={`https://jobequal.ch/job/${job.id}`} />
+        <meta property="og:title" content={`${job.title} at ${job.company}`} />
+        <meta property="og:description" content={job.description.substring(0, 160)} />
+        <meta property="og:url" content={`https://jobequal.ch/job/${job.id}`} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${job.title} at ${job.company}`} />
+        <meta name="twitter:description" content={job.description.substring(0, 160)} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "JobPosting",
+            "title": job.title,
+            "description": job.description,
+            "hiringOrganization": {
+              "@type": "Organization",
+              "name": job.company,
+              "sameAs": job.companyInfo.website
+            },
+            "employmentType": job.type.toUpperCase().replace('-', '_'),
+            "datePosted": new Date(new Date().setDate(new Date().getDate()-2)).toISOString(), // Mocking "2 days ago"
+            "validThrough": job.deadline,
+            "jobLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": job.location.split(',')[0],
+                "addressCountry": job.location.split(',')[1]
+              }
+            },
+            "baseSalary": {
+              "@type": "MonetaryAmount",
+              "currency": "CHF",
+              "value": {
+                "@type": "QuantitativeValue",
+                "minValue": 120000,
+                "maxValue": 140000,
+                "unitText": "YEAR"
+              }
+            }
+          })}
+        </script>
+      </Helmet>
+      <main className="min-h-screen bg-gradient-to-b from-jobequal-neutral to-white">
+        <Navigation />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         {/* Back Navigation */}
         <Link
           to="/job-search"
@@ -631,5 +679,6 @@ export default function JobDetails() {
         cityName={job.location.split(",")[0].trim()}
       />
     </main>
+    </>
   );
 }

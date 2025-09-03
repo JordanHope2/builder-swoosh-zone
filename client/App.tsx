@@ -4,6 +4,7 @@ import { Toaster } from "./components/ui/toaster";
 import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeProvider";
@@ -56,18 +57,19 @@ import PostJob from "./pages/PostJob";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <LanguageProvider>
-        <AuthProvider>
-          <JobsProvider>
-            <FavoritesProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <SharedLayout>
-                    <Routes>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <JobsProvider>
+              <FavoritesProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <SharedLayout>
+                      <Routes>
                       {/* Home & jobs */}
                       <Route path="/" element={<Index />} />
                     <Route path="/jobs" element={<JobSearch />} />
@@ -285,13 +287,14 @@ const App = () => (
                     </Routes>
                   </SharedLayout>
                 </BrowserRouter>
-              </TooltipProvider>
-            </FavoritesProvider>
-          </JobsProvider>
-        </AuthProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+                </TooltipProvider>
+              </FavoritesProvider>
+            </JobsProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 createRoot(document.getElementById("root")!).render(<App />);
