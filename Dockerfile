@@ -12,8 +12,8 @@ RUN npm ci
 # This includes server, client, shared code, and config files
 COPY . .
 
-# Run the server build command specifically
-RUN npm run build:server
+# Run the full build command for both client and server
+RUN npm run build
 
 # Stage 2: Production
 # This stage creates the final, lean image with only production dependencies and the built code.
@@ -25,8 +25,8 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
 
-# Copy the built server code from the builder stage
-COPY --from=builder /app/dist/server ./dist/server
+# Copy the entire built application (client and server) from the builder stage
+COPY --from=builder /app/dist ./dist
 
 # Expose the port the server will run on
 EXPOSE 8080
