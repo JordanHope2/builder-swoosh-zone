@@ -1,80 +1,54 @@
 import { Router } from "express";
 import { getSupabaseAdmin } from "../supabase";
-import { spawn } from "child_process";
-import path from "path";
+import { authMiddleware } from "../middleware/auth";
+import natural from "natural";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
-  const { candidateId, jobId } = req.body;
+const { TfIdf, PorterStemmer } = natural;
 
-  if (!candidateId || !jobId) {
+router.post("/", authMiddleware, async (req, res) => {
+  const { candidateText, jobText } = req.body;
+
+  if (!candidateText || !jobText) {
     return res
       .status(400)
-      .json({ error: "candidateId and jobId are required." });
+      .json({ error: "candidateText and jobText are required." });
   }
 
-  const supabase = getSupabaseAdmin();
-
   try {
-    // 1. Fetch candidate and job data from Supabase
-    const { data: candidate, error: candidateError } = await supabase
-      .from("scraped_candidates")
-      .select("bio")
-      .eq("id", candidateId)
-      .single();
+    // 1. Preprocess the text (stemming)
+    const processText = (text: string) => {
+      return text.split(' ').map(PorterStemmer.stem).join(' ');
+    };
 
-    const { data: job, error: jobError } = await supabase
-      .from("jobs")
-      .select("description")
-      .eq("id", jobId)
-      .single();
+    const processedCandidateText = processText(candidateText);
+    const processedJobText = processText(jobText);
 
-    if (candidateError || jobError) {
-      console.error(
-        "Error fetching data from Supabase:",
-        candidateError || jobError,
-      );
-      return res.status(404).json({ error: "Candidate or Job not found." });
+    // 2. Calculate TF-IDF and cosine similarity
+    const tfidf = new TfIdf();
+    tfidf.addDocument(processedCandidateText);
+    tfidf.addDocument(processedJobText);
+
+    // Get the vectors for the documents
+    const candidateVector = tfidf.getVector(0);
+    const jobVector = tfidf.getVector(1);
+
+    // Calculate cosine similarity
+    const dotProduct = candidateVector.dot(jobVector);
+    const candidateMagnitude = candidateVector.magnitude();
+    const jobMagnitude = jobVector.magnitude();
+
+    let cosineSimilarity = 0;
+    if (candidateMagnitude !== 0 && jobMagnitude !== 0) {
+      cosineSimilarity = dotProduct / (candidateMagnitude * jobMagnitude);
     }
 
-    if (!candidate?.bio || !job?.description) {
-      return res
-        .status(400)
-        .json({ error: "Candidate bio or job description is missing." });
-    }
+    const matchScore = Math.round(cosineSimilarity * 100);
 
-    // 2. Execute the Python matching script
-    const pythonScriptPath = path.join(
-      __dirname,
-      "../../job_scraper/analysis/matching_service.py",
-    );
-    const pythonProcess = spawn("python3", [
-      pythonScriptPath,
-      candidate.bio,
-      job.description,
-    ]);
+    // 3. Return the score
+    res.json({ match_score: matchScore });
 
-    let matchScore = "";
-    pythonProcess.stdout.on("data", (data) => {
-      matchScore += data.toString();
-    });
-
-    pythonProcess.stderr.on("data", (data) => {
-      console.error(`stderr from Python script: ${data}`);
-    });
-
-    pythonProcess.on("close", (code) => {
-      if (code !== 0) {
-        console.error(`Python script exited with code ${code}`);
-        return res
-          .status(500)
-          .json({ error: "Failed to calculate match score." });
-      }
-
-      // 3. Return the score
-      res.json({ match_score: parseInt(matchScore.trim(), 10) });
-    });
   } catch (error: any) {
     console.error("Error in /api/match:", error);
     res.status(500).json({ error: error.message });

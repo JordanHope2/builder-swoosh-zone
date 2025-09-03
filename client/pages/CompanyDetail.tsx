@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { Navigation } from "@components/Navigation";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useFavorites } from "../contexts/FavoritesContext";
@@ -92,234 +94,6 @@ interface CompanyData {
   };
 }
 
-// Mock company data
-const mockCompanies: { [key: string]: CompanyData } = {
-  "1": {
-    id: "1",
-    name: "TechCorp Zurich",
-    logo: "🚀",
-    industry: "Technology",
-    size: "200-500 employees",
-    founded: 2015,
-    headquarters: "Zurich, Switzerland",
-    website: "https://techcorp.ch",
-    description:
-      "Leading fintech company revolutionizing digital banking solutions across Europe. We combine Swiss precision with cutting-edge technology to create financial products that empower businesses and individuals.",
-    mission:
-      "To democratize financial services through innovative technology and Swiss-quality engineering.",
-    values: [
-      "Innovation",
-      "Transparency",
-      "Customer-Centric",
-      "Sustainability",
-      "Swiss Quality",
-    ],
-    benefits: [
-      "Health Insurance",
-      "Remote Work",
-      "Stock Options",
-      "Learning Budget",
-      "25 Days Vacation",
-      "Gym Membership",
-    ],
-    culture: {
-      workLifeBalance: 4.2,
-      diversity: 4.5,
-      careerGrowth: 4.3,
-      compensation: 4.1,
-      management: 4.0,
-      overall: 4.2,
-    },
-    openPositions: [
-      {
-        id: "1",
-        title: "Senior Software Engineer",
-        department: "Engineering",
-        location: "Zurich",
-        type: "Full-time",
-        salary: "CHF 120,000 - 140,000",
-        postedDate: "2024-01-15",
-        applications: 45,
-        urgent: true,
-      },
-      {
-        id: "2",
-        title: "Product Manager",
-        department: "Product",
-        location: "Zurich",
-        type: "Full-time",
-        salary: "CHF 110,000 - 130,000",
-        postedDate: "2024-01-10",
-        applications: 28,
-      },
-      {
-        id: "3",
-        title: "DevOps Engineer",
-        department: "Engineering",
-        location: "Remote",
-        type: "Full-time",
-        salary: "CHF 100,000 - 120,000",
-        postedDate: "2024-01-08",
-        applications: 67,
-      },
-    ],
-    reviews: [
-      {
-        id: "1",
-        rating: 5,
-        title: "Amazing company culture and growth opportunities",
-        review:
-          "I've been with TechCorp for 2 years and it's been an incredible journey. The company truly values work-life balance and provides excellent opportunities for professional development.",
-        pros: "Great benefits, flexible work arrangements, innovative projects, supportive management",
-        cons: "Fast-paced environment might not suit everyone, occasional tight deadlines",
-        position: "Software Engineer",
-        employmentStatus: "Current Employee",
-        date: "2024-01-10",
-        helpful: 24,
-        anonymous: false,
-      },
-      {
-        id: "2",
-        rating: 4,
-        title: "Solid fintech company with room to grow",
-        review:
-          "TechCorp offers competitive compensation and interesting challenges. The team is talented and collaborative.",
-        pros: "Good compensation, smart colleagues, cutting-edge technology, learning opportunities",
-        cons: "Limited career paths in some departments, office space could be better",
-        position: "Product Manager",
-        employmentStatus: "Former Employee",
-        date: "2024-01-05",
-        helpful: 18,
-        anonymous: true,
-      },
-      {
-        id: "3",
-        rating: 4,
-        title: "Great place for tech enthusiasts",
-        review:
-          "Working at TechCorp has been rewarding. The company is innovative and the work is challenging in a good way.",
-        pros: "Innovation focus, good team dynamics, modern tech stack, flexible hours",
-        cons: "Can be demanding during product launches, limited social events",
-        position: "DevOps Engineer",
-        employmentStatus: "Current Employee",
-        date: "2023-12-28",
-        helpful: 31,
-        anonymous: false,
-      },
-    ],
-    photos: ["🏢", "💻", "☕", "🎯", "🌟", "👥"],
-    stats: {
-      totalEmployees: 320,
-      averageTenure: "2.3 years",
-      diversityScore: 85,
-      glassdoorRating: 4.2,
-      totalReviews: 156,
-    },
-  },
-  "2": {
-    id: "2",
-    name: "SwissFinance Solutions",
-    logo: "🏦",
-    industry: "Financial Services",
-    size: "500-1000 employees",
-    founded: 2008,
-    headquarters: "Geneva, Switzerland",
-    website: "https://swissfinance.ch",
-    description:
-      "Premier financial services company providing wealth management, investment banking, and digital financial solutions to clients across Switzerland and Europe.",
-    mission:
-      "To provide world-class financial services with Swiss precision and innovation.",
-    values: ["Trust", "Excellence", "Innovation", "Client Focus", "Integrity"],
-    benefits: [
-      "Premium Health Insurance",
-      "Pension Plan",
-      "Flexible Work",
-      "Professional Development",
-      "30 Days Vacation",
-      "Executive Dining",
-    ],
-    culture: {
-      workLifeBalance: 3.8,
-      diversity: 4.1,
-      careerGrowth: 4.4,
-      compensation: 4.6,
-      management: 4.2,
-      overall: 4.2,
-    },
-    openPositions: [
-      {
-        id: "4",
-        title: "Investment Analyst",
-        department: "Investment Banking",
-        location: "Geneva",
-        type: "Full-time",
-        salary: "CHF 95,000 - 115,000",
-        postedDate: "2024-01-12",
-        applications: 89,
-        urgent: true,
-      },
-      {
-        id: "5",
-        title: "Risk Manager",
-        department: "Risk Management",
-        location: "Geneva",
-        type: "Full-time",
-        salary: "CHF 130,000 - 150,000",
-        postedDate: "2024-01-09",
-        applications: 34,
-      },
-      {
-        id: "6",
-        title: "Digital Banking Lead",
-        department: "Digital",
-        location: "Hybrid",
-        type: "Full-time",
-        salary: "CHF 140,000 - 160,000",
-        postedDate: "2024-01-07",
-        applications: 52,
-      },
-    ],
-    reviews: [
-      {
-        id: "4",
-        rating: 4,
-        title: "Excellent compensation and prestige",
-        review:
-          "SwissFinance is a well-respected firm with excellent compensation packages. The work is challenging and the clients are high-profile.",
-        pros: "High compensation, prestigious clients, excellent benefits, professional development",
-        cons: "Long hours, high pressure environment, limited work-life balance",
-        position: "Investment Analyst",
-        employmentStatus: "Current Employee",
-        date: "2024-01-08",
-        helpful: 42,
-        anonymous: true,
-      },
-      {
-        id: "5",
-        rating: 5,
-        title: "Outstanding career development opportunities",
-        review:
-          "The mentorship program here is exceptional. Senior leadership is very invested in developing junior talent.",
-        pros: "Career development, mentorship, international exposure, learning opportunities",
-        cons: "Demanding schedule, travel requirements, competitive internal environment",
-        position: "Portfolio Manager",
-        employmentStatus: "Current Employee",
-        date: "2024-01-03",
-        helpful: 36,
-        anonymous: false,
-      },
-    ],
-    photos: ["🏢", "📊", "💼", "🤝", "🌍", "📈"],
-    stats: {
-      totalEmployees: 750,
-      averageTenure: "4.1 years",
-      diversityScore: 78,
-      glassdoorRating: 4.2,
-      totalReviews: 203,
-    },
-  },
-};
-
 export default function CompanyDetail() {
   const { id } = useParams<{ id: string }>();
   const { t } = useLanguage();
@@ -329,13 +103,33 @@ export default function CompanyDetail() {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const company = mockCompanies[id || "1"];
+  const fetchCompany = async () => {
+    const response = await fetch(`/api/companies/${id}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data.company;
+  };
+
+  const { data: company, isLoading, isError, error } = useQuery({
+    queryKey: ['company', id],
+    queryFn: fetchCompany,
+  });
 
   useEffect(() => {
     if (company) {
       setIsFollowing(isFavorite(company.id));
     }
   }, [company, isFavorite]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   if (!company) {
     return (
@@ -435,10 +229,23 @@ export default function CompanyDetail() {
   );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <Navigation />
+    <>
+      <Helmet>
+        <title>{`${company.name} | Company Profile | JobEqual`}</title>
+        <meta name="description" content={company.description.substring(0, 160)} />
+        <link rel="canonical" href={`https://jobequal.ch/company/${company.id}`} />
+        <meta property="og:title" content={`${company.name} | Company Profile`} />
+        <meta property="og:description" content={company.description.substring(0, 160)} />
+        <meta property="og:url" content={`https://jobequal.ch/company/${company.id}`} />
+        <meta property="og:type" content="profile" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${company.name} | Company Profile`} />
+        <meta name="twitter:description" content={company.description.substring(0, 160)} />
+      </Helmet>
+      <main className="min-h-screen bg-gradient-to-br from-jobequal-neutral via-white to-jobequal-blue dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <Navigation />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -904,5 +711,6 @@ export default function CompanyDetail() {
         </AnimatePresence>
       </div>
     </main>
+    </>
   );
 }

@@ -1,141 +1,67 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  MessageCircle,
-  X,
-  Send,
-  Bot,
-  User,
-  Sparkles,
-  Briefcase,
-  MapPin,
-  Search,
-  TrendingUp,
-  Zap,
-} from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { MessageCircle, X, Send, Bot, User, Sparkles } from "lucide-react";
 
 interface Message {
   id: string;
   text: string;
   isBot: boolean;
-  timestamp: Date;
-  suggestions?: string[];
 }
 
-const quickActions = [
-  { icon: Search, text: "Find jobs for me", action: "search_jobs" },
-  { icon: MapPin, text: "Jobs in Zurich", action: "jobs_zurich" },
-  { icon: Briefcase, text: "Remote positions", action: "remote_jobs" },
-  { icon: TrendingUp, text: "Salary insights", action: "salary_info" },
-];
-
-const mockResponses = {
-  search_jobs:
-    "I'd be happy to help you find jobs! What type of role are you looking for? You can say something like 'Software Engineer' or 'Marketing Manager'.",
-  jobs_zurich:
-    "Great choice! Zurich has amazing opportunities. I found 47 jobs in Zurich matching your profile. The top matches include:\n\n🚀 Senior Software Engineer at TechCorp (95% match)\n💡 Product Manager at InnovateCH (89% match)\n📊 Data Scientist at Analytics Pro (87% match)\n\nWould you like to see more details?",
-  remote_jobs:
-    "I found 23 remote positions that match your profile! Remote work is very popular in Switzerland. Here are the top matches:\n\n☁️ DevOps Engineer at CloudTech (92% match)\n🎨 UX Designer at DesignStudio (85% match)\n📈 Digital Marketing Lead at GrowthCo (81% match)",
-  salary_info:
-    "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?",
-  default:
-    "I'm here to help you find the perfect job! I can help you:\n\n• Search for specific roles\n• Find jobs by location\n• Get salary insights\n• Match you with companies\n• Optimize your profile\n\nWhat would you like to do?",
+const mockResponses: { [key: string]: string } = {
+  default: "Hello! How can I help you find your dream job today?",
+  "find jobs": "I can help with that! What role are you looking for?",
+  "salary insights": "I can provide salary information. What job title and location are you interested in?",
 };
 
 export function AIChatbot() {
-  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize with welcome message
   useEffect(() => {
-    if (messages.length === 0) {
+    if (isOpen && messages.length === 0) {
       setMessages([
         {
           id: "1",
-          text: t("ai.welcome"),
+          text: mockResponses.default,
           isBot: true,
-          timestamp: new Date(),
-          suggestions: [
-            t("ai.find_jobs_for_me"),
-            t("ai.jobs_in_zurich"),
-            t("ai.remote_positions"),
-            t("ai.salary_insights"),
-          ],
         },
       ]);
     }
-  }, [t, messages.length]);
+  }, [isOpen, messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  useEffect(scrollToBottom, [messages]);
 
-  const handleQuickAction = (action: string, text: string) => {
-    sendMessage(text, action);
-  };
-
-  const sendMessage = async (text: string, action?: string) => {
+  const sendMessage = async (text: string) => {
     if (!text.trim()) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       text,
       isBot: false,
-      timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInputText("");
     setIsTyping(true);
 
-    // Simulate AI thinking time
-    setTimeout(
-      () => {
-        const responseKey = action || "default";
-        let response;
-
-        switch (responseKey) {
-          case "search_jobs":
-            response = t("ai.find_jobs_response");
-            break;
-          case "jobs_zurich":
-            response = t("ai.zurich_jobs_response");
-            break;
-          case "remote_jobs":
-            response = t("ai.remote_jobs_response");
-            break;
-          case "salary_info":
-            response =
-              "Based on your profile and current market data:\n\n💰 Average salary range: CHF 95,000 - 130,000\n📊 You're in the top 15% of candidates\n🎯 Recommended asking range: CHF 110,000 - 125,000\n\nWould you like tips on salary negotiation?";
-            break;
-          default:
-            response = t("ai.help_find_job");
-        }
-
-        const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: response,
-          isBot: true,
-          timestamp: new Date(),
-          suggestions: action
-            ? []
-            : ["Tell me more", "Show me jobs", "Update my profile"],
-        };
-
-        setMessages((prev) => [...prev, botMessage]);
-        setIsTyping(false);
-      },
-      1000 + Math.random() * 1000,
-    );
+    setTimeout(() => {
+      const responseKey = text.toLowerCase().includes("job") ? "find jobs" : text.toLowerCase().includes("salary") ? "salary insights" : "default";
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: mockResponses[responseKey],
+        isBot: true,
+      };
+      setMessages((prev) => [...prev, botMessage]);
+      setIsTyping(false);
+    }, 1000);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -145,193 +71,48 @@ export function AIChatbot() {
 
   return (
     <>
-      {/* Chat Toggle Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ${isOpen ? "hidden" : "flex"} items-center justify-center group`}
-        whileHover={{ scale: 1.05 }}
+        className={`fixed bottom-6 right-6 z-40 p-4 bg-blue-600 text-white rounded-full shadow-lg ${isOpen ? "hidden" : "flex"}`}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2 }}
       >
-        <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
-        <div className="absolute -top-2 -right-2 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-
-        {/* Tooltip */}
-        <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          {t("ai.ask_anything")}
-        </div>
+        <MessageCircle />
       </motion.button>
 
-      {/* Chat Interface */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 100 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 100 }}
-            transition={{ type: "spring", duration: 0.5 }}
-            className="fixed bottom-6 right-6 z-50 w-96 h-[600px] bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-jobequal-neutral-dark dark:border-gray-600 flex flex-col overflow-hidden"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-20 right-6 z-50 w-96 h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col"
           >
-            {/* Header */}
-            <div className="p-4 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <Bot className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">AI Career Assistant</h3>
-                    <p className="text-xs opacity-90">Online • Ready to help</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-1 hover:bg-white/20 rounded transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+            <div className="p-4 bg-blue-600 text-white flex justify-between items-center">
+              <h3 className="font-semibold">AI Career Assistant</h3>
+              <button onClick={() => setIsOpen(false)}><X /></button>
             </div>
-
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
-                >
-                  <div
-                    className={`max-w-[80%] ${message.isBot ? "order-2" : "order-1"}`}
-                  >
-                    <div
-                      className={`p-3 rounded-2xl ${
-                        message.isBot
-                          ? "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-md"
-                          : "bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-br-md"
-                      }`}
-                    >
-                      {message.isBot && (
-                        <Sparkles className="w-4 h-4 inline mr-2 opacity-70" />
-                      )}
-                      <span className="text-sm whitespace-pre-line">
-                        {message.text}
-                      </span>
-                    </div>
-
-                    {/* Suggestions */}
-                    {message.suggestions && message.suggestions.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {message.suggestions.map((suggestion, index) => (
-                          <button
-                            key={index}
-                            onClick={() => sendMessage(suggestion)}
-                            className="px-3 py-1 text-xs bg-jobequal-green-light text-jobequal-green-dark rounded-full hover:bg-jobequal-green hover:text-white transition-colors"
-                          >
-                            {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                <div key={message.id} className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}>
+                  <div className={`p-3 rounded-lg ${message.isBot ? "bg-gray-200" : "bg-blue-500 text-white"}`}>
+                    {message.text}
                   </div>
-
-                  {message.isBot && (
-                    <div className="w-6 h-6 bg-gradient-to-r from-jobequal-green to-jobequal-teal rounded-full flex items-center justify-center mr-2 order-1 flex-shrink-0">
-                      <Bot className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                </motion.div>
+                </div>
               ))}
-
-              {/* Typing Indicator */}
-              {isTyping && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex justify-start"
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className="w-6 h-6 bg-gradient-to-r from-jobequal-green to-jobequal-teal rounded-full flex items-center justify-center">
-                      <Bot className="w-3 h-3 text-white" />
-                    </div>
-                    <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-2xl rounded-bl-md">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.1s" }}
-                        />
-                        <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
-                          style={{ animationDelay: "0.2s" }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
+              {isTyping && <div className="text-gray-500">AI is typing...</div>}
               <div ref={messagesEndRef} />
             </div>
-
-            {/* Quick Actions */}
-            <div className="p-3 border-t border-gray-200 dark:border-gray-600">
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {quickActions.map((action, index) => {
-                  let translatedText = action.text;
-                  switch (action.action) {
-                    case "search_jobs":
-                      translatedText = t("ai.find_jobs_for_me");
-                      break;
-                    case "jobs_zurich":
-                      translatedText = t("ai.jobs_in_zurich");
-                      break;
-                    case "remote_jobs":
-                      translatedText = t("ai.remote_positions");
-                      break;
-                    case "salary_info":
-                      translatedText = t("ai.salary_insights");
-                      break;
-                  }
-                  return (
-                    <button
-                      key={index}
-                      onClick={() =>
-                        handleQuickAction(action.action, translatedText)
-                      }
-                      className="flex items-center space-x-2 p-2 bg-jobequal-green-light dark:bg-gray-700 text-jobequal-green-dark dark:text-gray-300 rounded-lg hover:bg-jobequal-green hover:text-white dark:hover:bg-jobequal-green transition-colors text-xs"
-                    >
-                      <action.icon className="w-3 h-3" />
-                      <span className="truncate">{translatedText}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Input */}
-            <form
-              onSubmit={handleSubmit}
-              className="p-4 border-t border-gray-200 dark:border-gray-600"
-            >
-              <div className="flex items-center space-x-2">
+            <form onSubmit={handleSubmit} className="p-4 border-t">
+              <div className="flex items-center">
                 <input
                   type="text"
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  placeholder={t("ai.ask_placeholder")}
-                  className="flex-1 p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-jobequal-green focus:border-transparent text-sm"
+                  placeholder="Ask about jobs, salaries..."
+                  className="flex-1 p-2 border rounded-lg"
                 />
-                <button
-                  type="submit"
-                  disabled={!inputText.trim() || isTyping}
-                  className="p-2 bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white rounded-lg hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
+                <button type="submit" className="ml-2 p-2 bg-blue-600 text-white rounded-lg"><Send /></button>
               </div>
             </form>
           </motion.div>

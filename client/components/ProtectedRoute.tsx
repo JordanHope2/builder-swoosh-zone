@@ -1,21 +1,31 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { HeroSkeletonLoader } from "./SkeletonLoader"; // Assuming a generic loader exists
+import { SkeletonLoader } from "./SkeletonLoader";
 
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, session } = useAuth();
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  allowedRoles?: string[];
+}
 
-  // While the session is being loaded, you might want to show a loader.
-  // The initial state of session is null, so we need to differentiate between
-  // "loading" and "no session". A simple check for `user` can work if `useAuth`
-  // sets it only after the initial check. Let's assume a brief loading state.
-  // A more robust solution might involve a dedicated `isLoading` state in the AuthContext.
+export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
+  const { user, profile, loading } = useAuth();
+  const location = useLocation();
 
-  // For this implementation, we'll consider that if there's no user, access is denied.
-  if (!user && !session) {
+  if (loading) {
+    return <SkeletonLoader />;
+  }
+
+  if (!user) {
     // Redirect them to the /signin page, but save the current location they were
     // trying to go to. This allows us to send them back there after they log in.
-    return <Navigate to="/signin" replace />;
+    return <Navigate to="/signin" state={{ from: location }} replace />;
+  }
+
+  // If roles are specified, check if the user has one of the allowed roles.
+  if (allowedRoles && (!profile || !allowedRoles.includes(profile.role))) {
+    // Redirect to a "not authorized" page or back to the homepage.
+    // For now, redirecting to the homepage is a safe default.
+    return <Navigate to="/" replace />;
   }
 
   return children;

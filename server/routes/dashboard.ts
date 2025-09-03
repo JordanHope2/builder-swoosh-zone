@@ -1,18 +1,15 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { getSupabaseAdmin } from "../supabase";
+import { rbacMiddleware } from "../middleware/rbac";
 
 const router = Router();
 
-router.get("/recruiter", authMiddleware, async (req, res) => {
+router.get("/recruiter", [authMiddleware, rbacMiddleware(['recruiter', 'pro', 'admin'])], async (req, res) => {
   const userId = req.user.id;
   const supabase = getSupabaseAdmin();
 
   try {
-    // We should also check the user's role here.
-    // For now, we assume any authenticated user hitting this is a recruiter.
-    // A proper implementation would check `req.user.role === 'pro'`.
-
     // Fetch all jobs owned by the recruiter
     const { data: jobs, error: jobsError } = await supabase
       .from("jobs")

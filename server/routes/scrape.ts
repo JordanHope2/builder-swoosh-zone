@@ -1,6 +1,7 @@
 import { Router } from "express";
 import "dotenv/config";
 import Parser from "rss-parser";
+import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
 const parser = new Parser();
@@ -23,7 +24,7 @@ const scrapeSwissDevJobs = async () => {
   }
 };
 
-router.get("/", async (req, res) => {
+router.get("/", authMiddleware, async (req, res) => {
   const { search, location, page = 1, limit = 20 } = req.query;
 
   const adzunaPromise = (async () => {

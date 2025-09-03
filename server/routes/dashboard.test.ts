@@ -43,6 +43,13 @@ describe("GET /api/dashboard/recruiter", () => {
             in: vi.fn().mockResolvedValue({ data: mockApplications, error: null }),
           };
         }
+        if (table === "profiles") {
+          return {
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockReturnThis(),
+            single: vi.fn().mockResolvedValue({ data: { role: 'recruiter' }, error: null }),
+          };
+        }
         return { from: vi.fn() };
       }),
     };
