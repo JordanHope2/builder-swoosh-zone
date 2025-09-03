@@ -46,6 +46,29 @@ const createJobSchema = z.object({
   salary_max: z.coerce.number().int().optional(),
 });
 
+/**
+ * GET /api/jobs/:id — get a single job by id (public)
+ * Uses anon client -> respects RLS
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("jobs")
+      .select("*, companies(*)")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    if (!data) return res.status(404).json({ error: "Job not found" });
+
+    res.json({ job: data });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message ?? "Unknown error" });
+  }
+});
+
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;

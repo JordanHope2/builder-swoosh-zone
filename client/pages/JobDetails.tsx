@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useQuery } from "@tanstack/react-query";
 import { Navigation } from "@components/Navigation";
 import { EnhancedApplicationForm } from "../components/EnhancedApplicationForm";
 import {
@@ -31,81 +32,14 @@ import {
   Target,
 } from "lucide-react";
 
-// Mock job data - in real app this would come from API
-const mockJob = {
-  id: "1",
-  title: "Senior Software Engineer",
-  company: "TechCorp Zurich",
-  location: "Zurich, Switzerland",
-  salary: "CHF 120,000 - 140,000",
-  type: "Full-time",
-  remote: true,
-  logo: "🚀",
-  featured: true,
-  posted: "2 days ago",
-  deadline: "2024-02-15",
-  applicants: 24,
-  views: 156,
-  matchScore: 95,
-  description: `Join our innovative team building next-generation financial technology solutions that serve millions of users worldwide. We're looking for a passionate Senior Software Engineer to help us scale our platform and deliver exceptional user experiences.
-
-As a Senior Software Engineer, you'll work on challenging problems in a collaborative environment where your contributions directly impact the product. You'll have the opportunity to mentor junior developers, architect solutions, and work with cutting-edge technologies.`,
-
-  responsibilities: [
-    "Design and develop scalable web applications using React and TypeScript",
-    "Collaborate with cross-functional teams to define and implement new features",
-    "Mentor junior developers and participate in code reviews",
-    "Optimize application performance and ensure high code quality",
-    "Participate in architectural decisions and technical planning",
-    "Work with product managers to translate business requirements into technical solutions",
-  ],
-
-  requirements: [
-    "5+ years of experience in software development",
-    "Strong proficiency in React, TypeScript, and modern JavaScript",
-    "Experience with Node.js and backend development",
-    "Knowledge of cloud platforms (AWS, Azure, or GCP)",
-    "Experience with agile development methodologies",
-    "Excellent communication skills in English and German",
-    "Bachelor's degree in Computer Science or related field",
-  ],
-
-  niceToHave: [
-    "Experience with fintech or financial services",
-    "Knowledge of microservices architecture",
-    "Experience with Docker and Kubernetes",
-    "Previous startup experience",
-    "Open source contributions",
-  ],
-
-  benefits: [
-    "Competitive salary and equity package",
-    "Flexible working hours and remote work options",
-    "Comprehensive health insurance",
-    "25 days paid vacation + Swiss holidays",
-    "Professional development budget (CHF 3,000/year)",
-    "Modern office in Zurich with all amenities",
-    "Team events and company retreats",
-    "Pension plan contributions",
-  ],
-
-  companyInfo: {
-    name: "TechCorp Zurich",
-    size: "200-500 employees",
-    industry: "Financial Technology",
-    founded: "2015",
-    website: "https://techcorp.ch",
-    description:
-      "TechCorp is a leading fintech company revolutionizing how people manage their finances. We combine cutting-edge technology with user-centric design to create products that millions trust with their financial future.",
-  },
-};
-
 function ApplicationModal({
   isOpen,
   onClose,
+  job,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  job: any;
 }) {
   const [applicationData, setApplicationData] = useState({
     coverLetter: "",
@@ -118,8 +52,8 @@ function ApplicationModal({
       // Here you would typically send the application data to your backend
       const submissionData = {
         ...applicationData,
-        jobId: mockJob.id,
-        jobTitle: mockJob.title,
+        jobId: job.id,
+        jobTitle: job.title,
         timestamp: new Date().toISOString(),
       };
 
@@ -129,7 +63,7 @@ function ApplicationModal({
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Show success toast with job title and timestamp
-      applicationToast.success(mockJob.title, new Date().toLocaleTimeString());
+      applicationToast.success(job.title, new Date().toLocaleTimeString());
 
       // Reset form and close modal
       setApplicationData({ coverLetter: "", portfolio: "", availability: "" });
@@ -243,8 +177,27 @@ export default function JobDetails() {
   const [isAIMatchModalOpen, setIsAIMatchModalOpen] = useState(false);
   const [isCityEventsModalOpen, setIsCityEventsModalOpen] = useState(false);
 
-  // In real app, fetch job data based on id
-  const job = mockJob;
+  const fetchJob = async () => {
+    const response = await fetch(`/api/jobs/${id}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data.job;
+  };
+
+  const { data: job, isLoading, isError, error } = useQuery({
+    queryKey: ['job', id],
+    queryFn: fetchJob,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   // Generate profiles for AI analysis
   const generateJobProfile = () => ({
