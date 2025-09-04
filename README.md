@@ -220,16 +220,6 @@ This project follows security best practices for managing secrets and credential
 
 ## 🎨 Architecture
 
-### Headless Architecture with Builder.io
-
-This project is configured to use a headless architecture with Builder.io as the primary content management system (CMS).
-
--   **Catch-all Route:** The file at `src/app/[...slug]/page.tsx` is a dynamic catch-all route. It intercepts all incoming page requests.
--   **Content from CMS:** This route fetches and renders content directly from your Builder.io project. This means that new pages (like `/about`, `/contact`, etc.) should be created and managed within the Builder.io visual editor, not as new files in the codebase.
--   **Static Pages:** While you can create static pages in the `src/app` directory (e.g., for user dashboards that require complex application logic), any route that exists as a physical file will override the content from Builder.io for that specific URL.
-
-This headless approach provides maximum flexibility for marketing and content teams to create and update pages without requiring a new code deployment.
-
 ### Frontend Structure
 
 ```

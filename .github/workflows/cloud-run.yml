@@ -1,0 +1,34 @@
+name: Deploy API to Cloud Run
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "api/**"
+      - "Dockerfile"
+      - "package*.json"
+      - ".github/workflows/cloud-run.yml"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # REQUIRED for WIF
+    steps:
+      - uses: actions/checkout@v5
+      - uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: deploy@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Build & Push
+        run: gcloud builds submit ./api --tag ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/containers/je-api
+      - name: Deploy
+        run: |
+          gcloud run deploy je-api \
+            --image ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/containers/je-api \
+            --region ${{ vars.GCP_REGION }} \
+            --allow-unauthenticated \
+            --service-account je-api-runner@${{ vars.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+      - name: Show URL
+        run: gcloud run services describe je-api --region ${{ vars.GCP_REGION }} --format='value(status.url)'
