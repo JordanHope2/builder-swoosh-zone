@@ -1,57 +1,36 @@
-# --- Stage 1: Dependency Installation ---
-# This stage is dedicated to installing all npm dependencies.
-# It's separated to take advantage of Docker's layer caching.
-FROM node:20-alpine AS deps
+# Stage 1: Builder
+# This stage installs all dependencies (including dev) and builds the TypeScript server.
+FROM node:20-alpine AS builder
+
 WORKDIR /app
 
-# Copy package.json and lock file
+# Copy package files and install all dependencies
 COPY package.json package-lock.json* ./
-
-# Install all dependencies
 RUN npm ci
 
-# --- Stage 2: Application Builder ---
-# This stage builds the Next.js application. It copies the dependencies
-# from the 'deps' stage and the source code, then runs the build.
-FROM node:20-alpine AS builder
-WORKDIR /app
-
-# Copy dependencies from the 'deps' stage
-COPY --from=deps /app/node_modules ./node_modules
-# Copy the rest of the source code
+# Copy all source code required for the build
+# This includes server, client, shared code, and config files
 COPY . .
 
-# Set the NEXT_TELEMETRY_DISABLED environment variable to 1 to disable telemetry.
-ENV NEXT_TELEMETRY_DISABLED 1
+# Run the server build command specifically
+RUN npm run build:server
 
-# Run the Next.js build command.
-# This will generate the production-ready application, including the standalone server.
-RUN npm run build:next
+# Stage 2: Production
+# This stage creates the final, lean image with only production dependencies and the built code.
+FROM node:20-alpine
 
-# --- Stage 3: Production Runner ---
-# This is the final stage that creates the lean production image.
-# It uses a minimal Node.js image and copies only the necessary artifacts
-# from the 'builder' stage.
-FROM node:20-alpine AS runner
 WORKDIR /app
 
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# Copy package files and install only production dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
 
-# Create a non-root user for security purposes
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Copy the built server code from the builder stage
+COPY --from=builder /app/dist/server ./dist/server
 
-# Copy the standalone output from the builder stage
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Expose the port the server will run on
+EXPOSE 8080
 
-# Set the user to the non-root user
-USER nextjs
-
-# The Next.js server runs on port 3000 by default.
-EXPOSE 3000
-
-# The command to start the production Next.js server.
-CMD ["node", "server.js"]
+# Command to start the server
+# This should match the "start" script in package.json
+CMD ["node", "dist/server/node-build.mjs"]

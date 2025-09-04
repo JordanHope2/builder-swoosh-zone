@@ -1,13 +1,10 @@
-/**
- * @jest-environment node
- */
-
+import { describe, it, expect, vi } from "vitest";
 import request from "supertest";
 import { createServer } from "../index";
 import { getSupabaseAdmin } from "../supabase";
 
 // Mock the auth middleware
-jest.mock("../middleware/auth", () => ({
+vi.mock("../middleware/auth", () => ({
   authMiddleware: (req: any, res: any, next: () => void) => {
     req.user = { id: "test-user-id", email: "test@example.com" };
     next();
@@ -15,8 +12,8 @@ jest.mock("../middleware/auth", () => ({
 }));
 
 // Mock the supabase client
-jest.mock("../supabase", () => ({
-  getSupabaseAdmin: jest.fn(),
+vi.mock("../supabase", () => ({
+  getSupabaseAdmin: vi.fn(),
 }));
 
 describe("GET /api/dashboard/recruiter", () => {
@@ -33,20 +30,20 @@ describe("GET /api/dashboard/recruiter", () => {
     ];
 
     const mockSupabaseClient = {
-      from: jest.fn((table: string) => {
+      from: vi.fn((table: string) => {
         if (table === "jobs") {
           return {
-            select: jest.fn().mockReturnThis(),
-            eq: jest.fn().mockResolvedValue({ data: mockJobs, error: null }),
+            select: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockResolvedValue({ data: mockJobs, error: null }),
           };
         }
         if (table === "applications") {
           return {
-            select: jest.fn().mockReturnThis(),
-            in: jest.fn().mockResolvedValue({ data: mockApplications, error: null }),
+            select: vi.fn().mockReturnThis(),
+            in: vi.fn().mockResolvedValue({ data: mockApplications, error: null }),
           };
         }
-        return { from: jest.fn() };
+        return { from: vi.fn() };
       }),
     };
 
@@ -57,6 +54,7 @@ describe("GET /api/dashboard/recruiter", () => {
 
     expect(response.status).toBe(200);
 
+    // Check stats and pipeline
     expect(response.body.stats).toEqual({
       activeJobs: 1,
       totalApplicants: 3,
@@ -66,6 +64,7 @@ describe("GET /api/dashboard/recruiter", () => {
       reviewed: 1,
     });
 
+    // Check jobs array without being dependent on order
     expect(response.body.jobs).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ id: "job-1", applicantCount: 2 }),
