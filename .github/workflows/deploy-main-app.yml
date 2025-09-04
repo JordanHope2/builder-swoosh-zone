@@ -10,10 +10,11 @@ on:
     branches: [ main ]
     paths:
       # List of files and directories that should trigger a new deployment
-      - 'client/**'
-      - 'server/**'
+      - 'src/**'
+      - 'public/**'
       - 'shared/**'
       - 'Dockerfile'
+      - 'next.config.js'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/deploy-main-app.yml'
@@ -52,7 +53,7 @@ jobs:
             --image=${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/jobequal-repo/jobequal:latest \
             --platform=managed \
             --region=${{ vars.GCP_REGION }} \
-            --port=8080 \
+            --port=3000 \
             --allow-unauthenticated \
             # Note: Secrets should be managed in the Cloud Run service directly
             # or via a secret manager, not passed in the workflow.

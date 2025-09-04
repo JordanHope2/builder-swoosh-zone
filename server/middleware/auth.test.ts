@@ -1,47 +1,44 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { authMiddleware } from './auth';
 import { getSupabase } from '../supabase';
 import { Request, Response, NextFunction } from 'express';
 
-// Mock the getSupabase module
-vi.mock('../supabase', () => ({
-  getSupabase: vi.fn(),
+// Mock the getSupabase module using Jest
+jest.mock('../supabase', () => ({
+  getSupabase: jest.fn(),
 }));
 
 const mockUser = { id: '123', email: 'test@example.com' };
 
 const mockSupabase = {
   auth: {
-    getUser: vi.fn(),
+    getUser: jest.fn(),
   },
 };
 
 describe('authMiddleware (Unit)', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let nextFunction: NextFunction = vi.fn();
+  let nextFunction: NextFunction = jest.fn();
   let statusJsonMock: any;
 
   beforeEach(() => {
-    vi.clearAllMocks();
-    (getSupabase as vi.Mock).mockReturnValue(mockSupabase);
+    jest.clearAllMocks();
+    (getSupabase as jest.Mock).mockReturnValue(mockSupabase);
 
-    // Mock Express request and response objects
     mockRequest = {
-      header: vi.fn(),
+      header: jest.fn(),
     };
 
-    // Create a spy that can mock the chainable res.status().json() call
-    statusJsonMock = vi.fn(() => {});
+    statusJsonMock = jest.fn(() => {});
     mockResponse = {
-      status: vi.fn(() => ({ json: statusJsonMock } as any)),
+      status: jest.fn(() => ({ json: statusJsonMock } as any)),
     };
 
-    nextFunction = vi.fn();
+    nextFunction = jest.fn();
   });
 
   it('should return 401 if no Authorization header is provided', async () => {
-    (mockRequest.header as vi.Mock).mockReturnValue(undefined);
+    (mockRequest.header as jest.Mock).mockReturnValue(undefined);
     await authMiddleware(mockRequest as Request, mockResponse as Response, nextFunction);
 
     expect(mockResponse.status).toHaveBeenCalledWith(401);
@@ -50,10 +47,10 @@ describe('authMiddleware (Unit)', () => {
   });
 
   it('should return 401 if token is invalid', async () => {
-    (mockRequest.header as vi.Mock).mockReturnValue('Bearer invalid-token');
+    (mockRequest.header as jest.Mock).mockReturnValue('Bearer invalid-token');
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: null },
-      error: { message: 'Invalid token', status: 401 },
+      error: { message: 'Invalid token' }, // Simplified error object
     });
 
     await authMiddleware(mockRequest as Request, mockResponse as Response, nextFunction);
@@ -65,7 +62,7 @@ describe('authMiddleware (Unit)', () => {
   });
 
   it('should call next() and attach user if token is valid', async () => {
-    (mockRequest.header as vi.Mock).mockReturnValue('Bearer valid-token');
+    (mockRequest.header as jest.Mock).mockReturnValue('Bearer valid-token');
     mockSupabase.auth.getUser.mockResolvedValue({
       data: { user: mockUser },
       error: null,
