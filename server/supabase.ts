@@ -6,23 +6,14 @@ import type { Database } from "@shared/types/supabase";
 let _anon: SupabaseClient<Database> | null = null;
 let _admin: SupabaseClient<Database> | null = null;
 
-function getEnv(name: string) {
-  return process.env[name];
-}
+import { getSecrets } from './services/secretManager';
 
 export function getSupabase(): SupabaseClient<Database> {
   if (_anon) return _anon;
 
-  // Prefer server names; keep Vite/Next fallbacks
-  const url =
-    getEnv("SUPABASE_URL") ||
-    getEnv("VITE_SUPABASE_URL") ||
-    getEnv("NEXT_PUBLIC_SUPABASE_URL");
-
-  const anon =
-    getEnv("SUPABASE_ANON_KEY") ||
-    getEnv("VITE_SUPABASE_ANON_KEY") ||
-    getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  // Public keys can remain as environment variables.
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anon = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !anon) {
     throw new Error(
@@ -39,16 +30,13 @@ export function getSupabase(): SupabaseClient<Database> {
 export function getSupabaseAdmin(): SupabaseClient<Database> {
   if (_admin) return _admin;
 
-  const url =
-    getEnv("SUPABASE_URL") ||
-    getEnv("VITE_SUPABASE_URL") ||
-    getEnv("NEXT_PUBLIC_SUPABASE_URL");
-
-  const serviceKey = getEnv("SUPABASE_SERVICE_ROLE_KEY");
+  const secrets = getSecrets();
+  const url = secrets.SUPABASE_URL;
+  const serviceKey = secrets.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceKey) {
     throw new Error(
-      "Missing Supabase admin env: set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.",
+      "Supabase secrets (URL or service key) not found in cache. Ensure fetchAndCacheSecrets() is called at startup.",
     );
   }
 
