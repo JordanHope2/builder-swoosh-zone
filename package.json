@@ -89,7 +89,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@react-three/drei": "^10.1.2",
-    "@react-three/fiber": "^8.18.0",
+    "@react-three/fiber": "^9.3.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@size-limit/preset-app": "^9.0.0",
