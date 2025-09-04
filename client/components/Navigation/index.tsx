@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-// TODO: For full migration, replace `Link` here with the new `SmartLink` component.
-// This will allow seamless navigation between legacy React Router pages and new Next.js pages.
-// Example: import { SmartLink as Link } from '@components/SmartLink';
-import { Link, useLocation } from "react-router-dom";
+import { SmartLink as Link } from "@components/SmartLink";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Bell, Settings, User, LogOut, Shield } from "lucide-react";
 import { LanguageSwitcher } from "@components/LanguageSwitcher";
@@ -31,7 +28,6 @@ export function Navigation({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
   const { t } = useLanguage();
 
   // Handle scroll effect with throttling for performance
@@ -51,12 +47,6 @@ export function Navigation({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close menus on route change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsProfileOpen(false);
-  }, [location.pathname]);
-
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -70,12 +60,12 @@ export function Navigation({
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { to: "/job-search", label: t("nav.browse_jobs"), public: true },
-    { to: "/swipe", label: t("nav.swipe_discovery"), public: true },
-    { to: "/cv-upload", label: t("nav.upload_cv"), public: true },
-    { to: "/companies", label: t("nav.companies"), public: true },
-    { to: "/about", label: t("nav.about"), public: true },
-    { to: "/contact", label: t("nav.contact"), public: true },
+    { href: "/job-search", label: t("nav.browse_jobs"), public: true },
+    { href: "/swipe", label: t("nav.swipe_discovery"), public: true },
+    { href: "/cv-upload", label: t("nav.upload_cv"), public: true },
+    { href: "/companies", label: t("nav.companies"), public: true },
+    { href: "/about", label: t("nav.about"), public: true },
+    { href: "/contact", label: t("nav.contact"), public: true },
   ];
 
   const dashboardLinks = {
@@ -85,17 +75,15 @@ export function Navigation({
     admin: "/owner-admin-dashboard",
   };
 
-  const isActiveLink = (path: string) => location.pathname === path;
+  // The isActiveLink logic is temporarily disabled as it relies on useLocation,
+  // which is part of the old router. A new solution using Next.js's `usePathname`
+  // will be needed in the final, fully migrated navigation component.
+  const isActiveLink = (path: string) => false;
 
   const handleSecureLogout = () => {
-    // Clear any stored tokens/session data
     localStorage.removeItem("auth_token");
     sessionStorage.clear();
-
-    // Call logout handler
     onLogout?.();
-
-    // Redirect to home
     window.location.href = "/";
   };
 
@@ -122,13 +110,12 @@ export function Navigation({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-18">
-            {/* Logo */}
             <motion.div
               className="flex items-center"
               whileHover={{ scale: 1.02 }}
             >
               <Link
-                to="/"
+                href="/"
                 className="flex items-center space-x-2 lg:space-x-3 group"
               >
                 <div className="relative w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-jobequal-green to-jobequal-teal rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105">
@@ -145,15 +132,14 @@ export function Navigation({
               </Link>
             </motion.div>
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:block">
               <div className="flex items-center space-x-8">
                 {navLinks.map((link) => (
-                  <motion.div key={link.to} whileHover={{ scale: 1.05 }}>
+                  <motion.div key={link.href} whileHover={{ scale: 1.05 }}>
                     <Link
-                      to={link.to}
+                      href={link.href}
                       className={`relative text-sm xl:text-base font-medium transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-jobequal-green after:transition-all after:duration-300 ${
-                        isActiveLink(link.to)
+                        isActiveLink(link.href)
                           ? "text-jobequal-green after:w-full"
                           : "text-jobequal-text-muted hover:text-jobequal-text after:w-0 hover:after:w-full"
                       }`}
@@ -165,16 +151,14 @@ export function Navigation({
               </div>
             </div>
 
-            {/* Desktop Actions */}
             <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
               <NotificationsOverlay />
               <ThemeToggle />
               <LanguageSwitcher />
 
-              {/* Role Switcher */}
               <motion.div whileHover={{ scale: 1.02 }}>
                 <Link
-                  to="/role-switcher"
+                  href="/role-switcher"
                   className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-3 xl:px-4 py-2 xl:py-2.5 rounded-lg font-medium hover:from-purple-600 hover:to-indigo-600 shadow-md hover:shadow-lg transition-all duration-200 text-xs xl:text-sm"
                 >
                   🔄 Role Switch
@@ -182,7 +166,6 @@ export function Navigation({
               </motion.div>
 
               {user ? (
-                // User Profile Dropdown
                 <div className="relative">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
@@ -226,14 +209,14 @@ export function Navigation({
 
                         <div className="py-1">
                           <Link
-                            to={dashboardLinks[user.role]}
+                            href={dashboardLinks[user.role]}
                             className="flex items-center px-4 py-2 text-sm text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                           >
                             <User className="w-4 h-4 mr-3" />
                             Dashboard
                           </Link>
                           <Link
-                            to="/settings"
+                            href="/settings"
                             className="flex items-center px-4 py-2 text-sm text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                           >
                             <Settings className="w-4 h-4 mr-3" />
@@ -241,7 +224,7 @@ export function Navigation({
                           </Link>
                           {user.role === "admin" && (
                             <Link
-                              to="/admin"
+                              href="/admin"
                               className="flex items-center px-4 py-2 text-sm text-jobequal-text dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                             >
                               <Shield className="w-4 h-4 mr-3" />
@@ -264,10 +247,9 @@ export function Navigation({
                   </AnimatePresence>
                 </div>
               ) : (
-                // Auth Buttons
                 <div className="flex items-center space-x-3">
                   <Link
-                    to="/signin"
+                    href="/signin"
                     className="text-jobequal-text-muted hover:text-jobequal-text font-medium transition-all duration-200 hover:scale-105 text-sm xl:text-base"
                   >
                     {t("nav.sign_in")}
@@ -277,7 +259,7 @@ export function Navigation({
                     whileTap={{ scale: 0.98 }}
                   >
                     <Link
-                      to="/signup"
+                      href="/signup"
                       className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white px-4 xl:px-6 py-2.5 xl:py-3 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200 text-sm xl:text-base"
                     >
                       {t("nav.sign_up")}
@@ -287,7 +269,6 @@ export function Navigation({
               )}
             </div>
 
-            {/* Mobile menu button */}
             <div className="lg:hidden flex items-center space-x-3">
               <NotificationsOverlay />
               <ThemeToggle />
@@ -327,7 +308,6 @@ export function Navigation({
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -336,7 +316,6 @@ export function Navigation({
             exit={{ opacity: 0 }}
             className="lg:hidden fixed inset-0 z-40"
           >
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -345,7 +324,6 @@ export function Navigation({
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Mobile Menu Panel */}
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -354,7 +332,6 @@ export function Navigation({
               className="absolute top-16 right-0 bottom-0 w-80 max-w-[90vw] bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
             >
               <div className="p-6 space-y-6">
-                {/* User Profile Section */}
                 {user && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -379,7 +356,7 @@ export function Navigation({
                       </div>
                     </div>
                     <Link
-                      to={dashboardLinks[user.role]}
+                      href={dashboardLinks[user.role]}
                       className="block w-full text-center bg-jobequal-green text-white py-2 rounded-lg font-medium hover:bg-jobequal-green-hover transition-colors"
                     >
                       Go to Dashboard
@@ -387,19 +364,18 @@ export function Navigation({
                   </motion.div>
                 )}
 
-                {/* Navigation Links */}
                 <div className="space-y-4">
                   {navLinks.map((link, index) => (
                     <motion.div
-                      key={link.to}
+                      key={link.href}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >
                       <Link
-                        to={link.to}
+                        href={link.href}
                         className={`block py-3 px-4 rounded-xl font-medium transition-all duration-200 ${
-                          isActiveLink(link.to)
+                          isActiveLink(link.href)
                             ? "bg-jobequal-green-light text-jobequal-green border-l-4 border-jobequal-green"
                             : "text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral dark:hover:bg-gray-700"
                         }`}
@@ -410,10 +386,9 @@ export function Navigation({
                   ))}
                 </div>
 
-                {/* Mobile CTA Buttons */}
                 <div className="pt-6 border-t border-jobequal-neutral-dark space-y-3">
                   <Link
-                    to="/role-switcher"
+                    href="/role-switcher"
                     className="block w-full text-center bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-medium hover:from-purple-600 hover:to-indigo-600 shadow-md hover:shadow-lg transition-all duration-200"
                   >
                     🔄 Role Switcher
@@ -429,14 +404,14 @@ export function Navigation({
                   ) : (
                     <>
                       <Link
-                        to="/signin"
+                        href="/signin"
                         className="block w-full text-center py-3 px-4 rounded-xl font-medium text-jobequal-text-muted hover:text-jobequal-text hover:bg-jobequal-neutral dark:hover:bg-gray-700 transition-all duration-200"
                       >
                         {t("nav.sign_in")}
                       </Link>
                       <Link
-                        to="/signup"
-                        className="block w-full text-center bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200"
+                        href="/signup"
+                        className="bg-gradient-to-r from-jobequal-green to-jobequal-teal text-white py-3 px-4 rounded-xl font-semibold hover:from-jobequal-green-hover hover:to-jobequal-teal shadow-md hover:shadow-lg transition-all duration-200"
                       >
                         {t("nav.sign_up")}
                       </Link>
