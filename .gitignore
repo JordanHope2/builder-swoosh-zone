@@ -40,3 +40,8 @@ dist-ssr
 /coverage
 /playwright-report/
 /test-results/
+
+# Build artifacts
+.next/
+.vite/
+dist/

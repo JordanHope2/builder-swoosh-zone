@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+// TODO: For full migration, replace `Link` here with the new `SmartLink` component.
+// This will allow seamless navigation between legacy React Router pages and new Next.js pages.
+// Example: import { SmartLink as Link } from '@components/SmartLink';
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Bell, Settings, User, LogOut, Shield } from "lucide-react";
