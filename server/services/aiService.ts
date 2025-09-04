@@ -3,19 +3,13 @@ import OpenAI from "openai";
 
 let openai: OpenAI | null = null;
 
-import { getSecrets } from './secretManager';
-
 function getOpenAIClient(): OpenAI {
   if (openai) return openai;
-
-  const secrets = getSecrets();
-  const apiKey = secrets.OPENAI_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("OpenAI API key not found in cache. Ensure fetchAndCacheSecrets() is called at startup.");
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("Missing OpenAI env: set OPENAI_API_KEY.");
   }
   openai = new OpenAI({
-    apiKey: apiKey,
+    apiKey: process.env.OPENAI_API_KEY,
   });
   return openai;
 }
