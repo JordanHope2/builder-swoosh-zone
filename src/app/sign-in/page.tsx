@@ -24,6 +24,13 @@ export default function SignIn() {
     });
   }
 
+  async function signInWithLinkedIn() {
+    await supabaseClient.auth.signInWithOAuth({
+      provider: 'linkedin',
+      options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback` }
+    });
+  }
+
   return (
     <div className="p-6 max-w-md mx-auto space-y-4">
       <h1 className="text-2xl font-bold">Connexion</h1>
@@ -37,6 +44,9 @@ export default function SignIn() {
       </form>
       <button onClick={signInGoogle} className="w-full border rounded px-3 py-2">
         Continuer avec Google
+      </button>
+      <button onClick={signInWithLinkedIn} className="w-full border rounded px-3 py-2 mt-2">
+        Continuer avec LinkedIn
       </button>
       {msg && <p className="text-sm text-gray-600">{msg}</p>}
     </div>
