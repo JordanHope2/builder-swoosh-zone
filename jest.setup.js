@@ -9,3 +9,8 @@ global.TextDecoder = TextDecoder;
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
+import { loadEnvConfig } from '@next/env'
+
+// Load environment variables from .env.test
+const projectDir = process.cwd()
+loadEnvConfig(projectDir)

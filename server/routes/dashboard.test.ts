@@ -1,7 +1,6 @@
 /**
  * @jest-environment node
  */
-
 import request from "supertest";
 import { createServer } from "../index";
 import { getSupabaseAdmin } from "../supabase";

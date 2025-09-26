@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useAuth } from "../contexts/AuthContext";
 import {
   Eye,
@@ -21,8 +22,16 @@ export default function SignIn() {
   const [mode, setMode] = useState<"signin" | "magic-link">("signin");
 
   const { signIn, signInWithOtp } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const redirectTo = "/dashboard"; // Hardcoded for now
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +43,16 @@ export default function SignIn() {
       await signIn(email, password);
       setSuccess("Successfully signed in!");
       setTimeout(() => {
-        navigate(redirectTo);
+        if (isMounted.current) {
+          router.push(redirectTo);
+        }
       }, 1000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to sign in");
     } finally {
-      setIsLoading(false);
+      if (isMounted.current) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -74,7 +87,7 @@ export default function SignIn() {
           <p className="mt-2 text-center text-sm text-jobequal-text-muted">
             Or{" "}
             <Link
-              to="/signup"
+              href="/signup"
               className="font-medium text-jobequal-green hover:text-jobequal-green-hover"
             >
               create a new account
