@@ -112,7 +112,7 @@ jobs:
         run: tar -czf build-artifact.tgz "${{ steps.detect_build_dir.outputs.build_dir }}"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build-artifact
           path: build-artifact.tgz
